@@ -39,7 +39,7 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
         return '#ef4444';
       }),
       borderRadius: 8,
-      barThickness: 40,
+      barThickness: 28,
     }]
   };
 
