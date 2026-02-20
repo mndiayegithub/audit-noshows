@@ -46,8 +46,8 @@ export default function GaugeBenchmark({ tauxActuel }: { tauxActuel: number }) {
   const ecart = tauxActuel - 4.5;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-      <h3 className="text-xl font-bold text-center text-gray-800 mb-6">
+    <div className="bg-surface rounded-xl border border-white/10 shadow-card p-6 mb-8">
+      <h3 className="text-xl font-bold text-center text-slate-100 mb-6">
         🎯 Votre position vs secteur dentaire
       </h3>
 
@@ -82,9 +82,9 @@ export default function GaugeBenchmark({ tauxActuel }: { tauxActuel: number }) {
       </div>
 
       <div className="flex justify-between px-8 mt-2 text-xs text-gray-500">
-        <span>0%</span>
-        <span>10%</span>
-        <span>20%+</span>
+        <span className="text-slate-400">0%</span>
+        <span className="text-slate-400">10%</span>
+        <span className="text-slate-400">20%+</span>
       </div>
 
       <div className="mt-6 text-center">
@@ -97,17 +97,17 @@ export default function GaugeBenchmark({ tauxActuel }: { tauxActuel: number }) {
         >
           Zone {zone}
         </div>
-        <p className="mt-3 text-gray-600">{zoneTexte}</p>
+        <p className="mt-3 text-slate-300">{zoneTexte}</p>
       </div>
 
-      <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-6 pt-6 border-t border-white/10">
         <div className="grid grid-cols-2 gap-4 text-center">
           <div>
-            <div className="text-xs text-gray-500 mb-1">Taux optimal secteur</div>
+            <div className="text-xs text-slate-400 mb-1">Taux optimal secteur</div>
             <div className="text-2xl font-bold text-green-600">4–5%</div>
           </div>
           <div>
-            <div className="text-xs text-gray-500 mb-1">Votre écart</div>
+            <div className="text-xs text-slate-400 mb-1">Votre écart</div>
             <div className="text-2xl font-bold" style={{ color: zoneColor }}>
               {ecart > 0 ? '+' : ''}{ecart.toFixed(2)} pts
             </div>

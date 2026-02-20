@@ -54,7 +54,7 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
         text: '📊 Répartition des no-shows par jour de la semaine',
         font: { size: 16, weight: 'bold' as const },
         padding: 20,
-        color: '#111827'
+        color: '#e2e8f0'
       },
       tooltip: {
         callbacks: {
@@ -72,19 +72,25 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
       x: {
         beginAtZero: true,
         max: 25,
-        ticks: { callback: (value: any) => value + '%' },
-        grid: { color: 'rgba(0,0,0,0.05)' }
+        ticks: {
+          callback: (value: any) => value + '%',
+          color: '#94a3b8'
+        },
+        grid: { color: 'rgba(255,255,255,0.08)' }
       },
-      y: { grid: { display: false } }
+      y: {
+        grid: { display: false },
+        ticks: { color: '#cbd5e1' }
+      }
     }
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div className="bg-surface rounded-xl border border-white/10 shadow-card p-6 mb-8">
       <div style={{ height: '320px' }}>
         <Bar data={data} options={options} />
       </div>
-      <div className="flex justify-center gap-6 mt-4 text-sm text-gray-600">
+      <div className="flex justify-center gap-6 mt-4 text-sm text-slate-300">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#10b981' }}></div>
           <span>Optimal (&lt; 5%)</span>
