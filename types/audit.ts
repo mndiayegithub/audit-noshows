@@ -28,6 +28,12 @@ export interface AuditStats {
     ca_perdu: number;
   }>;
   potentiel: { passage_5: number; passage_45: number };
+  par_jour?: Array<{
+    jour: string;
+    total_rdv: number;
+    no_shows: number;
+    taux: number;
+  }>;
   // Champs additionnels optionnels venant de n8n
   stats_par_jour?: Array<{ jour: string; total: number; noShows: number; taux: number }>;
   stats_par_praticien?: Array<{

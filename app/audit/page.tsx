@@ -9,6 +9,8 @@ import remarkGfm from "remark-gfm";
 import toast from "react-hot-toast";
 import { pdf } from "@react-pdf/renderer";
 import RapportPDF from "@/components/audit/RapportPDF";
+import GraphiqueParJour from "@/components/GraphiqueParJour";
+import GaugeBenchmark from "@/components/GaugeBenchmark";
 import type { AuditResponse } from "@/types/audit";
 
 type Etat = "formulaire" | "loading" | "resultats" | "erreur";
@@ -407,6 +409,11 @@ export default function AuditPage() {
                 </ul>
               </div>
             )}
+
+            {resultats.stats.par_jour && resultats.stats.par_jour.length > 0 && (
+              <GraphiqueParJour parJour={resultats.stats.par_jour} />
+            )}
+            <GaugeBenchmark tauxActuel={resultats.stats.global.taux} />
 
             {/* Rapport IA */}
             {resultats.rapport_texte && (
