@@ -25,13 +25,34 @@ npm run dev
 
 Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
+## Build production
+
+```bash
+npm run build
+npm run start
+```
+
 ## Déploiement (Vercel)
 
-Le projet est prêt pour un déploiement sur Vercel. Aucune configuration spéciale n'est requise.
+Le projet est prêt pour un déploiement sur Vercel (framework détecté automatiquement : Next.js).
 
-**Variable d'environnement optionnelle :**
+1. Importer le dépôt dans Vercel (`Add New` -> `Project`)
+2. Vérifier les paramètres de build (par défaut) :
+   - Build Command : `npm run build`
+   - Output Directory : `.next` (géré automatiquement)
+3. Configurer les variables d'environnement
+4. Lancer le déploiement
 
-- `N8N_WEBHOOK_URL` ou `NEXT_PUBLIC_N8N_WEBHOOK_URL` : URL du webhook n8n (par défaut : `https://n8n.srv939707.hstgr.cloud/webhook/audit-flash`)
+**Variable d'environnement :**
+
+- `N8N_WEBHOOK_URL` : URL du webhook n8n (exemple : `https://n8n.srv939707.hstgr.cloud/webhook/audit-flash`)
+- Optionnel selon votre implémentation : `NEXT_PUBLIC_N8N_WEBHOOK_URL`
+
+## Notes métier importantes
+
+- `ca_perdu` est déjà annualisé côté backend n8n.
+- Le frontend ne doit pas réappliquer de calcul d'annualisation (`* 12` ou `* (12 / nb_mois)`) dans les sections Top 3 créneaux (UI et PDF).
+- Les montants affichés dans les cards et dans le PDF doivent rester alignés avec les valeurs backend.
 
 ## Pages
 
