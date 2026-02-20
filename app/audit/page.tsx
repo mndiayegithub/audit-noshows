@@ -348,6 +348,16 @@ export default function AuditPage() {
               </div>
             </div>
 
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              {/* Graphique 1 : Bar chart */}
+              {resultats.stats.par_jour && resultats.stats.par_jour.length > 0 && (
+                <GraphiqueParJour parJour={resultats.stats.par_jour} />
+              )}
+
+              {/* Graphique 2 : Gauge */}
+              <GaugeBenchmark tauxActuel={resultats.stats.global.taux} />
+            </div>
+
             {/* Top 3 créneaux à risque */}
             {resultats.stats.top_3_pires?.length > 0 && (
               <div className="bg-surface rounded-xl border border-white/10 p-6 shadow-card">
@@ -409,11 +419,6 @@ export default function AuditPage() {
                 </ul>
               </div>
             )}
-
-            {resultats.stats.par_jour && resultats.stats.par_jour.length > 0 && (
-              <GraphiqueParJour parJour={resultats.stats.par_jour} />
-            )}
-            <GaugeBenchmark tauxActuel={resultats.stats.global.taux} />
 
             {/* Rapport IA */}
             {resultats.rapport_texte && (

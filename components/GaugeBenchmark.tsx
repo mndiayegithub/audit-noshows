@@ -46,12 +46,12 @@ export default function GaugeBenchmark({ tauxActuel }: { tauxActuel: number }) {
   const ecart = tauxActuel - 4.5;
 
   return (
-    <div className="bg-surface rounded-xl border border-white/10 shadow-card p-6 mb-8">
+    <div className="bg-surface rounded-xl border border-white/10 shadow-card p-6 h-full">
       <h3 className="text-xl font-bold text-center text-slate-100 mb-6">
         🎯 Votre position vs secteur dentaire
       </h3>
 
-      <div className="relative mx-auto" style={{ height: '200px', maxWidth: '400px' }}>
+      <div className="relative mx-auto" style={{ height: '240px', maxWidth: '100%' }}>
         <Doughnut data={data} options={options} />
         {/* Aiguille */}
         <div

@@ -86,8 +86,8 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
   };
 
   return (
-    <div className="bg-surface rounded-xl border border-white/10 shadow-card p-6 mb-8">
-      <div style={{ height: '320px' }}>
+    <div className="bg-surface rounded-xl border border-white/10 shadow-card p-6 h-full">
+      <div style={{ height: '380px' }}>
         <Bar data={data} options={options} />
       </div>
       <div className="flex justify-center gap-6 mt-4 text-sm text-slate-300">
