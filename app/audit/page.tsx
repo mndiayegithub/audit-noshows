@@ -385,7 +385,9 @@ export default function AuditPage() {
                   🟢 Top 3 créneaux performants
                 </h2>
                 <p className="text-slate-400 text-sm mb-4">
-                  Ces créneaux fonctionnent bien, modélisez-les sur les autres !
+                  Ces créneaux présentent un taux de no-shows optimal. Analysez
+                  pourquoi ils performent mieux et appliquez les mêmes conditions
+                  aux créneaux à risque.
                 </p>
                 <ul className="space-y-3">
                   {resultats.stats.top_3_meilleurs.map((creneau, index) => (
@@ -400,7 +402,7 @@ export default function AuditPage() {
                         {creneau.noShows}/{creneau.total} no-shows
                       </span>
                       <span className="text-emerald-400 font-medium">
-                        {100 - creneau.taux} % de réussite
+                        {`${creneau.taux}% no-shows`}
                       </span>
                     </li>
                   ))}
@@ -465,7 +467,10 @@ export default function AuditPage() {
                       ),
                     }}
                   >
-                    {resultats.rapport_texte}
+                    {resultats.rapport_texte.replace(
+                    /RECOMMANDATIONS PRIORITAIRES/g,
+                    "ACTIONS IMMÉDIATES (7 PREMIERS JOURS)"
+                  )}
                   </ReactMarkdown>
                 </div>
               </div>
@@ -484,7 +489,7 @@ export default function AuditPage() {
                     Génération en cours...
                   </>
                 ) : (
-                  "Télécharger Rapport PDF"
+                  "📥 Télécharger ce rapport en PDF"
                 )}
               </button>
               <a
