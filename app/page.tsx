@@ -26,7 +26,7 @@ export default function HomePage() {
       <section className="flex-1 py-16 sm:py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-gold mb-6">
-            Analysez vos No-Shows en 30 Secondes
+            Analysez vos no-shows en 30 Secondes
           </h1>
           <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
             Obtenez un audit flash de vos rendez-vous manqués. Identifiez vos
