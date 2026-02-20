@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# audit-noshows
-=======
 # PerfIAmatic - Audit No-Shows pour Cabinets Dentaires
 
 Outil d'audit des rendez-vous manqués (no-shows) pour cabinets dentaires. Analysez vos données en 30 secondes grâce à l'IA.
@@ -44,4 +41,3 @@ Le projet est prêt pour un déploiement sur Vercel. Aucune configuration spéci
 ## Format CSV attendu
 
 Le fichier CSV doit contenir les données d'export des rendez-vous. Le format exact dépend de votre logiciel de gestion de cabinet.
->>>>>>> bb5e574 (Projet audit no-shows cabinet dentaire)
