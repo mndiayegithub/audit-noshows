@@ -355,10 +355,7 @@ export default function RapportPDF({ resultats }: { resultats: AuditResponse }) 
               return (
                 <View
                   key={i}
-                  style={[
-                    styles.tableRow,
-                    i % 2 === 1 ? styles.tableRowAlt : undefined,
-                  ]}
+                  style={[styles.tableRow, ...(i % 2 === 1 ? [styles.tableRowAlt] : [])]}
                 >
                   <Text style={styles.colCreneau}>
                     {c.jour} à {c.heure}
@@ -390,10 +387,7 @@ export default function RapportPDF({ resultats }: { resultats: AuditResponse }) 
               return (
                 <View
                   key={i}
-                  style={[
-                    styles.tableRow,
-                    i % 2 === 1 ? styles.tableRowAlt : undefined,
-                  ]}
+                  style={[styles.tableRow, ...(i % 2 === 1 ? [styles.tableRowAlt] : [])]}
                 >
                   <Text style={styles.colCreneau}>
                     {c.jour} à {c.heure}
