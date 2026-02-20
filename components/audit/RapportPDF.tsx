@@ -269,7 +269,6 @@ function FooterPDF({
 
 export default function RapportPDF({ resultats }: { resultats: AuditResponse }) {
   const { stats, rapport_texte } = resultats;
-  const nbMois = stats.periode.nb_mois;
   const debut = formatDate(stats.periode.debut);
   const fin = formatDate(stats.periode.fin);
   const dateGen = formatDate(new Date().toISOString());
@@ -351,7 +350,7 @@ export default function RapportPDF({ resultats }: { resultats: AuditResponse }) 
               <Text style={[styles.colCa, { width: "25%" }]}>CA Perdu/an</Text>
             </View>
             {stats.top_3_pires.map((c, i) => {
-              const caAn = Math.round(c.ca_perdu * (12 / nbMois));
+              const caAn = Math.round(c.ca_perdu);
               return (
                 <View
                   key={i}
@@ -383,7 +382,7 @@ export default function RapportPDF({ resultats }: { resultats: AuditResponse }) 
               <Text style={[styles.colCa, { width: "25%" }]}>CA Perdu/an</Text>
             </View>
             {stats.top_3_meilleurs.map((c, i) => {
-              const caAn = Math.round(c.ca_perdu * (12 / nbMois));
+              const caAn = Math.round(c.ca_perdu);
               return (
                 <View
                   key={i}

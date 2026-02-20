@@ -354,9 +354,7 @@ export default function AuditPage() {
                 </h2>
                 <ul className="space-y-3">
                   {resultats.stats.top_3_pires.map((creneau, index) => {
-                    const caPerduAnnuel = Math.round(
-                      creneau.ca_perdu * (12 / resultats.stats.periode.nb_mois)
-                    );
+                    const caPerduAnnuel = creneau.ca_perdu;
                     return (
                       <li
                         key={index}
