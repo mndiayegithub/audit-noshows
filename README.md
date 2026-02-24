@@ -7,9 +7,12 @@ Outil d'audit des rendez-vous manqués (no-shows) pour cabinets dentaires. Analy
 - **Next.js 14** (App Router)
 - **TypeScript** (mode strict)
 - **Tailwind CSS**
-- **react-dropzone** - Upload CSV
-- **react-markdown** + **remark-gfm** - Affichage du rapport
-- **react-hot-toast** - Notifications
+- **Chart.js** + **react-chartjs-2** — Graphiques (bar chart par jour, jauge benchmark)
+- **framer-motion** — Animations et transitions (entrées au scroll, hover, stagger)
+- **react-dropzone** — Upload CSV
+- **react-markdown** + **remark-gfm** — Affichage du rapport IA
+- **react-hot-toast** — Notifications
+- **@react-pdf/renderer** — Génération du rapport PDF
 
 ## Installation
 
@@ -56,8 +59,16 @@ Le projet est prêt pour un déploiement sur Vercel (framework détecté automat
 
 ## Pages
 
-- **/** - Landing page
-- **/audit** - Formulaire d'audit et affichage des résultats
+- **/** — Landing page
+- **/audit** — Formulaire d'audit et affichage des résultats (cartes, graphique par jour, jauge benchmark, Top 3 créneaux, rapport IA, boutons PDF / Audit Complet)
+
+## Interface résultats
+
+- **5 cartes** : Total RDV, No-shows, Taux, CA perdu/an, Potentiel récupérable
+- **Graphiques** (côte à côte sur desktop) : répartition no-shows par jour (bar chart), jauge de position vs secteur dentaire
+- **Top 3 créneaux** à risque et performants
+- **Rapport IA** en Markdown
+- **Animations** : apparition au scroll (fade-in, slide), hover sur cartes et boutons, animation des barres et de l’aiguille de la jauge
 
 ## Format CSV attendu
 
