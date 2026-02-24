@@ -7,11 +7,29 @@ import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 import { pdf } from "@react-pdf/renderer";
 import RapportPDF from "@/components/audit/RapportPDF";
 import GraphiqueParJour from "@/components/GraphiqueParJour";
 import GaugeBenchmark from "@/components/GaugeBenchmark";
 import type { AuditResponse } from "@/types/audit";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.06, duration: 0.4 },
+  }),
+};
+const sectionVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+};
 
 type Etat = "formulaire" | "loading" | "resultats" | "erreur";
 
@@ -302,7 +320,11 @@ export default function AuditPage() {
 
         {etat === "resultats" && resultats && (
           <div className="space-y-8">
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               <h1 className="text-3xl font-bold text-gold">
                 Résultats de l&apos;audit
               </h1>
@@ -310,43 +332,36 @@ export default function AuditPage() {
                 {resultats.stats.nom_cabinet} • Période analysée :{" "}
                 {resultats.stats.periode.nb_mois} mois
               </p>
-            </div>
+            </motion.div>
 
             {/* 5 cards statistiques */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-              <div className="bg-surface rounded-xl border border-white/10 p-4 shadow-card">
-                <p className="text-sm text-slate-400 mb-1">📊 Total RDV</p>
-                <p className="text-2xl font-bold text-white">
-                  {resultats.stats.global.total_rdv.toLocaleString()}
-                </p>
-              </div>
-              <div className="bg-surface rounded-xl border border-white/10 p-4 shadow-card">
-                <p className="text-sm text-slate-400 mb-1">❌ No-shows</p>
-                <p className="text-2xl font-bold text-white">
-                  {resultats.stats.global.no_shows.toLocaleString()}
-                </p>
-              </div>
-              <div className="bg-surface rounded-xl border border-white/10 p-4 shadow-card">
-                <p className="text-sm text-slate-400 mb-1">📉 Taux no-shows</p>
-                <p className="text-2xl font-bold text-white">
-                  {resultats.stats.global.taux}%
-                </p>
-              </div>
-              <div className="bg-surface rounded-xl border border-white/10 p-4 shadow-card">
-                <p className="text-sm text-slate-400 mb-1">💸 CA perdu/an</p>
-                <p className="text-2xl font-bold text-white">
-                  {resultats.stats.global.ca_perdu_an.toLocaleString()} €
-                </p>
-              </div>
-              <div className="bg-surface rounded-xl border border-white/10 p-4 shadow-card">
-                <p className="text-sm text-slate-400 mb-1">
-                  📈 Potentiel récupérable
-                </p>
-                <p className="text-2xl font-bold text-gold">
-                  {resultats.stats.potentiel.passage_45.toLocaleString()} €/an
-                </p>
-              </div>
-            </div>
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: { transition: { staggerChildren: 0.06 } },
+                hidden: {},
+              }}
+            >
+              {[
+                { label: "📊 Total RDV", value: resultats.stats.global.total_rdv.toLocaleString(), color: "text-white" },
+                { label: "❌ No-shows", value: resultats.stats.global.no_shows.toLocaleString(), color: "text-white" },
+                { label: "📉 Taux no-shows", value: `${resultats.stats.global.taux}%`, color: "text-white" },
+                { label: "💸 CA perdu/an", value: `${resultats.stats.global.ca_perdu_an.toLocaleString()} €`, color: "text-white" },
+                { label: "📈 Potentiel récupérable", value: `${resultats.stats.potentiel.passage_45.toLocaleString()} €/an`, color: "text-gold" },
+              ].map((card, i) => (
+                <motion.div
+                  key={card.label}
+                  variants={fadeInUp}
+                  custom={i}
+                  className="bg-surface rounded-2xl border border-white/10 p-4 shadow-card transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20 hover:-translate-y-0.5"
+                >
+                  <p className="text-sm text-slate-400 mb-1">{card.label}</p>
+                  <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
+                </motion.div>
+              ))}
+            </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               {/* Graphique 1 : Bar chart */}
@@ -360,7 +375,13 @@ export default function AuditPage() {
 
             {/* Top 3 créneaux à risque */}
             {resultats.stats.top_3_pires?.length > 0 && (
-              <div className="bg-surface rounded-xl border border-white/10 p-6 shadow-card">
+              <motion.div
+                variants={sectionVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-40px" }}
+                className="bg-surface rounded-2xl border border-white/10 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20"
+              >
                 <h2 className="text-lg font-semibold text-gold mb-4">
                   🔴 Top 3 créneaux à risque
                 </h2>
@@ -385,12 +406,18 @@ export default function AuditPage() {
                     );
                   })}
                 </ul>
-              </div>
+              </motion.div>
             )}
 
             {/* Top 3 créneaux performants */}
             {resultats.stats.top_3_meilleurs?.length > 0 && (
-              <div className="bg-surface rounded-xl border border-white/10 p-6 shadow-card">
+              <motion.div
+                variants={sectionVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-40px" }}
+                className="bg-surface rounded-2xl border border-white/10 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20"
+              >
                 <h2 className="text-lg font-semibold text-gold mb-4">
                   🟢 Top 3 créneaux performants
                 </h2>
@@ -417,12 +444,18 @@ export default function AuditPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             )}
 
             {/* Rapport IA */}
             {resultats.rapport_texte && (
-              <div className="bg-surface rounded-xl border border-white/10 p-6 shadow-card">
+              <motion.div
+                variants={sectionVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-40px" }}
+                className="bg-surface rounded-2xl border border-white/10 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20"
+              >
                 <h2 className="text-lg font-semibold text-gold mb-4">
                   Rapport d&apos;analyse IA
                 </h2>
@@ -483,15 +516,21 @@ export default function AuditPage() {
                   )}
                   </ReactMarkdown>
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Boutons d'action */}
-            <div className="flex flex-wrap gap-4">
+            <motion.div
+              className="flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+            >
               <button
                 onClick={handleDownloadPDF}
                 disabled={isGeneratingPDF}
-                className="px-6 py-3 border border-gold/50 rounded-lg text-slate-200 hover:bg-gold/10 hover:border-gold transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-6 py-3 border border-gold/50 rounded-xl text-slate-200 hover:bg-gold/10 hover:border-gold transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 hover:shadow-lg active:scale-[0.98]"
               >
                 {isGeneratingPDF ? (
                   <>
@@ -504,11 +543,11 @@ export default function AuditPage() {
               </button>
               <a
                 href="mailto:contact@perfiamatic.com?subject=Demande%20Audit%20Complet%20-%201500€"
-                className="px-6 py-3 bg-gold text-brand-dark hover:bg-gold-light rounded-lg font-semibold transition-colors"
+                className="px-6 py-3 bg-gold text-brand-dark hover:bg-gold-light rounded-xl font-semibold transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 Passer à l&apos;Audit Complet (1 500 €)
               </a>
-            </div>
+            </motion.div>
           </div>
         )}
 

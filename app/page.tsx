@@ -29,8 +29,7 @@ export default function HomePage() {
             Analysez vos no-shows en 30 secondes
           </h1>
           <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
-            Obtenez un audit flash de vos rendez-vous manqués. Identifiez vos
-            créneaux à risque et estimez votre potentiel de récupération.
+            Obtenez un audit flash de vos rendez-vous manqués. Identifiez vos créneaux à risque et estimez votre potentiel de récupération.
           </p>
           <Link
             href="/audit"
