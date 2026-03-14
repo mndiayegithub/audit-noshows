@@ -95,7 +95,7 @@ export default function HomePage() {
             >
               Analysez votre historique Doctolib et découvrez exactement <br className="hidden sm:block" />
               combien vous perdez chaque mois.<br/>
-              <span className="font-medium text-white mt-3 inline-block">Gratuit. Sans inscription. En 30 secondes.</span>
+              <span className="font-medium text-white mt-3 inline-block">Gratuit. Sans inscription. En 60 secondes.</span>
             </motion.p>
             
             <motion.div variants={fadeInUp}>
@@ -151,7 +151,7 @@ export default function HomePage() {
               </motion.div>
               <motion.div variants={fadeInUp} className="px-4">
                 <div className="text-4xl md:text-5xl font-heading font-bold text-med-blue mb-2">
-                  <Counter from={0} to={30} duration={1.5} format={(v) => Math.round(v).toString() + ' sec'} />
+                  <Counter from={0} to={60} duration={1.5} format={(v) => Math.round(v).toString() + ' sec'} />
                 </div>
                 <div className="text-sm text-slate-300">
                   Pour connaître votre chiffre exact
@@ -179,7 +179,7 @@ export default function HomePage() {
                     </svg>
                   ),
                   title: "Rapide",
-                  desc: "Uploadez votre export Doctolib CSV. Résultats personnalisés en 30 secondes."
+                  desc: "Uploadez votre export Doctolib CSV. Résultats personnalisés en 60 secondes."
                 },
                 {
                   icon: (
@@ -203,7 +203,7 @@ export default function HomePage() {
                 <motion.div 
                   key={i}
                   variants={fadeInUp}
-                  className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-med-blue/20 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-med-blue/40"
+                  className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-med-blue/20 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-med-blue/40 h-full flex flex-col"
                 >
                   <div className="mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-heading font-bold text-white mb-3">
@@ -234,7 +234,7 @@ export default function HomePage() {
                   author: "Cabinet dentaire — Lyon"
                 },
                 {
-                  quote: "En 30 secondes j'ai su exactement ce que je perdais chaque mois. Personne ne m'avait jamais montré ce chiffre.",
+                  quote: "En 60 secondes j'ai su exactement ce que je perdais chaque mois. Personne ne m'avait jamais montré ce chiffre.",
                   author: "Chirurgien-dentiste — Amiens"
                 },
                 {
@@ -374,7 +374,7 @@ export default function HomePage() {
               Vous perdez peut-être <span className="text-gold">20 000€</span> par an sans le savoir.
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-lg text-slate-300 mb-10">
-              Vérifiez en 30 secondes — c&apos;est gratuit.
+              Vérifiez en 60 secondes — c&apos;est gratuit.
             </motion.p>
             <motion.div variants={fadeInUp}>
               <Link
@@ -385,7 +385,7 @@ export default function HomePage() {
               </Link>
             </motion.div>
             <motion.p variants={fadeInUp} className="text-slate-400 text-sm">
-              Gratuit · Sans inscription · 30 secondes
+              Gratuit · Sans inscription · 60 secondes
             </motion.p>
           </motion.div>
         </section>
