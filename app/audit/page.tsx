@@ -323,7 +323,7 @@ export default function AuditPage() {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
             >
               <h1 className="text-3xl font-bold text-gold">
                 Résultats de l&apos;audit
@@ -525,7 +525,7 @@ export default function AuditPage() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
             >
               <button
                 onClick={handleDownloadPDF}

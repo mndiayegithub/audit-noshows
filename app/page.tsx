@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, Variants } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const Counter = ({ from, to, duration, format }: { from: number; to: number; duration: number; format?: (v: number) => string }) => {
@@ -29,12 +29,12 @@ const Counter = ({ from, to, duration, format }: { from: number; to: number; dur
 };
 
 export default function HomePage() {
-  const fadeInUp = {
+  const fadeInUp: Variants = {
     hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
   };
 
-  const staggerContainer = {
+  const staggerContainer: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -86,7 +86,7 @@ export default function HomePage() {
               variants={fadeInUp}
               className="text-4xl sm:text-6xl font-heading font-bold text-white mb-6 leading-tight"
             >
-              Combien vous coûtent vraiment <span className="text-gold">vos no-shows</span> ?
+              Combien vous coûtent vraiment <span className="text-gold">vos rendez-vous non honorés</span> ?
             </motion.h1>
             
             <motion.p 
