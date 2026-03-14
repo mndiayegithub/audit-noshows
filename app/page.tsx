@@ -31,7 +31,7 @@ const Counter = ({ from, to, duration, format }: { from: number; to: number; dur
 export default function HomePage() {
   const fadeInUp = {
     hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
   };
 
   const staggerContainer = {
@@ -108,7 +108,7 @@ export default function HomePage() {
                   transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
                   className="inline-block"
                 >
-                  Commencer l'audit gratuit →
+                  Commencer l&apos;audit gratuit →
                 </motion.span>
               </Link>
               
@@ -234,11 +234,11 @@ export default function HomePage() {
                   author: "Cabinet dentaire — Lyon"
                 },
                 {
-                  quote: "En 30 secondes j&apos;ai su exactement ce que je perdais chaque mois. Personne ne m&apos;avait jamais montré ce chiffre.",
+                  quote: "En 30 secondes j'ai su exactement ce que je perdais chaque mois. Personne ne m'avait jamais montré ce chiffre.",
                   author: "Chirurgien-dentiste — Amiens"
                 },
                 {
-                  quote: "La liste d&apos;attente automatique a rempli 3 créneaux le premier lundi d&apos;utilisation.",
+                  quote: "La liste d'attente automatique a rempli 3 créneaux le premier lundi d'utilisation.",
                   author: "Cabinet dentaire — Paris 15ème"
                 }
               ].map((t, i) => (

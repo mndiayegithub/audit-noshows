@@ -272,7 +272,7 @@ export default function AuditPage() {
                 onClick={handleSubmit}
                 className="w-full bg-gold text-brand-dark py-3 rounded-lg font-semibold hover:bg-gold-light transition-colors"
               >
-                Générer l'Audit Flash
+                Générer l&apos;Audit Flash
               </button>
             </div>
           </div>
@@ -326,7 +326,7 @@ export default function AuditPage() {
               transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <h1 className="text-3xl font-bold text-gold">
-                Résultats de l'audit
+                Résultats de l&apos;audit
               </h1>
               <p className="text-slate-300 mt-1">
                 {resultats.stats.nom_cabinet} • Période analysée :{" "}
@@ -545,7 +545,7 @@ export default function AuditPage() {
                 href="mailto:contact@perfiamatic.com?subject=Demande%20Audit%20Complet%20-%201500€"
                 className="px-6 py-3 bg-gold text-brand-dark hover:bg-gold-light rounded-xl font-semibold transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98]"
               >
-                Passer à l'Auudit Complet (1 500 €)
+                Passer à l&apos;Audit Complet (1 500 €)
               </a>
             </motion.div>
           </div>
