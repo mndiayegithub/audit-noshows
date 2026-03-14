@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -18,14 +18,38 @@ const containerVariants = {
 
 export default function GaugeBenchmark({ tauxActuel }: { tauxActuel: number }) {
   const [needleAngle, setNeedleAngle] = useState(-90);
+  const [displayTaux, setDisplayTaux] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
 
   const maxValue = 20;
   const targetAngle = (Math.min(tauxActuel, maxValue) / maxValue) * 180 - 90;
 
   useEffect(() => {
-    const id = setTimeout(() => setNeedleAngle(targetAngle), 50);
-    return () => clearTimeout(id);
-  }, [targetAngle]);
+    if (inView) {
+      // Animer l'aiguille
+      const id = setTimeout(() => setNeedleAngle(targetAngle), 50);
+      
+      // Animer le compteur
+      let start: number | null = null;
+      const duration = 1400; // 1.4s pour correspondre à l'aiguille
+      
+      const step = (timestamp: number) => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        setDisplayTaux(tauxActuel * easeProgress);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          setDisplayTaux(tauxActuel);
+        }
+      };
+      window.requestAnimationFrame(step);
+      
+      return () => clearTimeout(id);
+    }
+  }, [targetAngle, inView, tauxActuel]);
 
   let zone: string, zoneTexte: string, zoneColor: string;
 
@@ -87,6 +111,7 @@ export default function GaugeBenchmark({ tauxActuel }: { tauxActuel: number }) {
 
   return (
     <motion.div
+      ref={ref}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -137,10 +162,11 @@ export default function GaugeBenchmark({ tauxActuel }: { tauxActuel: number }) {
             className="text-5xl font-bold mb-3"
             style={{ color: zoneColor }}
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.4 }}
           >
-            {tauxActuel.toFixed(2)}%
+            {displayTaux.toFixed(2)}%
           </motion.div>
           <div
             className="inline-block px-6 py-2 rounded-full text-white font-semibold text-sm"
