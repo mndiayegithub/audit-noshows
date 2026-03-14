@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -32,6 +32,31 @@ const containerVariants = {
 };
 
 export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (inView) {
+      let start: number | null = null;
+      const duration = 1400; // Même durée que la jauge
+      
+      const step = (timestamp: number) => {
+        if (!start) start = timestamp;
+        const currentProgress = Math.min((timestamp - start) / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - currentProgress, 3); // easeOutCubic
+        setProgress(easeProgress);
+        
+        if (currentProgress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          setProgress(1);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+  }, [inView]);
+
   const ordre = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
   const donneesSorted = ordre
     .map((j) => parJour.find((d) => d.jour === j))
@@ -43,7 +68,8 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
       datasets: [
         {
           label: 'Taux no-shows (%)',
-          data: donneesSorted.map((d) => d.taux),
+          // Appliquer la progression sur chaque barre
+          data: donneesSorted.map((d) => d.taux * progress),
           backgroundColor: donneesSorted.map((d) => {
             if (d.taux < 5) return '#10b981';
             if (d.taux < 10) return '#f59e0b';
@@ -54,7 +80,7 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
         },
       ],
     }),
-    [donneesSorted]
+    [donneesSorted, progress]
   );
 
   const options = useMemo(
@@ -63,7 +89,7 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
       responsive: true,
       maintainAspectRatio: false,
       animation: {
-        duration: 1000,
+        duration: 0, // Désactivé car on gère l'animation nous-mêmes via react state
       },
       plugins: {
         legend: { display: false },
@@ -110,6 +136,7 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
 
   return (
     <motion.div
+      ref={ref}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
