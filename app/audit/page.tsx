@@ -416,9 +416,9 @@ export default function AuditPage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
-                className="bg-surface rounded-xl border border-white/10 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:border-white/20"
+                className="bg-red-500/5 rounded-xl border border-red-500/20 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:border-red-500/40"
               >
-                <h2 className="text-lg font-semibold text-gold mb-4">
+                <h2 className="text-lg font-heading font-semibold text-red-400 mb-4">
                   🔴 Top 3 créneaux à risque
                 </h2>
                 <ul className="space-y-3">
