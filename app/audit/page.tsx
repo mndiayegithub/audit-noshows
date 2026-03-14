@@ -159,7 +159,9 @@ export default function AuditPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-dark">
+    <div className="min-h-screen flex flex-col bg-brand-dark relative">
+      <div className="fixed inset-0 bg-hex-pattern opacity-[0.03] pointer-events-none" />
+      
       {/* Header */}
       <header className="bg-brand-dark border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -324,19 +326,33 @@ export default function AuditPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
+              className="flex flex-col items-center text-center mb-8"
             >
-              <h1 className="text-3xl font-bold text-gold">
+              <div className="flex justify-center mb-5">
+                <svg 
+                  width="48" 
+                  height="48" 
+                  viewBox="0 0 48 48" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ filter: "drop-shadow(0 0 8px rgba(79, 195, 247, 0.6))" }}
+                >
+                  <rect x="18" y="4" width="12" height="40" rx="4" fill="#4FC3F7"/>
+                  <rect x="4" y="18" width="40" height="12" rx="4" fill="#4FC3F7"/>
+                </svg>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-heading font-bold text-gold">
                 Résultats de l&apos;audit
               </h1>
-              <p className="text-slate-300 mt-1">
+              <p className="text-slate-300 mt-2 text-lg">
                 {resultats.stats.nom_cabinet} • Période analysée :{" "}
                 {resultats.stats.periode.nb_mois} mois
               </p>
             </motion.div>
 
-            {/* 5 cards statistiques */}
+            {/* Cards statistiques */}
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+              className="flex flex-col gap-4"
               initial="hidden"
               animate="visible"
               variants={{
@@ -344,23 +360,43 @@ export default function AuditPage() {
                 hidden: {},
               }}
             >
-              {[
-                { label: "📊 Total RDV", value: resultats.stats.global.total_rdv.toLocaleString(), color: "text-white" },
-                { label: "❌ No-shows", value: resultats.stats.global.no_shows.toLocaleString(), color: "text-white" },
-                { label: "📉 Taux no-shows", value: `${resultats.stats.global.taux}%`, color: "text-white" },
-                { label: "💸 CA perdu/an", value: `${resultats.stats.global.ca_perdu_an.toLocaleString()} €`, color: "text-white" },
-                { label: "📈 Potentiel récupérable", value: `${resultats.stats.potentiel.passage_45.toLocaleString()} €/an`, color: "text-gold" },
-              ].map((card, i) => (
-                <motion.div
-                  key={card.label}
-                  variants={fadeInUp}
-                  custom={i}
-                  className="bg-surface rounded-2xl border border-white/10 p-4 shadow-card transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20 hover:-translate-y-0.5"
-                >
-                  <p className="text-sm text-slate-400 mb-1">{card.label}</p>
-                  <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
-                </motion.div>
-              ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { label: "📊 Total RDV", value: resultats.stats.global.total_rdv.toLocaleString(), color: "text-white" },
+                  { label: "❌ No-shows", value: resultats.stats.global.no_shows.toLocaleString(), color: "text-white" },
+                  { label: "📉 Taux no-shows", value: `${resultats.stats.global.taux}%`, color: "text-white" },
+                  { label: "💸 CA perdu/an", value: `${resultats.stats.global.ca_perdu_an.toLocaleString()} €`, color: "text-white" },
+                ].map((card, i) => (
+                  <motion.div
+                    key={card.label}
+                    variants={fadeInUp}
+                    custom={i}
+                    className="bg-surface rounded-xl border border-white/10 p-4 shadow-card transition-all duration-300 hover:shadow-xl hover:border-white/20 hover:-translate-y-0.5"
+                  >
+                    <p className="text-sm text-slate-400 mb-1">{card.label}</p>
+                    <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Potentiel récupérable */}
+              <motion.div
+                variants={fadeInUp}
+                custom={4}
+                className="bg-surface rounded-xl border border-gold/50 p-8 text-center shadow-card transition-all duration-300 hover:shadow-glow-gold hover:border-gold hover:-translate-y-1 relative overflow-hidden"
+              >
+                {/* Glow subtil en fond */}
+                <div className="absolute inset-0 bg-gold/5 animate-pulse" style={{ animationDuration: '3s' }} />
+                
+                <div className="relative z-10">
+                  <p className="text-med-blue font-heading font-semibold mb-2 uppercase tracking-wider text-sm md:text-base">
+                    Potentiel récupérable/an
+                  </p>
+                  <p className="text-4xl md:text-[48px] font-heading font-bold text-gold">
+                    {resultats.stats.potentiel.passage_45.toLocaleString()} €
+                  </p>
+                </div>
+              </motion.div>
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -380,7 +416,7 @@ export default function AuditPage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
-                className="bg-surface rounded-2xl border border-white/10 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20"
+                className="bg-surface rounded-xl border border-white/10 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:border-white/20"
               >
                 <h2 className="text-lg font-semibold text-gold mb-4">
                   🔴 Top 3 créneaux à risque
@@ -409,6 +445,13 @@ export default function AuditPage() {
               </motion.div>
             )}
 
+            {/* Séparateur visuel */}
+            <div className="flex items-center justify-center my-8">
+              <div className="h-px bg-med-blue/20 w-16 md:w-32"></div>
+              <div className="w-2 h-2 rounded-full bg-med-blue/50 mx-4"></div>
+              <div className="h-px bg-med-blue/20 w-16 md:w-32"></div>
+            </div>
+
             {/* Top 3 créneaux performants */}
             {resultats.stats.top_3_meilleurs?.length > 0 && (
               <motion.div
@@ -416,9 +459,9 @@ export default function AuditPage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
-                className="bg-surface rounded-2xl border border-white/10 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20"
+                className="bg-med-green/5 rounded-xl border border-med-green/20 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:border-med-green/40"
               >
-                <h2 className="text-lg font-semibold text-gold mb-4">
+                <h2 className="text-lg font-heading font-semibold text-med-green mb-4">
                   🟢 Top 3 créneaux performants
                 </h2>
                 <p className="text-slate-400 text-sm mb-4">
@@ -454,9 +497,9 @@ export default function AuditPage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
-                className="bg-surface rounded-2xl border border-white/10 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20"
+                className="bg-surface rounded-xl border border-white/10 p-6 md:p-8 shadow-card transition-all duration-300 hover:shadow-xl hover:border-white/20"
               >
-                <h2 className="text-lg font-semibold text-gold mb-4">
+                <h2 className="text-xl font-heading font-bold text-gold mb-6">
                   Rapport d&apos;analyse IA
                 </h2>
                 <div className="rapport-markdown">
@@ -465,37 +508,37 @@ export default function AuditPage() {
                     components={{
                       h1: ({ node, ...props }) => (
                         <h1
-                          className="text-2xl font-bold mt-8 mb-4 text-gold first:mt-0"
+                          className="text-2xl font-heading font-bold mt-8 mb-4 text-gold first:mt-0"
                           {...props}
                         />
                       ),
                       h2: ({ node, ...props }) => (
                         <h2
-                          className="text-xl font-bold mt-6 mb-3 text-gold pl-0 ml-0"
+                          className="text-xl font-heading font-bold mt-10 mb-5 text-gold border-t border-med-blue/30 pt-6 first:border-0 first:mt-0"
                           {...props}
                         />
                       ),
                       h3: ({ node, ...props }) => (
                         <h3
-                          className="text-lg font-semibold mt-4 mb-2 text-slate-200 pl-0 ml-0"
+                          className="text-lg font-heading font-semibold mt-6 mb-3 text-slate-200"
                           {...props}
                         />
                       ),
                       p: ({ node, ...props }) => (
                         <p
-                          className="mb-3 text-slate-300 leading-relaxed pl-0 ml-0"
+                          className="mb-4 text-slate-300 leading-relaxed"
                           {...props}
                         />
                       ),
                       ul: ({ node, ...props }) => (
                         <ul
-                          className="list-disc pl-4 mb-3 space-y-1 text-slate-300 ml-0"
+                          className="space-y-3 mb-6 [&>li]:bg-white/5 [&>li]:rounded-lg [&>li]:p-4 [&>li]:border [&>li]:border-white/5"
                           {...props}
                         />
                       ),
                       ol: ({ node, ...props }) => (
                         <ol
-                          className="list-decimal pl-4 mb-3 space-y-1 text-slate-300 ml-0"
+                          className="list-decimal pl-5 space-y-4 mb-6 text-slate-300 marker:text-med-blue marker:font-bold"
                           {...props}
                         />
                       ),
@@ -504,7 +547,7 @@ export default function AuditPage() {
                       ),
                       strong: ({ node, ...props }) => (
                         <strong
-                          className="font-semibold text-slate-100"
+                          className="font-semibold text-white"
                           {...props}
                         />
                       ),
@@ -521,32 +564,37 @@ export default function AuditPage() {
 
             {/* Boutons d'action */}
             <motion.div
-              className="flex flex-wrap gap-4"
+              className="flex flex-col gap-4"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
             >
-              <button
-                onClick={handleDownloadPDF}
-                disabled={isGeneratingPDF}
-                className="px-6 py-3 border border-gold/50 rounded-xl text-slate-200 hover:bg-gold/10 hover:border-gold transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 hover:shadow-lg active:scale-[0.98]"
-              >
-                {isGeneratingPDF ? (
-                  <>
-                    <span className="inline-block w-4 h-4 border-2 border-gold border-t-transparent rounded-full animate-spin" />
-                    Génération en cours...
-                  </>
-                ) : (
-                  "📥 Télécharger ce rapport en PDF"
-                )}
-              </button>
-              <a
-                href="mailto:contact@perfiamatic.com?subject=Demande%20Audit%20Complet%20-%201500€"
-                className="px-6 py-3 bg-gold text-brand-dark hover:bg-gold-light rounded-xl font-semibold transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98]"
-              >
-                Passer à l&apos;Audit Complet (1 500 €)
-              </a>
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={handleDownloadPDF}
+                  disabled={isGeneratingPDF}
+                  className="px-6 py-3 border-2 border-gold bg-transparent text-gold rounded-xl font-heading font-semibold hover:bg-gold/10 hover:border-gold transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 hover:shadow-glow-gold active:scale-[0.98]"
+                >
+                  {isGeneratingPDF ? (
+                    <>
+                      <span className="inline-block w-4 h-4 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+                      Génération en cours...
+                    </>
+                  ) : (
+                    "📥 Télécharger ce rapport en PDF"
+                  )}
+                </button>
+                <a
+                  href="mailto:contact@perfiamatic.com?subject=Demande%20Audit%20Complet"
+                  className="px-6 py-3 bg-gold text-brand-dark hover:bg-gold-light rounded-xl font-heading font-semibold transition-all duration-200 hover:shadow-glow-gold hover:-translate-y-0.5 active:scale-[0.98] flex items-center"
+                >
+                  Passer à l&apos;Audit Complet →
+                </a>
+              </div>
+              <p className="text-sm text-slate-400">
+                🔒 Données confidentielles — Conforme RGPD
+              </p>
             </motion.div>
           </div>
         )}
