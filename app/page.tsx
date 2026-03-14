@@ -76,9 +76,9 @@ export default function HomePage() {
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <svg className="w-12 h-12 text-gold opacity-80" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C8.5 2 6 5 6 8.5C6 11.5 7.5 14 7.5 14L8 19C8 20 8.5 22 12 22C15.5 22 16 20 16 19L16.5 14C16.5 14 18 11.5 18 8.5C18 5 15.5 2 12 2ZM11 18H9.5C9.2 18 9 17.8 9 17.5V14H11V18ZM14.5 18H13V14H15V17.5C15 17.8 14.8 18 14.5 18Z" />
+            <motion.div variants={fadeInUp} className="flex justify-center mb-4">
+              <svg className="w-8 h-8 text-med-blue" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1h-3V3c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v3H4c-.55 0-1 .45-1 1v3.5c0 .55.45 1 1 1h3v3c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-3h3c.55 0 1-.45 1-1z" />
               </svg>
             </motion.div>
             
