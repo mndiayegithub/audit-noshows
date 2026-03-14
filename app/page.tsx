@@ -108,7 +108,7 @@ export default function HomePage() {
                   transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
                   className="inline-block"
                 >
-                  Commencer l&apos;audit gratuit →
+                  Commencer l'audit gratuit →
                 </motion.span>
               </Link>
               
@@ -230,7 +230,7 @@ export default function HomePage() {
             >
               {[
                 {
-                  quote: "Après l&apos;audit PerfIAmatic, nous avons réduit notre taux de no-shows de 7,2% à 4,9%. Soit 37 000€ récupérés par an.",
+                  quote: "Après l'audit PerfIAmatic, nous avons réduit notre taux de no-shows de 7,2% à 4,9%. Soit 37 000€ récupérés par an.",
                   author: "Cabinet dentaire — Lyon"
                 },
                 {
