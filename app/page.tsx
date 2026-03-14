@@ -94,7 +94,7 @@ export default function HomePage() {
               variants={fadeInUp}
               className="text-4xl sm:text-6xl font-heading font-bold text-white mb-6 leading-tight"
             >
-              Combien vous coûtent vraiment <span className="text-gold">vos rendez-vous non honorés</span> ?
+              Combien vous coûtent réellement <span className="text-gold">vos rendez-vous non honorés</span> ?
             </motion.h1>
             
             <motion.p 
