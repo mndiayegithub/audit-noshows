@@ -155,7 +155,8 @@ export default function HomePage() {
 
       <main className="flex-1 relative z-10 pt-24">
         {/* 2. HERO */}
-        <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-24 px-4 overflow-hidden">
+        <section className="hero relative pt-12 pb-16 sm:pt-20 sm:pb-24 px-4 overflow-hidden">
+          <div className="absolute inset-0 bg-hex-pattern opacity-[0.03] pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/10 blur-[120px] rounded-full pointer-events-none" />
           
           <motion.div 

@@ -18,3 +18,22 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Custom Hero Background */
+.hero {
+  background: 
+    linear-gradient(
+      rgba(10, 22, 40, 0.80),
+      rgba(10, 22, 40, 0.95)
+    ),
+    url('/dental-cabinet-hero.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    background-attachment: scroll;
+  }
+}
