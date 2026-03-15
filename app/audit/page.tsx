@@ -331,7 +331,7 @@ export default function AuditPage() {
               <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
                 className="flex justify-center mb-5"
               >
                 <svg 
@@ -342,17 +342,10 @@ export default function AuditPage() {
                   xmlns="http://www.w3.org/2000/svg"
                   style={{ filter: "drop-shadow(0 0 10px rgba(79, 195, 247, 0.7))" }}
                 >
-                  {/* Corps du stéthoscope */}
-                  <path d="M14 8 C14 8 10 8 10 14 L10 24 C10 32 18 38 26 38 C34 38 42 32 42 24 L42 20" stroke="#4FC3F7" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
-                  {/* Tube vers l'oreille */}
-                  <path d="M42 20 C42 14 46 12 46 8" stroke="#4FC3F7" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
-                  {/* Écouteur gauche */}
-                  <circle cx="10" cy="7" r="3" fill="#4FC3F7"/>
-                  {/* Écouteur droit */}
-                  <circle cx="46" cy="7" r="3" fill="#4FC3F7"/>
-                  {/* Membrane (tête) */}
-                  <circle cx="26" cy="43" r="5" fill="none" stroke="#4FC3F7" strokeWidth="3"/>
-                  <circle cx="26" cy="43" r="2" fill="#4FC3F7"/>
+                  {/* Corps principal de la dent */}
+                  <path d="M26 4 C18 4 12 9 12 16 C12 20 13 23 14 26 C16 32 17 38 18 44 C18.5 47 20 48 22 47 C24 46 24 42 26 42 C28 42 28 46 30 47 C32 48 33.5 47 34 44 C35 38 36 32 38 26 C39 23 40 20 40 16 C40 9 34 4 26 4Z" fill="none" stroke="#4FC3F7" strokeWidth="2.5" strokeLinejoin="round"/>
+                  {/* Ligne de séparation racines */}
+                  <path d="M20 36 C20 36 22 33 26 33 C30 33 32 36 32 36" stroke="#4FC3F7" strokeWidth="2" strokeLinecap="round" fill="none"/>
                 </svg>
               </motion.div>
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-gold">
