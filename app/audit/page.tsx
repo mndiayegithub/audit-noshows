@@ -328,19 +328,33 @@ export default function AuditPage() {
               transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
               className="flex flex-col items-center text-center mb-8"
             >
-              <div className="flex justify-center mb-5">
+              <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="flex justify-center mb-5"
+              >
                 <svg 
-                  width="48" 
-                  height="48" 
-                  viewBox="0 0 48 48" 
+                  width="52" 
+                  height="52" 
+                  viewBox="0 0 52 52" 
                   fill="none" 
                   xmlns="http://www.w3.org/2000/svg"
-                  style={{ filter: "drop-shadow(0 0 8px rgba(79, 195, 247, 0.6))" }}
+                  style={{ filter: "drop-shadow(0 0 10px rgba(79, 195, 247, 0.7))" }}
                 >
-                  <rect x="18" y="4" width="12" height="40" rx="4" fill="#4FC3F7"/>
-                  <rect x="4" y="18" width="40" height="12" rx="4" fill="#4FC3F7"/>
+                  {/* Corps du stéthoscope */}
+                  <path d="M14 8 C14 8 10 8 10 14 L10 24 C10 32 18 38 26 38 C34 38 42 32 42 24 L42 20" stroke="#4FC3F7" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+                  {/* Tube vers l'oreille */}
+                  <path d="M42 20 C42 14 46 12 46 8" stroke="#4FC3F7" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+                  {/* Écouteur gauche */}
+                  <circle cx="10" cy="7" r="3" fill="#4FC3F7"/>
+                  {/* Écouteur droit */}
+                  <circle cx="46" cy="7" r="3" fill="#4FC3F7"/>
+                  {/* Membrane (tête) */}
+                  <circle cx="26" cy="43" r="5" fill="none" stroke="#4FC3F7" strokeWidth="3"/>
+                  <circle cx="26" cy="43" r="2" fill="#4FC3F7"/>
                 </svg>
-              </div>
+              </motion.div>
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-gold">
                 Résultats de l&apos;audit
               </h1>
