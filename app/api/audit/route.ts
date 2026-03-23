@@ -20,18 +20,35 @@ export async function POST(request: Request) {
 
     const raw = await response.json();
 
-    // n8n peut retourner un tableau [ { output: {...}, email: ... } ]
-    // ou directement l'objet { success, stats, rapport_texte }
+    // n8n peut renvoyer plusieurs formats selon le mode d'exécution :
+    // 1) Production (Respond to Webhook + JSON.stringify) :
+    //    { output: { success, stats, rapport_texte }, email }
+    // 2) Test webhook (n8n retourne un tableau) :
+    //    [{ output: { success, stats, rapport_texte }, email }]
+    // 3) Direct (ancienne version) :
+    //    { success, stats, rapport_texte }
     let data = raw;
+
     if (Array.isArray(raw)) {
+      // Format tableau : prendre le premier élément
       const first = raw[0];
-      // Format : [{ output: { success, stats, rapport_texte }, email }]
-      if (first?.output) {
+      if (first?.output && typeof first.output === "object" && "success" in first.output) {
         data = first.output;
       } else {
         data = first;
       }
+    } else if (
+      raw &&
+      typeof raw === "object" &&
+      "output" in raw &&
+      raw.output &&
+      typeof raw.output === "object" &&
+      "success" in raw.output
+    ) {
+      // Format objet avec wrapper { output: {...}, email }
+      data = raw.output;
     }
+    // Sinon : raw est directement { success, stats, rapport_texte }
 
     return Response.json(data);
   } catch (error: any) {
