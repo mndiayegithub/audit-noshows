@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,6 +32,192 @@ const sectionVariants = {
 };
 
 type Etat = "formulaire" | "loading" | "resultats" | "erreur";
+
+// ─── Calcul du score de performance ──────────────────────────────────────────
+function calcScore(taux: number): number {
+  return Math.max(0, Math.min(100, Math.round(100 - taux * 3.2)));
+}
+
+function getScoreConfig(score: number) {
+  if (score >= 80) return { label: "Excellent",     color: "#4CAF50", tw: "text-med-green",  bgTw: "bg-med-green/10",    borderTw: "border-med-green/40"   };
+  if (score >= 60) return { label: "Bien",           color: "#F59E0B", tw: "text-yellow-400", bgTw: "bg-yellow-400/10",   borderTw: "border-yellow-400/40"  };
+  if (score >= 40) return { label: "À améliorer",    color: "#F97316", tw: "text-orange-400", bgTw: "bg-orange-400/10",   borderTw: "border-orange-400/40"  };
+  return             { label: "Critique",        color: "#EF4444", tw: "text-red-400",    bgTw: "bg-red-500/10",      borderTw: "border-red-500/40"     };
+}
+
+// ─── ScoreCard ────────────────────────────────────────────────────────────────
+function ScoreCard({ stats }: { stats: import("@/types/audit").AuditStats }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [displayed, setDisplayed] = useState(0);
+
+  const score  = calcScore(stats.global.taux);
+  const config = getScoreConfig(score);
+
+  // SVG arc constants (270° gauge)
+  const R    = 72;
+  const CX   = 96;
+  const CY   = 96;
+  const CIRC = 2 * Math.PI * R;   // ≈ 452.4
+  const ARC  = CIRC * 0.75;       // 270° visible track
+  const GAP  = CIRC - ARC;
+
+  // Intersection observer — trigger animation once
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.25 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // Counter animation 0 → score
+  useEffect(() => {
+    if (!visible) return;
+    let raf: number;
+    const start = performance.now();
+    const duration = 1400;
+    const run = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplayed(Math.round(eased * score));
+      if (t < 1) raf = requestAnimationFrame(run);
+    };
+    raf = requestAnimationFrame(run);
+    return () => cancelAnimationFrame(raf);
+  }, [visible, score]);
+
+  const progressArc = ARC * (displayed / 100);
+
+  const taux = stats.global.taux;
+  const categories = [
+    {
+      label: "Taux no-shows",
+      value: `${taux}%`,
+      status: taux <= 5  ? "OPTIMAL"      : taux <= 10 ? "À SURVEILLER" : "À RISQUE",
+      statusCls: taux <= 5 ? "text-med-green bg-med-green/15" : taux <= 10 ? "text-yellow-400 bg-yellow-400/15" : "text-red-400 bg-red-500/10",
+    },
+    {
+      label: "Vs benchmark secteur",
+      value: stats.benchmark.optimal,
+      status: stats.benchmark.ecart <= 1 ? "CONFORME" : `+${stats.benchmark.ecart.toFixed(1)} pts`,
+      statusCls: stats.benchmark.ecart <= 1 ? "text-med-green bg-med-green/15" : "text-orange-400 bg-orange-400/15",
+    },
+    {
+      label: "CA perdu / an",
+      value: `${stats.global.ca_perdu_an.toLocaleString("fr-FR")} €`,
+      status: stats.global.ca_perdu_an > 30000 ? "IMPACT FORT" : stats.global.ca_perdu_an > 10000 ? "IMPACT MOYEN" : "IMPACT FAIBLE",
+      statusCls: stats.global.ca_perdu_an > 30000 ? "text-red-400 bg-red-500/10" : stats.global.ca_perdu_an > 10000 ? "text-orange-400 bg-orange-400/15" : "text-med-green bg-med-green/15",
+    },
+    {
+      label: "Créneaux à risque",
+      value: `${stats.top_3_pires?.length ?? 0} identifiés`,
+      status: (stats.top_3_pires?.length ?? 0) > 0 ? "À TRAITER" : "RAS",
+      statusCls: (stats.top_3_pires?.length ?? 0) > 0 ? "text-orange-400 bg-orange-400/15" : "text-med-green bg-med-green/15",
+    },
+  ];
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={{
+        hidden:  { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+      }}
+      initial="hidden"
+      animate="visible"
+      className="bg-surface rounded-2xl border border-white/10 overflow-hidden shadow-card"
+    >
+      {/* Top label */}
+      <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-white/5">
+        <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Score de performance no-shows</p>
+        <p className="text-xs text-slate-500 hidden sm:block">VOS RÉSULTATS PERSONNALISÉS</p>
+      </div>
+
+      {/* Body: gauge ＋ categories */}
+      <div className="flex flex-col md:flex-row items-center gap-6 p-6">
+
+        {/* ── Jauge SVG ────────────────── */}
+        <div className="flex-shrink-0 flex flex-col items-center gap-3">
+          <svg width="192" height="192" viewBox="0 0 192 192" aria-label={`Score ${score}/100`}>
+            {/* Track */}
+            <circle
+              cx={CX} cy={CY} r={R}
+              fill="none"
+              stroke="rgba(255,255,255,0.07)"
+              strokeWidth="14"
+              strokeDasharray={`${ARC} ${GAP}`}
+              strokeLinecap="round"
+              transform={`rotate(135 ${CX} ${CY})`}
+            />
+            {/* Active */}
+            <circle
+              cx={CX} cy={CY} r={R}
+              fill="none"
+              stroke={config.color}
+              strokeWidth="14"
+              strokeDasharray={`${progressArc} ${CIRC - progressArc}`}
+              strokeLinecap="round"
+              transform={`rotate(135 ${CX} ${CY})`}
+              style={{ filter: `drop-shadow(0 0 6px ${config.color}88)` }}
+            />
+            {/* Score number */}
+            <text x={CX} y={CY - 6} textAnchor="middle" fill="white" fontSize="38" fontWeight="bold" fontFamily="DM Sans, sans-serif">
+              {displayed}
+            </text>
+            <text x={CX} y={CY + 16} textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="15" fontFamily="DM Sans, sans-serif">
+              /100
+            </text>
+          </svg>
+
+          {/* Badge label */}
+          <span className={`text-sm font-bold px-4 py-1.5 rounded-full border ${config.bgTw} ${config.tw} ${config.borderTw}`}>
+            {config.label}
+          </span>
+
+          {/* Legend */}
+          <div className="flex gap-3 text-xs text-slate-500 mt-1">
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" />Critique</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-yellow-400 inline-block" />Moyen</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-med-green inline-block" />Optimal</span>
+          </div>
+        </div>
+
+        {/* ── Séparateur vertical ───────── */}
+        <div className="hidden md:block self-stretch w-px bg-white/10 mx-2" />
+
+        {/* ── Indicateurs ──────────────── */}
+        <div className="flex-1 w-full space-y-2.5">
+          {categories.map((cat) => (
+            <div
+              key={cat.label}
+              className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/5"
+            >
+              <span className="text-slate-300 text-sm">{cat.label}</span>
+              <div className="flex items-center gap-2.5 shrink-0">
+                <span className="text-white font-semibold text-sm">{cat.value}</span>
+                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap ${cat.statusCls}`}>
+                  {cat.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom strip — Potentiel récupérable */}
+      <div className="bg-med-blue/10 border-t border-med-blue/20 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <span className="text-slate-300 text-sm font-medium">Potentiel récupérable estimé</span>
+        <span className="text-med-blue font-heading font-bold text-xl md:text-2xl tracking-tight">
+          +{stats.potentiel.passage_45.toLocaleString("fr-FR")} €/an
+        </span>
+      </div>
+    </motion.div>
+  );
+}
 
 const ETAPES_LOADING = [
   { id: 1, texte: "Lecture du fichier CSV...", delai: 0 },
@@ -336,6 +522,9 @@ export default function AuditPage() {
                 {resultats.stats.periode.nb_mois} mois
               </p>
             </motion.div>
+
+            {/* Score de performance */}
+            <ScoreCard stats={resultats.stats} />
 
             {/* Cards statistiques */}
             <motion.div
