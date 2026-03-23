@@ -523,12 +523,9 @@ export default function AuditPage() {
               </p>
             </motion.div>
 
-            {/* Score de performance */}
-            <ScoreCard stats={resultats.stats} />
-
-            {/* Cards statistiques */}
+            {/* Cards statistiques — au-dessus du score */}
             <motion.div
-              className="flex flex-col gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
               initial="hidden"
               animate="visible"
               variants={{
@@ -536,44 +533,46 @@ export default function AuditPage() {
                 hidden: {},
               }}
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
-                  { label: "📊 Total RDV", value: resultats.stats.global.total_rdv.toLocaleString(), color: "text-white" },
-                  { label: "❌ No-shows", value: resultats.stats.global.no_shows.toLocaleString(), color: "text-white" },
-                  { label: "📉 Taux no-shows", value: `${resultats.stats.global.taux}%`, color: "text-white" },
-                  { label: "💸 CA perdu/an", value: `${resultats.stats.global.ca_perdu_an.toLocaleString()} €`, color: "text-white" },
-                ].map((card, i) => (
-                  <motion.div
-                    key={card.label}
-                    variants={fadeInUp}
-                    custom={i}
-                    className="bg-surface rounded-xl border border-white/10 p-4 shadow-card transition-all duration-300 hover:shadow-xl hover:border-white/20 hover:-translate-y-0.5"
-                  >
-                    <p className="text-sm text-slate-400 mb-1">{card.label}</p>
-                    <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Potentiel récupérable */}
-              <motion.div
-                variants={fadeInUp}
-                custom={4}
-                className="bg-surface rounded-xl border border-gold/50 p-8 text-center shadow-card transition-all duration-300 hover:shadow-glow-gold hover:border-gold hover:-translate-y-1 relative overflow-hidden"
-              >
-                {/* Glow subtil en fond */}
-                <div className="absolute inset-0 bg-gold/5 animate-pulse" style={{ animationDuration: '3s' }} />
-                
-                <div className="relative z-10">
-                  <p className="text-med-blue font-heading font-semibold mb-2 uppercase tracking-wider text-sm md:text-base">
-                    Potentiel récupérable/an
-                  </p>
-                  <p className="text-4xl md:text-[48px] font-heading font-bold text-gold">
-                    {resultats.stats.potentiel.passage_45.toLocaleString()} €
-                  </p>
-                </div>
-              </motion.div>
+              {[
+                { label: "📊 Total RDV", value: resultats.stats.global.total_rdv.toLocaleString(), color: "text-white" },
+                { label: "❌ No-shows", value: resultats.stats.global.no_shows.toLocaleString(), color: "text-white" },
+                { label: "📉 Taux no-shows", value: `${resultats.stats.global.taux}%`, color: "text-white" },
+                { label: "💸 CA perdu/an", value: `${resultats.stats.global.ca_perdu_an.toLocaleString()} €`, color: "text-white" },
+              ].map((card, i) => (
+                <motion.div
+                  key={card.label}
+                  variants={fadeInUp}
+                  custom={i}
+                  className="bg-surface rounded-xl border border-white/10 p-4 shadow-card transition-all duration-300 hover:shadow-xl hover:border-white/20 hover:-translate-y-0.5"
+                >
+                  <p className="text-sm text-slate-400 mb-1">{card.label}</p>
+                  <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
+                </motion.div>
+              ))}
             </motion.div>
+
+            {/* Score de performance */}
+            <ScoreCard stats={resultats.stats} />
+
+            {/* Potentiel récupérable — masqué temporairement, décommenter pour réafficher
+            <motion.div
+              variants={fadeInUp}
+              custom={4}
+              initial="hidden"
+              animate="visible"
+              className="bg-surface rounded-xl border border-gold/50 p-8 text-center shadow-card transition-all duration-300 hover:shadow-glow-gold hover:border-gold hover:-translate-y-1 relative overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gold/5 animate-pulse" style={{ animationDuration: '3s' }} />
+              <div className="relative z-10">
+                <p className="text-med-blue font-heading font-semibold mb-2 uppercase tracking-wider text-sm md:text-base">
+                  Potentiel récupérable/an
+                </p>
+                <p className="text-4xl md:text-[48px] font-heading font-bold text-gold">
+                  {resultats.stats.potentiel.passage_45.toLocaleString()} €
+                </p>
+              </div>
+            </motion.div>
+            */}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               {/* Graphique 1 : Bar chart */}
