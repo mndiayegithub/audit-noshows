@@ -18,7 +18,21 @@ export async function POST(request: Request) {
       throw new Error(`n8n a répondu avec le statut : ${response.status}`);
     }
 
-    const data = await response.json();
+    const raw = await response.json();
+
+    // n8n peut retourner un tableau [ { output: {...}, email: ... } ]
+    // ou directement l'objet { success, stats, rapport_texte }
+    let data = raw;
+    if (Array.isArray(raw)) {
+      const first = raw[0];
+      // Format : [{ output: { success, stats, rapport_texte }, email }]
+      if (first?.output) {
+        data = first.output;
+      } else {
+        data = first;
+      }
+    }
+
     return Response.json(data);
   } catch (error: any) {
     console.error("Erreur API audit:", error);
