@@ -489,7 +489,7 @@ export default function AuditPage() {
                 <h2 className="text-xl font-heading font-bold text-gold mb-6">
                   Rapport d&apos;analyse IA
                 </h2>
-                <div className="rapport-markdown">
+                <div className="rapport-markdown text-slate-300">
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
@@ -519,7 +519,7 @@ export default function AuditPage() {
                       ),
                       ul: ({ node, ...props }) => (
                         <ul
-                          className="space-y-3 mb-6 [&>li]:bg-white/5 [&>li]:rounded-lg [&>li]:p-4 [&>li]:border [&>li]:border-white/5"
+                          className="space-y-3 mb-6 [&>li]:bg-white/5 [&>li]:rounded-lg [&>li]:p-4 [&>li]:border [&>li]:border-white/5 [&>li]:text-slate-300"
                           {...props}
                         />
                       ),
@@ -530,11 +530,29 @@ export default function AuditPage() {
                         />
                       ),
                       li: ({ node, ...props }) => (
-                        <li className="leading-relaxed" {...props} />
+                        <li className="leading-relaxed text-slate-300" {...props} />
                       ),
                       strong: ({ node, ...props }) => (
                         <strong
                           className="font-semibold text-white"
+                          {...props}
+                        />
+                      ),
+                      em: ({ node, ...props }) => (
+                        <em className="italic text-slate-200" {...props} />
+                      ),
+                      code: ({ node, ...props }) => (
+                        <code
+                          className="bg-white/10 text-med-blue rounded px-1.5 py-0.5 text-sm font-mono"
+                          {...props}
+                        />
+                      ),
+                      hr: ({ node, ...props }) => (
+                        <hr className="border-med-blue/20 my-6" {...props} />
+                      ),
+                      blockquote: ({ node, ...props }) => (
+                        <blockquote
+                          className="border-l-4 border-gold/50 pl-4 my-4 text-slate-300 italic"
                           {...props}
                         />
                       ),
