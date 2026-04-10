@@ -3,11 +3,11 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Link from "next/link";
-import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { UploadCloud, ShieldCheck, TrendingUp, Activity } from "lucide-react";
 import { pdf } from "@react-pdf/renderer";
 import RapportPDF from "@/components/audit/RapportPDF";
 import GraphiqueParJour from "@/components/GraphiqueParJour";
@@ -39,10 +39,9 @@ function calcScore(taux: number): number {
 }
 
 function getScoreConfig(score: number) {
-  if (score >= 80) return { label: "Excellent",     color: "#4CAF50", tw: "text-med-green",  bgTw: "bg-med-green/10",    borderTw: "border-med-green/40"   };
-  if (score >= 60) return { label: "Bien",           color: "#F59E0B", tw: "text-yellow-400", bgTw: "bg-yellow-400/10",   borderTw: "border-yellow-400/40"  };
-  if (score >= 40) return { label: "À améliorer",    color: "#F97316", tw: "text-orange-400", bgTw: "bg-orange-400/10",   borderTw: "border-orange-400/40"  };
-  return             { label: "Critique",        color: "#EF4444", tw: "text-red-400",    bgTw: "bg-red-500/10",      borderTw: "border-red-500/40"     };
+  if (score >= 80) return { label: "Optimal",     color: "#10B981", tw: "text-success",  bgTw: "bg-green-50",    borderTw: "border-success/20"   };
+  if (score >= 60) return { label: "Moyen",           color: "#F59E0B", tw: "text-warning", bgTw: "bg-orange-50",   borderTw: "border-warning/20"  };
+  return             { label: "Critique",        color: "#EF4444", tw: "text-danger",    bgTw: "bg-red-50",      borderTw: "border-danger/20"     };
 }
 
 // ─── ScoreCard ────────────────────────────────────────────────────────────────
@@ -98,25 +97,25 @@ function ScoreCard({ stats }: { stats: import("@/types/audit").AuditStats }) {
       label: "Taux no-shows",
       value: `${taux}%`,
       status: taux <= 5  ? "OPTIMAL"      : taux <= 10 ? "À SURVEILLER" : "À RISQUE",
-      statusCls: taux <= 5 ? "text-med-green bg-med-green/15" : taux <= 10 ? "text-yellow-400 bg-yellow-400/15" : "text-red-400 bg-red-500/10",
+      statusCls: taux <= 5 ? "text-success bg-emerald-50" : taux <= 10 ? "text-warning bg-amber-50" : "text-danger bg-red-50",
     },
     {
       label: "Vs benchmark secteur",
       value: stats.benchmark.optimal,
       status: stats.benchmark.ecart <= 1 ? "CONFORME" : `+${stats.benchmark.ecart.toFixed(1)} pts`,
-      statusCls: stats.benchmark.ecart <= 1 ? "text-med-green bg-med-green/15" : "text-orange-400 bg-orange-400/15",
+      statusCls: stats.benchmark.ecart <= 1 ? "text-success bg-emerald-50" : "text-warning bg-amber-50",
     },
     {
       label: "CA perdu / an",
       value: `${stats.global.ca_perdu_an.toLocaleString("fr-FR")} €`,
       status: stats.global.ca_perdu_an > 30000 ? "IMPACT FORT" : stats.global.ca_perdu_an > 10000 ? "IMPACT MOYEN" : "IMPACT FAIBLE",
-      statusCls: stats.global.ca_perdu_an > 30000 ? "text-red-400 bg-red-500/10" : stats.global.ca_perdu_an > 10000 ? "text-orange-400 bg-orange-400/15" : "text-med-green bg-med-green/15",
+      statusCls: stats.global.ca_perdu_an > 30000 ? "text-danger bg-red-50" : stats.global.ca_perdu_an > 10000 ? "text-warning bg-amber-50" : "text-success bg-emerald-50",
     },
     {
       label: "Créneaux à risque",
       value: `${stats.top_3_pires?.length ?? 0} identifiés`,
       status: (stats.top_3_pires?.length ?? 0) > 0 ? "À TRAITER" : "RAS",
-      statusCls: (stats.top_3_pires?.length ?? 0) > 0 ? "text-orange-400 bg-orange-400/15" : "text-med-green bg-med-green/15",
+      statusCls: (stats.top_3_pires?.length ?? 0) > 0 ? "text-warning bg-amber-50" : "text-success bg-emerald-50",
     },
   ];
 
@@ -129,12 +128,12 @@ function ScoreCard({ stats }: { stats: import("@/types/audit").AuditStats }) {
       }}
       initial="hidden"
       animate="visible"
-      className="bg-surface rounded-2xl border border-white/10 overflow-hidden shadow-card"
+      className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
     >
       {/* Top label */}
-      <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-white/5">
-        <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Score de performance no-shows</p>
-        <p className="text-xs text-slate-500 hidden sm:block">VOS RÉSULTATS PERSONNALISÉS</p>
+      <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-slate-100">
+        <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Score de performance</p>
+        <p className="text-xs text-slate-400 hidden sm:block">VOS RÉSULTATS PERSONNALISÉS</p>
       </div>
 
       {/* Body: gauge ＋ categories */}
@@ -147,7 +146,7 @@ function ScoreCard({ stats }: { stats: import("@/types/audit").AuditStats }) {
             <circle
               cx={CX} cy={CY} r={R}
               fill="none"
-              stroke="rgba(255,255,255,0.07)"
+              stroke="#F1F5F9"
               strokeWidth="14"
               strokeDasharray={`${ARC} ${GAP}`}
               strokeLinecap="round"
@@ -162,13 +161,12 @@ function ScoreCard({ stats }: { stats: import("@/types/audit").AuditStats }) {
               strokeDasharray={`${progressArc} ${CIRC - progressArc}`}
               strokeLinecap="round"
               transform={`rotate(135 ${CX} ${CY})`}
-              style={{ filter: `drop-shadow(0 0 6px ${config.color}88)` }}
             />
             {/* Score number */}
-            <text x={CX} y={CY - 6} textAnchor="middle" fill="white" fontSize="38" fontWeight="bold" fontFamily="DM Sans, sans-serif">
+            <text x={CX} y={CY - 6} textAnchor="middle" fill="#0F172A" fontSize="38" fontWeight="bold" fontFamily="Plus Jakarta Sans, sans-serif">
               {displayed}
             </text>
-            <text x={CX} y={CY + 16} textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="15" fontFamily="DM Sans, sans-serif">
+            <text x={CX} y={CY + 16} textAnchor="middle" fill="#64748B" fontSize="15" fontFamily="Plus Jakarta Sans, sans-serif">
               /100
             </text>
           </svg>
@@ -179,27 +177,27 @@ function ScoreCard({ stats }: { stats: import("@/types/audit").AuditStats }) {
           </span>
 
           {/* Legend */}
-          <div className="flex gap-3 text-xs text-slate-500 mt-1">
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" />Critique</span>
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-yellow-400 inline-block" />Moyen</span>
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-med-green inline-block" />Optimal</span>
+          <div className="flex gap-3 text-xs text-slate-500 mt-1 font-medium">
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-danger inline-block" />Critique</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-warning inline-block" />Moyen</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-success inline-block" />Optimal</span>
           </div>
         </div>
 
         {/* ── Séparateur vertical ───────── */}
-        <div className="hidden md:block self-stretch w-px bg-white/10 mx-2" />
+        <div className="hidden md:block self-stretch w-px bg-slate-200 mx-2" />
 
         {/* ── Indicateurs ──────────────── */}
         <div className="flex-1 w-full space-y-2.5">
           {categories.map((cat) => (
             <div
               key={cat.label}
-              className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/5"
+              className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-slate-50 border border-slate-100"
             >
-              <span className="text-slate-300 text-sm">{cat.label}</span>
+              <span className="text-slate-600 font-medium text-sm">{cat.label}</span>
               <div className="flex items-center gap-2.5 shrink-0">
-                <span className="text-white font-semibold text-sm">{cat.value}</span>
-                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap ${cat.statusCls}`}>
+                <span className="text-slate-900 font-bold text-sm">{cat.value}</span>
+                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap border border-current ${cat.statusCls}`}>
                   {cat.status}
                 </span>
               </div>
@@ -209,9 +207,9 @@ function ScoreCard({ stats }: { stats: import("@/types/audit").AuditStats }) {
       </div>
 
       {/* Bottom strip — Potentiel récupérable */}
-      <div className="bg-med-blue/10 border-t border-med-blue/20 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <span className="text-slate-300 text-sm font-medium">Potentiel récupérable estimé</span>
-        <span className="text-med-blue font-heading font-bold text-xl md:text-2xl tracking-tight">
+      <div className="bg-yellow-50 border-t border-yellow-100 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <span className="text-yellow-800 text-sm font-semibold">Potentiel récupérable estimé</span>
+        <span className="text-yellow-600 font-heading font-bold text-xl md:text-2xl tracking-tight">
           +{stats.potentiel.passage_45.toLocaleString("fr-FR")} €/an
         </span>
       </div>
@@ -345,158 +343,162 @@ export default function AuditPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-dark relative">
-      <div className="fixed inset-0 bg-hex-pattern opacity-[0.03] pointer-events-none" />
+    <div className="min-h-screen flex flex-col bg-background text-slate-800 font-sans selection:bg-brand-200 selection:text-brand-900 overflow-x-hidden">
       
       {/* Header */}
-      <header className="bg-brand-dark border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center shrink-0" aria-label="PerfIAmatic - Accueil">
-              <Image
-                src="/logo.png"
-                alt="PerfIAmatic"
-                width={246}
-                height={55}
-                className="h-[2.73rem] w-auto object-contain"
-                priority
-              />
+      <nav id="navbar" className="bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-lg">
+                <Activity className="w-6 h-6" />
+              </div>
+              <span className="font-heading font-bold text-2xl tracking-tight text-slate-900">
+                PerfIAmatic
+              </span>
             </Link>
-            <nav>
-              <Link
-                href="/"
-                className="text-slate-300 hover:text-gold transition-colors font-medium"
-              >
-                Accueil
-              </Link>
-            </nav>
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="/#comment-ca-marche" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">Comment ça marche</Link>
+              <Link href="/#impact" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">Impact</Link>
+            </div>
           </div>
         </div>
-      </header>
+      </nav>
 
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12">
+      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12 flex flex-col justify-center">
         {etat === "formulaire" && (
-          <div className="space-y-8">
-            <h1 className="text-3xl font-bold text-gold">
-              Audit Flash No-Shows
-            </h1>
-            <p className="text-slate-300">
-              Uploadez votre fichier CSV d&apos;export de rendez-vous pour
-              obtenir une analyse complète en quelques secondes.
-            </p>
-
-            {/* Zone dropzone */}
-            <div
-              {...getRootProps()}
-              className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
-                isDragActive
-                  ? "border-gold bg-gold/10"
-                  : "border-white/30 hover:border-gold/50 text-slate-300"
-              }`}
-            >
-              <input {...getInputProps()} />
-              <p className={isDragActive ? "text-gold" : ""}>
-                {file
-                  ? `Fichier sélectionné : ${file.name}`
-                  : "Glissez-déposez votre fichier CSV ici, ou cliquez pour sélectionner"}
+          <div className="max-w-xl mx-auto w-full">
+            <div className="glass-panel bg-white/60 rounded-[3rem] p-8 md:p-12 shadow-2xl border border-slate-200">
+              <h1 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-4 text-center tracking-tight">
+                Lancez votre audit gratuit.
+              </h1>
+              <p className="text-slate-500 text-center mb-10 font-medium">
+                Uploadez votre export Doctolib et recevez votre rapport personnalisé en 60 secondes.
               </p>
-              <p className="text-sm text-slate-400 mt-2">
-                Fichiers .csv uniquement, max 10 Mo
-              </p>
-            </div>
 
-            {/* Formulaire */}
-            <div className="bg-surface rounded-xl border border-white/10 p-6 space-y-4 shadow-card">
-              <div>
-                <label
-                  htmlFor="nom_cabinet"
-                  className="block text-sm font-medium text-slate-300 mb-1"
-                >
-                  Nom du cabinet <span className="text-red-400">*</span>
-                </label>
-                <input
-                  id="nom_cabinet"
-                  type="text"
-                  value={nomCabinet}
-                  onChange={(e) => setNomCabinet(e.target.value)}
-                  placeholder="Ex : Cabinet Dr. Martin"
-                  className="w-full px-4 py-2 border border-white/20 rounded-lg bg-brand-dark/50 text-white placeholder-slate-500 focus:ring-2 focus:ring-gold focus:border-gold/50"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="ca_moyen"
-                  className="block text-sm font-medium text-slate-300 mb-1"
-                >
-                  CA moyen par RDV (€)
-                </label>
-                <input
-                  id="ca_moyen"
-                  type="number"
-                  value={caMoyen}
-                  onChange={(e) => setCaMoyen(Number(e.target.value) || 150)}
-                  min={1}
-                  className="w-full px-4 py-2 border border-white/20 rounded-lg bg-brand-dark/50 text-white focus:ring-2 focus:ring-gold focus:border-gold/50"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-slate-300 mb-1"
-                >
-                  Email (optionnel, pour recevoir le rapport)
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="cabinet@exemple.fr"
-                  className="w-full px-4 py-2 border border-white/20 rounded-lg bg-brand-dark/50 text-white placeholder-slate-500 focus:ring-2 focus:ring-gold focus:border-gold/50"
-                />
-              </div>
-              <button
-                onClick={handleSubmit}
-                className="w-full bg-gold text-brand-dark py-3 rounded-lg font-semibold hover:bg-gold-light transition-colors"
+              {/* Zone dropzone */}
+              <div
+                {...getRootProps()}
+                className={`border-4 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 mb-8 flex flex-col items-center justify-center group ${
+                  isDragActive
+                    ? "border-primary bg-blue-50/50"
+                    : "border-slate-300 bg-slate-50/50 hover:bg-blue-50/50 hover:border-primary text-slate-600"
+                }`}
               >
-                Générer l&apos;Audit Flash
-              </button>
+                <input {...getInputProps()} />
+                <div className="w-20 h-20 bg-white shadow-lg rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <UploadCloud className="w-8 h-8 text-primary" />
+                </div>
+                <p className={`font-heading font-semibold text-xl mb-2 ${isDragActive ? "text-primary" : "text-slate-800"}`}>
+                  {file
+                    ? file.name
+                    : "Lancer l'Audit"}
+                </p>
+                <p className="text-sm text-slate-500 font-medium">
+                  {file ? "Cliquez pour modifier" : "Cliquez ou glissez votre CSV ici"}
+                </p>
+              </div>
+
+              {/* Formulaire */}
+              <div className="space-y-5 text-left">
+                <div>
+                  <label
+                    htmlFor="nom_cabinet"
+                    className="block text-sm font-semibold text-slate-700 mb-1.5"
+                  >
+                    Nom du cabinet <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="nom_cabinet"
+                    type="text"
+                    value={nomCabinet}
+                    onChange={(e) => setNomCabinet(e.target.value)}
+                    placeholder="Ex : Cabinet Dr. Martin"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="ca_moyen"
+                    className="block text-sm font-semibold text-slate-700 mb-1.5"
+                  >
+                    CA moyen par RDV (€)
+                  </label>
+                  <input
+                    id="ca_moyen"
+                    type="number"
+                    value={caMoyen}
+                    onChange={(e) => setCaMoyen(Number(e.target.value) || 150)}
+                    min={1}
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-semibold text-slate-700 mb-1.5"
+                  >
+                    Email (optionnel, pour recevoir le rapport)
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="cabinet@exemple.fr"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm"
+                  />
+                </div>
+                <button
+                  onClick={handleSubmit}
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-full font-bold text-lg hover:shadow-xl hover:-translate-y-0.5 transition-all mt-6 flex items-center justify-center gap-2 group"
+                >
+                  <TrendingUp className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  Générer l{"'"}Audit Flash
+                </button>
+                <div className="text-center mt-6 text-xs text-slate-500 font-medium flex items-center justify-center gap-2">
+                  <ShieldCheck className="w-4 h-4" />
+                  Chiffrement 256-bit · Conforme RGPD · Aucun nom patient stocké
+                </div>
+              </div>
             </div>
           </div>
         )}
 
         {etat === "loading" && (
-          <div className="space-y-8">
-            <h1 className="text-3xl font-bold text-gold">
+          <div className="max-w-lg mx-auto w-full text-center">
+            <h2 className="text-3xl font-heading font-extrabold text-slate-900 mb-2 tracking-tight">
               Analyse en cours...
-            </h1>
-            <p className="text-slate-300">
+            </h2>
+            <p className="text-slate-500 mb-8 font-medium">
               Temps estimé : 30-60 secondes
             </p>
-            <div className="bg-surface rounded-xl border border-white/10 p-8 shadow-card">
-              <div className="h-2 bg-white/20 rounded-full overflow-hidden mb-8">
+            <div className="glass-panel bg-white/60 rounded-3xl border border-slate-200 p-8 shadow-sm text-left">
+              <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden mb-8">
                 <div
-                  className="h-full bg-gold transition-all duration-500 ease-out"
+                  className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-500 ease-out relative"
                   style={{
                     width: `${(etapeActuelle / 4) * 100}%`,
                   }}
-                />
+                >
+                  <div className="absolute top-0 left-0 w-full h-full bg-white/20 animate-pulse"></div>
+                </div>
               </div>
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {ETAPES_LOADING.map((etape) => (
                   <li
                     key={etape.id}
-                    className={`flex items-center gap-3 ${
+                    className={`flex items-center gap-3 font-medium ${
                       etapeActuelle >= etape.id
-                        ? "text-slate-200"
-                        : "text-slate-500"
+                        ? "text-slate-900"
+                        : "text-slate-400"
                     }`}
                   >
                     {etapeActuelle >= etape.id ? (
-                      <span className="text-gold">✓</span>
+                      <span className="w-6 h-6 rounded-full bg-emerald-100 text-success flex items-center justify-center text-xs font-bold">✓</span>
                     ) : (
-                      <span className="w-5" />
+                      <span className="w-6 h-6 rounded-full border-2 border-slate-200" />
                     )}
                     {etape.texte}
                   </li>
@@ -507,25 +509,36 @@ export default function AuditPage() {
         )}
 
         {etat === "resultats" && resultats && (
-          <div className="space-y-8">
+          <div className="space-y-8 w-full">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
-              className="flex flex-col items-center text-center mb-8"
+              transition={{ duration: 0.4 }}
+              className="glass-panel bg-white/60 p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
             >
-              <h1 className="text-3xl md:text-4xl font-heading font-bold text-gold">
-                Résultats de l&apos;audit
-              </h1>
-              <p className="text-slate-300 mt-2 text-lg">
-                {resultats.stats.nom_cabinet} • Période analysée :{" "}
-                {resultats.stats.periode.nb_mois} mois
-              </p>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-slate-900 tracking-tight">
+                  Résultats de l{"'"}audit — {resultats.stats.nom_cabinet}
+                </h1>
+                <p className="text-slate-500 mt-2 font-medium flex items-center gap-2">
+                  <Activity className="w-4 h-4" />
+                  Période analysée : {resultats.stats.periode.nb_mois} mois
+                </p>
+              </div>
+              <div className="flex gap-3 shrink-0">
+                <button
+                  onClick={handleDownloadPDF}
+                  disabled={isGeneratingPDF}
+                  className="px-6 py-2.5 border-2 border-primary bg-white/50 text-primary rounded-full font-bold text-sm hover:bg-blue-50 transition-all shadow-sm hover:shadow-md disabled:opacity-50 flex items-center gap-2"
+                >
+                  {isGeneratingPDF ? "Génération..." : "Télécharger PDF"}
+                </button>
+              </div>
             </motion.div>
 
-            {/* Cards statistiques — au-dessus du score */}
+            {/* KPI ROW */}
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
               initial="hidden"
               animate="visible"
               variants={{
@@ -534,19 +547,19 @@ export default function AuditPage() {
               }}
             >
               {[
-                { label: "📊 Total RDV", value: resultats.stats.global.total_rdv.toLocaleString(), color: "text-white" },
-                { label: "❌ No-shows", value: resultats.stats.global.no_shows.toLocaleString(), color: "text-white" },
-                { label: "📉 Taux no-shows", value: `${resultats.stats.global.taux}%`, color: "text-white" },
-                { label: "💸 CA perdu/an", value: `${resultats.stats.global.ca_perdu_an.toLocaleString()} €`, color: "text-white" },
+                { label: "Total RDV", value: resultats.stats.global.total_rdv.toLocaleString(), color: "text-slate-900", border: "border-l-primary" },
+                { label: "No-shows", value: resultats.stats.global.no_shows.toLocaleString(), color: "text-slate-900", border: "border-l-danger" },
+                { label: "Taux no-shows", value: `${resultats.stats.global.taux}%`, color: resultats.stats.global.taux > 5 ? "text-danger" : resultats.stats.global.taux > 3 ? "text-warning" : "text-success", border: resultats.stats.global.taux > 5 ? "border-l-danger" : resultats.stats.global.taux > 3 ? "border-l-warning" : "border-l-success" },
+                { label: "CA perdu/an", value: `${resultats.stats.global.ca_perdu_an.toLocaleString()} €`, color: "text-danger", border: "border-l-danger" },
               ].map((card, i) => (
                 <motion.div
                   key={card.label}
                   variants={fadeInUp}
                   custom={i}
-                  className="bg-surface rounded-xl border border-white/10 p-4 shadow-card transition-all duration-300 hover:shadow-xl hover:border-white/20 hover:-translate-y-0.5"
+                  className={`glass-panel bg-white/60 rounded-3xl border border-slate-100 border-l-4 p-6 shadow-sm ${card.border}`}
                 >
-                  <p className="text-sm text-slate-400 mb-1">{card.label}</p>
-                  <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
+                  <p className="text-sm font-medium text-slate-500 mb-2 uppercase tracking-wider">{card.label}</p>
+                  <p className={`text-3xl font-heading font-extrabold ${card.color}`}>{card.value}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -554,34 +567,18 @@ export default function AuditPage() {
             {/* Score de performance */}
             <ScoreCard stats={resultats.stats} />
 
-            {/* Potentiel récupérable — masqué temporairement, décommenter pour réafficher
-            <motion.div
-              variants={fadeInUp}
-              custom={4}
-              initial="hidden"
-              animate="visible"
-              className="bg-surface rounded-xl border border-gold/50 p-8 text-center shadow-card transition-all duration-300 hover:shadow-glow-gold hover:border-gold hover:-translate-y-1 relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gold/5 animate-pulse" style={{ animationDuration: '3s' }} />
-              <div className="relative z-10">
-                <p className="text-med-blue font-heading font-semibold mb-2 uppercase tracking-wider text-sm md:text-base">
-                  Potentiel récupérable/an
-                </p>
-                <p className="text-4xl md:text-[48px] font-heading font-bold text-gold">
-                  {resultats.stats.potentiel.passage_45.toLocaleString()} €
-                </p>
-              </div>
-            </motion.div>
-            */}
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               {/* Graphique 1 : Bar chart */}
               {resultats.stats.par_jour && resultats.stats.par_jour.length > 0 && (
-                <GraphiqueParJour parJour={resultats.stats.par_jour} />
+                <div className="glass-panel bg-white/60 rounded-3xl border border-slate-200 shadow-sm p-4">
+                   <GraphiqueParJour parJour={resultats.stats.par_jour} />
+                </div>
               )}
 
               {/* Graphique 2 : Gauge */}
-              <GaugeBenchmark tauxActuel={resultats.stats.global.taux} />
+              <div className="glass-panel bg-white/60 rounded-3xl border border-slate-200 shadow-sm p-4">
+                <GaugeBenchmark tauxActuel={resultats.stats.global.taux} />
+              </div>
             </div>
 
             {/* Top 3 créneaux à risque */}
@@ -591,26 +588,27 @@ export default function AuditPage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
-                className="bg-red-500/5 rounded-xl border border-red-500/20 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:border-red-500/40"
+                className="glass-panel bg-white/60 rounded-3xl border border-slate-100 border-l-4 border-l-danger p-8 shadow-sm"
               >
-                <h2 className="text-lg font-heading font-semibold text-red-400 mb-4">
-                  🔴 Top 3 créneaux à risque
+                <h2 className="text-2xl font-heading font-extrabold text-slate-900 mb-6 flex items-center gap-3">
+                  <span className="text-danger text-2xl">✗</span> Top 3 créneaux à risque
                 </h2>
-                <ul className="space-y-3">
+                <ul className="space-y-0">
                   {resultats.stats.top_3_pires.map((creneau, index) => {
                     const caPerduAnnuel = creneau.ca_perdu;
                     return (
                       <li
                         key={index}
-                        className="flex flex-wrap items-center justify-between gap-2 py-2 border-b border-white/10 last:border-0"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-b border-slate-100/50 last:border-0"
                       >
-                        <span className="font-medium text-slate-200">
+                        <span className="font-extrabold font-heading text-slate-900 text-lg w-1/3">
                           {creneau.jour} à {creneau.heure}
                         </span>
-                        <span className="text-slate-400">
-                          {creneau.taux}% • {creneau.noShows}/{creneau.total} no-shows
+                        <span className="text-slate-600 font-medium w-1/3">
+                          <span className="text-danger font-bold mr-1">{creneau.taux}%</span> no-shows 
+                          <span className="text-sm text-slate-400 ml-2">({creneau.noShows}/{creneau.total})</span>
                         </span>
-                        <span className="text-red-400 font-medium">
+                        <span className="text-danger font-bold text-lg w-1/3 sm:text-right">
                           {caPerduAnnuel.toLocaleString()} € perdus/an
                         </span>
                       </li>
@@ -620,13 +618,6 @@ export default function AuditPage() {
               </motion.div>
             )}
 
-            {/* Séparateur visuel */}
-            <div className="flex items-center justify-center my-8">
-              <div className="h-px bg-med-blue/20 w-16 md:w-32"></div>
-              <div className="w-2 h-2 rounded-full bg-med-blue/50 mx-4"></div>
-              <div className="h-px bg-med-blue/20 w-16 md:w-32"></div>
-            </div>
-
             {/* Top 3 créneaux performants */}
             {resultats.stats.top_3_meilleurs?.length > 0 && (
               <motion.div
@@ -634,29 +625,25 @@ export default function AuditPage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
-                className="bg-med-green/5 rounded-xl border border-med-green/20 p-6 shadow-card transition-all duration-300 hover:shadow-xl hover:border-med-green/40"
+                className="glass-panel bg-white/60 rounded-3xl border border-slate-100 border-l-4 border-l-success p-8 shadow-sm"
               >
-                <h2 className="text-lg font-heading font-semibold text-med-green mb-4">
-                  🟢 Top 3 créneaux performants
+                <h2 className="text-2xl font-heading font-extrabold text-slate-900 mb-6 flex items-center gap-3">
+                  <span className="text-success text-2xl">✓</span> Top 3 créneaux performants
                 </h2>
-                <p className="text-slate-400 text-sm mb-4">
-                  Ces créneaux présentent un taux de no-shows optimal. Analysez
-                  pourquoi ils performent mieux et appliquez les mêmes conditions
-                  aux créneaux à risque.
-                </p>
-                <ul className="space-y-3">
+                <ul className="space-y-0">
                   {resultats.stats.top_3_meilleurs.map((creneau, index) => (
                     <li
                       key={index}
-                      className="flex flex-wrap items-center justify-between gap-2 py-2 border-b border-white/10 last:border-0"
+                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-b border-slate-100/50 last:border-0"
                     >
-                      <span className="font-medium text-slate-200">
+                      <span className="font-extrabold font-heading text-slate-900 text-lg w-1/3">
                         {creneau.jour} à {creneau.heure}
                       </span>
-                      <span className="text-slate-400">
-                        {creneau.noShows}/{creneau.total} no-shows
+                      <span className="text-slate-600 font-medium w-1/3">
+                        <span className="text-sm text-slate-400 mr-2">({creneau.noShows}/{creneau.total})</span>
+                        no-shows
                       </span>
-                      <span className="text-emerald-400 font-medium">
+                      <span className="text-success font-bold text-lg w-1/3 sm:text-right">
                         {`${creneau.taux}% no-shows`}
                       </span>
                     </li>
@@ -672,84 +659,27 @@ export default function AuditPage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
-                className="bg-surface rounded-xl border border-white/10 p-6 md:p-8 shadow-card transition-all duration-300 hover:shadow-xl hover:border-white/20"
+                className="glass-panel bg-white/60 rounded-3xl border border-slate-200 p-8 shadow-sm"
               >
-                <h2 className="text-xl font-heading font-bold text-gold mb-6">
-                  Rapport d&apos;analyse IA
+                <h2 className="text-2xl font-heading font-extrabold text-slate-900 mb-6 flex items-center gap-2">
+                  <span className="text-primary">✨</span> Plan d{"'"}action IA
                 </h2>
-                <div className="rapport-markdown text-slate-300">
+                <div className="text-slate-700 leading-relaxed">
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
-                      h1: ({ node, ...props }) => (
-                        <h1
-                          className="text-2xl font-heading font-bold mt-8 mb-4 text-gold first:mt-0"
-                          {...props}
-                        />
-                      ),
-                      h2: ({ node, ...props }) => (
-                        <h2
-                          className="text-xl font-heading font-bold mt-10 mb-5 text-gold border-t border-med-blue/30 pt-6 first:border-0 first:mt-0"
-                          {...props}
-                        />
-                      ),
-                      h3: ({ node, ...props }) => (
-                        <h3
-                          className="text-lg font-heading font-semibold mt-6 mb-3 text-slate-200"
-                          {...props}
-                        />
-                      ),
-                      p: ({ node, ...props }) => (
-                        <p
-                          className="mb-4 text-slate-300 leading-relaxed"
-                          {...props}
-                        />
-                      ),
-                      ul: ({ node, ...props }) => (
-                        <ul
-                          className="space-y-3 mb-6 [&>li]:bg-white/5 [&>li]:rounded-lg [&>li]:p-4 [&>li]:border [&>li]:border-white/5 [&>li]:text-slate-300"
-                          {...props}
-                        />
-                      ),
-                      ol: ({ node, ...props }) => (
-                        <ol
-                          className="list-decimal pl-5 space-y-4 mb-6 text-slate-300 marker:text-med-blue marker:font-bold"
-                          {...props}
-                        />
-                      ),
-                      li: ({ node, ...props }) => (
-                        <li className="leading-relaxed text-slate-300" {...props} />
-                      ),
-                      strong: ({ node, ...props }) => (
-                        <strong
-                          className="font-semibold text-white"
-                          {...props}
-                        />
-                      ),
-                      em: ({ node, ...props }) => (
-                        <em className="italic text-slate-200" {...props} />
-                      ),
-                      code: ({ node, ...props }) => (
-                        <code
-                          className="bg-white/10 text-med-blue rounded px-1.5 py-0.5 text-sm font-mono"
-                          {...props}
-                        />
-                      ),
-                      hr: ({ node, ...props }) => (
-                        <hr className="border-med-blue/20 my-6" {...props} />
-                      ),
-                      blockquote: ({ node, ...props }) => (
-                        <blockquote
-                          className="border-l-4 border-gold/50 pl-4 my-4 text-slate-300 italic"
-                          {...props}
-                        />
-                      ),
+                      h1: ({ node, ...props }) => <h1 className="text-2xl font-heading font-bold mt-8 mb-4 text-primary first:mt-0" {...props} />,
+                      h2: ({ node, ...props }) => <h2 className="text-xl font-heading font-bold mt-10 mb-5 text-slate-900 border-b border-slate-200 pb-2 first:mt-0" {...props} />,
+                      h3: ({ node, ...props }) => <h3 className="text-lg font-heading font-bold mt-6 mb-3 text-slate-900" {...props} />,
+                      p: ({ node, ...props }) => <p className="mb-4" {...props} />,
+                      ul: ({ node, ...props }) => <ul className="space-y-3 mb-6" {...props} />,
+                      ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-3 mb-6 marker:text-primary marker:font-bold" {...props} />,
+                      li: ({ node, ...props }) => <li className="pl-2 border-l-2 border-primary/20" {...props} />,
+                      strong: ({ node, ...props }) => <strong className="font-bold text-slate-900" {...props} />,
+                      hr: ({ node, ...props }) => <hr className="border-slate-200 my-8" {...props} />,
                     }}
                   >
-                    {resultats.rapport_texte.replace(
-                    /RECOMMANDATIONS PRIORITAIRES/g,
-                    "ACTIONS IMMÉDIATES (7 PREMIERS JOURS)"
-                  )}
+                    {resultats.rapport_texte}
                   </ReactMarkdown>
                 </div>
               </motion.div>
@@ -757,79 +687,60 @@ export default function AuditPage() {
 
             {/* Boutons d'action */}
             <motion.div
-              className="flex flex-col gap-4"
+              className="flex flex-col gap-4 items-center mt-12"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
             >
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                 <button
                   onClick={handleDownloadPDF}
                   disabled={isGeneratingPDF}
-                  className="px-6 py-3 border-2 border-gold bg-transparent text-gold rounded-xl font-heading font-semibold hover:bg-gold/10 hover:border-gold transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 hover:shadow-glow-gold active:scale-[0.98]"
+                  className="px-8 py-4 border-2 border-primary text-primary rounded-full font-bold hover:bg-blue-50 transition-colors w-full sm:w-auto text-center flex justify-center items-center gap-2"
                 >
-                  {isGeneratingPDF ? (
-                    <>
-                      <span className="inline-block w-4 h-4 border-2 border-gold border-t-transparent rounded-full animate-spin" />
-                      Génération en cours...
-                    </>
-                  ) : (
-                    "📥 Télécharger ce rapport en PDF"
-                  )}
+                  Télécharger ce rapport en PDF
                 </button>
                 <a
                   href="mailto:contact@perfiamatic.com?subject=Demande%20Audit%20Complet"
-                  className="px-6 py-3 bg-gold text-brand-dark hover:bg-gold-light rounded-xl font-heading font-semibold transition-all duration-200 hover:shadow-glow-gold hover:-translate-y-0.5 active:scale-[0.98] flex items-center"
+                  className="px-8 py-4 bg-slate-900 text-white rounded-full font-bold hover:bg-slate-800 transition-colors w-full sm:w-auto text-center shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
-                  Passer à l&apos;Audit Complet →
+                  Passer à l{"'"}Audit Complet →
                 </a>
               </div>
-              <p className="text-sm text-slate-400">
-                🔒 Données confidentielles — Conforme RGPD
+              <p className="text-sm font-medium text-slate-500 mt-2 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4" />
+                Données confidentielles — Conforme RGPD
               </p>
             </motion.div>
           </div>
         )}
 
         {etat === "erreur" && (
-          <div className="space-y-8">
-            <div className="bg-surface border border-red-500/30 rounded-xl p-8">
-              <h1 className="text-xl font-bold text-red-400 mb-2">
+          <div className="max-w-xl mx-auto w-full">
+            <div className="glass-panel bg-red-50/80 border border-danger/30 rounded-3xl p-8 text-center shadow-sm">
+              <div className="w-16 h-16 bg-red-100 text-danger rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">!</div>
+              <h1 className="text-2xl font-heading font-extrabold text-danger mb-2">
                 Une erreur est survenue
               </h1>
-              <p className="text-slate-300 mb-6">{erreur}</p>
-              <div className="flex flex-wrap gap-3">
+              <p className="text-slate-700 mb-8 font-medium">{erreur}</p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <button
                   onClick={reessayer}
-                  className="bg-gold text-brand-dark hover:bg-gold-light px-6 py-2 rounded-lg font-semibold transition-colors"
+                  className="bg-danger text-white hover:bg-red-600 px-8 py-3 rounded-full font-bold transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                 >
                   Réessayer
                 </button>
                 <Link
                   href="/"
-                  className="text-slate-300 hover:text-gold font-medium transition-colors"
+                  className="px-8 py-3 border-2 border-slate-300 text-slate-700 rounded-full font-bold hover:bg-slate-50 transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                 >
-                  Retour à l&apos;accueil
+                  Retour à l{"'"}accueil
                 </Link>
               </div>
             </div>
           </div>
         )}
       </main>
-
-      {/* Footer – identité PerfIAmatic */}
-      <footer className="bg-brand-darker border-t border-white/10 py-8 mt-auto">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-slate-400 text-sm">© 2025 PerfIAmatic</p>
-          <a
-            href="mailto:contact@perfiamatic.com"
-            className="text-slate-400 text-sm hover:text-gold transition-colors"
-          >
-            contact@perfiamatic.com
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }

@@ -7,37 +7,48 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   safelist: [
-    { pattern: /(bg|text|border|ring|placeholder|from|to|via)-(brand-dark|brand-darker|surface|gold|gold-light|med-blue|med-green)/ },
+    { pattern: /(bg|text|border|ring|placeholder|from|to|via)-(primary|accent|navy|danger|success|warning)/ },
   ],
   theme: {
     extend: {
       backgroundImage: {
-        'hex-pattern': "url(\"data:image/svg+xml,%3Csvg width='60' height='103.923' viewBox='0 0 60 103.923' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 103.923L0 86.602V51.961l30-17.32l30 17.32v34.641L30 103.923zM30 86.602l20-11.547V51.961L30 40.415L10 51.961v23.094L30 86.602zM30 34.641L0 17.32V-17.32l30-17.32l30 17.32v34.64L30 34.641z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E\")",
+        'plus-pattern': "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M9 9H0v2h9v9h2v-9h9V9h-9V0H9v9z'/%3E%3C/g%3E%3C/svg%3E\")",
       },
       colors: {
-        primary: "#1a73e8",
-        background: "#f9fafb",
-        // Identité PerfIAmatic
-        "brand-dark": "#0A1628",   // Bleu de nuit (obligatoire)
-        "brand-darker": "#060D18",
-        surface: "#0D1F3C",        // Fond légèrement plus clair pour cards et témoignages
-        gold: "#C9A84C",           // Doré accent
-        "gold-light": "#DAB85A",   // Doré accent hover
-        "med-blue": "#4FC3F7",     // Accent bleu ciel (médical)
-        "med-green": "#4CAF50",    // Accent vert succès
+        primary: "#0ea5e9", // Medical Blue (Brand-500 from antigravity)
+        accent: "#8b5cf6", // Indigo/Purple (Accent-500 from antigravity)
+        danger: "#EF4444",
+        success: "#10B981",
+        warning: "#F59E0B",
+        navy: "#0F172A",
+        background: "#F8FAFC", // slate-50
+        surface: "#FFFFFF",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        heading: ["DM Sans", "sans-serif"],
+        sans: ["Plus Jakarta Sans", "Inter", "sans-serif"],
+        heading: ["Outfit", "DM Sans", "sans-serif"],
       },
       boxShadow: {
-        card: "0 4px 6px -1px rgba(0,0,0,0.2), 0 2px 4px -2px rgba(0,0,0,0.15)",
-        "card-hover": "0 20px 25px -5px rgba(0,0,0,0.25), 0 8px 10px -6px rgba(0,0,0,0.2)",
-        "glow-gold": "0 0 20px rgba(201, 168, 76, 0.4)",
+        card: "0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05)",
+        "card-hover": "0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05)",
       },
-      transitionDuration: {
-        "250": "250ms",
+      animation: {
+        'blob': 'blob 7s infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
+      keyframes: {
+        blob: {
+          '0%': { transform: 'translate(0px, 0px) scale(1)' },
+          '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+          '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+          '100%': { transform: 'translate(0px, 0px) scale(1)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
+        }
+      }
     },
   },
   plugins: [],

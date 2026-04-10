@@ -1,39 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { motion, useInView, Variants, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-
-const Counter = ({ from, to, duration, format }: { from: number; to: number; duration: number; format?: (v: number) => string }) => {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-20px" });
-  const [value, setValue] = useState(from);
-
-  useEffect(() => {
-    if (!inView) return;
-    let start: number | null = null;
-    const step = (timestamp: number) => {
-      if (!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / (duration * 1000), 1);
-      const easeProgress = 1 - Math.pow(1 - progress, 3);
-      setValue(from + (to - from) * easeProgress);
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
-    };
-    window.requestAnimationFrame(step);
-  }, [inView, from, to, duration]);
-
-  return <span ref={ref}>{format ? format(value) : Math.round(value)}</span>;
-};
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { UploadCloud, ShieldCheck, Activity, CalendarX, TrendingUp, Download, PieChart, Clock } from "lucide-react";
 
 const FAQItem = ({ q, a, isOpen, onClick }: { q: string, a: React.ReactNode, isOpen: boolean, onClick: () => void }) => {
   return (
-    <div className={`border-b border-white/10 transition-all duration-300 ${isOpen ? 'border-l-[3px] border-l-gold bg-white/5' : ''}`}>
+    <div className={`border-b border-gray-100 transition-all duration-300 ${isOpen ? 'bg-gray-50' : ''}`}>
       <button onClick={onClick} className="w-full text-left py-6 px-6 flex justify-between items-center focus:outline-none">
-        <span className="font-heading font-semibold text-white text-lg pr-8">{q}</span>
-        <span className="text-gold text-2xl font-light w-6 text-center shrink-0">{isOpen ? '−' : '+'}</span>
+        <span className="font-heading font-semibold text-gray-900 text-lg pr-8">{q}</span>
+        <span className="text-primary text-2xl font-light w-6 text-center shrink-0">{isOpen ? '−' : '+'}</span>
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -43,7 +20,7 @@ const FAQItem = ({ q, a, isOpen, onClick }: { q: string, a: React.ReactNode, isO
             exit={{ height: 0, opacity: 0 }} 
             className="overflow-hidden"
           >
-            <div className="pb-6 px-6 text-slate-300 leading-relaxed">{a}</div>
+            <div className="pb-6 px-6 text-gray-600 leading-relaxed">{a}</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -64,12 +41,12 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const fadeInUp: Variants = {
+  const fadeInUp: any = {
     hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
   };
 
-  const staggerContainer: Variants = {
+  const staggerContainer: any = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -90,7 +67,7 @@ export default function HomePage() {
     },
     {
       q: "Mes données patients sont-elles sécurisées ?",
-      a: "L'export CSV ne contient aucune donnée nominative patient. Conforme RGPD, hébergé en France."
+      a: "L'export CSV ne contient aucune donnée nominative patient. Conforme RGPD, hébergé en France, aucun nom n'est stocké."
     },
     {
       q: "Ça fonctionne avec quel logiciel ?",
@@ -98,645 +75,533 @@ export default function HomePage() {
     },
     {
       q: "Combien de temps ça prend ?",
-      a: "L'export Doctolib prend 2 minutes. L'analyse prend 60 secondes."
+      a: "L'analyse est immédiate. Vous obtenez votre rapport en moins de 60 secondes après l'upload."
     },
     {
-      q: "Que se passe-t-il après l'audit ?",
-      a: "Vous recevez votre rapport complet. Si vous souhaitez aller plus loin, nous pouvons discuter d'une solution sur mesure pour votre cabinet."
+      q: "Que contient le rapport gratuit ?",
+      a: "Il contient votre taux de no-shows réel, les créneaux les plus à risque, et l'impact financier estimé sur votre chiffre d'affaires."
     },
     {
-      q: "Est-ce adapté à mon type de cabinet ?",
-      a: "Oui — solo, groupe, centre de santé. L'outil s'adapte à votre profil."
+      q: "Et après l'audit ?",
+      a: "Vous pouvez utiliser ces informations pour ajuster votre organisation, ou souscrire à nos services pour une automatisation complète de la récupération des no-shows."
     }
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-dark text-slate-200 font-sans relative">
-      {/* Background Pattern */}
-      <div className="fixed inset-0 bg-hex-pattern opacity-[0.03] pointer-events-none z-0" />
-
-      {/* 1. NAVIGATION STICKY */}
-      <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
-          isScrolled 
-            ? "bg-brand-dark/90 backdrop-blur-md border-white/10 py-3 shadow-lg" 
-            : "bg-transparent border-transparent py-5"
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-brand-200 selection:text-brand-900 overflow-x-hidden">
+      
+      {/* HEADER */}
+      <nav 
+        id="navbar"
+        className={`fixed w-full z-50 transition-all duration-300 ${
+          isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-100" : "glass-panel"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center shrink-0" aria-label="PerfIAmatic - Accueil">
-              <Image
-                src="/logo.png"
-                alt="PerfIAmatic"
-                width={200}
-                height={45}
-                className="h-[2.2rem] w-auto object-contain"
-                priority
-              />
-            </Link>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-lg">
+                <Activity className="w-6 h-6" />
+              </div>
+              <span className="font-heading font-bold text-2xl tracking-tight text-slate-900">
+                PerfIAmatic
+              </span>
+            </div>
             
-            <nav className="hidden md:flex items-center gap-8">
-              <a href="#pourquoi" className="text-sm font-medium text-slate-300 hover:text-gold transition-colors">Pourquoi PerfIAmatic</a>
-              <a href="#comment" className="text-sm font-medium text-slate-300 hover:text-gold transition-colors">Comment ça marche</a>
-              <a href="#resultats" className="text-sm font-medium text-slate-300 hover:text-gold transition-colors">Résultats</a>
-              <a href="#faq" className="text-sm font-medium text-slate-300 hover:text-gold transition-colors">FAQ</a>
-            </nav>
-
-            <Link
-              href="/audit"
-              className="hidden sm:inline-block bg-gold text-brand-dark px-6 py-2.5 rounded-lg font-heading font-semibold text-sm hover:bg-gold-light hover:shadow-glow-gold transition-all"
-            >
-              Commencer l&apos;audit gratuit →
-            </Link>
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#comment-ca-marche" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">Comment ça marche</a>
+              <a href="#impact" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">Impact</a>
+              <Link 
+                href="/audit"
+                className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                Démarrer l&apos;Audit Gratuit
+              </Link>
+            </div>
           </div>
         </div>
-      </header>
+      </nav>
 
-      <main className="flex-1 relative z-10 pt-24">
-        {/* 2. HERO */}
-        <section className="hero relative pt-12 pb-16 sm:pt-20 sm:pb-24 px-4 overflow-hidden">
-          <div className="absolute inset-0 bg-hex-pattern opacity-[0.03] pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/10 blur-[120px] rounded-full pointer-events-none" />
-          
-          <motion.div 
-            className="max-w-4xl mx-auto text-center relative z-10"
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-          >
-            <motion.h1 
-              variants={fadeInUp}
-              className="text-4xl sm:text-6xl font-heading font-bold text-white mb-6 leading-tight"
-            >
-              Combien vous coûtent réellement <span className="text-gold">vos rendez-vous non honorés</span> ?
-            </motion.h1>
+      {/* HERO SECTION */}
+      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-gradient-to-br from-[#EFF6FF] to-[#F5F3FF]">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
             
-            <motion.p 
-              variants={fadeInUp}
-              className="text-lg sm:text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed"
+            {/* Left Content */}
+            <motion.div 
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+              className="max-w-2xl"
             >
-              Analysez votre historique Doctolib et découvrez exactement <br className="hidden sm:block" />
-              combien vous perdez chaque mois.<br/>
-              <span className="font-medium text-white mt-3 inline-block">Gratuit. Sans inscription. En 60 secondes.</span>
-            </motion.p>
-            
-            <motion.div variants={fadeInUp}>
-              <Link
-                href="/audit"
-                className="inline-block bg-gold text-brand-dark px-8 py-4 rounded-xl font-heading font-semibold text-lg hover:bg-gold-light transition-all shadow-card hover:shadow-glow-gold hover:-translate-y-1 mb-4"
+              <motion.div variants={fadeInUp} className="mb-6">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/60 border border-blue-100 text-blue-800 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
+                  <span className="relative flex h-2 w-2 mr-1">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                  </span>
+                  Exclusif cliniques médicales
+                </span>
+              </motion.div>
+              
+              <motion.h1 
+                variants={fadeInUp}
+                className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-gray-900 leading-[1.1] mb-6 tracking-tight"
               >
-                <motion.span
-                  animate={{ scale: [1, 1.02, 1] }}
-                  transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                  className="inline-block"
+                Vos données Doctolib révèlent <br/>
+                <span className="text-accent">ce que vous perdez vraiment.</span>
+              </motion.h1>
+              
+              <motion.p 
+                variants={fadeInUp}
+                className="text-lg text-gray-600 mb-8 leading-relaxed"
+              >
+                Taux exact, créneaux à risque, CA perdu. <br className="hidden sm:block" />
+                Analysez votre export en 60 secondes — gratuit, sans inscription.
+              </motion.p>
+              
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                <Link 
+                  href="/audit"
+                  className="group flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-accent hover:from-blue-500 hover:to-purple-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-1"
                 >
-                  Commencer l&apos;audit gratuit →
-                </motion.span>
-              </Link>
-              
-              <p className="text-sm text-slate-400 italic mt-3">
-                Déjà utilisé par des cabinets dentaires à Paris, Lyon, Amiens, Bordeaux...
-              </p>
+                  <UploadCloud className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  Importer un CSV Doctolib
+                </Link>
+                <div className="flex items-center gap-3 px-4 py-2 text-sm text-slate-500 font-medium">
+                  <ShieldCheck className="text-emerald-500 w-5 h-5" />
+                  100% Gratuit & Sécurisé
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        </section>
 
-        {/* 3. BANDE LOGOS / PREUVES */}
-        <section className="py-8 border-y border-white/5 bg-white/[0.02]">
-          <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-8 opacity-60">
-            <span className="text-sm font-medium uppercase tracking-wider text-slate-300">Analyse basée sur les données de :</span>
-            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8">
-              <div className="text-2xl font-bold tracking-tight text-white">Doctolib</div>
-              <div className="text-2xl font-bold tracking-tighter text-white">DREES</div>
-              <div className="hidden md:block h-6 w-px bg-white/20"></div>
-              <div className="text-sm font-medium text-slate-300">30 millions de RDV analysés</div>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. SECTION "POURQUOI PERFIAMATIC" */}
-        <section id="pourquoi" className="py-24 px-4">
-          <div className="max-w-6xl mx-auto">
+            {/* Right Visual / Dashboard mockup */}
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 gap-8"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
-              variants={staggerContainer}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative lg:ml-10 animate-float"
             >
-              {/* Colonne Gauche - Problème */}
-              <motion.div variants={fadeInUp} className="bg-surface rounded-2xl p-8 md:p-10 border-l-[4px] border-red-500 border-y border-r border-y-white/5 border-r-white/5 shadow-card relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-6 opacity-5">
-                  <svg className="w-24 h-24 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-heading font-bold text-white mb-8">Ce que Doctolib ne vous dit pas</h3>
-                <ul className="space-y-5">
-                  {[
-                    "Votre taux de no-shows réel",
-                    "Quels créneaux sont les plus à risque",
-                    "Ce que ça représente en euros perdus",
-                    "Comment vous comparez au secteur"
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-4">
-                      <span className="text-red-500 text-xl mt-0.5 shrink-0">❌</span>
-                      <span className="text-slate-300 text-lg">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              {/* Colonne Droite - Solution */}
-              <motion.div variants={fadeInUp} className="bg-med-green/5 rounded-2xl p-8 md:p-10 border-l-[4px] border-med-green border-y border-r border-y-med-green/20 border-r-med-green/20 shadow-card relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-6 opacity-5">
-                  <svg className="w-24 h-24 text-med-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-heading font-bold text-white mb-8">Ce que PerfIAmatic révèle</h3>
-                <ul className="space-y-5">
-                  {[
-                    "Taux exact mesuré sur votre historique",
-                    "Top 3 créneaux catastrophiques identifiés",
-                    "CA perdu calculé à l'euro près",
-                    "Benchmark vs cabinets de votre secteur"
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-4">
-                      <span className="text-gold text-xl mt-0.5 shrink-0">✅</span>
-                      <span className="text-slate-200 text-lg font-medium">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* 5. SECTION "COMMENT ÇA MARCHE" */}
-        <section id="comment" className="py-24 px-4 bg-brand-darker border-y border-white/5 relative overflow-hidden">
-          <div className="max-w-6xl mx-auto relative z-10">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white">Comment ça marche</h2>
-            </div>
-            
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-12 relative"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
-              variants={staggerContainer}
-            >
-              {/* Flèches de connexion (desktop) */}
-              <div className="hidden md:block absolute top-[4.5rem] left-[16.66%] right-[16.66%] h-[2px] bg-gradient-to-r from-med-blue/30 via-gold/30 to-med-green/30 z-0" />
-
-              {[
-                {
-                  num: "01",
-                  title: "Exportez votre CSV",
-                  desc: "2 clics dans Doctolib. Aucune installation requise.",
-                  icon: (
-                    <svg className="w-8 h-8 text-med-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                  )
-                },
-                {
-                  num: "02",
-                  title: "L'IA analyse vos données",
-                  desc: "Notre algorithme traite votre historique en temps réel.",
-                  icon: (
-                    <svg className="w-8 h-8 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  )
-                },
-                {
-                  num: "03",
-                  title: "Recevez votre rapport",
-                  desc: "Taux réel, créneaux à risque, CA perdu. En 60 secondes.",
-                  icon: (
-                    <svg className="w-8 h-8 text-med-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                  )
-                }
-              ].map((step, i) => (
-                <motion.div key={i} variants={fadeInUp} className="relative z-10 flex flex-col items-center text-center mt-6">
-                  <div className="absolute -top-14 left-1/2 -translate-x-1/2 text-[100px] font-bold text-gold/5 font-heading pointer-events-none select-none">
-                    {step.num}
-                  </div>
-                  <div className="w-20 h-20 rounded-full bg-brand-dark border-[3px] border-white/10 flex items-center justify-center mb-6 shadow-xl relative z-10">
-                    <div className="w-14 h-14 rounded-full bg-surface flex items-center justify-center">
-                      {step.icon}
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-heading font-bold text-white mb-3 relative z-10">{step.title}</h3>
-                  <p className="text-slate-400 leading-relaxed max-w-[250px] relative z-10">{step.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* 6. SECTION STATS */}
-        <section className="py-20 border-y border-med-blue/20 bg-surface">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-0 md:divide-x divide-med-blue/20 text-center"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
-              variants={staggerContainer}
-            >
-              <motion.div variants={fadeInUp} className="px-4">
-                <div className="text-4xl md:text-5xl font-heading font-bold text-med-blue mb-3">
-                  <Counter from={0} to={6.2} duration={2} format={(v) => v.toFixed(1).replace('.', ',') + '%'} />
-                </div>
-                <div className="text-sm font-medium text-slate-300">
-                  Taux moyen no-shows dentaires France
-                </div>
-              </motion.div>
-              
-              <motion.div variants={fadeInUp} className="px-4">
-                <div className="text-4xl md:text-5xl font-heading font-bold text-med-blue mb-3">
-                  <Counter from={0} to={22} duration={2} format={(v) => Math.round(v).toString() + ' 000€'} />
-                </div>
-                <div className="text-sm font-medium text-slate-300">
-                  Perdus en moyenne par cabinet/an
-                </div>
-              </motion.div>
-              
-              <motion.div variants={fadeInUp} className="px-4">
-                <div className="text-4xl md:text-5xl font-heading font-bold text-med-blue mb-3">
-                  <Counter from={0} to={60} duration={1.5} format={(v) => Math.round(v).toString() + ' sec'} />
-                </div>
-                <div className="text-sm font-medium text-slate-300">
-                  Pour connaître votre chiffre exact
-                </div>
-              </motion.div>
-              
-              <motion.div variants={fadeInUp} className="px-4">
-                <div className="text-4xl md:text-5xl font-heading font-bold text-med-blue mb-3">
-                  <Counter from={0} to={21} duration={2} format={(v) => Math.round(v).toString() + 'x'} />
-                </div>
-                <div className="text-sm font-medium text-slate-300">
-                  ROI moyen constaté
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* 7. SECTION "APERÇU DU RAPPORT" */}
-        <section id="resultats" className="py-24 px-4 overflow-hidden">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">Voici ce que vous allez recevoir</h2>
-              <p className="text-xl text-slate-400">Un rapport complet et personnalisé pour votre cabinet</p>
-            </div>
-            
-            <div className="relative max-w-4xl mx-auto">
-              {/* Mockup Window */}
-              <motion.div 
-                initial={{ opacity: 0, y: 40, rotateX: 10 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="bg-surface rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(201,168,76,0.15)] overflow-hidden relative z-10"
-                style={{ transformPerspective: 1000 }}
-              >
-                {/* Browser bar */}
-                <div className="bg-brand-darker px-4 py-3 border-b border-white/10 flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                  <div className="ml-4 flex-1 flex justify-center">
-                    <div className="bg-white/5 rounded-md px-6 py-1.5 text-xs text-slate-400 flex items-center gap-2 border border-white/5">
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                      audit.perfiamatic.fr/resultats
-                    </div>
+              <div className="glass-panel p-6 rounded-3xl border border-white/60 shadow-2xl bg-white/40 relative z-20">
+                <div className="flex items-center justify-between border-b border-slate-200/60 pb-4 mb-4">
+                  <h3 className="font-heading font-semibold text-slate-800">Aperçu du Cabinet</h3>
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                    <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
                   </div>
                 </div>
                 
-                {/* Dashboard content simplified mockup */}
-                <div className="p-6 md:p-10 bg-brand-dark/50">
-                  <div className="h-8 w-64 bg-gold/20 rounded mb-8"></div>
-                  
-                  {/* KPIs */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 relative">
-                    {[1,2,3,4].map(i => (
-                      <div key={i} className="bg-surface rounded-xl p-4 border border-white/5">
-                        <div className="h-3 w-16 bg-white/10 rounded mb-3"></div>
-                        <div className="h-6 w-24 bg-white/20 rounded"></div>
+                <div className="space-y-4">
+                  {/* Mock UI element 1 */}
+                  <div className="bg-white/70 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-blue-100 p-3 rounded-xl">
+                        <CalendarX className="text-primary w-5 h-5" />
                       </div>
-                    ))}
-                  </div>
-                  
-                  {/* Highlighted KPI */}
-                  <div className="bg-surface border border-gold/30 rounded-xl p-8 mb-8 relative">
-                    <div className="h-4 w-40 bg-med-blue/40 rounded mb-3 mx-auto"></div>
-                    <div className="h-12 w-56 bg-gold/80 rounded mx-auto"></div>
-                    
-                    {/* Annotation CA Perdu */}
-                    <div className="absolute -right-6 md:-right-40 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-3">
-                      <svg className="w-12 h-12 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                      </svg>
-                      <span className="text-gold font-medium bg-brand-darker px-4 py-2 rounded-lg border border-gold/30 whitespace-nowrap shadow-lg">
-                        CA perdu calculé en temps réel
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Charts */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
-                    <div className="bg-surface rounded-xl p-6 border border-white/5 h-48 relative">
-                      {/* Fake chart */}
-                      <div className="absolute bottom-6 left-6 right-6 h-32 flex items-end justify-between gap-2">
-                        <div className="w-full bg-white/10 h-[40%] rounded-t-sm"></div>
-                        <div className="w-full bg-white/10 h-[60%] rounded-t-sm"></div>
-                        <div className="w-full bg-med-blue/40 h-[90%] rounded-t-sm"></div>
-                        <div className="w-full bg-white/10 h-[30%] rounded-t-sm"></div>
-                        <div className="w-full bg-white/10 h-[50%] rounded-t-sm"></div>
+                      <div>
+                        <p className="text-sm text-slate-500 font-medium">CA perdu (30j)</p>
+                        <p className="font-heading font-bold text-xl text-slate-900">3 820 €</p>
                       </div>
                     </div>
+                    <span className="bg-red-100 text-danger text-xs font-bold px-2.5 py-1 rounded-full">Actionnable</span>
+                  </div>
+                  
+                  {/* Mock UI element 2 */}
+                  <div className="bg-white/70 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-purple-100 p-3 rounded-xl">
+                        <Clock className="text-accent w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-slate-500 font-medium">Taux no-shows</p>
+                        <p className="font-heading font-bold text-xl text-slate-900">7,4%</p>
+                      </div>
+                    </div>
+                    <span className="bg-amber-100 text-warning text-xs font-bold px-2.5 py-1 rounded-full">À risque</span>
+                  </div>
 
-                    <div className="bg-surface rounded-xl p-6 border border-white/5 h-48 relative">
-                       {/* Fake gauge */}
-                       <div className="absolute inset-0 flex items-center justify-center">
-                         <div className="w-32 h-16 border-t-[16px] border-x-[16px] border-med-green/40 rounded-t-full border-b-0"></div>
-                       </div>
-                      {/* Annotation Position */}
-                      <div className="absolute -left-6 md:-left-44 top-1/2 -translate-y-1/2 hidden md:flex flex-row-reverse items-center gap-3">
-                        <svg className="w-12 h-12 text-med-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                        <span className="text-med-blue font-medium bg-brand-darker px-4 py-2 rounded-lg border border-med-blue/30 whitespace-nowrap shadow-lg">
-                          Votre position vs secteur
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* AI Report */}
-                  <div className="mt-8 bg-surface rounded-xl p-8 border border-white/5 relative">
-                    <div className="h-6 w-48 bg-gold/50 rounded mb-6"></div>
-                    <div className="space-y-4">
-                      <div className="h-3 w-full bg-white/10 rounded"></div>
-                      <div className="h-3 w-5/6 bg-white/10 rounded"></div>
-                      <div className="h-3 w-4/6 bg-white/10 rounded"></div>
-                      <div className="h-3 w-full bg-white/10 rounded"></div>
-                    </div>
-                    
-                    {/* Annotation AI */}
-                    <div className="absolute -right-6 md:-right-48 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-3">
-                      <svg className="w-12 h-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                      </svg>
-                      <span className="text-slate-300 font-medium bg-brand-darker px-4 py-2 rounded-lg border border-white/20 whitespace-nowrap shadow-lg">
-                        Plan d&apos;action personnalisé par l&apos;IA
-                      </span>
+                  <div className="mt-6 pt-4 border-t border-slate-200/60">
+                    <p className="text-xs text-center text-slate-400 font-medium uppercase tracking-wider">Analyse IA Sécurisée en cours...</p>
+                    <div className="w-full bg-slate-200 rounded-full h-1.5 mt-2 overflow-hidden">
+                      <div className="bg-gradient-to-r from-primary to-accent h-1.5 rounded-full" style={{ width: '65%' }}></div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
+              </div>
 
-        {/* 8. TÉMOIGNAGES */}
-        <section className="py-20 border-y border-white/5 bg-brand-darker">
-          <div className="max-w-6xl mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
-              variants={staggerContainer}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6"
-            >
-              {[
-                {
-                  result: "37 000€ récupérés",
-                  quote: "Après l'audit PerfIAmatic, nous avons pris conscience du manque à gagner. Leur système nous a permis de récupérer un CA énorme dès la première année.",
-                  author: "Cabinet dentaire",
-                  city: "Lyon"
-                },
-                {
-                  result: "Chiffre exact révélé",
-                  quote: "En 60 secondes je voyais mon chiffre exact. Personne ne m'avait jamais montré la réalité de ces créneaux perdus avec autant de précision.",
-                  author: "Chirurgien-dentiste",
-                  city: "Amiens"
-                },
-                {
-                  result: "3 créneaux remplis",
-                  quote: "La liste d'attente automatique a rempli 3 créneaux le premier lundi d'utilisation de leur solution après l'audit.",
-                  author: "Cabinet dentaire",
-                  city: "Paris 15ème"
-                }
-              ].map((t, i) => (
-                <motion.div 
-                  key={i}
-                  variants={fadeInUp}
-                  className="bg-surface rounded-xl p-8 border border-white/10 shadow-card flex flex-col justify-between hover:border-gold/30 transition-colors"
-                >
-                  <div>
-                    <div className="text-gold tracking-widest text-xl mb-5">★★★★★</div>
-                    <p className="text-lg text-slate-300 italic mb-6 leading-relaxed">
-                      &quot;{t.quote}&quot;
-                    </p>
-                    <p className="text-gold font-bold text-xl mb-6 font-heading">{t.result}</p>
-                  </div>
-                  <div className="flex items-center gap-3 pt-5 border-t border-white/10">
-                    <span className="text-xl">🦷</span>
-                    <div>
-                      <p className="font-semibold text-white">{t.author}</p>
-                      <p className="text-sm text-slate-400">{t.city}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+              {/* Floating Badge */}
+              <div className="absolute -bottom-6 -left-6 glass-panel rounded-2xl p-4 shadow-xl border border-white flex items-center gap-4 animate-pulse-slow hover:animate-none transition-all cursor-pointer z-30">
+                <div className="bg-emerald-100 p-3 rounded-xl">
+                  <TrendingUp className="text-success w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">ROI MOYEN</p>
+                  <p className="font-heading font-extrabold text-2xl text-slate-800">21x</p>
+                </div>
+              </div>
             </motion.div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* 9. SECTION ROI INTERACTIVE */}
-        <section className="py-24 px-4">
-          <motion.div 
-            className="max-w-4xl mx-auto"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-40px" }}
-            variants={staggerContainer}
-          >
-            <motion.h2 
-              variants={fadeInUp}
-              className="text-3xl md:text-4xl font-heading font-bold text-center text-white mb-12"
-            >
-              Simulez vos pertes actuelles
+      {/* METRICS SECTION */}
+      <section id="metrics" className="py-24 bg-white relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+              Des données qui stimulent la <span className="text-gradient">croissance de votre clinique</span>.
             </motion.h2>
+            <motion.p variants={fadeInUp} className="text-lg text-slate-600">
+              Ne laissez plus de place au hasard dans votre agenda. Rejoignez les centaines de professionnels de santé qui ont transformé leurs données Doctolib en rentabilité absolue.
+            </motion.p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Stat 1 */}
+            <motion.div variants={fadeInUp} className="glass-panel hover:-translate-y-2 transition-transform duration-300 rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl text-center group bg-gradient-to-b from-white to-slate-50">
+              <div className="w-16 h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-4xl font-heading font-extrabold text-slate-900 mb-2">21x</h3>
+              <p className="text-slate-600 font-medium">ROI moyen constaté</p>
+            </motion.div>
             
-            <motion.div 
-              variants={fadeInUp}
-              className="bg-surface rounded-2xl p-8 md:p-12 border border-med-blue/30 shadow-card"
-            >
-              <div className="mb-12">
-                <div className="flex justify-between items-end mb-6">
-                  <label className="text-xl font-medium text-slate-200">Nombre de RDV par jour</label>
-                  <span className="text-4xl font-heading font-bold text-med-blue bg-med-blue/10 px-4 py-1 rounded-lg">{rdvPerDay}</span>
+            {/* Stat 2 */}
+            <motion.div variants={fadeInUp} className="glass-panel hover:-translate-y-2 transition-transform duration-300 rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl text-center group bg-gradient-to-b from-white to-slate-50">
+              <div className="w-16 h-16 mx-auto bg-purple-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Clock className="w-8 h-8 text-accent" />
+              </div>
+              <h3 className="text-4xl font-heading font-extrabold text-slate-900 mb-2">18 Jours</h3>
+              <p className="text-slate-600 font-medium">Délai de récupération</p>
+            </motion.div>
+            
+            {/* Stat 3 */}
+            <motion.div variants={fadeInUp} className="glass-panel hover:-translate-y-2 transition-transform duration-300 rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl text-center group bg-gradient-to-b from-white to-slate-50">
+              <div className="w-16 h-16 mx-auto bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Activity className="w-8 h-8 text-success" />
+              </div>
+              <h3 className="text-4xl font-heading font-extrabold text-slate-900 mb-2">9,7/10</h3>
+              <p className="text-slate-600 font-medium">Score de satisfaction cabinet</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section id="comment-ca-marche" className="py-24 bg-slate-900 text-white relative overflow-hidden">
+        {/* Abstract Background */}
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }}></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <motion.span variants={fadeInUp} className="text-primary font-bold tracking-wider uppercase text-sm mb-4 block">PROCESSUS SIMPLE</motion.span>
+            <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+              Du CSV brut à un <br/>plan d&apos;action clinique.
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-lg text-slate-300">
+              Trois étapes simples pour libérer tout le potentiel de votre agenda Doctolib.
+            </motion.p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12 relative">
+            {/* Connecting Line */}
+            <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0"></div>
+
+            {[
+              {
+                step: "1",
+                icon: <Download className="w-10 h-10 text-blue-400 group-hover:text-white transition-colors" />,
+                title: "Exportez votre CSV",
+                desc: "Connectez-vous à Doctolib et exportez votre historique de rendez-vous au format CSV standard. Aucune intégration n'est requise.",
+                borderColor: "border-blue-500/30 group-hover:border-blue-400",
+                shadowColor: "shadow-[0_0_30px_rgba(14,165,233,0.1)] group-hover:shadow-[0_0_40px_rgba(14,165,233,0.3)]",
+                badgeBg: "bg-blue-500"
+              },
+              {
+                step: "2",
+                icon: <UploadCloud className="w-10 h-10 text-purple-400 group-hover:text-white transition-colors" />,
+                title: "Upload Sécurisé",
+                desc: "Glissez-déposez votre CSV dans notre zone sécurisée. Les données sont traitées localement et immédiatement anonymisées.",
+                borderColor: "border-purple-500/30 group-hover:border-purple-400",
+                shadowColor: "shadow-[0_0_30px_rgba(139,92,246,0.1)] group-hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]",
+                badgeBg: "bg-purple-500"
+              },
+              {
+                step: "3",
+                icon: <PieChart className="w-10 h-10 text-emerald-400 group-hover:text-white transition-colors" />,
+                title: "Audit IA Instantané",
+                desc: "Obtenez un tableau de bord visuel indiquant précisément les zones de perte de revenus et les opportunités d'optimisation.",
+                borderColor: "border-emerald-500/30 group-hover:border-emerald-400",
+                shadowColor: "shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]",
+                badgeBg: "bg-emerald-500"
+              }
+            ].map((item, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="relative text-center group"
+              >
+                <div className={`w-24 h-24 mx-auto bg-slate-800 border-2 ${item.borderColor} rounded-3xl flex items-center justify-center mb-8 relative z-10 transition-colors duration-300 ${item.shadowColor} group-hover:scale-105`}>
+                  <span className={`absolute -top-4 -right-4 w-8 h-8 rounded-full ${item.badgeBg} text-white font-bold flex items-center justify-center text-sm shadow-lg`}>{item.step}</span>
+                  {item.icon}
                 </div>
+                <h4 className="text-xl font-heading font-bold mb-3">{item.title}</h4>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PROBLEM / SOLUTION */}
+      <section id="impact" className="py-24 bg-white relative">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+              Ce que <span className="text-gradient">Doctolib</span> ne vous dit pas.
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-lg text-slate-600">
+              Découvrez la différence entre les données brutes et les insights actionnables.
+            </motion.p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            
+            {/* Left Card */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-slate-50 rounded-3xl p-8 md:p-12 border-l-4 border-l-slate-300 shadow-sm"
+            >
+              <h3 className="text-2xl font-heading font-bold text-slate-900 mb-10">La réalité cachée</h3>
+              <ul className="space-y-6">
+                {[
+                  "Votre taux de no-shows réel",
+                  "Quels créneaux sont les plus à risque",
+                  "Ce que ça représente en euros perdus",
+                  "Comment vous situez-vous vs le secteur"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <span className="text-slate-400 mt-1 text-xl font-bold">✗</span>
+                    <span className="text-slate-700 text-lg">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* Right Card */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-brand-50/30 rounded-3xl p-8 md:p-12 border-l-4 border-l-primary shadow-md relative overflow-hidden"
+            >
+              <div className="absolute top-0 -right-4 w-32 h-32 bg-primary mix-blend-multiply filter blur-3xl opacity-10 rounded-full"></div>
+              <h3 className="text-2xl font-heading font-bold text-slate-900 mb-10 relative z-10">Ce que l&apos;Audit révèle</h3>
+              <ul className="space-y-6 relative z-10">
+                {[
+                  "Taux exact mesuré sur votre historique",
+                  "Top 3 créneaux catastrophiques identifiés",
+                  "CA perdu calculé à l'euro près",
+                  "Benchmark vs cabinets de votre secteur"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <span className="text-primary mt-1 text-xl font-bold">✓</span>
+                    <span className="text-slate-800 font-medium text-lg">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-24 bg-slate-50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-blue-100 mix-blend-multiply filter blur-3xl opacity-50 rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-purple-100 mix-blend-multiply filter blur-3xl opacity-50 rounded-full pointer-events-none"></div>
+        
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+          <div className="text-center mb-16">
+            <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-heading font-bold text-slate-900 mb-6 tracking-tight">L&apos;impact mesuré par <span className="text-gradient">vos confrères</span></motion.h2>
+            <motion.p variants={fadeInUp} className="text-lg text-slate-600 max-w-3xl mx-auto">
+              Découvrez comment d&apos;autres professionnels de santé optimisent leur agenda grâce à nos analyses.
+            </motion.p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                text: "Après l'audit, nous avons pris conscience du manque à gagner réel.",
+                author: "37 000€ récupérés",
+                sub: "Cabinet dentaire · Lyon"
+              },
+              {
+                text: "En 60 secondes je voyais mon chiffre exact. Personne ne m'avait jamais montré ça.",
+                author: "Chiffre exact révélé",
+                sub: "Chirurgien-dentiste · Amiens"
+              },
+              {
+                text: "La liste d'attente a rempli 3 créneaux le premier lundi.",
+                author: "3 créneaux remplis",
+                sub: "Cabinet dentaire · Paris 15ème"
+              }
+            ].map((t, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="glass-panel p-8 md:p-10 rounded-3xl shadow-md border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-shadow bg-gradient-to-b from-white to-slate-50"
+              >
+                <div>
+                  <div className="flex gap-1 text-emerald-500 text-xl mb-6">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                  </div>
+                  <p className="text-slate-900 font-medium text-lg leading-relaxed mb-8">&quot;{t.text}&quot;</p>
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-primary mb-1">→ {t.author}</div>
+                  <div className="text-xs font-medium text-slate-500">{t.sub}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SIMULATOR */}
+      <section className="py-24 bg-slate-50 relative w-full overflow-hidden border-t border-slate-200">
+        {/* Decorative bg blur */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-primary/20 rounded-full filter blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
+
+        <div className="w-full max-w-2xl mx-auto px-6 md:px-12 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="glass-panel bg-white/60 rounded-[3rem] p-8 md:p-12 text-center border border-slate-200 shadow-2xl"
+          >
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 mb-4">Simulez vos <span className="text-gradient">pertes actuelles</span></h2>
+            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">Ajustez le curseur pour estimer le manque à gagner de votre clinique selon votre volume de rendez-vous.</p>
+            
+            <div className="mb-10">
+              <div className="flex justify-between items-end mb-6">
+                <label className="font-semibold text-slate-700">Nombre de RDV par jour</label>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-bold text-primary bg-blue-50 px-4 py-2 rounded-xl border border-blue-100">{rdvPerDay}</span>
+                </div>
+              </div>
+              <div className="relative pt-2 pb-6">
                 <input 
                   type="range" 
                   min="20" 
                   max="80" 
-                  step="1" 
-                  value={rdvPerDay} 
+                  step="5"
+                  value={rdvPerDay}
                   onChange={(e) => setRdvPerDay(parseInt(e.target.value))}
-                  className="w-full h-3 bg-white/10 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:bg-med-blue [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-[0_0_15px_rgba(79,195,247,0.6)]"
-                  style={{
-                    background: `linear-gradient(to right, #4FC3F7 0%, #4FC3F7 ${(rdvPerDay-20)/60 * 100}%, rgba(255,255,255,0.1) ${(rdvPerDay-20)/60 * 100}%, rgba(255,255,255,0.1) 100%)`
-                  }}
+                  className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-primary"
                 />
-                <div className="flex justify-between text-sm font-medium text-slate-500 mt-4">
-                  <span>20 RDV</span>
-                  <span>80 RDV</span>
-                </div>
               </div>
+            </div>
 
-              <div className="bg-brand-dark/50 rounded-xl p-8 text-center border border-white/5 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-med-blue/5 pointer-events-none"></div>
-                <p className="text-xl text-slate-300 mb-3 relative z-10">Vous perdez environ</p>
-                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-4 relative z-10">
-                  {perteMois.toLocaleString()}€ <span className="text-2xl text-slate-400 font-normal">/ mois</span>
-                </div>
-                <p className="text-xl text-slate-300 relative z-10">
-                  soit <span className="text-gold font-bold text-3xl mx-1">{perteAn.toLocaleString()}€</span> par an
-                </p>
-                <p className="text-sm text-slate-500 mt-8 relative z-10">
-                  *Calcul basé sur le taux moyen national de 6,2%, un panier moyen de 150€ et 20 jours travaillés/mois.
-                </p>
+            <div className="bg-white rounded-3xl p-10 md:p-12 mb-8 border border-slate-100 shadow-sm relative overflow-hidden">
+              <p className="text-slate-500 font-medium mb-3">Vous perdez environ</p>
+              <div className="text-4xl md:text-5xl font-bold text-danger mb-3 font-heading tracking-tight">
+                {perteMois.toLocaleString('fr-FR')}€ <span className="text-2xl text-red-400">/ mois</span>
               </div>
-              
-              <div className="mt-10 text-center">
-                <Link
-                  href="/audit"
-                  className="inline-block bg-med-blue/10 text-med-blue border border-med-blue/30 px-8 py-4 rounded-xl font-heading font-semibold text-lg hover:bg-med-blue hover:text-brand-dark transition-all shadow-lg hover:shadow-glow-blue"
-                >
-                  Calculer mon chiffre exact →
-                </Link>
+              <div className="text-xl font-semibold text-slate-500">
+                soit <span className="text-slate-900">{perteAn.toLocaleString('fr-FR')}€ / an</span>
               </div>
-            </motion.div>
-          </motion.div>
-        </section>
+            </div>
 
-        {/* 10. SECTION FAQ */}
-        <section id="faq" className="py-24 px-4 bg-brand-darker border-y border-white/5">
-          <div className="max-w-3xl mx-auto">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-heading font-bold text-center text-white mb-12"
+            <p className="text-xs text-slate-400 mb-10">
+              *Basé sur un taux national de 6,2%, un panier moyen de 150€ et 20 jours/mois
+            </p>
+
+            <Link 
+              href="/audit"
+              className="inline-flex justify-center items-center w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
             >
-              Questions Fréquentes
-            </motion.h2>
-            
-            <div className="bg-surface rounded-2xl border border-white/10 overflow-hidden shadow-card">
-              {faqs.map((faq, index) => (
-                <FAQItem 
-                  key={index} 
-                  q={faq.q} 
-                  a={faq.a} 
-                  isOpen={openFaq === index} 
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)} 
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* 11. CTA FINAL */}
-        <section className="py-32 px-4 text-center relative z-10 overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/10 blur-[120px] rounded-full pointer-events-none" />
-          
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-3xl mx-auto relative z-10"
-          >
-            <motion.h2 variants={fadeInUp} className="text-4xl md:text-5xl font-heading font-bold text-white mb-6 leading-tight">
-              Vous perdez peut-être <span className="text-gold">20 000€</span> <br className="hidden md:block"/>par an sans le savoir.
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-slate-300 mb-12">
-              Vérifiez en 60 secondes — c&apos;est gratuit.
-            </motion.p>
-            <motion.div variants={fadeInUp}>
-              <Link
-                href="/audit"
-                className="inline-block bg-gold text-brand-dark px-12 py-5 rounded-xl font-heading font-bold text-xl hover:bg-gold-light transition-all shadow-card hover:shadow-glow-gold hover:-translate-y-1 mb-6 w-full sm:w-auto"
-              >
-                Découvrir ce que je perds vraiment →
-              </Link>
-            </motion.div>
-            <motion.div variants={fadeInUp} className="flex flex-col items-center gap-4">
-              <p className="text-slate-300 font-medium">
-                Gratuit · Sans inscription · 60 secondes
-              </p>
-              <div className="flex items-center justify-center gap-2 text-sm text-slate-400 bg-white/5 px-5 py-2.5 rounded-full border border-white/10 backdrop-blur-sm">
-                <span>🔒 Données confidentielles — Conforme RGPD</span>
-              </div>
-            </motion.div>
+              Lancer l&apos;Audit Gratuit →
+            </Link>
           </motion.div>
-        </section>
-      </main>
+        </div>
+      </section>
 
-      {/* 12. FOOTER */}
-      <footer className="bg-brand-dark border-t border-white/10 pt-16 pb-8 z-10 relative">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-            {/* Col 1 */}
-            <div>
-              <Image
-                src="/logo.png"
-                alt="PerfIAmatic"
-                width={200}
-                height={45}
-                className="h-[2.5rem] w-auto object-contain mb-6"
-              />
-              <p className="text-slate-400 text-sm leading-relaxed max-w-xs font-medium">
-                Spécialiste anti-no-shows <br/>cabinets dentaires.
-              </p>
-            </div>
-            
-            {/* Col 2 */}
-            <div>
-              <h4 className="text-white font-heading font-bold mb-6 text-lg">Liens rapides</h4>
-              <ul className="space-y-4 text-sm text-slate-400">
-                <li><Link href="/audit" className="hover:text-gold transition-colors font-medium">Audit gratuit</Link></li>
-                <li><a href="#comment" className="hover:text-gold transition-colors font-medium">Comment ça marche</a></li>
-                <li><a href="mailto:contact@perfiamatic.com" className="hover:text-gold transition-colors font-medium">Contact</a></li>
-              </ul>
-            </div>
-            
-            {/* Col 3 */}
-            <div>
-              <h4 className="text-white font-heading font-bold mb-6 text-lg">Mentions légales</h4>
-              <ul className="space-y-4 text-sm text-slate-400">
-                <li><a href="#" className="hover:text-gold transition-colors font-medium">Politique de confidentialité</a></li>
-                <li><a href="#" className="hover:text-gold transition-colors font-medium">Mentions légales</a></li>
-                <li><a href="#" className="hover:text-gold transition-colors font-medium">RGPD</a></li>
-              </ul>
-            </div>
+      {/* FAQ */}
+      <section className="py-24 bg-white border-t border-slate-200">
+        <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-heading font-bold text-slate-900">Questions fréquentes</h2>
           </div>
           
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-            <p>© 2026 PerfIAmatic</p>
-            <a href="mailto:contact@perfiamatic.com" className="hover:text-gold transition-colors font-medium">
-              contact@perfiamatic.com
-            </a>
+          <div className="border-t border-slate-100">
+            {faqs.map((faq, i) => (
+              <FAQItem 
+                key={i}
+                q={faq.q}
+                a={faq.a}
+                isOpen={openFaq === i}
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="py-24 bg-gradient-to-r from-blue-600 to-violet-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 pointer-events-none"></div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+            Vous perdez en moyenne 27 000€ par an.
+          </motion.h2>
+          <motion.p variants={fadeInUp} className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+            Vérifiez votre chiffre en 60 secondes — c&apos;est gratuit.
+          </motion.p>
+          
+          <motion.div variants={fadeInUp}>
+            <Link 
+              href="/audit"
+              className="inline-flex justify-center items-center bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-full text-lg font-bold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
+              Découvrir ce que je perds vraiment →
+            </Link>
+          </motion.div>
+          <motion.p variants={fadeInUp} className="text-sm text-blue-200 mt-6 flex items-center justify-center gap-2 font-medium">
+            <ShieldCheck className="w-4 h-4" /> Gratuit · Sans inscription · 60 secondes
+          </motion.p>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-lg">
+                <Activity className="w-4 h-4" />
+              </div>
+              <span className="font-heading font-bold text-xl tracking-tight text-white">PerfIAmatic</span>
+            </div>
+            
+            <div className="flex gap-8 text-sm font-medium">
+              <a href="#" className="hover:text-white transition-colors">Politique de Confidentialité</a>
+              <a href="#" className="hover:text-white transition-colors">Conditions Générales d&apos;Utilisation</a>
+              <a href="#" className="hover:text-white transition-colors">Contact</a>
+            </div>
+
+            <div className="text-sm">
+              &copy; {new Date().getFullYear()} PerfIAmatic. Tous droits réservés.
+            </div>
           </div>
         </div>
       </footer>

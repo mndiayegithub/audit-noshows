@@ -98,7 +98,7 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
           text: '📊 Répartition des no-shows par jour de la semaine',
           font: { size: 16, weight: 'bold' as const },
           padding: 20,
-          color: '#e2e8f0',
+          color: '#334155',
         },
         tooltip: {
           callbacks: {
@@ -119,20 +119,18 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
           ticks: {
             callback: (value: string | number) =>
               typeof value === 'number' ? `${value}%` : value,
-            color: '#94a3b8',
+            color: '#64748b',
           },
-          grid: { color: 'rgba(255,255,255,0.08)' },
+          grid: { color: '#f1f5f9' },
         },
         y: {
           grid: { display: false },
-          ticks: { color: '#cbd5e1' },
+          ticks: { color: '#0f172a' },
         },
       },
     }),
     [donneesSorted]
   );
-
-  if (donneesSorted.length === 0) return null;
 
   return (
     <motion.div
@@ -143,23 +141,9 @@ export default function GraphiqueParJour({ parJour }: { parJour: ParJourItem[] }
       viewport={{ once: true, margin: '-40px' }}
       className="h-full"
     >
-      <div className="bg-surface rounded-2xl border border-white/10 shadow-card p-6 h-full transition-all duration-300 hover:shadow-xl hover:shadow-black/25 hover:border-white/20">
-        <div style={{ height: '380px' }}>
+      <div className="glass-panel bg-white/60 rounded-3xl border border-slate-200 shadow-sm h-full flex flex-col p-2">
+        <div className="flex-1 relative min-h-[300px]">
           <Bar data={data} options={options} />
-        </div>
-        <div className="flex justify-center gap-6 mt-4 text-sm text-slate-300">
-          <div className="flex items-center gap-2 transition-opacity hover:opacity-100 opacity-90">
-            <div className="w-4 h-4 rounded-md shadow-sm" style={{ backgroundColor: '#10b981' }} />
-            <span>Optimal (&lt; 5%)</span>
-          </div>
-          <div className="flex items-center gap-2 transition-opacity hover:opacity-100 opacity-90">
-            <div className="w-4 h-4 rounded-md shadow-sm" style={{ backgroundColor: '#f59e0b' }} />
-            <span>Attention (5-10%)</span>
-          </div>
-          <div className="flex items-center gap-2 transition-opacity hover:opacity-100 opacity-90">
-            <div className="w-4 h-4 rounded-md shadow-sm" style={{ backgroundColor: '#ef4444' }} />
-            <span>Critique (&gt; 10%)</span>
-          </div>
         </div>
       </div>
     </motion.div>
