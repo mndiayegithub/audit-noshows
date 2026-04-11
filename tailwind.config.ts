@@ -31,6 +31,8 @@ const config: Config = {
       boxShadow: {
         card: "0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05)",
         "card-hover": "0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05)",
+        soft: "0 2px 8px -1px rgba(0,0,0,0.06), 0 4px 16px -2px rgba(0,0,0,0.04)",
+        "soft-hover": "0 8px 24px -4px rgba(0,0,0,0.10), 0 4px 12px -2px rgba(0,0,0,0.06)",
       },
       animation: {
         'blob': 'blob 7s infinite',

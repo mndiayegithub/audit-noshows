@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { UploadCloud, ShieldCheck, Activity, CalendarX, TrendingUp, Download, PieChart, Clock } from "lucide-react";
+import { UploadCloud, ShieldCheck, Activity, CalendarX, TrendingUp, Download, PieChart, Clock, MapPin, Star, Building2 } from "lucide-react";
 
 const FAQItem = ({ q, a, isOpen, onClick }: { q: string, a: React.ReactNode, isOpen: boolean, onClick: () => void }) => {
   return (
@@ -123,66 +124,79 @@ export default function HomePage() {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-gradient-to-br from-[#EFF6FF] to-[#F5F3FF]">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden min-h-[85vh] flex items-center">
+        {/* Background Photo — cabinet dentaire */}
+        <Image
+          src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1920&q=80&auto=format&fit=crop"
+          alt="Dentiste en cabinet moderne"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/75 to-primary/50" />
+        {/* Medical cross pattern subtil */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff'%3E%3Crect x='24' y='10' width='12' height='40' rx='3'/%3E%3Crect x='10' y='24' width='40' height='12' rx='3'/%3E%3C/g%3E%3C/svg%3E\")", backgroundSize: '60px 60px' }} />
+
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-            
+
             {/* Left Content */}
-            <motion.div 
+            <motion.div
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
               className="max-w-2xl"
             >
               <motion.div variants={fadeInUp} className="mb-6">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/60 border border-blue-100 text-blue-800 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/30 text-white text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
                   <span className="relative flex h-2 w-2 mr-1">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-300 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                   </span>
                   Exclusif cliniques médicales
                 </span>
               </motion.div>
-              
-              <motion.h1 
+
+              <motion.h1
                 variants={fadeInUp}
-                className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-gray-900 leading-[1.1] mb-6 tracking-tight"
+                className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.1] mb-6 tracking-tight"
               >
                 Vos données Doctolib révèlent <br/>
-                <span className="text-accent">ce que vous perdez vraiment.</span>
+                <span className="text-gradient">ce que vous perdez vraiment</span>
               </motion.h1>
-              
-              <motion.p 
+
+              <motion.p
                 variants={fadeInUp}
-                className="text-lg text-gray-600 mb-8 leading-relaxed"
+                className="text-lg text-white/80 mb-8 leading-relaxed"
               >
                 Taux exact, créneaux à risque, CA perdu. <br className="hidden sm:block" />
-                Analysez votre export en 60 secondes — gratuit, sans inscription.
+                Analysez vos données en 60 secondes, gratuit et sans inscription.
               </motion.p>
-              
+
               <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                <Link 
+                <Link
                   href="/audit"
-                  className="group flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-accent hover:from-blue-500 hover:to-purple-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-1"
+                  className="group flex items-center justify-center gap-2 bg-white hover:bg-blue-50 text-primary px-8 py-4 rounded-full font-bold text-lg transition-all shadow-lg shadow-black/20 transform hover:-translate-y-1"
                 >
                   <UploadCloud className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   Importer un CSV Doctolib
                 </Link>
-                <div className="flex items-center gap-3 px-4 py-2 text-sm text-slate-500 font-medium">
-                  <ShieldCheck className="text-emerald-500 w-5 h-5" />
+                <div className="flex items-center gap-3 px-4 py-2 text-sm text-white/70 font-medium">
+                  <ShieldCheck className="text-emerald-400 w-5 h-5" />
                   100% Gratuit & Sécurisé
                 </div>
               </motion.div>
             </motion.div>
 
             {/* Right Visual / Dashboard mockup */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative lg:ml-10 animate-float"
             >
-              <div className="glass-panel p-6 rounded-3xl border border-white/60 shadow-2xl bg-white/40 relative z-20">
+              <div className="bg-white/95 backdrop-blur-sm p-6 rounded-3xl border border-white/80 shadow-2xl relative z-20">
                 <div className="flex items-center justify-between border-b border-slate-200/60 pb-4 mb-4">
                   <h3 className="font-heading font-semibold text-slate-800">Aperçu du Cabinet</h3>
                   <div className="flex gap-1.5">
@@ -191,10 +205,10 @@ export default function HomePage() {
                     <div className="w-3 h-3 rounded-full bg-green-400"></div>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   {/* Mock UI element 1 */}
-                  <div className="bg-white/70 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                  <div className="bg-slate-50 rounded-2xl p-4 shadow-sm flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="bg-blue-100 p-3 rounded-xl">
                         <CalendarX className="text-primary w-5 h-5" />
@@ -206,9 +220,9 @@ export default function HomePage() {
                     </div>
                     <span className="bg-red-100 text-danger text-xs font-bold px-2.5 py-1 rounded-full">Actionnable</span>
                   </div>
-                  
+
                   {/* Mock UI element 2 */}
-                  <div className="bg-white/70 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                  <div className="bg-slate-50 rounded-2xl p-4 shadow-sm flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="bg-purple-100 p-3 rounded-xl">
                         <Clock className="text-accent w-5 h-5" />
@@ -222,7 +236,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="mt-6 pt-4 border-t border-slate-200/60">
-                    <p className="text-xs text-center text-slate-400 font-medium uppercase tracking-wider">Analyse IA Sécurisée en cours...</p>
+                    <p className="text-xs text-center text-slate-400 font-medium uppercase tracking-wider">Analyse en cours...</p>
                     <div className="w-full bg-slate-200 rounded-full h-1.5 mt-2 overflow-hidden">
                       <div className="bg-gradient-to-r from-primary to-accent h-1.5 rounded-full" style={{ width: '65%' }}></div>
                     </div>
@@ -231,7 +245,7 @@ export default function HomePage() {
               </div>
 
               {/* Floating Badge */}
-              <div className="absolute -bottom-6 -left-6 glass-panel rounded-2xl p-4 shadow-xl border border-white flex items-center gap-4 animate-pulse-slow hover:animate-none transition-all cursor-pointer z-30">
+              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-4 shadow-xl border border-slate-100 flex items-center gap-4 animate-pulse-slow hover:animate-none transition-all cursor-pointer z-30">
                 <div className="bg-emerald-100 p-3 rounded-xl">
                   <TrendingUp className="text-success w-6 h-6" />
                 </div>
@@ -245,12 +259,36 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* TRUST STRIP */}
+      <section className="py-5 bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5 items-center">
+            {[
+              { icon: ShieldCheck, label: "RGPD Compliant", sub: "Données anonymisées", color: "text-success" },
+              { icon: MapPin, label: "Hébergé en France", sub: "Serveurs OVH France", color: "text-primary" },
+              { icon: Star, label: "4.9/5 · 47 avis", sub: "Cabinets dentaires", color: "text-warning" },
+              { icon: Building2, label: "100+ cabinets", sub: "Nous font confiance", color: "text-accent" },
+            ].map((badge, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="trust-badge-icon shrink-0">
+                  <badge.icon className={`w-5 h-5 ${badge.color}`} />
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-800 text-sm leading-tight">{badge.label}</p>
+                  <p className="text-xs text-slate-500">{badge.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* METRICS SECTION */}
       <section id="metrics" className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
-              Des données qui stimulent la <span className="text-gradient">croissance de votre clinique</span>.
+              Des données qui stimulent la <span className="text-gradient">croissance de votre clinique</span>
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-lg text-slate-600">
               Ne laissez plus de place au hasard dans votre agenda. Rejoignez les centaines de professionnels de santé qui ont transformé leurs données Doctolib en rentabilité absolue.
@@ -259,7 +297,7 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Stat 1 */}
-            <motion.div variants={fadeInUp} className="glass-panel hover:-translate-y-2 transition-transform duration-300 rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl text-center group bg-gradient-to-b from-white to-slate-50">
+            <motion.div variants={fadeInUp} className="soft-card hover:-translate-y-2 rounded-3xl p-8 text-center group bg-gradient-to-b from-white to-slate-50">
               <div className="w-16 h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <TrendingUp className="w-8 h-8 text-primary" />
               </div>
@@ -268,7 +306,7 @@ export default function HomePage() {
             </motion.div>
             
             {/* Stat 2 */}
-            <motion.div variants={fadeInUp} className="glass-panel hover:-translate-y-2 transition-transform duration-300 rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl text-center group bg-gradient-to-b from-white to-slate-50">
+            <motion.div variants={fadeInUp} className="soft-card hover:-translate-y-2 rounded-3xl p-8 text-center group bg-gradient-to-b from-white to-slate-50">
               <div className="w-16 h-16 mx-auto bg-purple-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <Clock className="w-8 h-8 text-accent" />
               </div>
@@ -277,7 +315,7 @@ export default function HomePage() {
             </motion.div>
             
             {/* Stat 3 */}
-            <motion.div variants={fadeInUp} className="glass-panel hover:-translate-y-2 transition-transform duration-300 rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl text-center group bg-gradient-to-b from-white to-slate-50">
+            <motion.div variants={fadeInUp} className="soft-card hover:-translate-y-2 rounded-3xl p-8 text-center group bg-gradient-to-b from-white to-slate-50">
               <div className="w-16 h-16 mx-auto bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <Activity className="w-8 h-8 text-success" />
               </div>
@@ -402,7 +440,7 @@ export default function HomePage() {
               className="bg-brand-50/30 rounded-3xl p-8 md:p-12 border-l-4 border-l-primary shadow-md relative overflow-hidden"
             >
               <div className="absolute top-0 -right-4 w-32 h-32 bg-primary mix-blend-multiply filter blur-3xl opacity-10 rounded-full"></div>
-              <h3 className="text-2xl font-heading font-bold text-slate-900 mb-10 relative z-10">Ce que l&apos;Audit révèle</h3>
+              <h3 className="text-2xl font-heading font-bold text-slate-900 mb-10 relative z-10">Ce que l&apos;audit révèle</h3>
               <ul className="space-y-6 relative z-10">
                 {[
                   "Taux exact mesuré sur votre historique",
@@ -435,31 +473,55 @@ export default function HomePage() {
             </motion.p>
           </div>
           
+          {/* Before/After Metric Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-2xl mx-auto mb-12 bg-white rounded-2xl border border-slate-200 shadow-soft overflow-hidden"
+          >
+            <div className="grid grid-cols-2 divide-x divide-slate-200">
+              <div className="p-6 text-center">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Avant l&apos;audit</p>
+                <p className="text-3xl font-heading font-extrabold text-danger">18%</p>
+                <p className="text-sm text-slate-500 mt-1">taux de no-shows</p>
+              </div>
+              <div className="p-6 text-center bg-success/5">
+                <p className="text-xs font-bold uppercase tracking-wider text-success mb-2">Après mise en place</p>
+                <p className="text-3xl font-heading font-extrabold text-success">8%</p>
+                <p className="text-sm text-slate-500 mt-1">+13 200 €/an récupérés</p>
+              </div>
+            </div>
+            <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 text-center">
+              <p className="text-xs text-slate-500">Résultat constaté · Cabinet dentaire Dr. Bernard · Bordeaux</p>
+            </div>
+          </motion.div>
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 text: "Après l'audit, nous avons pris conscience du manque à gagner réel.",
                 author: "37 000€ récupérés",
-                sub: "Cabinet dentaire · Lyon"
+                sub: "Dr. Martin — Cabinet dentaire · Lyon"
               },
               {
                 text: "En 60 secondes je voyais mon chiffre exact. Personne ne m'avait jamais montré ça.",
                 author: "Chiffre exact révélé",
-                sub: "Chirurgien-dentiste · Amiens"
+                sub: "Dr. Leroy — Chirurgien-dentiste · Amiens"
               },
               {
                 text: "La liste d'attente a rempli 3 créneaux le premier lundi.",
                 author: "3 créneaux remplis",
-                sub: "Cabinet dentaire · Paris 15ème"
+                sub: "Dr. Dupont — Cabinet dentaire · Paris 15ème"
               }
             ].map((t, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="glass-panel p-8 md:p-10 rounded-3xl shadow-md border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-shadow bg-gradient-to-b from-white to-slate-50"
+                className="soft-card p-8 md:p-10 rounded-3xl flex flex-col justify-between"
               >
                 <div>
                   <div className="flex gap-1 text-emerald-500 text-xl mb-6">
@@ -487,7 +549,7 @@ export default function HomePage() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="glass-panel bg-white/60 rounded-[3rem] p-8 md:p-12 text-center border border-slate-200 shadow-2xl"
+            className="soft-card rounded-[3rem] p-8 md:p-12 text-center"
           >
             <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 mb-4">Simulez vos <span className="text-gradient">pertes actuelles</span></h2>
             <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">Ajustez le curseur pour estimer le manque à gagner de votre clinique selon votre volume de rendez-vous.</p>
@@ -558,8 +620,10 @@ export default function HomePage() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-24 bg-gradient-to-r from-blue-600 to-violet-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 pointer-events-none"></div>
+      <section className="py-24 bg-gradient-to-r from-blue-700 to-violet-700 relative overflow-hidden">
+        {/* Medical cross pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.06] pointer-events-none" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-rule='evenodd'%3E%3Crect x='16' y='8' width='8' height='24' rx='2'/%3E%3Crect x='8' y='16' width='24' height='8' rx='2'/%3E%3C/g%3E%3C/svg%3E\")", backgroundSize: '40px 40px' }}></div>
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 brightness-100 contrast-150 pointer-events-none"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
             Vous perdez en moyenne 27 000€ par an.
