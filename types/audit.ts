@@ -53,3 +53,10 @@ export interface AuditResponse {
   email_sent: boolean;
   error?: string;
 }
+
+export interface GoogleData {
+  name: string;
+  rating: number;
+  user_ratings_total: number;
+  formatted_address?: string;
+}

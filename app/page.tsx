@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { UploadCloud, ShieldCheck, Activity, CalendarX, TrendingUp, Download, PieChart, Clock, MapPin, Star, Building2 } from "lucide-react";
+import { UploadCloud, ShieldCheck, Activity, CalendarX, TrendingUp, Download, PieChart, Clock, MapPin, Star, Building2, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
 const FAQItem = ({ q, a, isOpen, onClick }: { q: string, a: React.ReactNode, isOpen: boolean, onClick: () => void }) => {
   return (
@@ -257,6 +258,153 @@ export default function HomePage() {
             </motion.div>
           </div>
         </div>
+      </section>
+
+      {/* PRODUCT SHOWCASE — ContainerScroll */}
+      <section className="bg-slate-50 overflow-hidden">
+        <ContainerScroll
+          titleComponent={
+            <div className="mb-4">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-5">
+                <Activity className="w-3.5 h-3.5" aria-hidden="true" />
+                Rapport généré en 60 secondes
+              </span>
+              <h2 className="text-4xl md:text-6xl font-heading font-bold text-slate-900 leading-tight mt-4">
+                Votre audit médical,{" "}
+                <span className="text-gradient">visualisé en temps réel</span>
+              </h2>
+              <p className="text-slate-500 text-lg mt-4 max-w-xl mx-auto font-medium">
+                Découvrez exactement ce que perd votre cabinet : créneaux, taux et impact financier.
+              </p>
+            </div>
+          }
+        >
+          {/* Dashboard mockup inside the 3D card */}
+          <div className="h-full flex flex-col bg-slate-50 overflow-hidden">
+
+            {/* Topbar */}
+            <div className="bg-white border-b border-slate-200 px-5 py-3 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                  <Activity className="w-4 h-4 text-white" aria-hidden="true" />
+                </div>
+                <span className="font-heading font-bold text-slate-900 text-sm">PerfIAmatic</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                </div>
+              </div>
+              <span className="text-xs text-slate-400 font-medium hidden sm:block">Cabinet Dr. Martin · Rapport du 12/04/2026</span>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-hidden p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+
+              {/* KPI cards row */}
+              {[
+                { label: "Total RDV", value: "1 917", color: "text-slate-900", border: "border-l-primary", icon: CalendarX },
+                { label: "No-shows", value: "226", color: "text-danger", border: "border-l-danger", icon: AlertTriangle },
+                { label: "Taux no-shows", value: "11,8%", color: "text-danger", border: "border-l-danger", icon: PieChart },
+                { label: "CA perdu / an", value: "81 360 €", color: "text-danger", border: "border-l-danger", icon: TrendingUp },
+              ].map((kpi) => (
+                <div key={kpi.label} className={`bg-white rounded-xl border border-slate-100 border-l-4 px-3 py-3 shadow-sm flex flex-col justify-between ${kpi.border}`}>
+                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wider leading-tight">{kpi.label}</p>
+                  <p className={`text-xl md:text-2xl font-heading font-extrabold mt-1 ${kpi.color}`}>{kpi.value}</p>
+                </div>
+              ))}
+
+              {/* Bar chart — no-shows par jour */}
+              <div className="col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-4">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">No-shows par jour</p>
+                <div className="flex items-end gap-2 h-16">
+                  {[
+                    { jour: "Lun", val: 40, pct: 70 },
+                    { jour: "Mar", val: 21, pct: 37 },
+                    { jour: "Mer", val: 49, pct: 86 },
+                    { jour: "Jeu", val: 41, pct: 72 },
+                    { jour: "Ven", val: 58, pct: 100 },
+                    { jour: "Sam", val: 17, pct: 30 },
+                  ].map((d) => (
+                    <div key={d.jour} className="flex-1 flex flex-col items-center gap-1">
+                      <div
+                        className={`w-full rounded-t-md ${d.pct >= 80 ? "bg-danger" : d.pct >= 60 ? "bg-warning" : "bg-success"}`}
+                        style={{ height: `${d.pct}%` }}
+                      />
+                      <span className="text-[9px] text-slate-400 font-medium">{d.jour}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Score + benchmark */}
+              <div className="col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-4">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Score performance</p>
+                <div className="flex items-center gap-4">
+                  <div className="relative w-16 h-16 shrink-0">
+                    <svg viewBox="0 0 36 36" className="w-16 h-16 -rotate-90">
+                      <circle cx="18" cy="18" r="15.9" fill="none" stroke="#F1F5F9" strokeWidth="3" />
+                      <circle cx="18" cy="18" r="15.9" fill="none" stroke="#EF4444" strokeWidth="3"
+                        strokeDasharray="37 63" strokeLinecap="round" />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center text-sm font-heading font-extrabold text-danger">37</span>
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-500 font-medium">Vs benchmark secteur</span>
+                      <span className="text-danger font-bold">+7,3 pts</span>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-2">
+                      <div className="bg-danger h-2 rounded-full" style={{ width: "37%" }} />
+                    </div>
+                    <p className="text-xs text-slate-400">Optimal : 4–5% · Votre taux : 11,8%</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Top créneaux à risque */}
+              <div className="col-span-2 md:col-span-4 bg-white rounded-xl border border-slate-100 border-l-4 border-l-danger shadow-sm p-4">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Top créneaux à risque</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { slot: "Vendredi 18:30", pct: "47,6%", ca: "3 600 €" },
+                    { slot: "Mercredi 18:30", pct: "38,1%", ca: "2 880 €" },
+                    { slot: "Vendredi 15:00", pct: "33,3%", ca: "2 160 €" },
+                  ].map((c) => (
+                    <div key={c.slot} className="bg-red-50 border border-danger/10 rounded-lg px-3 py-2">
+                      <p className="text-xs font-bold text-slate-700 leading-tight">{c.slot}</p>
+                      <p className="text-danger font-extrabold text-sm mt-0.5">{c.pct}</p>
+                      <p className="text-xs text-slate-400">{c.ca} perdus/an</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Meilleurs créneaux */}
+              <div className="col-span-2 md:col-span-4 bg-white rounded-xl border border-slate-100 border-l-4 border-l-success shadow-sm p-4">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Créneaux performants</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { slot: "Mardi 09:00", pct: "0%" },
+                    { slot: "Mardi 09:30", pct: "0%" },
+                    { slot: "Mardi 10:00", pct: "0%" },
+                  ].map((c) => (
+                    <div key={c.slot} className="bg-green-50 border border-success/10 rounded-lg px-3 py-2 flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
+                      <div>
+                        <p className="text-xs font-bold text-slate-700 leading-tight">{c.slot}</p>
+                        <p className="text-success font-extrabold text-sm">{c.pct} no-show</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </ContainerScroll>
       </section>
 
       {/* TRUST STRIP */}

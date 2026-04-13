@@ -7,11 +7,14 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
-import { UploadCloud, ShieldCheck, TrendingUp, Activity, Sparkles, CheckCircle, FileText } from "lucide-react";
+import { UploadCloud, ShieldCheck, TrendingUp, Activity, Sparkles, CheckCircle, FileText, Search } from "lucide-react";
 // react-pdf est importé dynamiquement dans handleDownloadPDF pour éviter tout chargement SSR
 import GraphiqueParJour from "@/components/GraphiqueParJour";
 import GaugeBenchmark from "@/components/GaugeBenchmark";
-import type { AuditResponse } from "@/types/audit";
+import DiagnosticGoogle from "@/components/audit/DiagnosticGoogle";
+import ScoreGlobal from "@/components/audit/ScoreGlobal";
+import CTACalendly from "@/components/audit/CTACalendly";
+import type { AuditResponse, GoogleData } from "@/types/audit";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -233,6 +236,8 @@ export default function AuditPage() {
   const [erreur, setErreur] = useState("");
   const [etapeActuelle, setEtapeActuelle] = useState(0);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [googleData, setGoogleData] = useState<GoogleData | null>(null);
+  const [showGoogleSection, setShowGoogleSection] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -750,6 +755,46 @@ export default function AuditPage() {
                 </div>
               </motion.div>
             )}
+
+            {/* Bouton déclencheur Google */}
+            {!showGoogleSection && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="flex justify-center"
+              >
+                <button
+                  onClick={() => setShowGoogleSection(true)}
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-full font-bold text-lg hover:bg-slate-800 focus:ring-2 focus:ring-slate-900/30 focus:outline-none transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 transform cursor-pointer"
+                >
+                  <Search className="w-5 h-5" aria-hidden="true" />
+                  Analyser aussi mes avis Google
+                </button>
+              </motion.div>
+            )}
+
+            {/* Section 3 — Diagnostic Google */}
+            {showGoogleSection && (
+              <DiagnosticGoogle
+                nomCabinet={resultats.stats.nom_cabinet}
+                onSuccess={setGoogleData}
+              />
+            )}
+
+            {/* Section 4 — Score global */}
+            <ScoreGlobal stats={resultats.stats} googleData={googleData} />
+
+            {/* Section 5 — CTA Calendly */}
+            <CTACalendly
+              caPerduAn={resultats.stats.global.ca_perdu_an}
+              caPerduGoogle={
+                googleData && googleData.user_ratings_total < 87
+                  ? (87 - googleData.user_ratings_total) * 4 * 150 * 12
+                  : undefined
+              }
+              email={email || undefined}
+            />
 
             {/* Boutons d'action */}
             <motion.div
