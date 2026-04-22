@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Auto-loaded skills
 
 - **Sketch findings for system-audit-noshows** (validated design decisions, CSS patterns, visual direction for the audit report v2 — stepped reveal, Apple Health clinical style) → `Skill("sketch-findings-system-audit-noshows")`
+- **Sketch findings for landing page** (validated design decisions for the landing v2 — dark premium, split hero, marquee stats, FAQ minimal) → `Skill("sketch-findings-landing-system-audit-noshows")`
 
 ## Commands
 

@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sketch 006 — How It Works</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  body { background: #0A0A0C; color: #F5F5F7; }
+  .sketch-toolbar { background: #111113; border-bottom-color: rgba(255,255,255,0.06); color: #F5F5F7; }
+  .sketch-toolbar .tertiary { color: rgba(245,245,247,0.5); }
+  .sketch-toolbar button { background: rgba(255,255,255,0.06); color: rgba(245,245,247,0.7); border-color: transparent; }
+  .sketch-toolbar button:hover { background: rgba(255,255,255,0.1); }
+  .sketch-toolbar button.active { background: #F5F5F7; color: #0A0A0C; }
+
+  .wrap { position: relative; overflow: hidden; padding: 80px 40px 100px; }
+  .wrap::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(700px 500px at 20% 10%, rgba(99,102,241,0.12), transparent 60%),
+      radial-gradient(600px 500px at 85% 80%, rgba(236,72,153,0.08), transparent 60%);
+  }
+  .head { max-width: 960px; margin: 0 auto 64px; text-align: center; position: relative; z-index: 2; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #A78BFA; font-weight: 600; margin-bottom: 18px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 999px; background: #A78BFA;
+    box-shadow: 0 0 0 4px rgba(167,139,250,0.18);
+  }
+  .title {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(32px, 4.2vw, 48px); line-height: 1.1; letter-spacing: -0.03em;
+    margin: 0 0 16px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #C7C7CC 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .title .accent {
+    font-family: var(--font-serif); font-weight: 500;
+    background: linear-gradient(135deg, #A78BFA, #F472B6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .lede {
+    color: rgba(245,245,247,0.7); font-size: 18px; line-height: 1.6;
+    max-width: 620px; margin: 0 auto;
+  }
+
+  /* ========== Variant A : 3 steps numérotés horizontaux ========== */
+  .a-grid {
+    max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .a-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; padding: 32px; position: relative;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+  }
+  .a-card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.14);
+    transform: translateY(-2px);
+  }
+  .a-num {
+    font-family: var(--font-serif); font-size: 72px;
+    letter-spacing: -0.04em; line-height: 1;
+    background: linear-gradient(135deg, #A78BFA, #F472B6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+  }
+  .a-card h3 {
+    font-family: var(--font-display); font-size: 22px;
+    letter-spacing: -0.02em; margin: 0 0 12px; color: #F5F5F7;
+  }
+  .a-card p {
+    color: rgba(245,245,247,0.65); font-size: 15px; line-height: 1.6; margin: 0 0 20px;
+  }
+  .a-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: rgba(245,245,247,0.55);
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    padding: 5px 10px; border-radius: 999px;
+  }
+  .a-arrow {
+    position: absolute; top: 54px; right: -14px; z-index: 3;
+    width: 28px; height: 28px; border-radius: 999px;
+    background: #0A0A0C; border: 1px solid rgba(255,255,255,0.14);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(245,245,247,0.6); font-size: 14px;
+  }
+
+  /* ========== Variant B : Timeline verticale + screenshots ========== */
+  .b-wrap { max-width: 960px; margin: 0 auto; position: relative; z-index: 2; }
+  .b-step {
+    display: grid; grid-template-columns: 80px 1fr 1fr; gap: 32px;
+    padding: 40px 0; position: relative;
+  }
+  .b-step:not(:last-child)::after {
+    content: ""; position: absolute; left: 36px; top: 84px; bottom: -40px;
+    width: 2px; background: linear-gradient(180deg, rgba(167,139,250,0.4), rgba(244,114,182,0.15));
+  }
+  .b-num-wrap {
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .b-num {
+    width: 48px; height: 48px; border-radius: 999px;
+    background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif); font-size: 20px;
+    color: #A78BFA;
+    box-shadow: 0 0 24px rgba(167,139,250,0.25);
+  }
+  .b-txt h3 {
+    font-family: var(--font-display); font-size: 22px;
+    letter-spacing: -0.02em; margin: 4px 0 10px; color: #F5F5F7;
+  }
+  .b-txt p {
+    color: rgba(245,245,247,0.65); font-size: 15px; line-height: 1.6; margin: 0 0 12px;
+  }
+  .b-meta {
+    font-size: 12px; color: rgba(245,245,247,0.45);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .b-meta::before {
+    content: ""; width: 4px; height: 4px; border-radius: 999px; background: #34D399;
+  }
+  .b-shot {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 16px; min-height: 160px;
+    display: flex; flex-direction: column; justify-content: center; gap: 10px;
+  }
+  .b-shot .mono-line {
+    font-family: var(--font-mono); font-size: 11px;
+    color: rgba(245,245,247,0.65);
+    background: rgba(0,0,0,0.35); padding: 6px 10px; border-radius: 6px;
+  }
+  .b-shot .chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .b-shot .chip {
+    background: rgba(167,139,250,0.15); color: #C4B5FD;
+    border: 1px solid rgba(167,139,250,0.3);
+    padding: 4px 10px; border-radius: 999px; font-size: 11px;
+  }
+  .b-shot .kpi-preview {
+    font-family: var(--font-serif); font-size: 32px;
+    background: linear-gradient(135deg, #FF6961, #F472B6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em; line-height: 1;
+  }
+  .b-shot .lbl { font-size: 11px; color: rgba(245,245,247,0.5); }
+
+  /* ========== Variant C : Video-like preview interactive ========== */
+  .c-wrap { max-width: 1040px; margin: 0 auto; position: relative; z-index: 2; }
+  .c-player {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; padding: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  .c-player::before {
+    content: ""; position: absolute; inset: -16px;
+    background: linear-gradient(135deg, rgba(167,139,250,0.25), rgba(244,114,182,0.15));
+    border-radius: 32px; z-index: -1; filter: blur(30px);
+  }
+  .c-frame {
+    background: #111113; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; aspect-ratio: 16/9;
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px; position: relative; overflow: hidden;
+  }
+  .c-frame-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    padding: 10px 14px; display: flex; gap: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.35);
+  }
+  .c-dot { width: 10px; height: 10px; border-radius: 999px; }
+  .c-dot.r { background: #FF6961; }
+  .c-dot.y { background: #FBBF24; }
+  .c-dot.g { background: #34D399; }
+  .c-scene { display: none; width: 100%; padding-top: 28px; }
+  .c-scene.active { display: block; }
+
+  /* Scene 1 : upload CSV */
+  .c-scene-1 {
+    display: none; text-align: center;
+  }
+  .c-scene-1.active { display: block; }
+  .c-drop {
+    border: 2px dashed rgba(167,139,250,0.4); border-radius: 14px;
+    padding: 40px; background: rgba(167,139,250,0.05);
+    color: rgba(245,245,247,0.7);
+  }
+  .c-drop .ic {
+    font-size: 48px; background: linear-gradient(135deg, #A78BFA, #F472B6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+  .c-drop .file {
+    display: inline-flex; gap: 10px; align-items: center; margin-top: 14px;
+    background: rgba(255,255,255,0.06); padding: 8px 14px; border-radius: 8px;
+    font-family: var(--font-mono); font-size: 12px;
+  }
+
+  /* Scene 2 : analyse IA */
+  .c-scene-2 .spinner-row {
+    display: flex; flex-direction: column; gap: 14px; max-width: 480px; margin: 0 auto;
+  }
+  .c-log-line {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px 14px;
+    font-family: var(--font-mono); font-size: 12px;
+    color: rgba(245,245,247,0.75);
+  }
+  .c-log-line .tick { color: #34D399; }
+  .c-log-line .pulse {
+    width: 8px; height: 8px; border-radius: 999px; background: #A78BFA;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 0.4; }
+    50% { opacity: 1; box-shadow: 0 0 12px #A78BFA; }
+  }
+
+  /* Scene 3 : rapport */
+  .c-scene-3 .rep {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 18px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    max-width: 540px; margin: 0 auto;
+  }
+  .c-scene-3 .big {
+    font-family: var(--font-serif); font-size: 38px;
+    background: linear-gradient(135deg, #FF6961, #F472B6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em; line-height: 1;
+  }
+  .c-scene-3 .lbl { font-size: 11px; color: rgba(245,245,247,0.5); margin-top: 4px; }
+  .c-scene-3 .cell { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; }
+
+  .c-tabs {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    margin-top: 28px;
+  }
+  .c-tab {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 20px; cursor: pointer;
+    transition: all 0.2s ease; text-align: left;
+    color: #F5F5F7;
+  }
+  .c-tab:hover { background: rgba(255,255,255,0.06); }
+  .c-tab.active {
+    background: rgba(167,139,250,0.12);
+    border-color: rgba(167,139,250,0.4);
+    box-shadow: 0 0 0 1px rgba(167,139,250,0.3);
+  }
+  .c-tab .n {
+    font-family: var(--font-serif); font-size: 20px; color: #A78BFA;
+  }
+  .c-tab h4 {
+    font-family: var(--font-display); font-size: 15px;
+    margin: 4px 0 4px; color: #F5F5F7;
+  }
+  .c-tab p { font-size: 12px; color: rgba(245,245,247,0.6); margin: 0; }
+
+  @media (max-width: 860px) {
+    .a-grid { grid-template-columns: 1fr; }
+    .a-arrow { display: none; }
+    .b-step { grid-template-columns: 60px 1fr; }
+    .b-shot { grid-column: 2; }
+    .c-tabs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sketch-toolbar">
+  <strong>Sketch 006 · how-it-works</strong>
+  <span class="tertiary">Landing — section explicative</span>
+  <div class="tabs">
+    <button class="active winner" onclick="sw('a',this)">A · 3 steps numérotés</button>
+    <button onclick="sw('b',this)">B · Timeline + screenshots</button>
+    <button onclick="sw('c',this)">C · Player interactif</button>
+  </div>
+</div>
+
+<div class="sketch-body">
+
+  <!-- ========== VARIANT A ========== -->
+  <section class="variant active" data-v="a">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow"><span class="dot"></span> Comment ça marche</div>
+        <h2 class="title">3 étapes. <span class="accent">60 secondes.</span> Aucun compte.</h2>
+        <p class="lede">Vous partez de votre export Doctolib, vous repartez avec un rapport chiffré prêt à être partagé avec votre équipe.</p>
+      </div>
+
+      <div class="a-grid">
+        <div class="a-card">
+          <div class="a-num">01</div>
+          <h3>Upload du CSV</h3>
+          <p>Glissez votre export Doctolib. Aucune authentification, aucun nom de patient stocké.</p>
+          <span class="a-tag">📎 CSV Doctolib / Dr Bruni / DrHub</span>
+          <div class="a-arrow">→</div>
+        </div>
+        <div class="a-card">
+          <div class="a-num">02</div>
+          <h3>Analyse IA</h3>
+          <p>Notre moteur segmente vos no-shows, calcule le CA perdu annualisé et croise avec votre note Google.</p>
+          <span class="a-tag">⏱ 30 à 50 secondes</span>
+          <div class="a-arrow">→</div>
+        </div>
+        <div class="a-card">
+          <div class="a-num">03</div>
+          <h3>Rapport chiffré</h3>
+          <p>6 écrans clairs : synthèse, money build, répartition jour, tendance, score, plan d'action.</p>
+          <span class="a-tag">📄 PDF téléchargeable</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== VARIANT B ========== -->
+  <section class="variant" data-v="b">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow"><span class="dot"></span> Comment ça marche</div>
+        <h2 class="title">Un parcours <span class="accent">sans friction</span>, de bout en bout.</h2>
+        <p class="lede">De l'upload au rapport final, voici ce qui se passe. Chaque étape prend moins d'une minute.</p>
+      </div>
+
+      <div class="b-wrap">
+        <div class="b-step">
+          <div class="b-num-wrap"><div class="b-num">1</div></div>
+          <div class="b-txt">
+            <h3>Upload de votre CSV Doctolib</h3>
+            <p>Glissez le fichier exporté depuis votre logiciel de gestion. Aucun champ patient n'est stocké — seuls les agrégats sont analysés.</p>
+            <div class="b-meta">Conforme RGPD · Aucun compte</div>
+          </div>
+          <div class="b-shot">
+            <div class="mono-line">doctolib-export-2026-04.csv · 427 Ko</div>
+            <div class="mono-line">colonnes : date, statut, praticien, durée, motif</div>
+            <div class="chip-row">
+              <span class="chip">✓ lu</span>
+              <span class="chip">✓ normalisé</span>
+              <span class="chip">✓ anonymisé</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="b-step">
+          <div class="b-num-wrap"><div class="b-num">2</div></div>
+          <div class="b-txt">
+            <h3>Analyse par IA médicale</h3>
+            <p>Notre moteur segmente vos no-shows par jour, praticien et motif. Il calcule le CA perdu annualisé et croise avec votre réputation Google.</p>
+            <div class="b-meta">30 à 50 s · 100% serveur Europe</div>
+          </div>
+          <div class="b-shot">
+            <div class="mono-line">⚙ segmentation no-shows par jour…</div>
+            <div class="mono-line">⚙ calcul CA perdu annualisé…</div>
+            <div class="mono-line">⚙ Google Places : analyse des avis…</div>
+            <div class="chip-row">
+              <span class="chip">IA · 12 métriques</span>
+              <span class="chip">Google · +324 avis</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="b-step">
+          <div class="b-num-wrap"><div class="b-num">3</div></div>
+          <div class="b-txt">
+            <h3>Rapport chiffré + PDF</h3>
+            <p>6 écrans structurés : synthèse, money build, répartition, tendance, score global, plan d'action. PDF téléchargeable, partageable avec votre équipe.</p>
+            <div class="b-meta">Livré sous 60 s · Sans achat requis</div>
+          </div>
+          <div class="b-shot">
+            <div class="kpi-preview">42 380 €</div>
+            <div class="lbl">CA annualisé perdu</div>
+            <div class="chip-row">
+              <span class="chip">Score 54 / 100</span>
+              <span class="chip">14,2 % no-show</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== VARIANT C ========== -->
+  <section class="variant" data-v="c">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow"><span class="dot"></span> Voir le processus</div>
+        <h2 class="title">Cliquez, regardez. <span class="accent">C'est aussi simple.</span></h2>
+        <p class="lede">Explorez chaque étape dans le player. Tout ce qui est montré ici se passe réellement pendant l'audit.</p>
+      </div>
+
+      <div class="c-wrap">
+        <div class="c-player">
+          <div class="c-frame">
+            <div class="c-frame-bar">
+              <span class="c-dot r"></span>
+              <span class="c-dot y"></span>
+              <span class="c-dot g"></span>
+            </div>
+
+            <div class="c-scene c-scene-1 active" data-scene="1">
+              <div class="c-drop">
+                <div class="ic">⬆</div>
+                <div style="font-size:16px;color:#F5F5F7;margin-bottom:6px">Glissez votre CSV Doctolib</div>
+                <div style="font-size:13px;color:rgba(245,245,247,0.55)">Aucun compte · Aucun nom patient stocké</div>
+                <div class="file">📎 doctolib-export-2026-04.csv · 427 Ko</div>
+              </div>
+            </div>
+
+            <div class="c-scene c-scene-2" data-scene="2">
+              <div class="spinner-row">
+                <div class="c-log-line"><span class="tick">✓</span> CSV reçu · 1 284 RDV sur 6 mois</div>
+                <div class="c-log-line"><span class="tick">✓</span> Anonymisation · 0 nom patient conservé</div>
+                <div class="c-log-line"><span class="pulse"></span> Segmentation no-shows par jour…</div>
+                <div class="c-log-line"><span class="pulse"></span> Calcul CA perdu annualisé…</div>
+                <div class="c-log-line" style="opacity:0.5">◦ Google Places · benchmark avis…</div>
+              </div>
+            </div>
+
+            <div class="c-scene c-scene-3" data-scene="3">
+              <div style="text-align:center;margin-bottom:16px;font-size:13px;color:rgba(245,245,247,0.55)">Aperçu du rapport</div>
+              <div class="rep">
+                <div class="cell" style="grid-column:1 / -1">
+                  <div class="big">42 380 €</div>
+                  <div class="lbl">CA annualisé perdu</div>
+                </div>
+                <div class="cell">
+                  <div style="font-family:var(--font-serif);font-size:22px;color:#FF6961">14,2 %</div>
+                  <div class="lbl">Taux no-show</div>
+                </div>
+                <div class="cell">
+                  <div style="font-family:var(--font-serif);font-size:22px;color:#FB923C">54 / 100</div>
+                  <div class="lbl">Score performance</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="c-tabs">
+          <button class="c-tab active" onclick="scene(1,this)">
+            <div class="n">01</div>
+            <h4>Upload du CSV</h4>
+            <p>Glissez votre export. Sans compte, sans friction.</p>
+          </button>
+          <button class="c-tab" onclick="scene(2,this)">
+            <div class="n">02</div>
+            <h4>Analyse IA</h4>
+            <p>Segmentation + calcul CA + Google, en parallèle.</p>
+          </button>
+          <button class="c-tab" onclick="scene(3,this)">
+            <div class="n">03</div>
+            <h4>Rapport chiffré</h4>
+            <p>6 écrans + PDF téléchargeable en 60 secondes.</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function sw(v, el) {
+    document.querySelectorAll('.variant').forEach(s => s.classList.toggle('active', s.dataset.v===v));
+    document.querySelectorAll('.sketch-toolbar button').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    window.scrollTo({top:0});
+  }
+  function scene(n, el) {
+    document.querySelectorAll('.c-scene').forEach(s => s.classList.toggle('active', s.dataset.scene==String(n)));
+    document.querySelectorAll('.c-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>
