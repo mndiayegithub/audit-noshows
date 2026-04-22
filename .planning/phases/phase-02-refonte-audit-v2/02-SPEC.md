@@ -1,11 +1,11 @@
-# SPEC — Phase 1 · Refonte audit v2 (stepped reveal)
+# SPEC — Phase 2 · Refonte audit v2 (stepped reveal)
 
 **Status:** locked · 2026-04-22
 **Milestone:** v2.0 Finalisation
 **Upstream artifacts:**
 - `.planning/PROJECT.md` · identity, vision, invariants
 - `.planning/REQUIREMENTS.md` · REQ-1, REQ-3, REQ-5 scope
-- `.planning/ROADMAP.md` · phase 1 entry
+- `.planning/ROADMAP.md` · phase 2 entry
 - `.planning/sketches/MANIFEST.md` · 4 winners
 - `.planning/sketches/WRAP-UP-SUMMARY.md`
 - `.claude/skills/sketch-findings-system-audit-noshows/` · auto-loaded
@@ -68,7 +68,7 @@ et au skill `sketch-findings-system-audit-noshows`.
 - **Current:** aucune donnée historique exposée par n8n WF12
 - **Target:** sparkline SVG rouge ascendante avec gradient area (skill pattern line-chart), 6 points mensuels, headline "La situation s'aggrave depuis {mois}" si pente > 0.
 - **Décision scope :** Step 04 **intégré dans phase 1 uniquement si** WF12 expose `stats.stats_par_mois: { mois: string; taux: number; no_shows: number }[]`. Sinon le parcours devient 5 steps (02-03 deviennent 03-04 et le step 04 actuel est supprimé).
-- **Dépendance externe bloquante :** extension WF12 (tracked comme `DEP-1.5-n8n-mensuel`, hors scope code phase 1 mais bloque cette REQ).
+- **Dépendance externe bloquante :** extension WF12 (tracked comme `DEP-2.5-n8n-mensuel`, hors scope code phase 2 mais bloque cette REQ).
 - **Acceptance:**
   - [ ] Si `stats.stats_par_mois` présent : sparkline rendue, pente calculée, headline affichée
   - [ ] Si absent : step 04 supprimé, stepper passe à 5 dots, le step 05 devient step 04 dans le parcours utilisateur
@@ -191,7 +191,7 @@ et au skill `sketch-findings-system-audit-noshows`.
 - **Conformité RGPD renforcée** (phase 3) — validation CSV serveur, logs, audit complet
 - **Modification de `app/api/audit/route.ts`** — le proxy reste identique
 - **Refonte visuelle du PDF** (`RapportPDF.tsx`) — dark/gold conservé, ajout du narratif seulement
-- **Modifications du workflow n8n WF12** — sauf ajout du champ `stats_par_mois[]` qui est **tracké comme dépendance externe** (DEP-1.5) mais pas réalisé dans le code de cette phase
+- **Modifications du workflow n8n WF12** — sauf ajout du champ `stats_par_mois[]` qui est **tracké comme dépendance externe** (DEP-2.5) mais pas réalisé dans le code de cette phase
 - **Landing page** (`app/page.tsx`, `landing.html`, `landing-preview.html`, `mockup.html`) — direction visuelle distincte, scope séparé
 - **Tests unitaires / e2e** formels — tests manuels seulement en phase 1, infra test arrive en phase 3
 - **Rolling deploy / feature flag** — remplacement direct (backup `main` via branche avant merge)
@@ -200,8 +200,8 @@ et au skill `sketch-findings-system-audit-noshows`.
 
 ### Dependencies
 
-- **DEP-1.5** (externe, bloquante pour step 04 uniquement) : extension n8n WF12 pour exposer `stats.stats_par_mois: { mois: string; taux: number; no_shows: number }[]` calculé en regroupant le CSV par mois. Si non livré avant la mise en prod phase 1, step 04 est supprimé du parcours (5 steps au lieu de 6).
-- **DEP-1.7** (externe, non bloquante) : clé API Calendly valide + URL du calendrier cible. À vérifier dans `.env` (`NEXT_PUBLIC_CALENDLY_URL` à ajouter).
+- **DEP-2.5** (externe, bloquante pour step 04 uniquement) : extension n8n WF12 pour exposer `stats.stats_par_mois: { mois: string; taux: number; no_shows: number }[]` calculé en regroupant le CSV par mois. Si non livré avant la mise en prod phase 1, step 04 est supprimé du parcours (5 steps au lieu de 6).
+- **DEP-2.7** (externe, non bloquante) : clé API Calendly valide + URL du calendrier cible. À vérifier dans `.env` (`NEXT_PUBLIC_CALENDLY_URL` à ajouter).
 
 ---
 
@@ -237,6 +237,6 @@ et au skill `sketch-findings-system-audit-noshows`.
 
 ## Next step
 
-`/gsd-discuss-phase 1` — traitera les décisions d'implémentation (architecture des composants, état global, Calendly integration technique, gestion du email prefill, Chart.js stay or go, etc.) à partir de ce SPEC.
+`/gsd-discuss-phase 2` — traitera les décisions d'implémentation (architecture des composants, état global, Calendly integration technique, gestion du email prefill, Chart.js stay or go, etc.) à partir de ce SPEC.
 
 **Requirements lockées :** 14 (REQ-1.1 à REQ-1.14)
