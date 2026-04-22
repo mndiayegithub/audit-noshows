@@ -26,3 +26,11 @@ un document médical sérieux plutôt qu'un dashboard produit.
 | 002 | hero-kpi | Comment faire émerger le "chiffre qui fait mal" ? | **D · Money build + reveal latéral du comparatif marché** | hero, kpi |
 | 003 | conversion-moment | Comment afficher le score global (step 5) ? | **A · Activity ring + breakdown + sticky CTA** | score, ring |
 | 004 | synthesis-cta | Comment traiter la synthèse finale + CTA Calendly (step 6) ? | **C · Split problème / solution + CTA** | cta, calendly, synthesis |
+
+### Landing page (phase 1 · cabinets médicaux FR)
+
+Direction distincte de l'audit : hero commercial dark premium, mais même KPI / typo serif pour les chiffres-clés — cohérence de marque via le **chiffre** et non via la palette. Un toggle dark/light est envisagé à l'implémentation (C = version light du même layout).
+
+| # | Name | Design Question | Winner | Tags |
+|---|------|-----------------|--------|------|
+| 005 | hero-impact | Quel hero convertit le mieux sur la landing ? | **D · Split dark premium (message + preview rapport)** | landing, hero, dark |
