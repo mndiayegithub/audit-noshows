@@ -1,414 +1,369 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-import { UploadCloud, ShieldCheck, Activity, CalendarX, TrendingUp, Download, PieChart, Clock, MapPin, Star, Building2, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import {
+  UploadCloud, ShieldCheck, Activity, TrendingUp,
+  Download, PieChart, Clock, MapPin, Star, Building2,
+  CheckCircle2, ChevronDown, Zap, Lock,
+} from "lucide-react";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+import { ShuffleTestimonials } from "@/components/ui/testimonial-cards";
+import { FaqSection } from "@/components/ui/faq-section";
 
-const FAQItem = ({ q, a, isOpen, onClick }: { q: string, a: React.ReactNode, isOpen: boolean, onClick: () => void }) => {
-  return (
-    <div className={`border-b border-gray-100 transition-all duration-300 ${isOpen ? 'bg-gray-50' : ''}`}>
-      <button onClick={onClick} className="w-full text-left py-6 px-6 flex justify-between items-center focus:outline-none">
-        <span className="font-heading font-semibold text-gray-900 text-lg pr-8">{q}</span>
-        <span className="text-primary text-2xl font-light w-6 text-center shrink-0">{isOpen ? '−' : '+'}</span>
-      </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }} 
-            animate={{ height: 'auto', opacity: 1 }} 
-            exit={{ height: 0, opacity: 0 }} 
-            className="overflow-hidden"
-          >
-            <div className="pb-6 px-6 text-gray-600 leading-relaxed">{a}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+/* ─── Count-up animation ─── */
+function CountUpNumber({
+  target, decimals = 0, suffix = "", className = "",
+}: { target: number; decimals?: number; suffix?: string; className?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        obs.disconnect();
+        let start: number | null = null;
+        const duration = 1800;
+        const step = (ts: number) => {
+          if (!start) start = ts;
+          const progress = Math.min((ts - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setCount(eased * target);
+          if (progress < 1) requestAnimationFrame(step);
+          else setCount(target);
+        };
+        requestAnimationFrame(step);
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [target]);
+
+  const formatted = decimals > 0
+    ? count.toFixed(decimals).replace(".", ",")
+    : Math.round(count).toString();
+
+  return <span ref={ref} className={className}>{formatted}{suffix}</span>;
+}
+
+/* ─── FAQ Item ─── */
+const FAQItem = ({
+  q, a, isOpen, onClick,
+}: {
+  q: string;
+  a: React.ReactNode;
+  isOpen: boolean;
+  onClick: () => void;
+}) => (
+  <div className={`border-b border-gray-100 transition-all duration-300 ${isOpen ? "bg-gray-50" : ""}`}>
+    <button
+      onClick={onClick}
+      className="w-full text-left py-6 px-6 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded"
+      aria-expanded={isOpen}
+    >
+      <span className="font-heading font-semibold text-gray-900 text-lg pr-8">{q}</span>
+      <ChevronDown
+        className={`w-5 h-5 text-primary shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+        aria-hidden="true"
+      />
+    </button>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="overflow-hidden"
+        >
+          <div className="pb-6 px-6 text-gray-600 leading-relaxed">{a}</div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
+/* ─── Animations ─── */
+const fadeInUp: any = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
+const staggerContainer: any = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
 };
 
+/* ─── Page ─── */
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [rdvPerDay, setRdvPerDay] = useState<number>(35);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const fadeInUp: any = {
-    hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-  };
-
-  const staggerContainer: any = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 },
-    },
-  };
-
-  // ROI Calculator
+  /* ROI Calculator */
   const rdvMois = rdvPerDay * 20;
   const noShowsMois = rdvMois * 0.062;
   const perteMois = Math.round(noShowsMois * 150);
   const perteAn = perteMois * 12;
 
   const faqs = [
-    {
-      q: "C'est vraiment gratuit ?",
-      a: "Oui, l'audit de base est 100% gratuit et sans engagement."
-    },
+    { q: "C'est vraiment gratuit ?", a: "Oui, l'audit de base est 100% gratuit et sans engagement." },
     {
       q: "Mes données patients sont-elles sécurisées ?",
-      a: "L'export CSV ne contient aucune donnée nominative patient. Conforme RGPD, hébergé en France, aucun nom n'est stocké."
+      a: "L'export CSV ne contient aucune donnée nominative patient. Conforme RGPD, hébergé en France, aucun nom n'est stocké.",
     },
-    {
-      q: "Ça fonctionne avec quel logiciel ?",
-      a: "L'audit fonctionne avec tout export Doctolib au format CSV."
-    },
+    { q: "Ça fonctionne avec quel logiciel ?", a: "L'audit fonctionne avec tout export Doctolib au format CSV." },
     {
       q: "Combien de temps ça prend ?",
-      a: "L'analyse est immédiate. Vous obtenez votre rapport en moins de 60 secondes après l'upload."
+      a: "L'analyse est immédiate. Vous obtenez votre rapport en moins de 60 secondes après l'upload.",
     },
     {
       q: "Que contient le rapport gratuit ?",
-      a: "Il contient votre taux de no-shows réel, les créneaux les plus à risque, et l'impact financier estimé sur votre chiffre d'affaires."
+      a: "Il contient votre taux de no-shows réel, les créneaux les plus à risque, et l'impact financier estimé sur votre chiffre d'affaires.",
     },
     {
       q: "Et après l'audit ?",
-      a: "Vous pouvez utiliser ces informations pour ajuster votre organisation, ou souscrire à nos services pour une automatisation complète de la récupération des no-shows."
-    }
+      a: "Vous pouvez utiliser ces informations pour ajuster votre organisation, ou souscrire à nos services pour une automatisation complète de la récupération des no-shows.",
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-brand-200 selection:text-brand-900 overflow-x-hidden">
-      
-      {/* HEADER */}
-      <nav 
-        id="navbar"
+    <div className="min-h-screen font-sans overflow-x-hidden">
+
+      {/* ─── NAV ─── */}
+      <nav
         className={`fixed w-full z-50 transition-all duration-300 ${
-          isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-100" : "glass-panel"
+          isScrolled
+            ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100"
+            : "glass-panel"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-lg">
-                <Activity className="w-6 h-6" />
+            {/* Logo */}
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
+                <Activity className="w-5 h-5 text-white" aria-hidden="true" />
               </div>
-              <span className="font-heading font-bold text-2xl tracking-tight text-slate-900">
+              <span className={`font-heading font-bold text-xl tracking-tight ${isScrolled ? "text-slate-900" : "text-white"}`}>
                 PerfIAmatic
               </span>
             </div>
-            
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#comment-ca-marche" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">Comment ça marche</a>
-              <a href="#impact" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">Impact</a>
-              <Link 
+
+            {/* Links */}
+            <div className="hidden md:flex items-center gap-8">
+              <a href="#comment-ca-marche" className={`text-sm font-medium transition-colors duration-200 ${isScrolled ? "text-slate-600 hover:text-primary" : "text-white/60 hover:text-white"}`}>
+                Comment ça marche
+              </a>
+              <a href="#impact" className={`text-sm font-medium transition-colors duration-200 ${isScrolled ? "text-slate-600 hover:text-primary" : "text-white/60 hover:text-white"}`}>
+                Impact
+              </a>
+              <Link
                 href="/audit"
-                className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
+                className="bg-primary text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-primary-light transition-all duration-200 shadow-md btn-glow"
               >
-                Démarrer l&apos;Audit Gratuit
+                Lancer l&apos;audit gratuit
               </Link>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* HERO SECTION */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden min-h-[85vh] flex items-center">
-        {/* Background Photo — cabinet dentaire */}
-        <Image
-          src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1920&q=80&auto=format&fit=crop"
-          alt="Dentiste en cabinet moderne"
-          fill
-          className="object-cover object-center"
-          priority
-        />
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/75 to-primary/50" />
-        {/* Medical cross pattern subtil */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff'%3E%3Crect x='24' y='10' width='12' height='40' rx='3'/%3E%3Crect x='10' y='24' width='40' height='12' rx='3'/%3E%3C/g%3E%3C/svg%3E\")", backgroundSize: '60px 60px' }} />
-
+      {/* ─── HERO — DARK ─── */}
+      <section className="mesh-bg grid-overlay relative pt-32 pb-20 lg:pt-44 lg:pb-36 overflow-hidden min-h-[92vh] flex items-center">
         <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-            {/* Left Content */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="max-w-2xl"
-            >
-              <motion.div variants={fadeInUp} className="mb-6">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/30 text-white text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
-                  <span className="relative flex h-2 w-2 mr-1">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-300 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            {/* Left */}
+            <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-2xl">
+              {/* Badge */}
+              <motion.div variants={fadeInUp} className="mb-7">
+                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.08] border border-white/[0.14] text-white/80 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                   </span>
-                  Exclusif cliniques médicales
+                  Audit IA — Cabinets médicales
                 </span>
               </motion.div>
 
-              <motion.h1
-                variants={fadeInUp}
-                className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.1] mb-6 tracking-tight"
-              >
-                Vos données Doctolib révèlent <br/>
-                <span className="text-gradient">ce que vous perdez vraiment</span>
+              {/* Headline */}
+              <motion.h1 variants={fadeInUp} className="text-5xl sm:text-6xl lg:text-7xl font-heading font-extrabold leading-[1.0] tracking-tight mb-7">
+                <span className="text-white/50 block">Chaque rendez-vous</span>
+                <span className="text-white block">manqué vous coûte</span>
+                <span className="text-gradient-indigo block">{perteAn.toLocaleString("fr-FR")} €/an</span>
               </motion.h1>
 
-              <motion.p
-                variants={fadeInUp}
-                className="text-lg text-white/80 mb-8 leading-relaxed"
-              >
-                Taux exact, créneaux à risque, CA perdu. <br className="hidden sm:block" />
-                Analysez vos données en 60 secondes, gratuit et sans inscription.
+              <motion.p variants={fadeInUp} className="text-lg text-white/60 mb-10 leading-relaxed">
+                Taux exact, créneaux à risque, CA perdu.<br className="hidden sm:block" />
+                Analysez vos données Doctolib en 60 secondes — gratuit, sans inscription.
               </motion.p>
 
-              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                <Link
-                  href="/audit"
-                  className="group flex items-center justify-center gap-2 bg-white hover:bg-blue-50 text-primary px-8 py-4 rounded-full font-bold text-lg transition-all shadow-lg shadow-black/20 transform hover:-translate-y-1"
-                >
-                  <UploadCloud className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  Importer un CSV Doctolib
+              {/* CTAs */}
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 items-start">
+                <Link href="/audit" className="btn-glow inline-flex items-center justify-center gap-2.5 bg-primary text-white px-8 py-4 rounded-full font-bold text-base transition-all duration-200 shadow-lg">
+                  <UploadCloud className="w-5 h-5" aria-hidden="true" />
+                  Lancer mon audit gratuit
                 </Link>
-                <div className="flex items-center gap-3 px-4 py-2 text-sm text-white/70 font-medium">
-                  <ShieldCheck className="text-emerald-400 w-5 h-5" />
-                  100% Gratuit & Sécurisé
-                </div>
+                <a href="#comment-ca-marche" className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border border-white/20 text-white/70 font-semibold text-base hover:bg-white/[0.06] hover:text-white transition-all duration-200">
+                  Voir comment ça marche
+                </a>
+              </motion.div>
+
+              {/* Micro-badges */}
+              <motion.div variants={fadeInUp} className="flex items-center gap-5 mt-7 flex-wrap">
+                {[
+                  { icon: ShieldCheck, label: "RGPD" },
+                  { icon: Lock, label: "HDS" },
+                  { icon: Zap, label: "60 sec" },
+                ].map(({ icon: Icon, label }) => (
+                  <span key={label} className="flex items-center gap-1.5 text-white/40 text-xs font-semibold">
+                    <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+                    {label}
+                  </span>
+                ))}
               </motion.div>
             </motion.div>
 
-            {/* Right Visual / Dashboard mockup */}
+            {/* Right — Dashboard mockup (exact HTML version) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative lg:ml-10 animate-float"
+              initial={{ opacity: 0, y: 30, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="relative hidden lg:block animate-float"
             >
-              <div className="bg-white/95 backdrop-blur-sm p-6 rounded-3xl border border-white/80 shadow-2xl relative z-20">
-                <div className="flex items-center justify-between border-b border-slate-200/60 pb-4 mb-4">
-                  <h3 className="font-heading font-semibold text-slate-800">Aperçu du Cabinet</h3>
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                    <div className="w-3 h-3 rounded-full bg-amber-400"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
+              {/* Main card */}
+              <div className="glass-dark-strong rounded-3xl p-6 shadow-2xl relative z-10">
+                {/* Card header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <p className="text-white/40 text-xs font-medium uppercase tracking-wider mb-0.5">Rapport d&apos;audit</p>
+                    <p className="text-white font-heading font-semibold text-base">Cabinet Dr. Martin — Nov. 2024</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/15 border border-red-500/25">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-400" aria-hidden="true" />
+                    <span className="text-red-300 text-xs font-semibold">7,4% no-shows</span>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  {/* Mock UI element 1 */}
-                  <div className="bg-slate-50 rounded-2xl p-4 shadow-sm flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-blue-100 p-3 rounded-xl">
-                        <CalendarX className="text-primary w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-slate-500 font-medium">CA perdu (30j)</p>
-                        <p className="font-heading font-bold text-xl text-slate-900">3 820 €</p>
-                      </div>
+                {/* Gauge ring + progress bars */}
+                <div className="flex items-center gap-6 mb-6">
+                  <div className="relative w-24 h-24 flex-shrink-0">
+                    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90" aria-label="Score 70/100">
+                      <defs>
+                        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#6366F1" />
+                          <stop offset="100%" stopColor="#7C3AED" />
+                        </linearGradient>
+                      </defs>
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="10" />
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="url(#ringGrad)" strokeWidth="10"
+                        strokeDasharray="263.9" strokeDashoffset="79" strokeLinecap="round" />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="font-heading font-bold text-white text-xl leading-none">70</span>
+                      <span className="text-white/40 text-[9px] mt-0.5">/ 100</span>
                     </div>
-                    <span className="bg-red-100 text-danger text-xs font-bold px-2.5 py-1 rounded-full">Actionnable</span>
                   </div>
-
-                  {/* Mock UI element 2 */}
-                  <div className="bg-slate-50 rounded-2xl p-4 shadow-sm flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-purple-100 p-3 rounded-xl">
-                        <Clock className="text-accent w-5 h-5" />
+                  <div className="flex-1 space-y-2.5">
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-white/50 text-xs">Score performance</span>
+                        <span className="font-heading text-white font-semibold text-sm">Améliorable</span>
                       </div>
-                      <div>
-                        <p className="text-sm text-slate-500 font-medium">Taux no-shows</p>
-                        <p className="font-heading font-bold text-xl text-slate-900">7,4%</p>
+                      <div className="w-full h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+                        <div className="h-full rounded-full bg-gradient-to-r from-primary to-accent" style={{ width: "70%" }} />
                       </div>
                     </div>
-                    <span className="bg-amber-100 text-warning text-xs font-bold px-2.5 py-1 rounded-full">À risque</span>
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-white/50 text-xs">Taux du secteur</span>
+                        <span className="font-heading text-white/70 font-semibold text-sm">6,2%</span>
+                      </div>
+                      <div className="w-full h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+                        <div className="h-full rounded-full bg-white/20" style={{ width: "56%" }} />
+                      </div>
+                    </div>
                   </div>
+                </div>
 
-                  <div className="mt-6 pt-4 border-t border-slate-200/60">
-                    <p className="text-xs text-center text-slate-400 font-medium uppercase tracking-wider">Analyse en cours...</p>
-                    <div className="w-full bg-slate-200 rounded-full h-1.5 mt-2 overflow-hidden">
-                      <div className="bg-gradient-to-r from-primary to-accent h-1.5 rounded-full" style={{ width: '65%' }}></div>
-                    </div>
+                {/* 3 KPI mini-cards */}
+                <div className="grid grid-cols-3 gap-3 mb-6">
+                  <div className="rounded-2xl bg-white/[0.04] border border-white/[0.07] p-3.5">
+                    <p className="text-white/40 text-[10px] font-medium uppercase tracking-wider mb-1.5">No-shows</p>
+                    <p className="font-mono text-white font-semibold text-lg tabular-nums">124</p>
+                    <p className="text-red-400 text-[10px] font-medium mt-0.5">↑ +12% /mois</p>
+                  </div>
+                  <div className="rounded-2xl bg-white/[0.04] border border-white/[0.07] p-3.5">
+                    <p className="text-white/40 text-[10px] font-medium uppercase tracking-wider mb-1.5">CA perdu</p>
+                    <p className="font-mono font-semibold text-lg tabular-nums text-gradient-cyan">18 600€</p>
+                    <p className="text-white/30 text-[10px] mt-0.5">sur 12 mois</p>
+                  </div>
+                  <div className="rounded-2xl bg-white/[0.04] border border-white/[0.07] p-3.5">
+                    <p className="text-white/40 text-[10px] font-medium uppercase tracking-wider mb-1.5">Pic de risque</p>
+                    <p className="font-mono text-white font-semibold text-lg tabular-nums">Lundi</p>
+                    <p className="text-amber-400 text-[10px] font-medium mt-0.5">9h – 11h</p>
+                  </div>
+                </div>
+
+                {/* Mini bar chart */}
+                <div>
+                  <p className="text-white/30 text-[10px] uppercase tracking-wider mb-3 font-medium">No-shows par jour</p>
+                  <div className="flex items-end justify-between gap-1.5" style={{ height: "48px" }}>
+                    {[
+                      { j: "Lun", h: "68%", highlight: true },
+                      { j: "Mar", h: "42%", highlight: false },
+                      { j: "Mer", h: "55%", highlight: false },
+                      { j: "Jeu", h: "38%", highlight: false },
+                      { j: "Ven", h: "72%", highlight: true },
+                    ].map((d) => (
+                      <div key={d.j} className="flex-1 flex flex-col items-center gap-1">
+                        <div className="w-full flex items-end" style={{ height: "40px" }}>
+                          <div
+                            className="w-full rounded-t-sm"
+                            style={{
+                              height: d.h,
+                              background: d.highlight
+                                ? "linear-gradient(to top, #f97316, #ef4444)"
+                                : "rgba(99,102,241,0.35)",
+                            }}
+                          />
+                        </div>
+                        <span className={`text-[9px] font-medium ${d.highlight ? "text-red-400" : "text-white/40"}`}>{d.j}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
 
-              {/* Floating Badge */}
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-4 shadow-xl border border-slate-100 flex items-center gap-4 animate-pulse-slow hover:animate-none transition-all cursor-pointer z-30">
-                <div className="bg-emerald-100 p-3 rounded-xl">
-                  <TrendingUp className="text-success w-6 h-6" />
+              {/* Floating card */}
+              <div className="glass-dark-strong absolute -bottom-8 -left-10 rounded-2xl p-4 shadow-xl z-20 flex items-center gap-3 min-w-[180px]">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-5 h-5 text-white" aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">ROI MOYEN</p>
-                  <p className="font-heading font-extrabold text-2xl text-slate-800">21x</p>
+                  <p className="text-white/50 text-[10px] uppercase tracking-wider">Récupérable</p>
+                  <p className="text-white font-heading font-bold text-base">+6 200€/an</p>
                 </div>
               </div>
             </motion.div>
+
           </div>
         </div>
       </section>
 
-      {/* PRODUCT SHOWCASE — ContainerScroll */}
-      <section className="bg-slate-50 overflow-hidden">
-        <ContainerScroll
-          titleComponent={
-            <div className="mb-4">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-5">
-                <Activity className="w-3.5 h-3.5" aria-hidden="true" />
-                Rapport généré en 60 secondes
-              </span>
-              <h2 className="text-4xl md:text-6xl font-heading font-bold text-slate-900 leading-tight mt-4">
-                Votre audit médical,{" "}
-                <span className="text-gradient">visualisé en temps réel</span>
-              </h2>
-              <p className="text-slate-500 text-lg mt-4 max-w-xl mx-auto font-medium">
-                Découvrez exactement ce que perd votre cabinet : créneaux, taux et impact financier.
-              </p>
-            </div>
-          }
-        >
-          {/* Dashboard mockup inside the 3D card */}
-          <div className="h-full flex flex-col bg-slate-50 overflow-hidden">
-
-            {/* Topbar */}
-            <div className="bg-white border-b border-slate-200 px-5 py-3 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <Activity className="w-4 h-4 text-white" aria-hidden="true" />
-                </div>
-                <span className="font-heading font-bold text-slate-900 text-sm">PerfIAmatic</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                </div>
-              </div>
-              <span className="text-xs text-slate-400 font-medium hidden sm:block">Cabinet Dr. Martin · Rapport du 12/04/2026</span>
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 overflow-hidden p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
-
-              {/* KPI cards row */}
-              {[
-                { label: "Total RDV", value: "1 917", color: "text-slate-900", border: "border-l-primary", icon: CalendarX },
-                { label: "No-shows", value: "226", color: "text-danger", border: "border-l-danger", icon: AlertTriangle },
-                { label: "Taux no-shows", value: "11,8%", color: "text-danger", border: "border-l-danger", icon: PieChart },
-                { label: "CA perdu / an", value: "81 360 €", color: "text-danger", border: "border-l-danger", icon: TrendingUp },
-              ].map((kpi) => (
-                <div key={kpi.label} className={`bg-white rounded-xl border border-slate-100 border-l-4 px-3 py-3 shadow-sm flex flex-col justify-between ${kpi.border}`}>
-                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wider leading-tight">{kpi.label}</p>
-                  <p className={`text-xl md:text-2xl font-heading font-extrabold mt-1 ${kpi.color}`}>{kpi.value}</p>
-                </div>
-              ))}
-
-              {/* Bar chart — no-shows par jour */}
-              <div className="col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">No-shows par jour</p>
-                <div className="flex items-end gap-2 h-16">
-                  {[
-                    { jour: "Lun", val: 40, pct: 70 },
-                    { jour: "Mar", val: 21, pct: 37 },
-                    { jour: "Mer", val: 49, pct: 86 },
-                    { jour: "Jeu", val: 41, pct: 72 },
-                    { jour: "Ven", val: 58, pct: 100 },
-                    { jour: "Sam", val: 17, pct: 30 },
-                  ].map((d) => (
-                    <div key={d.jour} className="flex-1 flex flex-col items-center gap-1">
-                      <div
-                        className={`w-full rounded-t-md ${d.pct >= 80 ? "bg-danger" : d.pct >= 60 ? "bg-warning" : "bg-success"}`}
-                        style={{ height: `${d.pct}%` }}
-                      />
-                      <span className="text-[9px] text-slate-400 font-medium">{d.jour}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Score + benchmark */}
-              <div className="col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Score performance</p>
-                <div className="flex items-center gap-4">
-                  <div className="relative w-16 h-16 shrink-0">
-                    <svg viewBox="0 0 36 36" className="w-16 h-16 -rotate-90">
-                      <circle cx="18" cy="18" r="15.9" fill="none" stroke="#F1F5F9" strokeWidth="3" />
-                      <circle cx="18" cy="18" r="15.9" fill="none" stroke="#EF4444" strokeWidth="3"
-                        strokeDasharray="37 63" strokeLinecap="round" />
-                    </svg>
-                    <span className="absolute inset-0 flex items-center justify-center text-sm font-heading font-extrabold text-danger">37</span>
-                  </div>
-                  <div className="flex-1 space-y-2">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-slate-500 font-medium">Vs benchmark secteur</span>
-                      <span className="text-danger font-bold">+7,3 pts</span>
-                    </div>
-                    <div className="w-full bg-slate-100 rounded-full h-2">
-                      <div className="bg-danger h-2 rounded-full" style={{ width: "37%" }} />
-                    </div>
-                    <p className="text-xs text-slate-400">Optimal : 4–5% · Votre taux : 11,8%</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Top créneaux à risque */}
-              <div className="col-span-2 md:col-span-4 bg-white rounded-xl border border-slate-100 border-l-4 border-l-danger shadow-sm p-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Top créneaux à risque</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { slot: "Vendredi 18:30", pct: "47,6%", ca: "3 600 €" },
-                    { slot: "Mercredi 18:30", pct: "38,1%", ca: "2 880 €" },
-                    { slot: "Vendredi 15:00", pct: "33,3%", ca: "2 160 €" },
-                  ].map((c) => (
-                    <div key={c.slot} className="bg-red-50 border border-danger/10 rounded-lg px-3 py-2">
-                      <p className="text-xs font-bold text-slate-700 leading-tight">{c.slot}</p>
-                      <p className="text-danger font-extrabold text-sm mt-0.5">{c.pct}</p>
-                      <p className="text-xs text-slate-400">{c.ca} perdus/an</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Meilleurs créneaux */}
-              <div className="col-span-2 md:col-span-4 bg-white rounded-xl border border-slate-100 border-l-4 border-l-success shadow-sm p-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Créneaux performants</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { slot: "Mardi 09:00", pct: "0%" },
-                    { slot: "Mardi 09:30", pct: "0%" },
-                    { slot: "Mardi 10:00", pct: "0%" },
-                  ].map((c) => (
-                    <div key={c.slot} className="bg-green-50 border border-success/10 rounded-lg px-3 py-2 flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
-                      <div>
-                        <p className="text-xs font-bold text-slate-700 leading-tight">{c.slot}</p>
-                        <p className="text-success font-extrabold text-sm">{c.pct} no-show</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </ContainerScroll>
-      </section>
-
-      {/* TRUST STRIP */}
-      <section className="py-5 bg-white border-b border-slate-200 shadow-sm">
+      {/* ─── TRUST STRIP — LIGHT ─── */}
+      <section className="py-5 bg-white border-y border-[#E8ECF2]">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5 items-center">
             {[
@@ -418,8 +373,8 @@ export default function HomePage() {
               { icon: Building2, label: "100+ cabinets", sub: "Nous font confiance", color: "text-accent" },
             ].map((badge, i) => (
               <div key={i} className="flex items-center gap-3">
-                <div className="trust-badge-icon shrink-0">
-                  <badge.icon className={`w-5 h-5 ${badge.color}`} />
+                <div className="w-10 h-10 rounded-[10px] bg-[#f8fafc] border border-[#e2e8f0] flex items-center justify-center shrink-0">
+                  <badge.icon className={`w-5 h-5 ${badge.color}`} aria-hidden="true" />
                 </div>
                 <div>
                   <p className="font-semibold text-slate-800 text-sm leading-tight">{badge.label}</p>
@@ -431,392 +386,506 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* METRICS SECTION */}
-      <section id="metrics" className="py-24 bg-white relative">
+      {/* ─── PRODUCT SHOWCASE — LIGHT + ContainerScroll ─── */}
+      <section className="bg-white overflow-hidden">
+        <ContainerScroll
+          titleComponent={
+            <div className="mb-4 text-center">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-5">
+                <Zap className="w-3.5 h-3.5" aria-hidden="true" />
+                Aperçu du rapport
+              </span>
+              <h2 className="text-4xl md:text-6xl font-heading font-extrabold text-slate-900 leading-tight mt-4 tracking-tight">
+                Voyez exactement{" "}
+                <span className="text-gradient-indigo">ce que l&apos;IA analyse</span>
+              </h2>
+              <p className="text-slate-500 text-lg mt-4 max-w-xl mx-auto font-medium">
+                Un rapport structuré, chiffré et actionnable — des données précises sur chaque aspect de vos absences.
+              </p>
+            </div>
+          }
+        >
+          {/* Dashboard inside 3D card — DARK inside LIGHT for dramatic contrast */}
+          <div className="h-full flex flex-col bg-[#18181B] overflow-hidden rounded-[22px]">
+            {/* Browser chrome */}
+            <div style={{ background: "#1C1C2E", padding: "12px 20px", display: "flex", alignItems: "center", gap: "12px", flexShrink: 0, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ display: "flex", gap: "6px" }}>
+                <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "rgba(239,68,68,0.8)" }} />
+                <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "rgba(251,191,36,0.8)" }} />
+                <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "rgba(52,211,153,0.8)" }} />
+              </div>
+              <div style={{ flex: 1, background: "rgba(255,255,255,0.06)", borderRadius: "6px", padding: "5px 12px", textAlign: "center" }}>
+                <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", fontFamily: "monospace" }}>
+                  perfiamatic.fr/audit/resultats
+                </span>
+              </div>
+            </div>
+
+            {/* App content */}
+            <div className="flex-1 overflow-y-auto bg-[#0E0F1C] p-6 space-y-4">
+              {/* 3 KPI cards */}
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  {
+                    label: "Taux no-shows",
+                    value: "7.4",
+                    unit: "%",
+                    dot: "#f87171",
+                    subColor: "#fca5a5",
+                    sub: "Au-dessus de la moyenne (6,2%)",
+                    gradient: false,
+                  },
+                  {
+                    label: "CA perdu / an",
+                    value: "18 600",
+                    unit: "€",
+                    dot: "#fbbf24",
+                    subColor: "#fde68a",
+                    sub: "Potentiellement récupérable",
+                    gradient: true,
+                  },
+                  {
+                    label: "Rendez-vous analysés",
+                    value: "1 674",
+                    unit: "",
+                    dot: "#34d399",
+                    subColor: "#6ee7b7",
+                    sub: "Période : sept.–nov. 2024",
+                    gradient: false,
+                  },
+                ].map((kpi) => (
+                  <div key={kpi.label} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px", padding: "18px 20px" }}>
+                    <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, marginBottom: "8px" }}>
+                      {kpi.label}
+                    </p>
+                    {kpi.gradient ? (
+                      <p style={{ fontFamily: "monospace", fontSize: "36px", fontWeight: 700, background: "linear-gradient(135deg, #06B6D4, #6366F1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", lineHeight: 1 }}>
+                        {kpi.value}<span style={{ fontSize: "18px", color: "rgba(255,255,255,0.45)", WebkitTextFillColor: "rgba(255,255,255,0.45)" }}>{kpi.unit}</span>
+                      </p>
+                    ) : (
+                      <p style={{ fontFamily: "monospace", fontSize: "36px", fontWeight: 700, color: "#fff", lineHeight: 1 }}>
+                        {kpi.value}<span style={{ fontSize: "18px", color: "rgba(255,255,255,0.45)" }}>{kpi.unit}</span>
+                      </p>
+                    )}
+                    <div style={{ marginTop: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: kpi.dot, display: "inline-block" }} />
+                      <span style={{ color: kpi.subColor, fontSize: "11px" }}>{kpi.sub}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* AI Report preview */}
+              <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "20px 24px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
+                  <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "linear-gradient(135deg, #4F46E5, #7C3AED)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="2" aria-hidden="true">
+                      <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z" />
+                      <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p style={{ color: "#fff", fontWeight: 600, fontSize: "14px" }}>Analyse IA — Synthèse exécutive</p>
+                    <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px" }}>Généré en 54 secondes</p>
+                  </div>
+                </div>
+                <div style={{ fontSize: "13px", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}>
+                  <p style={{ marginBottom: "10px" }}>
+                    Votre cabinet présente un taux de no-shows de{" "}
+                    <span style={{ color: "#a5b4fc", fontWeight: 500 }}>7,4%</span>, soit 1,2 point au-dessus de la médiane du secteur dentaire français. Ce niveau d&apos;absence représente une perte annuelle estimée à{" "}
+                    <span style={{ color: "#06B6D4", fontWeight: 600 }}>18 600€</span> de chiffre d&apos;affaires net.
+                  </p>
+                  <p style={{ color: "rgba(255,255,255,0.35)" }}>
+                    L&apos;analyse des patterns temporels révèle une concentration significative sur les créneaux du{" "}
+                    <span style={{ color: "#fbbf24", fontWeight: 500 }}>lundi matin (9h–11h)</span> et du{" "}
+                    <span style={{ color: "#fbbf24", fontWeight: 500 }}>vendredi après-midi</span>, représentant à eux seuls 43% des absences. Une stratégie de rappel ciblée sur ces fenêtres pourrait réduire votre taux de 35 à 45%.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ContainerScroll>
+      </section>
+
+      {/* ─── METRICS — LIGHT ─── */}
+      <section id="metrics" className="py-24 bg-[#FAFBFC] border-t border-[#E8ECF2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
-              Des données qui stimulent la <span className="text-gradient">croissance de votre clinique</span>
+            <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="font-heading text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+              Des données qui stimulent la{" "}
+              <span className="text-gradient-indigo">croissance de votre clinique</span>
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-lg text-slate-600">
-              Ne laissez plus de place au hasard dans votre agenda. Rejoignez les centaines de professionnels de santé qui ont transformé leurs données Doctolib en rentabilité absolue.
+            <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="text-lg text-slate-600">
+              Rejoignez les centaines de professionnels de santé qui ont transformé leurs données Doctolib en rentabilité.
             </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Stat 1 */}
-            <motion.div variants={fadeInUp} className="soft-card hover:-translate-y-2 rounded-3xl p-8 text-center group bg-gradient-to-b from-white to-slate-50">
-              <div className="w-16 h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <TrendingUp className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-4xl font-heading font-extrabold text-slate-900 mb-2">21x</h3>
-              <p className="text-slate-600 font-medium">ROI moyen constaté</p>
-            </motion.div>
-            
-            {/* Stat 2 */}
-            <motion.div variants={fadeInUp} className="soft-card hover:-translate-y-2 rounded-3xl p-8 text-center group bg-gradient-to-b from-white to-slate-50">
-              <div className="w-16 h-16 mx-auto bg-purple-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Clock className="w-8 h-8 text-accent" />
-              </div>
-              <h3 className="text-4xl font-heading font-extrabold text-slate-900 mb-2">18 Jours</h3>
-              <p className="text-slate-600 font-medium">Délai de récupération</p>
-            </motion.div>
-            
-            {/* Stat 3 */}
-            <motion.div variants={fadeInUp} className="soft-card hover:-translate-y-2 rounded-3xl p-8 text-center group bg-gradient-to-b from-white to-slate-50">
-              <div className="w-16 h-16 mx-auto bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Activity className="w-8 h-8 text-success" />
-              </div>
-              <h3 className="text-4xl font-heading font-extrabold text-slate-900 mb-2">9,7/10</h3>
-              <p className="text-slate-600 font-medium">Score de satisfaction cabinet</p>
-            </motion.div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon: TrendingUp, value: "21x", label: "ROI moyen constaté", iconColor: "text-primary", iconBg: "bg-primary/10" },
+              { icon: Clock, value: "18 Jours", label: "Délai de récupération", iconColor: "text-accent", iconBg: "bg-accent/10" },
+              { icon: Activity, value: "9,7/10", label: "Score de satisfaction cabinet", iconColor: "text-success", iconBg: "bg-success/10" },
+            ].map((s, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                className="soft-card rounded-3xl p-8 text-center group hover:-translate-y-1 transition-all duration-300">
+                <div className={`w-16 h-16 mx-auto ${s.iconBg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-200`}>
+                  <s.icon className={`w-8 h-8 ${s.iconColor}`} aria-hidden="true" />
+                </div>
+                <h3 className="text-4xl font-heading font-extrabold text-slate-900 mb-2">{s.value}</h3>
+                <p className="text-slate-600 font-medium">{s.label}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section id="comment-ca-marche" className="py-24 bg-slate-900 text-white relative overflow-hidden">
-        {/* Abstract Background */}
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }}></div>
-        
+      {/* ─── HOW IT WORKS — DARK ─── */}
+      <section id="comment-ca-marche" className="py-24 mesh-bg grid-overlay relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <motion.span variants={fadeInUp} className="text-primary font-bold tracking-wider uppercase text-sm mb-4 block">PROCESSUS SIMPLE</motion.span>
-            <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-              Du CSV brut à un <br/>plan d&apos;action clinique.
+            <motion.span initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="text-primary-light font-bold tracking-wider uppercase text-xs mb-4 block">
+              PROCESSUS SIMPLE
+            </motion.span>
+            <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="font-heading text-3xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
+              Du CSV brut à un<br />plan d&apos;action clinique.
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-lg text-slate-300">
-              Trois étapes simples pour libérer tout le potentiel de votre agenda Doctolib.
+            <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="text-lg text-white/60">
+              Trois étapes simples pour libérer tout le potentiel de votre cabinet.
             </motion.p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-12 relative">
-            {/* Connecting Line */}
-            <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0"></div>
+            {/* Connecting line */}
+            <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
             {[
-              {
-                step: "1",
-                icon: <Download className="w-10 h-10 text-blue-400 group-hover:text-white transition-colors" />,
-                title: "Exportez votre CSV",
-                desc: "Connectez-vous à Doctolib et exportez votre historique de rendez-vous au format CSV standard. Aucune intégration n'est requise.",
-                borderColor: "border-blue-500/30 group-hover:border-blue-400",
-                shadowColor: "shadow-[0_0_30px_rgba(14,165,233,0.1)] group-hover:shadow-[0_0_40px_rgba(14,165,233,0.3)]",
-                badgeBg: "bg-blue-500"
-              },
-              {
-                step: "2",
-                icon: <UploadCloud className="w-10 h-10 text-purple-400 group-hover:text-white transition-colors" />,
-                title: "Upload Sécurisé",
-                desc: "Glissez-déposez votre CSV dans notre zone sécurisée. Les données sont traitées localement et immédiatement anonymisées.",
-                borderColor: "border-purple-500/30 group-hover:border-purple-400",
-                shadowColor: "shadow-[0_0_30px_rgba(139,92,246,0.1)] group-hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]",
-                badgeBg: "bg-purple-500"
-              },
-              {
-                step: "3",
-                icon: <PieChart className="w-10 h-10 text-emerald-400 group-hover:text-white transition-colors" />,
-                title: "Audit IA Instantané",
-                desc: "Obtenez un tableau de bord visuel indiquant précisément les zones de perte de revenus et les opportunités d'optimisation.",
-                borderColor: "border-emerald-500/30 group-hover:border-emerald-400",
-                shadowColor: "shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]",
-                badgeBg: "bg-emerald-500"
-              }
+              { step: "01", icon: Download,   title: "Exportez votre CSV",   desc: "Connectez-vous à Doctolib et exportez votre historique de rendez-vous au format CSV standard. Aucune intégration n'est requise.", accent: "from-primary/20 to-primary/5",  border: "border-primary/40",  iconColor: "text-primary-light" },
+              { step: "02", icon: UploadCloud, title: "Upload sécurisé",      desc: "Glissez-déposez votre CSV dans notre zone sécurisée. Les données sont traitées localement et immédiatement anonymisées.",       accent: "from-accent/20 to-accent/5",   border: "border-accent/40",   iconColor: "text-accent" },
+              { step: "03", icon: PieChart,    title: "Audit IA instantané",  desc: "Obtenez un tableau de bord visuel indiquant précisément les zones de perte de revenus et les opportunités d'optimisation.",       accent: "from-cyan/20 to-cyan/5",      border: "border-cyan/40",     iconColor: "text-cyan" },
             ].map((item, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="relative text-center group"
-              >
-                <div className={`w-24 h-24 mx-auto bg-slate-800 border-2 ${item.borderColor} rounded-3xl flex items-center justify-center mb-8 relative z-10 transition-colors duration-300 ${item.shadowColor} group-hover:scale-105`}>
-                  <span className={`absolute -top-4 -right-4 w-8 h-8 rounded-full ${item.badgeBg} text-white font-bold flex items-center justify-center text-sm shadow-lg`}>{item.step}</span>
-                  {item.icon}
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }}
+                className="relative text-center group">
+                <div className={`w-24 h-24 mx-auto bg-gradient-to-b ${item.accent} border-2 ${item.border} rounded-3xl flex items-center justify-center mb-8 relative z-10 transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_30px_rgba(99,102,241,0.25)]`}>
+                  <span className="absolute -top-4 -right-4 w-8 h-8 rounded-full bg-white/[0.08] border border-white/20 text-white/50 font-bold flex items-center justify-center text-xs">
+                    {item.step}
+                  </span>
+                  <item.icon className={`w-10 h-10 ${item.iconColor}`} aria-hidden="true" />
                 </div>
-                <h4 className="text-xl font-heading font-bold mb-3">{item.title}</h4>
-                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                <h4 className="text-xl font-heading font-bold mb-3 text-white">{item.title}</h4>
+                <p className="text-white/50 text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* PROBLEM / SOLUTION */}
-      <section id="impact" className="py-24 bg-white relative">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+      {/* ─── BEFORE / AFTER — LIGHT ─── */}
+      <section id="impact" className="py-24 bg-white border-t border-[#E8ECF2]">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
-              Ce que <span className="text-gradient">Doctolib</span> ne vous dit pas.
+            <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="font-heading text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+              Ce que <span className="text-gradient-indigo">Doctolib</span> ne vous dit pas.
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-lg text-slate-600">
+            <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="text-lg text-slate-600">
               Découvrez la différence entre les données brutes et les insights actionnables.
             </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            
-            {/* Left Card */}
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-slate-50 rounded-3xl p-8 md:p-12 border-l-4 border-l-slate-300 shadow-sm"
-            >
-              <h3 className="text-2xl font-heading font-bold text-slate-900 mb-10">La réalité cachée</h3>
-              <ul className="space-y-6">
-                {[
-                  "Votre taux de no-shows réel",
-                  "Quels créneaux sont les plus à risque",
-                  "Ce que ça représente en euros perdus",
-                  "Comment vous situez-vous vs le secteur"
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-4">
-                    <span className="text-slate-400 mt-1 text-xl font-bold">✗</span>
-                    <span className="text-slate-700 text-lg">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Right Card */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-brand-50/30 rounded-3xl p-8 md:p-12 border-l-4 border-l-primary shadow-md relative overflow-hidden"
-            >
-              <div className="absolute top-0 -right-4 w-32 h-32 bg-primary mix-blend-multiply filter blur-3xl opacity-10 rounded-full"></div>
-              <h3 className="text-2xl font-heading font-bold text-slate-900 mb-10 relative z-10">Ce que l&apos;audit révèle</h3>
-              <ul className="space-y-6 relative z-10">
-                {[
-                  "Taux exact mesuré sur votre historique",
-                  "Top 3 créneaux catastrophiques identifiés",
-                  "CA perdu calculé à l'euro près",
-                  "Benchmark vs cabinets de votre secteur"
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-4">
-                    <span className="text-primary mt-1 text-xl font-bold">✓</span>
-                    <span className="text-slate-800 font-medium text-lg">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="py-24 bg-slate-50 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-blue-100 mix-blend-multiply filter blur-3xl opacity-50 rounded-full pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-purple-100 mix-blend-multiply filter blur-3xl opacity-50 rounded-full pointer-events-none"></div>
-        
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-          <div className="text-center mb-16">
-            <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-heading font-bold text-slate-900 mb-6 tracking-tight">L&apos;impact mesuré par <span className="text-gradient">vos confrères</span></motion.h2>
-            <motion.p variants={fadeInUp} className="text-lg text-slate-600 max-w-3xl mx-auto">
-              Découvrez comment d&apos;autres professionnels de santé optimisent leur agenda grâce à nos analyses.
-            </motion.p>
-          </div>
-          
-          {/* Before/After Metric Card */}
+          {/* VS Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto mb-12 bg-white rounded-2xl border border-slate-200 shadow-soft overflow-hidden"
+            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="max-w-5xl mx-auto relative"
           >
-            <div className="grid grid-cols-2 divide-x divide-slate-200">
-              <div className="p-6 text-center">
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Avant l&apos;audit</p>
-                <p className="text-3xl font-heading font-extrabold text-danger">18%</p>
-                <p className="text-sm text-slate-500 mt-1">taux de no-shows</p>
+            <div className="grid md:grid-cols-2 rounded-3xl overflow-hidden shadow-xl">
+
+              {/* Left — SANS AUDIT */}
+              <div className="bg-slate-50 p-8 md:p-10">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center shrink-0">
+                    <span className="text-slate-500 text-sm font-bold leading-none">✕</span>
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Sans audit</span>
+                </div>
+                <ul className="space-y-5">
+                  {[
+                    "Vous estimez votre taux de no-shows à l'intuition",
+                    "L'impact financier réel reste invisible",
+                    "Aucun pattern identifié sur les créneaux à risque",
+                    "Impossible de justifier un investissement de correction",
+                    "Vous perdez du revenu sans le mesurer",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3.5">
+                      <div className="w-5 h-5 rounded-full bg-red-100 border border-red-200 flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="text-danger text-[10px] font-bold leading-none">✕</span>
+                      </div>
+                      <span className="text-slate-600 text-[15px] leading-snug">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="p-6 text-center bg-success/5">
-                <p className="text-xs font-bold uppercase tracking-wider text-success mb-2">Après mise en place</p>
-                <p className="text-3xl font-heading font-extrabold text-success">8%</p>
-                <p className="text-sm text-slate-500 mt-1">+13 200 €/an récupérés</p>
+
+              {/* Right — AVEC PERFIAMATIC */}
+              <div className="bg-navy p-8 md:p-10">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
+                    <Activity className="w-4 h-4 text-white" aria-hidden="true" />
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-white/70">Avec Audit</span>
+                </div>
+                <ul className="space-y-5">
+                  {[
+                    "Votre taux exact calculé à la virgule près",
+                    "CA perdu annualisé, chiffré à l'euro",
+                    "Créneaux et jours à risque identifiés précisément",
+                    "Comparaison avec le benchmark du secteur dentaire",
+                    "Recommandations priorisées pour agir immédiatement",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3.5">
+                      <div className="w-5 h-5 rounded-full bg-success/20 border border-success/40 flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="text-success text-[10px] font-bold leading-none">✓</span>
+                      </div>
+                      <span className="text-white/90 text-[15px] leading-snug font-medium">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 text-center">
-              <p className="text-xs text-slate-500">Résultat constaté · Cabinet dentaire Dr. Bernard · Bordeaux</p>
+
+            {/* VS badge */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:flex">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg ring-4 ring-white">
+                <span className="text-white text-xs font-extrabold tracking-wide">VS</span>
+              </div>
             </div>
           </motion.div>
+        </div>
+      </section>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                text: "Après l'audit, nous avons pris conscience du manque à gagner réel.",
-                author: "37 000€ récupérés",
-                sub: "Dr. Martin — Cabinet dentaire · Lyon"
-              },
-              {
-                text: "En 60 secondes je voyais mon chiffre exact. Personne ne m'avait jamais montré ça.",
-                author: "Chiffre exact révélé",
-                sub: "Dr. Leroy — Chirurgien-dentiste · Amiens"
-              },
-              {
-                text: "La liste d'attente a rempli 3 créneaux le premier lundi.",
-                author: "3 créneaux remplis",
-                sub: "Dr. Dupont — Cabinet dentaire · Paris 15ème"
-              }
-            ].map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="soft-card p-8 md:p-10 rounded-3xl flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex gap-1 text-emerald-500 text-xl mb-6">
-                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                  </div>
-                  <p className="text-slate-900 font-medium text-lg leading-relaxed mb-8">&quot;{t.text}&quot;</p>
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-primary mb-1">→ {t.author}</div>
-                  <div className="text-xs font-medium text-slate-500">{t.sub}</div>
-                </div>
-              </motion.div>
-            ))}
+      {/* ─── IMPACT CHIFFRÉ — DARK ─── */}
+      <section className="py-24 mesh-bg grid-overlay relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+
+          {/* Badge */}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.07] border border-white/[0.12] text-white/60 text-xs font-semibold uppercase tracking-widest mb-8">
+            Chiffres secteur
+          </motion.div>
+
+          {/* Title */}
+          <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+            className="font-heading text-3xl md:text-5xl font-extrabold text-white mb-16 tracking-tight">
+            La réalité des cabinets médicaux
+          </motion.h2>
+
+          {/* Stats */}
+          <div className="grid md:grid-cols-3 gap-12">
+
+            {/* 6,2% */}
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0 }}
+              className="flex flex-col items-center">
+              <p className="text-6xl lg:text-7xl font-heading font-extrabold text-gradient-indigo mb-4 tabular-nums">
+                <CountUpNumber target={6.2} decimals={1} suffix="%" />
+              </p>
+              <p className="text-white font-bold text-lg mb-2">Taux moyen de no-shows</p>
+              <p className="text-white/40 text-sm leading-relaxed max-w-[220px]">en France dans les cabinets médicaux et dentaires</p>
+            </motion.div>
+
+            {/* 150€ */}
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
+              className="flex flex-col items-center">
+              <p className="text-6xl lg:text-7xl font-heading font-extrabold text-gradient-cyan mb-4 tabular-nums">
+                <CountUpNumber target={150} suffix="€" />
+              </p>
+              <p className="text-white font-bold text-lg mb-2">Perdu par créneau manqué</p>
+              <p className="text-white/40 text-sm leading-relaxed max-w-[220px]">en chiffre d&apos;affaires net par consultation non honorée</p>
+            </motion.div>
+
+            {/* 60s */}
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
+              className="flex flex-col items-center">
+              <p className="text-6xl lg:text-7xl font-heading font-extrabold text-white mb-4 tabular-nums">
+                <CountUpNumber target={60} suffix="s" />
+              </p>
+              <p className="text-white font-bold text-lg mb-2">Pour votre rapport complet</p>
+              <p className="text-white/40 text-sm leading-relaxed max-w-[220px]">upload, analyse IA et génération du PDF en moins d&apos;une minute</p>
+            </motion.div>
+
           </div>
         </div>
       </section>
 
-      {/* SIMULATOR */}
-      <section className="py-24 bg-slate-50 relative w-full overflow-hidden border-t border-slate-200">
-        {/* Decorative bg blur */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-primary/20 rounded-full filter blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
+      {/* ─── TESTIMONIALS — LIGHT ─── */}
+      <section className="py-24 bg-[#FAFBFC]">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-16">
+            <motion.span initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="text-primary font-bold tracking-wider uppercase text-xs mb-4 block">
+              ILS L&apos;ONT DÉJÀ FAIT
+            </motion.span>
+            <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 mb-4 tracking-tight">
+              L&apos;impact mesuré par <span className="text-gradient-indigo">vos confrères</span>
+            </motion.h2>
+            <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+              className="text-slate-500 text-lg max-w-xl mx-auto">
+              Glissez les cartes pour découvrir leurs témoignages.
+            </motion.p>
+          </div>
 
-        <div className="w-full max-w-2xl mx-auto px-6 md:px-12 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="soft-card rounded-[3rem] p-8 md:p-12 text-center"
+          {/* Shuffle testimonial cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12"
           >
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 mb-4">Simulez vos <span className="text-gradient">pertes actuelles</span></h2>
-            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">Ajustez le curseur pour estimer le manque à gagner de votre clinique selon votre volume de rendez-vous.</p>
-            
+            {/* Cards */}
+            <div className="shrink-0">
+              <ShuffleTestimonials />
+            </div>
+
+            {/* Side stats */}
+            <div className="flex flex-col gap-6 max-w-xs w-full">
+              {[
+                { value: "37 000€", label: "récupérés en moyenne", sub: "par cabinet après mise en place", color: "text-gradient-indigo" },
+                { value: "60s", label: "pour obtenir le rapport complet", sub: "sans inscription, sans engagement", color: "text-gradient-cyan" },
+                { value: "100%", label: "des cabinets trouvent des insights", sub: "qu'ils ne soupçonnaient pas", color: "text-gradient-indigo" },
+              ].map((stat, i) => (
+                <motion.div key={i}
+                  initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12 }}
+                  className="soft-card rounded-2xl px-6 py-5 flex items-center gap-5">
+                  <p className={`text-3xl font-heading font-extrabold tabular-nums shrink-0 ${stat.color}`}>{stat.value}</p>
+                  <div>
+                    <p className="text-slate-900 font-semibold text-sm leading-snug">{stat.label}</p>
+                    <p className="text-slate-400 text-xs mt-0.5">{stat.sub}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── SIMULATOR — DARK ─── */}
+      <section className="py-24 mesh-bg grid-overlay relative overflow-hidden">
+        <div className="w-full max-w-2xl mx-auto px-6 relative z-10">
+          <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
+            className="glass-dark rounded-3xl p-8 md:p-12 text-center border border-white/[0.08]">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold text-white mb-4 tracking-tight">
+              Simulez vos <span className="text-gradient-cyan">pertes actuelles</span>
+            </h2>
+            <p className="text-base text-white/60 mb-10 max-w-xl mx-auto">
+              Ajustez le curseur pour estimer le manque à gagner de votre clinique selon votre volume de rendez-vous.
+            </p>
+
             <div className="mb-10">
-              <div className="flex justify-between items-end mb-6">
-                <label className="font-semibold text-slate-700">Nombre de RDV par jour</label>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold text-primary bg-blue-50 px-4 py-2 rounded-xl border border-blue-100">{rdvPerDay}</span>
-                </div>
+              <div className="flex justify-between items-end mb-4">
+                <label className="font-semibold text-white/70 text-sm">RDV par jour</label>
+                <span className="text-xl font-bold text-primary-light bg-primary/20 px-4 py-1.5 rounded-xl border border-primary/30">{rdvPerDay}</span>
               </div>
-              <div className="relative pt-2 pb-6">
-                <input 
-                  type="range" 
-                  min="20" 
-                  max="80" 
-                  step="5"
-                  value={rdvPerDay}
-                  onChange={(e) => setRdvPerDay(parseInt(e.target.value))}
-                  className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer accent-primary"
-                />
+              <input type="range" min="20" max="80" step="5" value={rdvPerDay}
+                onChange={(e) => setRdvPerDay(parseInt(e.target.value))}
+                className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer accent-primary"
+                aria-label="Nombre de rendez-vous par jour" />
+            </div>
+
+            <div className="bg-white/[0.05] rounded-3xl p-8 md:p-10 mb-8 border border-white/[0.08]">
+              <p className="text-white/40 font-medium mb-3 text-sm">Vous perdez environ</p>
+              <div className="text-4xl md:text-5xl font-bold text-danger mb-3 font-heading tracking-tight tabular-nums">
+                {perteMois.toLocaleString("fr-FR")} € <span className="text-2xl text-red-400">/ mois</span>
+              </div>
+              <div className="text-lg font-semibold text-white/50">
+                soit <span className="text-gradient-cyan tabular-nums">{perteAn.toLocaleString("fr-FR")} € / an</span>
               </div>
             </div>
 
-            <div className="bg-white rounded-3xl p-10 md:p-12 mb-8 border border-slate-100 shadow-sm relative overflow-hidden">
-              <p className="text-slate-500 font-medium mb-3">Vous perdez environ</p>
-              <div className="text-4xl md:text-5xl font-bold text-danger mb-3 font-heading tracking-tight">
-                {perteMois.toLocaleString('fr-FR')}€ <span className="text-2xl text-red-400">/ mois</span>
-              </div>
-              <div className="text-xl font-semibold text-slate-500">
-                soit <span className="text-slate-900">{perteAn.toLocaleString('fr-FR')}€ / an</span>
-              </div>
-            </div>
-
-            <p className="text-xs text-slate-400 mb-10">
+            <p className="text-xs text-white/30 mb-8">
               *Basé sur un taux national de 6,2%, un panier moyen de 150€ et 20 jours/mois
             </p>
 
-            <Link 
-              href="/audit"
-              className="inline-flex justify-center items-center w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
-            >
+            <Link href="/audit"
+              className="btn-glow inline-flex justify-center items-center w-full sm:w-auto bg-primary text-white px-8 py-4 rounded-full text-base font-bold transition-all duration-200 shadow-lg">
               Lancer l&apos;Audit Gratuit →
             </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-24 bg-white border-t border-slate-200">
-        <div className="max-w-3xl mx-auto px-6 md:px-12">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-slate-900">Questions fréquentes</h2>
-          </div>
-          
-          <div className="border-t border-slate-100">
-            {faqs.map((faq, i) => (
-              <FAQItem 
-                key={i}
-                q={faq.q}
-                a={faq.a}
-                isOpen={openFaq === i}
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-              />
-            ))}
-          </div>
+      {/* ─── FAQ — LIGHT ─── */}
+      <section className="py-24 bg-white border-t border-[#E8ECF2]">
+        <div className="max-w-6xl mx-auto px-6 md:px-12">
+          <FaqSection
+            faqs={faqs}
+            imageUrl="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=830&h=844&auto=format&fit=crop"
+            imageAlt="Cabinet dentaire moderne"
+            label=""
+            title="Questions fréquentes"
+            subtitle="Tout ce que vous devez savoir sur l'audit flash PerfIAmatic — gratuit, sécurisé, en 60 secondes."
+          />
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section className="py-24 bg-gradient-to-r from-blue-700 to-violet-700 relative overflow-hidden">
-        {/* Medical cross pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.06] pointer-events-none" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-rule='evenodd'%3E%3Crect x='16' y='8' width='8' height='24' rx='2'/%3E%3Crect x='8' y='16' width='24' height='8' rx='2'/%3E%3C/g%3E%3C/svg%3E\")", backgroundSize: '40px 40px' }}></div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 brightness-100 contrast-150 pointer-events-none"></div>
+      {/* ─── FINAL CTA — DARK (gradient) ─── */}
+      <section className="py-28 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#4338CA] via-[#6366F1] to-[#7C3AED]" />
+        {[
+          "w-96 h-96 -top-24 -right-24 opacity-20",
+          "w-64 h-64 bottom-0 left-10 opacity-10",
+          "w-48 h-48 top-1/2 left-1/3 opacity-10",
+        ].map((cls, i) => (
+          <div key={i} className={`absolute rounded-full border border-white/30 ${cls}`} aria-hidden="true" />
+        ))}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.h2 variants={fadeInUp} className="font-heading text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+          <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+            className="text-xs font-semibold uppercase tracking-widest text-white/50 mb-5">
+            Prochaine étape
+          </motion.p>
+          <motion.h2 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+            className="font-heading text-3xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
             Vous perdez en moyenne 27 000€ par an.
           </motion.h2>
-          <motion.p variants={fadeInUp} className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+          <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+            className="text-xl text-white/70 mb-10 max-w-2xl mx-auto">
             Vérifiez votre chiffre en 60 secondes — c&apos;est gratuit.
           </motion.p>
-          
-          <motion.div variants={fadeInUp}>
-            <Link 
-              href="/audit"
-              className="inline-flex justify-center items-center bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-full text-lg font-bold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+            <Link href="/audit"
+              className="inline-flex justify-center items-center bg-white text-[#4338CA] hover:bg-white/90 px-10 py-4 rounded-full text-lg font-extrabold transition-all shadow-2xl hover:-translate-y-0.5 transform duration-200">
               Découvrir ce que je perds vraiment →
             </Link>
           </motion.div>
-          <motion.p variants={fadeInUp} className="text-sm text-blue-200 mt-6 flex items-center justify-center gap-2 font-medium">
-            <ShieldCheck className="w-4 h-4" /> Gratuit · Sans inscription · 60 secondes
+          <motion.p initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
+            className="text-sm text-white/50 mt-6 flex items-center justify-center gap-2 font-medium">
+            <ShieldCheck className="w-4 h-4" aria-hidden="true" /> Gratuit · Sans inscription · 60 secondes
           </motion.p>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+      {/* ─── FOOTER — DARK ─── */}
+      <footer className="bg-ink border-t border-white/[0.07] text-white/40 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-lg">
-                <Activity className="w-4 h-4" />
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
+                <Activity className="w-4 h-4 text-white" aria-hidden="true" />
               </div>
-              <span className="font-heading font-bold text-xl tracking-tight text-white">PerfIAmatic</span>
+              <span className="font-heading font-bold text-lg tracking-tight text-white">PerfIAmatic</span>
             </div>
-            
             <div className="flex gap-8 text-sm font-medium">
-              <a href="#" className="hover:text-white transition-colors">Politique de Confidentialité</a>
-              <a href="#" className="hover:text-white transition-colors">Conditions Générales d&apos;Utilisation</a>
-              <a href="#" className="hover:text-white transition-colors">Contact</a>
+              <a href="#" className="hover:text-white transition-colors duration-200">Politique de Confidentialité</a>
+              <a href="#" className="hover:text-white transition-colors duration-200">CGU</a>
+              <a href="#" className="hover:text-white transition-colors duration-200">Contact</a>
             </div>
-
-            <div className="text-sm">
-              &copy; {new Date().getFullYear()} PerfIAmatic. Tous droits réservés.
-            </div>
+            <div className="text-sm">&copy; {new Date().getFullYear()} PerfIAmatic. Tous droits réservés.</div>
           </div>
         </div>
       </footer>
+
     </div>
   );
 }

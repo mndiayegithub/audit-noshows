@@ -15,13 +15,17 @@ const config: Config = {
         'plus-pattern': "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M9 9H0v2h9v9h2v-9h9V9h-9V0H9v9z'/%3E%3C/g%3E%3C/svg%3E\")",
       },
       colors: {
-        primary: "#0ea5e9", // Medical Blue (Brand-500 from antigravity)
-        accent: "#8b5cf6", // Indigo/Purple (Accent-500 from antigravity)
+        primary: "#4F46E5",       // Indigo — CTA principal, accents
+        "primary-light": "#6366F1", // Hover, dégradés
+        accent: "#7C3AED",        // Violet — gradient extrémité
+        cyan: "#06B6D4",          // Highlights data, chiffres clés
+        ink: "#07080F",           // Hero background, CTA section
+        "ink-subtle": "#0E0F1C",  // Dark cards, dark sections
         danger: "#EF4444",
         success: "#10B981",
         warning: "#F59E0B",
         navy: "#0F172A",
-        background: "#F8FAFC", // slate-50
+        background: "#F8FAFC",
         surface: "#FFFFFF",
       },
       fontFamily: {

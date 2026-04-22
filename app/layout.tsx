@@ -3,9 +3,9 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PerfIAmatic - Audit No-Shows pour Cabinets Dentaires",
+  title: "PerfIAmatic — Audit No-Shows IA pour Cabinets Dentaires",
   description:
-    "Analysez vos no-shows en 30 secondes. Outil d'audit IA pour cabinets dentaires.",
+    "Découvrez exactement ce que vous perdez chaque mois. Analysez vos données Doctolib en 60 secondes, gratuit et sans inscription.",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className="antialiased min-h-screen bg-brand-dark">
+      <body className="antialiased min-h-screen bg-ink text-white">
         {children}
         <Toaster
           position="top-center"
