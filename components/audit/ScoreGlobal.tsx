@@ -44,21 +44,19 @@ export default function ScoreGlobal({ stats, googleData }: Props) {
 
   const getConfig = (score: number, max: number) => {
     const pct = (score / max) * 100;
-    if (pct >= 80) return { label: "Cabinet optimisé",                   color: "#10B981", tw: "text-success",  bgTw: "bg-green-50",  borderTw: "border-success/20"  };
-    if (pct >= 50) return { label: "Améliorations possibles",             color: "#F59E0B", tw: "text-warning",  bgTw: "bg-orange-50", borderTw: "border-warning/20"  };
-    return              { label: "Risque élevé — action recommandée",   color: "#EF4444", tw: "text-danger",   bgTw: "bg-red-50",    borderTw: "border-danger/20"   };
+    if (pct >= 80) return { label: "Cabinet optimisé",                  color: "#10B981", tw: "text-success", bgTw: "bg-success/10",  borderTw: "border-success/30"  };
+    if (pct >= 50) return { label: "Améliorations possibles",            color: "#F59E0B", tw: "text-warning", bgTw: "bg-warning/10",  borderTw: "border-warning/30"  };
+    return             { label: "Risque élevé — action recommandée",  color: "#EF4444", tw: "text-danger",  bgTw: "bg-danger/10",   borderTw: "border-danger/30"   };
   };
 
   const config = getConfig(scoreTotal, scoreMax);
 
-  // SVG arc (270°) — same pattern as existing ScoreCard
   const R = 72, CX = 96, CY = 96;
   const CIRC = 2 * Math.PI * R;
   const ARC = CIRC * 0.75;
   const GAP = CIRC - ARC;
   const progressArc = ARC * (displayed / scoreMax);
 
-  // prefers-reduced-motion
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mq.matches);
@@ -67,7 +65,6 @@ export default function ScoreGlobal({ stats, googleData }: Props) {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  // Intersection observer — trigger once
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -79,13 +76,9 @@ export default function ScoreGlobal({ stats, googleData }: Props) {
     return () => obs.disconnect();
   }, []);
 
-  // Counter animation 0 → scoreTotal
   useEffect(() => {
     if (!visible) return;
-    if (reducedMotion) {
-      setDisplayed(scoreTotal);
-      return;
-    }
+    if (reducedMotion) { setDisplayed(scoreTotal); return; }
     let raf: number;
     const start = performance.now();
     const duration = 1400;
@@ -110,39 +103,24 @@ export default function ScoreGlobal({ stats, googleData }: Props) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4 }}
-      className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
+      className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
     >
-      {/* Header — same style as existing ScoreCard */}
+      {/* Header */}
       <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-slate-100">
         <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Performance globale du cabinet</p>
         <p className="text-xs text-slate-400 hidden sm:block">SCORE COMPLET v2</p>
       </div>
 
       <div className="flex flex-col md:flex-row items-center gap-6 p-6">
-        {/* Jauge SVG — même pattern que ScoreCard existant */}
+        {/* Gauge SVG */}
         <div className="flex-shrink-0 flex flex-col items-center gap-3">
           <svg width="192" height="192" viewBox="0 0 192 192" aria-label={`Score ${scoreTotal} sur ${scoreMax}`}>
-            {/* Track */}
-            <circle
-              cx={CX} cy={CY} r={R}
-              fill="none"
-              stroke="#F1F5F9"
-              strokeWidth="14"
-              strokeDasharray={`${ARC} ${GAP}`}
-              strokeLinecap="round"
-              transform={`rotate(135 ${CX} ${CY})`}
-            />
-            {/* Active arc */}
-            <circle
-              cx={CX} cy={CY} r={R}
-              fill="none"
-              stroke={config.color}
-              strokeWidth="14"
-              strokeDasharray={`${progressArc} ${CIRC - progressArc}`}
-              strokeLinecap="round"
-              transform={`rotate(135 ${CX} ${CY})`}
-            />
-            {/* Score number */}
+            <circle cx={CX} cy={CY} r={R} fill="none" stroke="#F1F5F9"
+              strokeWidth="14" strokeDasharray={`${ARC} ${GAP}`} strokeLinecap="round"
+              transform={`rotate(135 ${CX} ${CY})`} />
+            <circle cx={CX} cy={CY} r={R} fill="none" stroke={config.color}
+              strokeWidth="14" strokeDasharray={`${progressArc} ${CIRC - progressArc}`}
+              strokeLinecap="round" transform={`rotate(135 ${CX} ${CY})`} />
             <text x={CX} y={CY - 6} textAnchor="middle" fill="#0F172A" fontSize="38" fontWeight="bold" fontFamily="Plus Jakarta Sans, sans-serif">
               {displayed}
             </text>
@@ -155,7 +133,6 @@ export default function ScoreGlobal({ stats, googleData }: Props) {
             {config.label}
           </span>
 
-          {/* Légende */}
           <div className="flex gap-3 text-xs text-slate-500 mt-1 font-medium">
             <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-danger inline-block" aria-hidden="true" />Risque élevé</span>
             <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-warning inline-block" aria-hidden="true" />Moyen</span>
@@ -163,10 +140,9 @@ export default function ScoreGlobal({ stats, googleData }: Props) {
           </div>
         </div>
 
-        {/* Séparateur vertical */}
         <div className="hidden md:block self-stretch w-px bg-slate-200 mx-2" aria-hidden="true" />
 
-        {/* Détail impact financier */}
+        {/* Impact financier */}
         <div className="flex-1 w-full space-y-2.5">
           <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-red-50 border border-danger/10">
             <span className="text-slate-600 font-medium text-sm flex items-center gap-2">
@@ -190,28 +166,27 @@ export default function ScoreGlobal({ stats, googleData }: Props) {
             </div>
           )}
 
-          {/* Total — même style que le "Potentiel récupérable" du ScoreCard V1 */}
-          <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-navy text-white">
-            <span className="font-semibold text-sm">Impact total estimé</span>
-            <span className="font-extrabold text-base tabular-nums">
+          <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-navy border border-navy">
+            <span className="font-semibold text-white text-sm">Impact total estimé</span>
+            <span className="font-extrabold text-base text-white tabular-nums">
               -{impactTotal.toLocaleString("fr-FR")} €/an
             </span>
           </div>
 
           {!googleData && (
-            <div className="px-4 py-3 rounded-xl bg-primary/5 border border-primary/10 text-primary text-sm font-medium">
+            <div className="px-4 py-3 rounded-xl bg-primary/[0.08] border border-primary/20 text-primary text-sm font-medium">
               Score calculé sur {scoreMax} pts — Complétez l&apos;analyse Google pour voir votre score complet sur 100.
             </div>
           )}
         </div>
       </div>
 
-      {/* Bottom strip — même pattern que V1 "Potentiel récupérable" */}
+      {/* Bottom strip */}
       <div className="bg-yellow-50 border-t border-yellow-100 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
         <span className="text-yellow-800 text-sm font-semibold">Référence sectorielle</span>
         <span className="text-yellow-700 font-medium text-sm text-center sm:text-right">
           Les cabinets qui ont corrigé ces deux points ont récupéré en moyenne{" "}
-          <strong className="text-yellow-900">3 200 € dans les 90 premiers jours.</strong>
+          <strong className="text-yellow-800">3 200 € dans les 90 premiers jours.</strong>
         </span>
       </div>
     </motion.div>

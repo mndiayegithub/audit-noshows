@@ -56,34 +56,20 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
 
   const avisConfig =
     result && result.user_ratings_total > BENCHMARK_AVIS
-      ? { text: "text-success", bg: "bg-green-50", border: "border-success/20", label: "Vous êtes bien positionné" }
+      ? { text: "text-success", bg: "bg-green-50", border: "border-success/30", label: "Vous êtes bien positionné" }
       : result && result.user_ratings_total >= 70
-      ? { text: "text-warning", bg: "bg-orange-50", border: "border-warning/20", label: "Vous êtes dans la moyenne" }
-      : { text: "text-danger", bg: "bg-red-50", border: "border-danger/20", label: "Vous avez un déficit de visibilité" };
+      ? { text: "text-warning", bg: "bg-orange-50", border: "border-warning/30", label: "Vous êtes dans la moyenne" }
+      : { text: "text-danger",  bg: "bg-red-50",   border: "border-danger/30",  label: "Vous avez un déficit de visibilité" };
 
   const handleSearch = async () => {
-    if (!inputValue.trim()) {
-      inputRef.current?.focus();
-      return;
-    }
+    if (!inputValue.trim()) { inputRef.current?.focus(); return; }
     setEtat("loading");
     setErrorMsg("");
-
     try {
-      const res = await fetch(
-        `/api/google-places?input=${encodeURIComponent(inputValue.trim())}`
-      );
+      const res = await fetch(`/api/google-places?input=${encodeURIComponent(inputValue.trim())}`);
       const data = await res.json();
-
-      if (!res.ok || data.error) {
-        throw new Error(data.error || "Erreur serveur");
-      }
-
-      if (!data.found) {
-        setEtat("not_found");
-        return;
-      }
-
+      if (!res.ok || data.error) throw new Error(data.error || "Erreur serveur");
+      if (!data.found) { setEtat("not_found"); return; }
       const googleData: GoogleData = {
         name: data.name,
         rating: data.rating,
@@ -107,7 +93,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
   return (
     <motion.div
       {...motionProps}
-      className="bg-white rounded-3xl border border-slate-100 border-t-4 border-t-primary p-8 shadow-soft"
+      className="bg-white rounded-3xl border border-slate-100 border-t-4 border-t-primary shadow-soft p-8"
     >
       <div className="flex items-center gap-3 mb-2">
         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -137,12 +123,12 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 placeholder="Ex : Cabinet dentaire Dr. Martin Paris"
-                className="flex-1 px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 shadow-sm outline-none"
+                className="flex-1 px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary/30 focus:border-primary/60 transition-all duration-200 outline-none"
                 aria-label="Nom du cabinet à rechercher"
               />
               <button
                 onClick={handleSearch}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 focus:ring-2 focus:ring-primary/30 focus:outline-none transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-px cursor-pointer shrink-0"
+                className="btn-glow inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary-light focus:ring-2 focus:ring-primary/30 focus:outline-none transition-all duration-200 shadow-lg shrink-0 cursor-pointer"
               >
                 Lancer l&apos;analyse
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -230,7 +216,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
                   </p>
                   <p className={`text-4xl font-heading font-extrabold tabular-nums ${avisConfig.text}`}>
                     {result.user_ratings_total.toLocaleString("fr-FR")}
-                    <span className="text-lg font-normal text-slate-500 ml-2">avis</span>
+                    <span className="text-lg font-normal text-slate-400 ml-2">avis</span>
                   </p>
                 </div>
                 <span className={`text-sm font-bold px-4 py-2 rounded-full border ${avisConfig.bg} ${avisConfig.text} ${avisConfig.border}`}>
@@ -263,8 +249,8 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
             </div>
 
             {/* Impact statique */}
-            <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5">
-              <p className="text-slate-700 font-medium text-sm leading-relaxed">
+            <div className="bg-primary/[0.07] border border-primary/20 rounded-2xl p-5">
+              <p className="text-slate-600 font-medium text-sm leading-relaxed">
                 Un cabinet avec 50 avis de plus convertit en moyenne{" "}
                 <strong className="text-slate-900">3–5 nouveaux patients/mois supplémentaires</strong>.
               </p>
