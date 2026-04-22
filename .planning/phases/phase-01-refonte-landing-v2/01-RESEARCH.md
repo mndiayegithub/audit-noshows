@@ -705,27 +705,19 @@ export function LandingSocialProof() {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **CSP headers existants ?**
-   - What we know : aucune config `next.config.js` CSP vue en quick scan.
-   - What's unclear : si Vercel ou un middleware ajoute des headers `Content-Security-Policy` restrictifs, l'inline script de next-themes peut être bloqué.
-   - Recommendation : vérifier `next.config.js` + headers Vercel preview en task 1. Si CSP strict, prévoir nonce propagation.
+   - RESOLVED : pas de CSP stricte configurée côté app (pas de `headers()` dans `next.config.js`, pas de middleware CSP). Vercel preview n'ajoute pas de CSP par défaut. Le script inline de next-themes passera sans nonce. Vérification finale en task 1 du plan 01-01.
 
-2. **Route `/audit` → doit-elle rester exactement identique (diff ∅) ou peut-on ajouter juste un wrapper layout ?**
-   - What we know : REQ-1.12 = "zéro régression", API inchangée, build pass.
-   - What's unclear : ajouter `app/audit/layout.tsx` est techniquement un nouveau fichier → pas une modif de `page.tsx`. À confirmer que le planner/verifier accepte cette lecture.
-   - Recommendation : considérer que "zéro régression" = fonctionnel (rendu identique) et non "diff = 0". Ajouter le layout est la seule voie propre.
+2. **Route `/audit` → diff ∅ ou wrapper layout ?**
+   - RESOLVED : ajout de `app/audit/layout.tsx` avec `<ThemeProvider forcedTheme="light">` accepté comme voie propre. REQ-1.12 interprété comme "zéro régression fonctionnelle" (rendu + API + build identiques), pas diff=0. Plan 01-01 crée ce fichier.
 
-3. **Fonts exactes pour dark-premium (SF Pro / New York vs Plus Jakarta / serif Google) ?**
-   - What we know : CONTEXT.md ne verrouille pas les fonts précises. Le SKILL mentionne Apple Health direction.
-   - What's unclear : SF Pro Display n'est pas legit-embeddable. Substitut serif premium (Instrument Serif, Source Serif, Fraunces, New York fallback via `ui-serif` stack) ?
-   - Recommendation : laisser le planner trancher. Recommandation tech : **`Instrument Serif`** (Google Fonts, esthétique proche New York) + Plus Jakarta Sans existant.
+3. **Fonts exactes pour dark-premium ?**
+   - RESOLVED : **Plus Jakarta Sans** (sans) + **Instrument Serif** (serif premium proche New York) via `next/font/google` pour self-hosting et preload automatique. Pas d'embed SF Pro (non légal). Plan 01-01 configure les deux fonts dans `app/layout.tsx` et `tailwind.config.ts`.
 
-4. **Breakpoint intermédiaire entre 768 et 1440 ?**
-   - What we know : REQ-1.10 cite les 3 breakpoints.
-   - What's unclear : comportement entre 1024 et 1280 (laptops courants) — fallback `md:` suffit-il ?
-   - Recommendation : tester manuellement 1024 et 1280 en plus de 1440 pendant la QA, mais pas de breakpoint custom.
+4. **Breakpoint intermédiaire 1024/1280 ?**
+   - RESOLVED : pas de breakpoint Tailwind custom. Les utilitaires `md:` (768) + `lg:` (1024) + `xl:` (1280) + `2xl:` (1536) existants suffisent. QA manuelle sur 1024/1280 en checkpoint humain du plan 01-05.
 
 ---
 
