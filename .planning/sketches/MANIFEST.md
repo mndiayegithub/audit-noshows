@@ -1,0 +1,27 @@
+# Sketch Manifest — Refonte site audit v2
+
+## Design Direction
+
+Rapport d'audit dentaire en mode **clinique & factuel**, inspiré des rapports
+Apple Health / fiches médicales : blanc clinique, grands nombres avec autorité,
+palette neutre avec accents médicaux (bleu `#0066CC`, rouge alerte `#FF3B30`).
+Typographie SF Pro / Inter + touche serif pour les chiffres d'autorité.
+L'action unique est la prise de RDV Calendly.
+
+On s'éloigne volontairement de la direction dark/premium SaaS des landings
+existantes (`landing.html`, `mockup.html`) pour positionner le rapport comme
+un document médical sérieux plutôt qu'un dashboard produit.
+
+## Reference Points
+
+- Apple Health — "Health Summary", "Activity Rings", typographie SF Pro Display
+- Rapports médicaux cliniques (sobres, data-first, typo serif pour l'autorité)
+- Stripe/Linear pour la rigueur des cards et la générosité du whitespace
+
+## Sketches
+
+| # | Name | Design Question | Winner | Tags |
+|---|------|-----------------|--------|------|
+| 001 | layout-structure | Quelle structure globale pour la page de résultats ? | **C · Stepped reveal (6 steps + graph/section)** | layout, flow |
+| 002 | hero-kpi | Comment faire émerger le "chiffre qui fait mal" ? | TBD | hero, kpi |
+| 003 | conversion-moment | Comment traiter score global + CTA Calendly ? | TBD | score, cta |

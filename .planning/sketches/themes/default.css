@@ -1,0 +1,118 @@
+/* Theme: Clinique & factuel — Apple Health inspired */
+:root {
+  /* Neutral clinical palette */
+  --bg: #F7F7F8;
+  --bg-elevated: #FFFFFF;
+  --bg-subtle: #F2F2F4;
+  --border: #E5E5E7;
+  --border-strong: #D2D2D7;
+
+  /* Text */
+  --text: #1D1D1F;
+  --text-secondary: #424245;
+  --text-tertiary: #86868B;
+  --text-placeholder: #AEAEB2;
+
+  /* Medical accents */
+  --blue: #0066CC;
+  --blue-soft: #E8F1FB;
+  --red: #FF3B30;
+  --red-soft: #FFEBEA;
+  --orange: #FF9500;
+  --orange-soft: #FFF4E5;
+  --green: #34C759;
+  --green-soft: #E8F8EE;
+  --purple: #AF52DE;
+
+  /* Fonts */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "SF Pro Display", -apple-system, "Inter", Arial, sans-serif;
+  --font-serif: "New York", "Source Serif Pro", "Charter", Georgia, serif;
+  --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, monospace;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Shadows (subtle, clinical) */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+
+  /* Spacing scale */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px;
+  --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.serif { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.01em; }
+.mono { font-family: var(--font-mono); }
+.tabular { font-variant-numeric: tabular-nums; }
+.muted { color: var(--text-secondary); }
+.tertiary { color: var(--text-tertiary); }
+
+/* Sketch toolbar */
+.sketch-toolbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px;
+  box-shadow: var(--shadow-sm);
+}
+.sketch-toolbar strong { font-weight: 600; }
+.sketch-toolbar .tabs { display: flex; gap: 6px; margin-left: auto; }
+.sketch-toolbar button {
+  font: inherit; color: var(--text-secondary);
+  background: var(--bg-subtle); border: 1px solid transparent;
+  padding: 6px 12px; border-radius: 999px; cursor: pointer;
+  transition: all 0.15s ease;
+}
+.sketch-toolbar button:hover { background: var(--bg); border-color: var(--border); }
+.sketch-toolbar button.active { background: var(--blue); color: white; }
+.sketch-toolbar button.winner::before { content: "★ "; }
+
+.sketch-body { padding-top: 56px; }
+.variant { display: none; }
+.variant.active { display: block; }
+
+/* Card base */
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--s5);
+}
+
+/* Button base */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: 999px;
+  font: inherit; font-weight: 500;
+  border: none; cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-primary { background: var(--blue); color: white; }
+.btn-primary:hover { background: #0052A3; }
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-ghost:hover { background: var(--bg-subtle); color: var(--text); }
