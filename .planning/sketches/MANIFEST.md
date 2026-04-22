@@ -35,3 +35,4 @@ Direction distincte de l'audit : hero commercial dark premium, mais même KPI / 
 |---|------|-----------------|--------|------|
 | 005 | hero-impact | Quel hero convertit le mieux sur la landing ? | **D · Split dark premium (message + preview rapport)** | landing, hero, dark |
 | 006 | how-it-works | Comment expliquer le flow upload → IA → rapport ? | **A · 3 steps numérotés horizontaux (dark premium)** | landing, explainer |
+| 007 | social-proof | Comment afficher crédibilité + témoignages ? | **B · Marquee logos + 4 stats (dark premium)** · A aussi viable avec animation à définir | landing, trust |
