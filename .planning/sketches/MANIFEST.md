@@ -24,4 +24,5 @@ un document médical sérieux plutôt qu'un dashboard produit.
 |---|------|-----------------|--------|------|
 | 001 | layout-structure | Quelle structure globale pour la page de résultats ? | **C · Stepped reveal (6 steps + graph/section)** | layout, flow |
 | 002 | hero-kpi | Comment faire émerger le "chiffre qui fait mal" ? | **D · Money build + reveal latéral du comparatif marché** | hero, kpi |
-| 003 | conversion-moment | Comment traiter score global + CTA Calendly ? | TBD | score, cta |
+| 003 | conversion-moment | Comment afficher le score global (step 5) ? | **A · Activity ring + breakdown + sticky CTA** | score, ring |
+| 004 | synthesis-cta | Comment traiter la synthèse finale + CTA Calendly (step 6) ? | TBD | cta, calendly, synthesis |
