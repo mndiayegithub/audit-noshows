@@ -10,25 +10,23 @@ RGPD renforcé), sécuriser le delivery (tests, deploy, monitoring).
 
 ### Phase 1 · Refonte Landing page
 
-**Status:** 📝 à sketcher
-**Goal:** Refaire `app/page.tsx` (et supprimer/migrer `landing.html`,
-`landing-preview.html`, `mockup.html`) en une landing B2B **ciblée
-dentistes FR**. Messaging niche (no-shows / avis Google / rappels
-manqués), social proof (témoignages dentistes), FAQ métier, CTA unique
-vers l'audit.
+**Status:** 📋 Planifiée · 5 plans · 14 REQs
+**Goal:** Remplacer `app/page.tsx` par une landing B2B dark premium (toggle dark/light via `next-themes`) ciblant les cabinets médicaux FR. 5 sections ordonnées (Nav sticky → Hero split → How-it-works 3 steps → Social proof marquee+stats → FAQ 4Q + Final CTA full-bleed → Footer). CTA unique vers `/audit`. Archivage des 3 HTML legacy.
 
-**Direction visuelle :** à explorer dans les sketches. Deux directions
-candidates testées en variants : (a) même clinique Apple Health que
-l'audit (cohérence marque maximale), (b) direction plus commerciale
-dark premium (existant `landing.html`) pour contraster avec le côté
-clinique du rapport.
+**Plans:** 5 plans
 
-**Pré-requis :** `/gsd-sketch` puis `/gsd-spec-phase 1` avant plan/exec.
+Plans:
+- [ ] 01-01-PLAN.md — Foundation (next-themes install, Tailwind darkMode, CSS vars, next/font, ThemeProvider, ThemeToggle, CountUpNumber, audit/layout)
+- [ ] 01-02-PLAN.md — LandingNav + LandingHero + ReportPreview (above-the-fold)
+- [ ] 01-03-PLAN.md — Marquee + LandingHowItWorks + LandingSocialProof (mid-page)
+- [ ] 01-04-PLAN.md — LandingFaqCta + LandingFooter (bottom)
+- [ ] 01-05-PLAN.md — Orchestration shell + archive HTMLs + build/regression/Lighthouse checkpoint
 
 **Canonical references:**
-- Existant : `app/page.tsx`, `landing.html`, `landing-preview.html`, `mockup.html`
-- PRD_V2.md (sections marketing)
-- Testimonials / offres : `06_Documentation/`, `03_Offres_PerfIAmatic/`
+- SPEC: `.planning/phases/phase-01-refonte-landing-v2/01-SPEC.md` (14 REQs lockés)
+- CONTEXT: `.planning/phases/phase-01-refonte-landing-v2/01-CONTEXT.md` (12 locked decisions)
+- RESEARCH: `.planning/phases/phase-01-refonte-landing-v2/01-RESEARCH.md`
+- Skill: `.claude/skills/sketch-findings-landing-system-audit-noshows/`
 
 ---
 

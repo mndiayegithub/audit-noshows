@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Carevia - Patient Support Dashboard</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- BEGIN: Custom Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'carevia-navy': '#0f172a',
+            'carevia-blue': '#3b82f6',
+            'carevia-light-blue': '#94a3b8',
+            'hero-bg-dark': '#0d1321',
+            'button-grey': '#475569',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+<!-- END: Custom Configuration -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="background-geometry">
+    .hero-background {
+      background-color: #0b1120;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(30, 41, 59, 0.2), transparent 60%),
+        radial-gradient(circle at 85% 30%, rgba(15, 23, 42, 0.8), transparent 70%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-background::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.01) 0%, transparent 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+      pointer-events: none;
+    }
+  </style>
+<style data-purpose="dashboard-frame">
+    .device-frame {
+      background: linear-gradient(180deg, #475569 0%, #334155 100%);
+      border-radius: 2rem;
+      padding: 8px;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    }
+    .device-screen {
+      background-color: #f8fafc;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+    }
+  </style>
+<!-- END: Custom Styles -->
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-black text-white antialiased">
+<!-- BEGIN: Hero Section -->
+<section class="hero-background min-h-screen flex flex-col px-6 pt-6 pb-0">
+<!-- BEGIN: MainHeader -->
+<header class="flex justify-between items-center mb-12" data-purpose="navigation-header">
+<div class="flex items-center space-x-2" data-purpose="logo-container">
+<!-- Carevia Logo Placeholder -->
+<div class="flex items-center">
+<svg class="mr-2" fill="none" height="32" viewbox="0 0 40 40" width="32" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 0C8.954 0 0 8.954 0 20s8.954 20 20 20 20-8.954 20-20S31.046 0 20 0z" fill="#3b82f6" fill-opacity="0.3"></path>
+<path d="M20 10v20M10 20h20" stroke="white" stroke-linecap="round" stroke-width="6"></path>
+</svg>
+<span class="text-2xl font-bold tracking-tight text-white">Carevia</span>
+</div>
+</div>
+<!-- Login Button -->
+<a class="bg-white text-slate-900 px-6 py-2 rounded-full font-semibold text-sm hover:bg-slate-100 transition-colors" href="#">
+        Log in
+      </a>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: Hero Content -->
+<div class="flex-grow flex flex-col" data-purpose="hero-main-content">
+<!-- Heading -->
+<h1 class="text-5xl leading-tight font-bold text-white mb-6 tracking-tight">Better way to support<br/>patients digitally and<br/>efficiently</h1>
+<!-- Subtext -->
+<p class="text-lg text-slate-300 mb-10 leading-relaxed max-w-md">
+        Carevia helps clinics deliver a calm, modern health experience with clear reports, appointments, and real-time updates all in one dashboard.
+      </p>
+<!-- Action Buttons -->
+<div class="flex flex-row space-x-4 mb-14 max-w-sm" data-purpose="hero-actions">
+<button class="w-48 bg-[#0a1128] text-white py-4 rounded-full font-semibold flex items-center justify-center space-x-2 shadow-lg">
+<span>Get Started</span>
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="w-48 bg-[#8b95a5] text-[#1e293b] py-4 rounded-full font-semibold">
+View Demo
+</button>
+</div>
+<!-- BEGIN: Dashboard Preview Image -->
+<div class="mt-auto w-full max-w-[100%] mx-auto px-0 relative flex justify-center" data-purpose="dashboard-preview-container">
+<div class="relative w-[95%] max-w-5xl z-10 bg-slate-400 rounded-[2rem] p-2 shadow-2xl">
+<div class="bg-white rounded-[1.5rem] overflow-hidden border border-slate-300">
+<img alt="Carevia Dashboard Preview" class="w-full h-auto object-cover object-top" src="https://lh3.googleusercontent.com/aida/ADBb0uglWjRigZ6FVVkoXoGtJLFtTceSlrX0oyCYl10VSSV3GfFtKZGIANF58iM2JFyNkuUaFUkEXvEMJDEK8tiC8hMEj3-xRK6tL0KJS_Ybyt-vmS8oHBGRu0SrYXtAPf2z-0D0wRUj2WwcycmFGgYJ-7aWWuahvw_B-mW5PZ3FNy0taW8LqBaAXzY8hoUbs8gNb1CWGNCdcR_0Y_C2p_zKHW7ix3CMpngkPVsvetSxfV9eRCMFoBFUY3nuS_ig" style="object-position: 50% 100%;"/>
+</div>
+</div>
+<div class="absolute bottom-[-10px] w-[90%] max-w-[60rem] h-20 bg-slate-600/50 rounded-[2rem] z-0 blur-[1px]"></div>
+<div class="absolute bottom-[-20px] w-[85%] max-w-[55rem] h-20 bg-slate-700/30 rounded-[2rem] -z-10 blur-[2px]"></div>
+</div>
+<!-- END: Dashboard Preview Image -->
+</div>
+<!-- END: Hero Content -->
+</section>
+<!-- END: Hero Section -->
+</body></html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PerfIAmatic — Audit No-Shows | Récupérez vos revenus perdus</title>
+  <meta name="description" content="Solution IA pour cabinets dentaires. Analysez vos absences, chiffrez vos revenus perdus et recevez un plan d'action personnalisé en 5 minutes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Outfit', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            ink: '#07080F',
+            'ink-2': '#0E0F1C',
+            primary: '#4F46E5',
+            'primary-2': '#6366F1',
+            violet: '#7C3AED',
+            cyan: '#06B6D4',
+            emerald: '#10B981',
+            amber: '#F59E0B',
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.8s ease-out forwards',
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-dot': 'pulseDot 2s ease-in-out infinite',
+            'aurora': 'aurora 20s linear infinite',
+          },
+          keyframes: {
+            fadeUp: { '0%': { opacity: '0', transform: 'translateY(24px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+            pulseDot: { '0%,100%': { opacity: '1', transform: 'scale(1)' }, '50%': { opacity: '0.4', transform: 'scale(0.85)' } },
+            aurora: { '0%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' }, '100%': { backgroundPosition: '0% 50%' } },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #07080F; color: #fff; }
+
+    .mesh-hero {
+      background-color: #07080F;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 75% -10%, rgba(124,58,237,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 10% 40%, rgba(79,70,229,0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 90%, rgba(6,182,212,0.15) 0%, transparent 55%);
+    }
+    .aurora-layer {
+      position: absolute; inset: -10%;
+      background-image: repeating-linear-gradient(100deg, #6366f1 10%, #8b5cf6 15%, #a855f7 20%, #c084fc 25%, #7c3aed 30%);
+      background-size: 300% 200%;
+      filter: blur(80px);
+      opacity: 0.35;
+      -webkit-mask-image: radial-gradient(ellipse at 100% 0%, black 10%, transparent 70%);
+      mask-image: radial-gradient(ellipse at 100% 0%, black 10%, transparent 70%);
+      animation: aurora 20s linear infinite;
+      pointer-events: none;
+    }
+    .grid-overlay::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+      pointer-events: none;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #c084fc 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .glass-hover { transition: all .25s ease; }
+    .glass-hover:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.14);
+      transform: translateY(-3px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+      box-shadow: 0 10px 30px -10px rgba(79,70,229,0.6), inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all .25s ease;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(124,58,237,0.7), inset 0 1px 0 rgba(255,255,255,0.25); }
+
+    .tile { transition: all .3s ease; position: relative; }
+    .tile:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.18); }
+    .tile::after {
+      content: ''; position: absolute; inset: 0; border-radius: 1rem;
+      background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(124,58,237,0.12), transparent 40%);
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .tile:hover::after { opacity: 1; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: all .7s ease-out; }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); }
+  </style>
+</head>
+<body class="font-sans antialiased">
+
+<!-- NAV -->
+<nav class="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-ink/60 border-b border-white/5">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-violet grid place-items-center shadow-lg shadow-primary/30">
+        <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C9 2 7 4 7 7c0 2 .5 4 1 6 .5 2 1 4 1 6 0 1 .5 2 1.5 2s1.5-1 1.5-2c0-1 .5-2 1-2s1 1 1 2c0 1 .5 2 1.5 2s1.5-1 1.5-2c0-2 .5-4 1-6 .5-2 1-4 1-6 0-3-2-5-5-5-1 0-2 .5-3 1-1-.5-2-1-3-1z"/></svg>
+      </div>
+      <div class="leading-tight">
+        <div class="font-heading font-bold text-white">PerfIAmatic</div>
+        <div class="text-[10px] uppercase tracking-[0.2em] text-white/40">Audit No-Shows</div>
+      </div>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm text-white/70">
+      <a href="#features" class="hover:text-white transition">Fonctionnalités</a>
+      <a href="#demo" class="hover:text-white transition">Démo</a>
+      <a href="#testimonials" class="hover:text-white transition">Témoignages</a>
+      <a href="#pricing" class="hover:text-white transition">Tarifs</a>
+    </div>
+    <a href="/audit" class="btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-semibold">
+      Lancer l'audit
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="mesh-hero relative overflow-hidden pt-32 pb-24 lg:pt-40 lg:pb-32">
+  <div class="aurora-layer"></div>
+  <div class="grid-overlay absolute inset-0"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+      <div class="space-y-8">
+        <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full glass">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald"></span>
+          </span>
+          <span class="text-xs font-semibold tracking-wide text-white/80">Solution IA pour cabinets dentaires</span>
+        </div>
+
+        <h1 class="reveal font-heading text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
+          Récupérez vos revenus
+          <span class="block text-gradient">perdus par les no-shows</span>
+        </h1>
+
+        <p class="reveal text-lg md:text-xl text-white/70 max-w-xl leading-relaxed">
+          Uploadez votre export de rendez-vous. Notre IA analyse vos absences, chiffre le CA perdu et vous livre un plan d'action personnalisé — en moins de <span class="text-white font-semibold">5 minutes</span>.
+        </p>
+
+        <div class="reveal flex flex-col sm:flex-row gap-4">
+          <a href="/audit" class="btn-primary inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full text-white font-semibold">
+            Lancer mon audit gratuit
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#demo" class="glass glass-hover inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full text-white font-semibold">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Voir la démo
+          </a>
+        </div>
+
+        <div class="reveal pt-6">
+          <div class="text-[11px] uppercase tracking-[0.25em] text-white/40 mb-4">Données chiffrées · RGPD · Hébergé en France</div>
+          <div class="flex flex-wrap items-center gap-x-8 gap-y-3 text-white/60">
+            <div class="flex items-center gap-2 text-sm"><svg class="w-4 h-4 text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> Compatible Doctolib</div>
+            <div class="flex items-center gap-2 text-sm"><svg class="w-4 h-4 text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> Veasy · Julie · Logos</div>
+            <div class="flex items-center gap-2 text-sm"><svg class="w-4 h-4 text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> Aucun logiciel à installer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative reveal">
+        <div class="absolute -top-10 -right-10 w-72 h-72 bg-violet/30 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-10 -left-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl"></div>
+
+        <div class="relative glass rounded-3xl p-6 shadow-2xl shadow-primary/10">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <div class="text-xs uppercase tracking-wider text-white/40">Votre audit · aperçu</div>
+              <div class="font-heading text-lg font-bold">Cabinet Dr. Martin</div>
+            </div>
+            <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald/15 border border-emerald/30">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald animate-pulse-dot"></span>
+              <span class="text-[11px] font-semibold text-emerald">Analyse terminée</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="glass rounded-2xl p-4">
+              <div class="text-[11px] uppercase tracking-wider text-white/40 mb-2">CA perdu / an</div>
+              <div class="font-heading text-3xl font-extrabold text-white">42 380 €</div>
+              <div class="flex items-center gap-1 text-xs text-rose-400 mt-1">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 17l9-9M9 8h8v8"/></svg>
+                Manque à gagner identifié
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <div class="text-[11px] uppercase tracking-wider text-white/40 mb-2">Taux no-show</div>
+              <div class="font-heading text-3xl font-extrabold text-white">14,2<span class="text-lg text-white/50">%</span></div>
+              <div class="flex items-center gap-1 text-xs text-amber mt-1">vs 8% secteur</div>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <div class="text-[11px] uppercase tracking-wider text-white/40 mb-2">RDV analysés</div>
+              <div class="font-heading text-3xl font-extrabold text-white">2 847</div>
+              <div class="text-xs text-white/50 mt-1">sur 6 mois</div>
+            </div>
+            <div class="glass rounded-2xl p-4 bg-gradient-to-br from-primary/20 to-violet/20 border-primary/30">
+              <div class="text-[11px] uppercase tracking-wider text-white/60 mb-2">Score perf.</div>
+              <div class="font-heading text-3xl font-extrabold text-gradient">68/100</div>
+              <div class="text-xs text-white/60 mt-1">Potentiel +18 pts</div>
+            </div>
+          </div>
+
+          <div class="mt-4 glass rounded-2xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-xs font-semibold text-white/80">No-shows par jour</div>
+              <div class="text-[10px] text-white/40">7 derniers jours</div>
+            </div>
+            <div class="flex items-end gap-2 h-24">
+              <div class="flex-1 rounded-t-md bg-gradient-to-t from-primary to-violet" style="height:40%"></div>
+              <div class="flex-1 rounded-t-md bg-gradient-to-t from-primary to-violet" style="height:65%"></div>
+              <div class="flex-1 rounded-t-md bg-gradient-to-t from-primary to-violet" style="height:30%"></div>
+              <div class="flex-1 rounded-t-md bg-gradient-to-t from-rose-500 to-violet" style="height:90%"></div>
+              <div class="flex-1 rounded-t-md bg-gradient-to-t from-primary to-violet" style="height:50%"></div>
+              <div class="flex-1 rounded-t-md bg-gradient-to-t from-primary to-violet" style="height:72%"></div>
+              <div class="flex-1 rounded-t-md bg-gradient-to-t from-primary to-violet opacity-50" style="height:22%"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-white/40 mt-2"><span>L</span><span>M</span><span>M</span><span class="text-rose-400 font-semibold">J</span><span>V</span><span>S</span><span>D</span></div>
+          </div>
+        </div>
+
+        <div class="absolute -top-4 -left-4 glass rounded-2xl px-4 py-3 animate-float">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald to-cyan grid place-items-center">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase tracking-wider text-white/40">Rapport IA</div>
+              <div class="text-xs font-semibold">Plan d'action prêt</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Stats strip -->
+    <div class="mt-24 reveal">
+      <div class="glass rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-6 divide-y md:divide-y-0 md:divide-x divide-white/10">
+        <div class="text-center md:px-4">
+          <div class="font-heading text-3xl md:text-4xl font-extrabold text-gradient">1 200+</div>
+          <div class="text-xs uppercase tracking-wider text-white/50 mt-1">cabinets audités</div>
+        </div>
+        <div class="text-center md:px-4 pt-6 md:pt-0">
+          <div class="font-heading text-3xl md:text-4xl font-extrabold text-gradient">3,2 M€</div>
+          <div class="text-xs uppercase tracking-wider text-white/50 mt-1">CA récupéré</div>
+        </div>
+        <div class="text-center md:px-4 pt-6 md:pt-0">
+          <div class="font-heading text-3xl md:text-4xl font-extrabold text-gradient">4,9<span class="text-xl">/5</span></div>
+          <div class="text-xs uppercase tracking-wider text-white/50 mt-1">satisfaction</div>
+        </div>
+        <div class="text-center md:px-4 pt-6 md:pt-0">
+          <div class="font-heading text-3xl md:text-4xl font-extrabold text-gradient">5 min</div>
+          <div class="text-xs uppercase tracking-wider text-white/50 mt-1">pour l'audit</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- FEATURES / BENTO -->
+<section id="features" class="relative py-28 overflow-hidden">
+  <div class="absolute left-1/4 top-0 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]"></div>
+  <div class="absolute right-1/4 bottom-0 h-[500px] w-[500px] rounded-full bg-violet/10 blur-[120px]"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <div class="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-[11px] uppercase tracking-[0.25em] text-white/60 mb-6">
+        <div class="h-1.5 w-1.5 rounded-full bg-emerald animate-pulse"></div>
+        Dental Practice Intelligence
+      </div>
+      <h2 class="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
+        Tout ce qu'il vous faut,<br/>
+        <span class="text-gradient">rien en trop.</span>
+      </h2>
+      <p class="mt-6 text-lg text-white/60 max-w-2xl mx-auto">
+        Une plateforme pensée pour les praticiens : simple à l'entrée, puissante à la sortie.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[minmax(220px,auto)]">
+      <div class="tile md:col-span-2 md:row-span-2 rounded-2xl glass p-8 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-violet/10 pointer-events-none"></div>
+        <div class="relative flex flex-col h-full">
+          <div class="flex items-start justify-between mb-5">
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl glass">
+              <svg class="w-6 h-6 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <span class="text-xs font-semibold px-3 py-1 rounded-full glass text-white/70">IA propriétaire</span>
+          </div>
+          <h3 class="font-heading text-2xl md:text-3xl font-bold mb-3">Détection intelligente des no-shows</h3>
+          <p class="text-white/60 leading-relaxed max-w-lg">Notre modèle identifie les schémas récurrents (jour, heure, praticien, type d'acte) et chiffre précisément l'impact financier sur votre cabinet.</p>
+          <div class="mt-auto pt-8 flex items-end justify-between">
+            <div>
+              <div class="font-heading text-5xl font-extrabold text-white">94<span class="text-2xl text-white/50">%</span></div>
+              <div class="text-[11px] uppercase tracking-wider text-white/40 mt-1">précision détection</div>
+            </div>
+            <svg class="w-24 h-16" viewBox="0 0 96 64" fill="none"><path d="M2 60C12 52 18 36 26 28 34 20 40 26 48 34 56 42 62 22 70 14 78 6 86 12 94 8" stroke="url(#g1)" stroke-width="3" stroke-linecap="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="96" y2="0"><stop stop-color="#6366F1"/><stop offset="1" stop-color="#C084FC"/></linearGradient></defs></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile rounded-2xl glass p-6 overflow-hidden">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl glass mb-4">
+          <svg class="w-5 h-5 text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <h3 class="font-semibold text-lg mb-1">CA perdu chiffré</h3>
+        <p class="text-sm text-white/60 leading-relaxed">Annualisé par praticien et type d'acte.</p>
+        <div class="mt-5 pt-4 border-t border-white/10">
+          <div class="font-heading text-2xl font-bold">47,2 k€</div>
+          <div class="text-[10px] uppercase tracking-wider text-white/40">récupérables</div>
+        </div>
+      </div>
+
+      <div class="tile rounded-2xl glass p-6 overflow-hidden">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl glass mb-4">
+          <svg class="w-5 h-5 text-primary-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3 class="font-semibold text-lg mb-1">Patterns par jour</h3>
+        <p class="text-sm text-white/60 leading-relaxed">Identifiez votre jour noir, ajustez le planning.</p>
+        <div class="mt-5 pt-4 border-t border-white/10 flex items-end gap-1.5 h-10">
+          <div class="flex-1 bg-primary/60 rounded-sm" style="height:40%"></div>
+          <div class="flex-1 bg-primary/60 rounded-sm" style="height:55%"></div>
+          <div class="flex-1 bg-primary/60 rounded-sm" style="height:35%"></div>
+          <div class="flex-1 bg-rose-500 rounded-sm" style="height:100%"></div>
+          <div class="flex-1 bg-primary/60 rounded-sm" style="height:60%"></div>
+        </div>
+      </div>
+
+      <div class="tile rounded-2xl glass p-6 overflow-hidden">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl glass mb-4">
+          <svg class="w-5 h-5 text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12A10 10 0 1112 2v10z"/><path d="M21.21 15.89A10 10 0 1118.11 2.79"/></svg>
+        </div>
+        <h3 class="font-semibold text-lg mb-1">Score de performance</h3>
+        <p class="text-sm text-white/60 leading-relaxed">0 à 100, vs benchmark secteur.</p>
+        <div class="mt-5 pt-4 border-t border-white/10">
+          <div class="font-heading text-2xl font-bold text-gradient">68 / 100</div>
+          <div class="text-[10px] uppercase tracking-wider text-white/40">vs 72 secteur</div>
+        </div>
+      </div>
+
+      <div class="tile rounded-2xl glass p-6 overflow-hidden md:col-span-2">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl glass">
+            <svg class="w-5 h-5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 rounded-full glass text-white/70">Export inclus</span>
+        </div>
+        <h3 class="font-heading text-xl font-bold mb-2">Rapport PDF + plan d'action IA</h3>
+        <p class="text-sm text-white/60 leading-relaxed max-w-md">Un document prêt à partager avec votre équipe. Recommandations priorisées, gains estimés, quick-wins identifiés.</p>
+        <div class="mt-5 pt-4 border-t border-white/10 flex gap-6">
+          <div><div class="font-heading text-xl font-bold">12 pages</div><div class="text-[10px] uppercase tracking-wider text-white/40">rapport complet</div></div>
+          <div><div class="font-heading text-xl font-bold">8 actions</div><div class="text-[10px] uppercase tracking-wider text-white/40">priorisées</div></div>
+          <div><div class="font-heading text-xl font-bold">+18 pts</div><div class="text-[10px] uppercase tracking-wider text-white/40">gain potentiel</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider max-w-5xl mx-auto"></div>
+
+<!-- HOW IT WORKS -->
+<section id="demo" class="relative py-28">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-20 reveal">
+      <div class="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-[11px] uppercase tracking-[0.25em] text-white/60 mb-6">3 étapes · 5 minutes</div>
+      <h2 class="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
+        De l'export à la <span class="text-gradient">décision</span>.
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="relative glass rounded-2xl p-8 reveal">
+        <div class="absolute -top-5 left-8 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-violet grid place-items-center font-heading font-bold text-white shadow-lg shadow-primary/40">1</div>
+        <div class="mt-4">
+          <h3 class="font-heading text-xl font-bold mb-2">Uploadez votre CSV</h3>
+          <p class="text-sm text-white/60 leading-relaxed">Exportez vos RDV depuis Doctolib, Veasy, Julie ou Logos. Glissez-déposez.</p>
+        </div>
+      </div>
+      <div class="relative glass rounded-2xl p-8 reveal">
+        <div class="absolute -top-5 left-8 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-violet grid place-items-center font-heading font-bold text-white shadow-lg shadow-primary/40">2</div>
+        <div class="mt-4">
+          <h3 class="font-heading text-xl font-bold mb-2">Notre IA analyse</h3>
+          <p class="text-sm text-white/60 leading-relaxed">Patterns temporels, patients récidivistes, actes les plus touchés. CA perdu calculé.</p>
+        </div>
+      </div>
+      <div class="relative glass rounded-2xl p-8 reveal">
+        <div class="absolute -top-5 left-8 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-violet grid place-items-center font-heading font-bold text-white shadow-lg shadow-primary/40">3</div>
+        <div class="mt-4">
+          <h3 class="font-heading text-xl font-bold mb-2">Recevez votre plan</h3>
+          <p class="text-sm text-white/60 leading-relaxed">Dashboard + rapport PDF + recommandations priorisées, activables dès le lendemain.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="relative py-28 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent"></div>
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <div class="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-[11px] uppercase tracking-[0.25em] text-white/60 mb-6">Ils ont testé</div>
+      <h2 class="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
+        La voix des <span class="text-gradient">praticiens</span>.
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="glass rounded-2xl p-7 reveal flex flex-col">
+        <div class="flex gap-1 mb-4 text-amber">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        </div>
+        <p class="text-white/80 leading-relaxed flex-1">« J'avais l'intuition que le jeudi était problématique. L'audit l'a confirmé chiffres à l'appui — 38 % de mes absences concentrées sur cette journée. On a réorganisé : +11 k€ sur 3 mois. »</p>
+        <div class="mt-6 pt-6 border-t border-white/10 flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-violet grid place-items-center font-bold">MR</div>
+          <div>
+            <div class="font-semibold text-sm">Dr. Marion Rousseau</div>
+            <div class="text-xs text-white/50">Cabinet dentaire · Lyon 6e</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass rounded-2xl p-7 reveal flex flex-col">
+        <div class="flex gap-1 mb-4 text-amber">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        </div>
+        <p class="text-white/80 leading-relaxed flex-1">« 5 minutes pour avoir ce que mon comptable n'a pas su produire en 6 mois. Le PDF est partagé avec mon assistante, on suit les quick-wins semaine après semaine. »</p>
+        <div class="mt-6 pt-6 border-t border-white/10 flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-gradient-to-br from-cyan to-primary grid place-items-center font-bold">TB</div>
+          <div>
+            <div class="font-semibold text-sm">Dr. Thomas Bernard</div>
+            <div class="text-xs text-white/50">Orthodontie · Bordeaux</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass rounded-2xl p-7 reveal flex flex-col">
+        <div class="flex gap-1 mb-4 text-amber">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        </div>
+        <p class="text-white/80 leading-relaxed flex-1">« Ce qui m'a bluffé : le score comparé au benchmark. On se croit « dans la moyenne » — en fait non. L'outil donne la photo sans filtre, c'est précieux. »</p>
+        <div class="mt-6 pt-6 border-t border-white/10 flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-gradient-to-br from-violet to-rose-500 grid place-items-center font-bold">AL</div>
+          <div>
+            <div class="font-semibold text-sm">Dr. Amélie Leroy</div>
+            <div class="text-xs text-white/50">Omnipratique · Nantes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="pricing" class="relative py-28 overflow-hidden">
+  <div class="absolute inset-0 mesh-hero opacity-80"></div>
+  <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <h2 class="reveal font-heading text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.05]">
+      Votre <span class="text-gradient">prochain audit</span><br/>est à 5 minutes.
+    </h2>
+    <p class="reveal mt-6 text-lg text-white/70 max-w-2xl mx-auto">
+      Gratuit. Sans carte bancaire. Aucun logiciel à installer. Juste votre export CSV.
+    </p>
+    <div class="reveal mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/audit" class="btn-primary inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-semibold text-lg">
+        Lancer mon audit gratuit
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#" class="glass glass-hover inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-semibold text-lg">
+        Réserver une démo
+      </a>
+    </div>
+    <div class="reveal mt-8 text-xs text-white/40 uppercase tracking-[0.25em]">RGPD · Données chiffrées · Hébergé en France</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/5 py-10 text-sm text-white/40">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-violet"></div>
+      <span class="font-semibold text-white/70">PerfIAmatic</span>
+      <span>© 2026</span>
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="#" class="hover:text-white transition">Mentions légales</a>
+      <a href="#" class="hover:text-white transition">RGPD</a>
+      <a href="#" class="hover:text-white transition">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }});
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  document.querySelectorAll('.tile').forEach(tile => {
+    tile.addEventListener('mousemove', (e) => {
+      const r = tile.getBoundingClientRect();
+      tile.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      tile.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+</script>
+
+</body>
+</html>
