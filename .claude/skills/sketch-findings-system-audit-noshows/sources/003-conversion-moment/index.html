@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sketch 003 — Conversion moment</title>
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  .page { max-width: 960px; margin: 0 auto; padding: var(--s7) var(--s5); }
+  .step-card-fake {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: var(--s7); position: relative;
+  }
+  .step-card-fake .step-num { position: absolute; top: var(--s5); right: var(--s5); font-family: var(--font-serif); font-size: 56px; color: var(--text-tertiary); font-weight: 500; opacity: 0.4; }
+  h2 { font-size: 32px; margin: 0 0 var(--s3); }
+  .lede { font-size: 17px; color: var(--text-secondary); max-width: 560px; margin: 0 0 var(--s6); }
+  .eyebrow { color: var(--text-tertiary); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+
+  /* ═══ Variant A — Activity ring + sticky CTA ═══ */
+  .ring-wrap { text-align: center; padding: var(--s5) 0 var(--s7); }
+  .ring-big { width: 280px; height: 280px; margin: 0 auto; display: block; }
+  .ring-track { fill: none; stroke: var(--bg-subtle); stroke-width: 20; }
+  .ring-prog { fill: none; stroke-width: 20; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 140px 140px; }
+  .ring-val { font-family: var(--font-display); font-size: 84px; font-weight: 600; text-anchor: middle; letter-spacing: -0.03em; }
+  .ring-unit { font-size: 22px; text-anchor: middle; fill: var(--text-tertiary); font-weight: 500; }
+  .ring-lab { font-size: 14px; text-anchor: middle; fill: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+  .ring-meta { margin-top: var(--s4); display: flex; justify-content: center; gap: var(--s5); flex-wrap: wrap; }
+  .ring-meta .pill { padding: 6px 14px; background: var(--bg-subtle); border-radius: 999px; font-size: 13px; color: var(--text-secondary); }
+  .ring-meta .pill.alert { background: var(--red-soft); color: var(--red); font-weight: 500; }
+
+  .breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); margin-top: var(--s6); }
+  .bd-item { padding: var(--s5); background: var(--bg-subtle); border-radius: var(--radius); }
+  .bd-item .l { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: var(--text-tertiary); }
+  .bd-item .n { font-family: var(--font-serif); font-size: 28px; color: var(--text); margin-top: var(--s2); font-weight: 500; }
+  .bd-item.bad .n { color: var(--red); }
+  .bd-item .s { font-size: 13px; color: var(--text-secondary); margin-top: var(--s1); }
+
+  .sticky-cta {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: white; padding: var(--s3) var(--s4) var(--s3) var(--s5);
+    border-radius: 999px; box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: var(--s4); z-index: 50;
+    max-width: calc(100% - 32px);
+  }
+  .sticky-cta .t { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .sticky-cta .t strong { color: white; }
+  .sticky-cta .btn { background: white; color: var(--text); padding: 10px 18px; font-size: 14px; }
+
+  /* ═══ Variant B — Prescription médicale + CTA inline ═══ */
+  .rx-card {
+    border: 1.5px solid var(--text); border-radius: var(--radius);
+    background: var(--bg-elevated); padding: 0; overflow: hidden;
+    font-family: var(--font-sans);
+  }
+  .rx-header {
+    padding: var(--s5); border-bottom: 1px dashed var(--border);
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .rx-header .title { font-family: var(--font-serif); font-size: 22px; font-weight: 500; color: var(--text); margin: 0; }
+  .rx-header .sub { font-size: 13px; color: var(--text-tertiary); margin-top: 4px; }
+  .rx-header .stamp {
+    border: 2px solid var(--blue); color: var(--blue);
+    padding: 6px 14px; border-radius: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    transform: rotate(-3deg); flex-shrink: 0;
+  }
+  .rx-body { padding: var(--s5); }
+  .rx-section { margin-bottom: var(--s5); }
+  .rx-section .lab {
+    font-family: var(--font-serif); font-size: 13px; font-weight: 600;
+    color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em;
+    padding-bottom: var(--s2); border-bottom: 1px solid var(--border);
+    margin-bottom: var(--s3);
+  }
+  .rx-diag { display: grid; grid-template-columns: auto 1fr; gap: var(--s4); align-items: center; }
+  .rx-diag-num { font-family: var(--font-serif); font-size: 72px; color: var(--red); font-weight: 500; line-height: 1; letter-spacing: -0.03em; }
+  .rx-diag-lab { font-size: 14px; color: var(--text-tertiary); }
+  .rx-diag-txt { font-size: 15px; color: var(--text); }
+  .rx-diag-txt strong { color: var(--red); }
+
+  .rx-findings { display: grid; gap: var(--s2); margin-top: var(--s3); }
+  .rx-finding {
+    display: grid; grid-template-columns: 20px 1fr auto; gap: var(--s3); align-items: center;
+    padding: var(--s2) 0; font-size: 14px; color: var(--text);
+  }
+  .rx-finding .dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; }
+  .rx-finding .dot.ok { background: var(--green); }
+  .rx-finding .v { font-family: var(--font-serif); font-weight: 500; color: var(--text); }
+
+  .rx-rx {
+    margin-top: var(--s4); padding: var(--s5);
+    background: var(--bg-subtle); border-left: 3px solid var(--blue);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .rx-rx .line { font-size: 15px; color: var(--text); margin-bottom: var(--s2); }
+  .rx-rx .line::before { content: "Rx · "; font-family: var(--font-serif); font-weight: 600; color: var(--blue); }
+  .rx-cta-block {
+    margin-top: var(--s5); padding: var(--s5); background: var(--text); color: white;
+    border-radius: var(--radius); display: flex; justify-content: space-between; align-items: center; gap: var(--s4); flex-wrap: wrap;
+  }
+  .rx-cta-block .t { flex: 1; min-width: 240px; }
+  .rx-cta-block .t h4 { font-size: 17px; margin: 0 0 4px; color: white; }
+  .rx-cta-block .t p { font-size: 13px; color: rgba(255,255,255,0.7); margin: 0; }
+  .rx-cta-block .btn-primary { background: white; color: var(--text); }
+  .rx-footer { padding: var(--s4) var(--s5); border-top: 1px dashed var(--border); font-size: 12px; color: var(--text-tertiary); display: flex; justify-content: space-between; }
+
+  /* ═══ Variant C — Timeline récap + CTA final ═══ */
+  .recap-intro { margin-bottom: var(--s6); }
+  .timeline { position: relative; padding-left: var(--s6); border-left: 2px solid var(--border); display: grid; gap: var(--s5); }
+  .tl-item { position: relative; }
+  .tl-item::before {
+    content: ""; position: absolute; left: calc(-1 * var(--s6) - 7px); top: 8px;
+    width: 12px; height: 12px; border-radius: 50%; background: var(--bg-elevated);
+    border: 2px solid var(--red);
+  }
+  .tl-item.ok::before { border-color: var(--green); }
+  .tl-item.info::before { border-color: var(--blue); }
+  .tl-lab { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; color: var(--text-tertiary); }
+  .tl-headline {
+    font-size: 18px; color: var(--text); margin: 4px 0 6px;
+    display: flex; align-items: baseline; gap: var(--s3); flex-wrap: wrap;
+  }
+  .tl-headline .big { font-family: var(--font-serif); font-size: 26px; font-weight: 500; color: var(--red); letter-spacing: -0.02em; }
+  .tl-item.info .tl-headline .big { color: var(--blue); }
+  .tl-item.ok .tl-headline .big { color: var(--green); }
+  .tl-sub { font-size: 14px; color: var(--text-secondary); }
+
+  .verdict-card {
+    margin-top: var(--s7); padding: var(--s6);
+    background: var(--text); color: white; border-radius: var(--radius-lg);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .verdict-card::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(255,59,48,0.15), transparent 60%);
+    pointer-events: none;
+  }
+  .verdict-card .lab { position: relative; color: rgba(255,255,255,0.6); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+  .verdict-card h3 { position: relative; color: white; font-size: 26px; margin: var(--s3) 0 var(--s2); max-width: 640px; margin-left: auto; margin-right: auto; }
+  .verdict-card .big { position: relative; font-family: var(--font-serif); font-size: 64px; color: var(--red); font-weight: 500; line-height: 1; letter-spacing: -0.03em; margin: var(--s5) 0; }
+  .verdict-card p { position: relative; color: rgba(255,255,255,0.75); font-size: 15px; margin: 0 auto var(--s5); max-width: 520px; }
+  .verdict-card .btn-primary { position: relative; background: white; color: var(--text); padding: 14px 28px; font-size: 16px; }
+  .verdict-card .reassure { position: relative; color: rgba(255,255,255,0.5); font-size: 12px; margin-top: var(--s4); }
+
+  @media (max-width: 720px) {
+    .breakdown { grid-template-columns: 1fr; }
+    .ring-big { width: 220px; height: 220px; }
+    .ring-val { font-size: 64px; }
+  }
+
+  /* ═══ Variant D — Ring + Timeline + Verdict (C enrichi par A) ═══ */
+  .d-hero {
+    display: grid; grid-template-columns: 260px 1fr; gap: var(--s6);
+    align-items: center; padding: var(--s5) 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .d-hero .ring-big { width: 240px; height: 240px; margin: 0; }
+  .d-hero-text h2 { font-size: 28px; margin: 0 0 var(--s3); }
+  .d-hero-text .lede { margin-bottom: var(--s4); }
+  .d-hero-pills { display: flex; gap: var(--s2); flex-wrap: wrap; }
+  .d-hero-pills .pill { padding: 6px 12px; background: var(--bg-subtle); border-radius: 999px; font-size: 12px; color: var(--text-secondary); }
+  .d-hero-pills .pill.bad { background: var(--red-soft); color: var(--red); font-weight: 500; }
+  .d-hero-pills .pill.ghost { background: transparent; border: 1px dashed var(--border-strong); color: var(--text-tertiary); }
+
+  .d-recap-intro { margin: var(--s7) 0 var(--s5); }
+  .d-recap-intro .eyebrow { display: block; margin-bottom: var(--s2); }
+  .d-recap-intro h3 { font-size: 22px; margin: 0; color: var(--text); font-weight: 600; }
+
+  @media (max-width: 720px) {
+    .d-hero { grid-template-columns: 1fr; text-align: center; }
+    .d-hero .ring-big { margin: 0 auto; }
+    .d-hero-pills { justify-content: center; }
+  }
+
+  /* ═══ Variant E — Prescription médicale + Timeline dans Observations ═══ */
+  .rx-timeline {
+    position: relative; padding-left: var(--s5);
+    border-left: 2px solid var(--border);
+    display: grid; gap: var(--s4); margin-top: var(--s4);
+  }
+  .rx-timeline .tl-item::before {
+    left: calc(-1 * var(--s5) - 7px);
+    background: var(--bg-elevated);
+    border-width: 2px;
+  }
+  .rx-timeline .tl-lab { font-family: var(--font-serif); font-weight: 500; color: var(--text-secondary); }
+  .rx-timeline .tl-headline { font-size: 15px; margin: 2px 0 4px; }
+  .rx-timeline .tl-headline .big { font-size: 20px; }
+  .rx-timeline .tl-sub { font-size: 13px; }
+
+  .rx-verdict {
+    margin-top: var(--s5); padding: var(--s5);
+    background: var(--red-soft); border-left: 3px solid var(--red);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .rx-verdict .lab { font-family: var(--font-serif); font-weight: 600; color: var(--red); font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .rx-verdict .v { font-family: var(--font-serif); font-size: 42px; color: var(--red); font-weight: 500; line-height: 1; margin: var(--s3) 0; letter-spacing: -0.02em; }
+  .rx-verdict .txt { color: var(--text); font-size: 14px; max-width: 560px; }
+
+  /* ═══ Variant F — Step 5 (A clean) + Step 6 (D verdict) as sequential preview ═══ */
+  .f-flow { display: grid; gap: var(--s5); }
+  .f-step-label {
+    display: flex; align-items: center; gap: var(--s3);
+    color: var(--text-tertiary); font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; font-weight: 600;
+    padding: 0 var(--s3);
+  }
+  .f-step-label .line { flex: 1; height: 1px; background: var(--border); }
+  .f-step-label .idx {
+    background: var(--text); color: white;
+    padding: 4px 10px; border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+  }
+  .f-arrow {
+    text-align: center; color: var(--text-tertiary);
+    padding: var(--s2) 0; font-size: 20px;
+  }
+
+  /* Step 5 — A clean (no sticky CTA) */
+  .f-step5 h2 { font-size: 26px; margin: 0 0 var(--s3); }
+  .f-step5 .lede { font-size: 15px; margin-bottom: var(--s5); }
+  .f-step5 .ring-big { width: 220px; height: 220px; }
+  .f-step5 .ring-val { font-size: 72px; }
+  .f-step5 .ring-wrap { padding: var(--s4) 0 var(--s5); }
+  .f-step5 .breakdown { margin-top: var(--s5); }
+  .f-step5 .bd-item { padding: var(--s4); }
+  .f-step5 .bd-item .n { font-size: 24px; }
+
+  /* Step nav preview (inside each step card) */
+  .f-nav {
+    margin-top: var(--s6); padding-top: var(--s4);
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .f-nav .pos { color: var(--text-tertiary); font-size: 13px; }
+  .f-nav .btn-next {
+    background: var(--blue); color: white;
+    padding: 10px 18px; border-radius: 999px;
+    border: none; cursor: pointer; font: inherit; font-weight: 500;
+    display: inline-flex; align-items: center; gap: var(--s2);
+  }
+
+  /* Step 6 — verdict card on own step */
+  .f-step6 { padding: 0; border: none; background: transparent; min-height: 0; }
+  .f-step6 .verdict-card { margin-top: 0; padding: var(--s7); }
+  .f-step6 .step-num-outside {
+    position: absolute; top: var(--s5); right: var(--s5);
+    font-family: var(--font-serif); font-size: 56px;
+    color: rgba(255,255,255,0.2); font-weight: 500;
+  }
+
+  /* ═══ Variant D (v2) — Compact synthesis grid ═══ */
+  .d2-card h2 { font-size: 26px; }
+  .d2-card .lede { font-size: 15px; margin-bottom: var(--s5); }
+  .d2-card .breakdown { margin-top: var(--s5); }
+  .d2-card .bd-item { padding: var(--s4); }
+  .d2-card .bd-item .n { font-size: 24px; }
+
+  .d2-synthese { margin-top: var(--s6); padding-top: var(--s5); border-top: 1px solid var(--border); }
+  .d2-synthese .eyebrow { display: block; margin-bottom: var(--s4); color: var(--red); }
+
+  .d2-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s3);
+  }
+  .d2-cell {
+    padding: var(--s4); background: var(--bg-subtle); border-radius: var(--radius-sm);
+    border-left: 3px solid var(--border);
+  }
+  .d2-cell:nth-child(1) { border-left-color: var(--red); }
+  .d2-cell:nth-child(2) { border-left-color: var(--red); }
+  .d2-cell:nth-child(3) { border-left-color: var(--orange); }
+  .d2-cell:nth-child(4) { border-left-color: var(--red); }
+  .d2-lab {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    font-weight: 600; color: var(--text-tertiary);
+  }
+  .d2-val {
+    font-size: 26px; font-weight: 500; color: var(--text);
+    margin: 4px 0; letter-spacing: -0.02em; line-height: 1;
+  }
+  .d2-sub { font-size: 12px; color: var(--text-secondary); }
+
+  .d2-nav {
+    margin-top: var(--s6); padding-top: var(--s4);
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .d2-pos { color: var(--text-tertiary); font-size: 13px; }
+
+  /* Sticky CTA — only visible when variant D is active */
+  .d-sticky-cta {
+    display: none;
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: white; padding: var(--s3) var(--s4) var(--s3) var(--s5);
+    border-radius: 999px; box-shadow: var(--shadow-lg);
+    align-items: center; gap: var(--s4); z-index: 50;
+    max-width: calc(100% - 32px);
+  }
+  .variant[data-v="d"].active ~ .d-sticky-cta,
+  body.d-active .d-sticky-cta { display: flex; }
+  .d-sticky-cta .t { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .d-sticky-cta .t strong { color: white; }
+  .d-sticky-cta .btn { background: white; color: var(--text); padding: 10px 18px; font-size: 14px; }
+
+  @media (max-width: 720px) {
+    .d2-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sketch-toolbar">
+  <strong>Sketch 003</strong>
+  <span class="tertiary">Conversion moment — score + CTA Calendly</span>
+  <div class="tabs">
+    <button data-v="a" class="active">A · Activity ring + sticky CTA</button>
+    <button data-v="b">B · Prescription médicale</button>
+    <button data-v="c">C · Timeline récap + verdict</button>
+    <button data-v="d">D · Ring + Timeline + Verdict</button>
+    <button data-v="e">E · Prescription + Timeline</button>
+    <button data-v="f">F · Step 5 (A) + Step 6 (verdict D) ★</button>
+  </div>
+</div>
+
+<div class="sketch-body">
+
+  <!-- ═══ VARIANT A — Activity ring + sticky CTA ═══ -->
+  <section class="variant active" data-v="a">
+    <div class="page">
+      <div class="step-card-fake">
+        <span class="step-num">05</span>
+        <div class="eyebrow" style="color: var(--red);">Score global de votre cabinet</div>
+        <h2>Votre cabinet obtient <span class="serif" style="color: var(--red);">54 / 100</span>.</h2>
+        <p class="lede">Score partiel (volet Google non analysé). Ce score combine votre taux de no-show et votre présence Google. Il situe votre cabinet dans le tiers bas du marché dentaire français.</p>
+
+        <div class="ring-wrap">
+          <svg class="ring-big" viewBox="0 0 280 280">
+            <circle class="ring-track" cx="140" cy="140" r="115"/>
+            <circle class="ring-prog" cx="140" cy="140" r="115"
+                    stroke="#FF3B30"
+                    stroke-dasharray="722" stroke-dashoffset="332"/>
+            <text class="ring-val" x="140" y="152" fill="#1D1D1F">54</text>
+            <text class="ring-unit" x="140" y="178">/ 100</text>
+            <text class="ring-lab" x="140" y="216">Tiers bas</text>
+          </svg>
+          <div class="ring-meta">
+            <span class="pill alert">⚠ Score partiel — volet Google non analysé</span>
+          </div>
+        </div>
+
+        <div class="breakdown">
+          <div class="bd-item bad">
+            <span class="l">Volet no-shows</span>
+            <div class="n">40 <span class="muted" style="font-size: 16px;">/ 50</span></div>
+            <div class="s">Taux 14,2 % — tiers bas du marché</div>
+          </div>
+          <div class="bd-item">
+            <span class="l">Volet Google</span>
+            <div class="n">— <span class="muted" style="font-size: 16px;">/ 50</span></div>
+            <div class="s">Non analysé · <a href="#" style="color: var(--blue);">Lancer l'analyse</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky CTA (stays visible while scrolling) -->
+    <div class="sticky-cta">
+      <span class="t">Discutons de <strong>comment récupérer ces 42 380 €</strong></span>
+      <button class="btn btn-primary">Réserver un RDV →</button>
+    </div>
+  </section>
+
+  <!-- ═══ VARIANT B — Prescription médicale + CTA inline ═══ -->
+  <section class="variant" data-v="b">
+    <div class="page">
+      <div class="step-card-fake" style="padding: var(--s5);">
+        <span class="step-num">05</span>
+        <div class="eyebrow" style="color: var(--red); margin-bottom: var(--s4);">Compte-rendu d'audit</div>
+
+        <div class="rx-card">
+          <div class="rx-header">
+            <div>
+              <h2 class="title">Compte-rendu d'audit · Cabinet Dr. Durand</h2>
+              <p class="sub">Réf. PIA-2026-04-22-3829 · Généré le 22 avril 2026 à 13:42</p>
+            </div>
+            <div class="stamp">PERFIAMATIC<br/>AUDIT · v2</div>
+          </div>
+
+          <div class="rx-body">
+
+            <div class="rx-section">
+              <div class="lab">Diagnostic</div>
+              <div class="rx-diag">
+                <div>
+                  <div class="rx-diag-num tabular">54</div>
+                  <div class="rx-diag-lab">Score / 100</div>
+                </div>
+                <div class="rx-diag-txt">
+                  Cabinet situé dans le <strong>tiers bas</strong> du marché dentaire français.
+                  Perte annuelle estimée : <strong>42 380 €</strong>. Volet Google non analysé —
+                  score complet sur 100 après analyse.
+                </div>
+              </div>
+            </div>
+
+            <div class="rx-section">
+              <div class="lab">Observations cliniques</div>
+              <div class="rx-findings">
+                <div class="rx-finding"><span class="dot"></span><span>Taux de no-show</span><span class="v">14,2 %</span></div>
+                <div class="rx-finding"><span class="dot"></span><span>Créneaux perdus / semaine</span><span class="v">18</span></div>
+                <div class="rx-finding"><span class="dot"></span><span>Concentration hebdomadaire — jeudi</span><span class="v">38 %</span></div>
+                <div class="rx-finding"><span class="dot"></span><span>Tendance 6 mois</span><span class="v">+0,8 pt / mois</span></div>
+                <div class="rx-finding"><span class="dot ok"></span><span>Volume RDV analysés</span><span class="v">2 847</span></div>
+              </div>
+            </div>
+
+            <div class="rx-section" style="margin-bottom: 0;">
+              <div class="lab">Prescription</div>
+              <div class="rx-rx">
+                <div class="line">Audit approfondi des process de rappel patient</div>
+                <div class="line">Mise en place d'un protocole de relance multi-canal</div>
+                <div class="line">Suivi mensuel du taux de no-show sur 3 mois</div>
+              </div>
+
+              <div class="rx-cta-block">
+                <div class="t">
+                  <h4>Discutons de la prescription — 30 min avec un expert</h4>
+                  <p>Zéro engagement · Nous expliquons les 3 leviers concrets</p>
+                </div>
+                <button class="btn btn-primary">Réserver un RDV Calendly →</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="rx-footer">
+            <span>Signé · PerfIAmatic Audit Engine v2.0</span>
+            <span>Base 2 847 RDV · Benchmark dentistes FR 2025</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VARIANT C — Timeline récap + verdict final ═══ -->
+  <section class="variant" data-v="c">
+    <div class="page">
+      <div class="step-card-fake">
+        <span class="step-num">05</span>
+        <div class="eyebrow" style="color: var(--red);">Synthèse de l'audit</div>
+        <h2>Ce que votre CSV révèle en 5 chiffres.</h2>
+        <p class="lede recap-intro">Avant de parler solution, résumons ce que nous avons vu ensemble dans ce rapport.</p>
+
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-lab">Détail no-shows · Section 2</div>
+            <div class="tl-headline"><span class="big tabular">42 380 €</span><span>de revenus perdus chaque année</span></div>
+            <div class="tl-sub">Calculé ligne à ligne depuis votre CSV · Écart de 36 180 € avec le top 10 % dentistes FR</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-lab">Répartition · Section 3</div>
+            <div class="tl-headline"><span class="big">Jeudi</span><span>concentre 38 % de vos no-shows</span></div>
+            <div class="tl-sub">Un jour à fort turnover qui mérite une stratégie de rappel dédiée</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-lab">Tendance · Section 4</div>
+            <div class="tl-headline"><span class="big">+0,8 pt</span><span>par mois sur les 6 derniers mois</span></div>
+            <div class="tl-sub">Sans intervention, projection à 12 mois &gt; 20 % de no-show</div>
+          </div>
+          <div class="tl-item info">
+            <div class="tl-lab">Taux observé · Synthèse · Section 1</div>
+            <div class="tl-headline"><span class="big">14,2 %</span><span>de no-show · contre 4 % moyenne sectorielle</span></div>
+            <div class="tl-sub">Votre cabinet est 3,5 × au-dessus de la moyenne nationale</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-lab">Score global</div>
+            <div class="tl-headline"><span class="big">54 / 100</span><span>· Tiers bas du marché</span></div>
+            <div class="tl-sub">Score partiel — volet Google non analysé</div>
+          </div>
+        </div>
+
+        <div class="verdict-card">
+          <div class="lab">Action recommandée</div>
+          <h3>Vous avez vu le problème. Parlons maintenant de comment récupérer votre chiffre d'affaires.</h3>
+          <div class="big tabular">42 380 €</div>
+          <p>30 minutes avec un expert PerfIAmatic. Zéro engagement. Nous vous expliquons les 3 leviers concrets utilisés par les cabinets à 1,8 % de no-show.</p>
+          <button class="btn btn-primary">Réserver un RDV Calendly →</button>
+          <div class="reassure">⏱ Créneau sous 48h · 🔒 Conforme RGPD · 📎 Vous ressortez avec un plan d'action, même sans achat</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VARIANT D (v2) — A core + compact synthesis inline + CTA, cohérent stepped reveal ═══ -->
+  <section class="variant" data-v="d">
+    <div class="page">
+
+      <!-- STEP 5 · Score global -->
+      <div class="step-card-fake d2-card">
+        <span class="step-num">05</span>
+        <div class="eyebrow" style="color: var(--red);">Score global de votre cabinet</div>
+        <h2>Votre cabinet obtient <span class="serif" style="color: var(--red);">54 / 100</span>.</h2>
+        <p class="lede">Score partiel — volet Google non analysé. Tiers bas du marché dentaire français.</p>
+
+        <!-- Top section : ring centered (A style) -->
+        <div class="ring-wrap" style="padding: var(--s4) 0 var(--s5);">
+          <svg class="ring-big" viewBox="0 0 280 280" style="width: 220px; height: 220px;">
+            <circle class="ring-track" cx="140" cy="140" r="115"/>
+            <circle class="ring-prog" cx="140" cy="140" r="115"
+                    stroke="#FF3B30"
+                    stroke-dasharray="722" stroke-dashoffset="332"/>
+            <text class="ring-val" x="140" y="150" fill="#1D1D1F" style="font-size: 72px;">54</text>
+            <text class="ring-unit" x="140" y="176">/ 100</text>
+            <text class="ring-lab" x="140" y="214">Tiers bas</text>
+          </svg>
+          <div class="ring-meta">
+            <span class="pill alert">⚠ Score partiel — volet Google non analysé</span>
+          </div>
+        </div>
+
+        <!-- Breakdown cards (A style) -->
+        <div class="breakdown">
+          <div class="bd-item bad">
+            <span class="l">Volet no-shows</span>
+            <div class="n">40 <span class="muted" style="font-size: 14px;">/ 50</span></div>
+            <div class="s">Taux 14,2 % — tiers bas du marché</div>
+          </div>
+          <div class="bd-item">
+            <span class="l">Volet Google</span>
+            <div class="n">— <span class="muted" style="font-size: 14px;">/ 50</span></div>
+            <div class="s">Non analysé · <a href="#" style="color: var(--blue);">Lancer l'analyse</a></div>
+          </div>
+        </div>
+
+        <!-- Compact synthesis — les 4 chiffres clés de l'audit en row -->
+        <div class="d2-synthese">
+          <div class="eyebrow">Synthèse de l'audit</div>
+          <div class="d2-grid">
+            <div class="d2-cell">
+              <div class="d2-lab">Perte annuelle</div>
+              <div class="d2-val serif tabular">42 380 €</div>
+              <div class="d2-sub">Écart de 36 180 € avec le top 10 %</div>
+            </div>
+            <div class="d2-cell">
+              <div class="d2-lab">Taux no-show</div>
+              <div class="d2-val serif">14,2 %</div>
+              <div class="d2-sub">× 3,5 la moyenne sectorielle (4 %)</div>
+            </div>
+            <div class="d2-cell">
+              <div class="d2-lab">Jour critique</div>
+              <div class="d2-val serif">Jeudi</div>
+              <div class="d2-sub">38 % des no-shows concentrés</div>
+            </div>
+            <div class="d2-cell">
+              <div class="d2-lab">Tendance 6 mois</div>
+              <div class="d2-val serif" style="color: var(--red);">+0,8 pt / mois</div>
+              <div class="d2-sub">Projection 12 mois &gt; 20 %</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step nav (cohérent stepped reveal) -->
+        <div class="d2-nav">
+          <button class="btn btn-ghost">← Précédent</button>
+          <span class="d2-pos">Section · Score global</span>
+          <button class="btn btn-primary">Continuer →</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ VARIANT E — Prescription médicale avec timeline dans Observations ═══ -->
+  <section class="variant" data-v="e">
+    <div class="page">
+      <div class="step-card-fake" style="padding: var(--s5);">
+        <span class="step-num">05</span>
+        <div class="eyebrow" style="color: var(--red); margin-bottom: var(--s4);">Compte-rendu d'audit</div>
+
+        <div class="rx-card">
+          <div class="rx-header">
+            <div>
+              <h2 class="title">Compte-rendu d'audit · Cabinet Dr. Durand</h2>
+              <p class="sub">Réf. PIA-2026-04-22-3829 · Généré le 22 avril 2026 à 13:42</p>
+            </div>
+            <div class="stamp">PERFIAMATIC<br/>AUDIT · v2</div>
+          </div>
+
+          <div class="rx-body">
+
+            <div class="rx-section">
+              <div class="lab">Diagnostic</div>
+              <div class="rx-diag">
+                <div>
+                  <div class="rx-diag-num tabular">54</div>
+                  <div class="rx-diag-lab">Score / 100</div>
+                </div>
+                <div class="rx-diag-txt">
+                  Cabinet situé dans le <strong>tiers bas</strong> du marché dentaire français.
+                  Perte annuelle estimée : <strong>42 380 €</strong>. Volet Google non analysé —
+                  score complet sur 100 après analyse.
+                </div>
+              </div>
+            </div>
+
+            <div class="rx-section">
+              <div class="lab">Observations cliniques</div>
+              <div class="timeline rx-timeline">
+                <div class="tl-item">
+                  <div class="tl-lab">Perte annualisée</div>
+                  <div class="tl-headline"><span class="big tabular">42 380 €</span><span>· calculé depuis votre CSV</span></div>
+                  <div class="tl-sub">Écart de 36 180 € avec le top 10 % des cabinets dentaires FR</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-lab">Concentration hebdomadaire</div>
+                  <div class="tl-headline"><span class="big">Jeudi</span><span>· 38 % des no-shows</span></div>
+                  <div class="tl-sub">Signe d'une fragilité ciblée sur un jour à fort turnover</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-lab">Tendance 6 mois</div>
+                  <div class="tl-headline"><span class="big">+0,8 pt / mois</span><span>· situation qui s'aggrave</span></div>
+                  <div class="tl-sub">Projection à 12 mois &gt; 20 % sans intervention</div>
+                </div>
+                <div class="tl-item info">
+                  <div class="tl-lab">Taux observé</div>
+                  <div class="tl-headline"><span class="big">14,2 %</span><span>· vs 4 % moyenne sectorielle</span></div>
+                  <div class="tl-sub">Cabinet 3,5 × au-dessus de la moyenne nationale</div>
+                </div>
+              </div>
+
+              <div class="rx-verdict">
+                <div class="lab">Verdict chiffré</div>
+                <div class="v tabular">42 380 €</div>
+                <div class="txt">C'est ce que votre cabinet laisse sur la table chaque année. L'équivalent de 12 mois de salaire pour votre assistante dentaire.</div>
+              </div>
+            </div>
+
+            <div class="rx-section" style="margin-bottom: 0;">
+              <div class="lab">Prescription</div>
+              <div class="rx-rx">
+                <div class="line">Audit approfondi des process de rappel patient</div>
+                <div class="line">Mise en place d'un protocole de relance multi-canal</div>
+                <div class="line">Suivi mensuel du taux de no-show sur 3 mois</div>
+              </div>
+
+              <div class="rx-cta-block">
+                <div class="t">
+                  <h4>Discutons de la prescription — 30 min avec un expert</h4>
+                  <p>Zéro engagement · Vous ressortez avec un plan d'action même sans achat</p>
+                </div>
+                <button class="btn btn-primary">Réserver un RDV Calendly →</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="rx-footer">
+            <span>Signé · PerfIAmatic Audit Engine v2.0</span>
+            <span>Base 2 847 RDV · Benchmark dentistes FR 2025</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VARIANT F — Step 5 (A clean) + Step 6 (D verdict) as two sequential steps ═══ -->
+  <section class="variant" data-v="f">
+    <div class="page">
+      <div class="f-flow">
+
+        <!-- STEP 5 label -->
+        <div class="f-step-label">
+          <span class="idx">05 / 06</span>
+          <span>Score global</span>
+          <span class="line"></span>
+        </div>
+
+        <!-- STEP 5 : A clean (score + breakdown only, pas de CTA ici) -->
+        <div class="step-card-fake f-step5">
+          <span class="step-num">05</span>
+          <div class="eyebrow" style="color: var(--red);">Score global de votre cabinet</div>
+          <h2>Votre cabinet obtient <span class="serif" style="color: var(--red);">54 / 100</span>.</h2>
+          <p class="lede">Score partiel (volet Google non analysé). Ce score combine votre taux de no-show et votre présence Google. Il situe votre cabinet dans le tiers bas du marché dentaire français.</p>
+
+          <div class="ring-wrap">
+            <svg class="ring-big" viewBox="0 0 280 280">
+              <circle class="ring-track" cx="140" cy="140" r="115"/>
+              <circle class="ring-prog" cx="140" cy="140" r="115"
+                      stroke="#FF3B30"
+                      stroke-dasharray="722" stroke-dashoffset="332"/>
+              <text class="ring-val" x="140" y="152" fill="#1D1D1F">54</text>
+              <text class="ring-unit" x="140" y="178">/ 100</text>
+              <text class="ring-lab" x="140" y="216">Tiers bas</text>
+            </svg>
+            <div class="ring-meta">
+              <span class="pill alert">⚠ Score partiel — volet Google non analysé</span>
+            </div>
+          </div>
+
+          <div class="breakdown">
+            <div class="bd-item bad">
+              <span class="l">Volet no-shows</span>
+              <div class="n">40 <span class="muted" style="font-size: 14px;">/ 50</span></div>
+              <div class="s">Taux 14,2 % — tiers bas du marché</div>
+            </div>
+            <div class="bd-item">
+              <span class="l">Volet Google</span>
+              <div class="n">— <span class="muted" style="font-size: 14px;">/ 50</span></div>
+              <div class="s">Non analysé · <a href="#" style="color: var(--blue);">Lancer l'analyse</a></div>
+            </div>
+          </div>
+
+          <div class="f-nav">
+            <button class="btn btn-ghost">← Précédent</button>
+            <span class="pos">Section · Score global</span>
+            <button class="btn-next">Continuer →</button>
+          </div>
+        </div>
+
+        <!-- Arrow between steps -->
+        <div class="f-arrow">↓</div>
+
+        <!-- STEP 6 label -->
+        <div class="f-step-label">
+          <span class="idx">06 / 06</span>
+          <span>Action recommandée</span>
+          <span class="line"></span>
+        </div>
+
+        <!-- STEP 6 : Verdict card de D (CTA Calendly unique) -->
+        <div class="step-card-fake f-step6">
+          <div class="verdict-card" style="position: relative;">
+            <span class="step-num-outside">06</span>
+            <div class="lab">Action recommandée</div>
+            <h3>Vous avez vu le problème. Parlons maintenant de comment récupérer votre chiffre d'affaires.</h3>
+            <div class="big tabular">42 380 €</div>
+            <p>30 minutes avec un expert PerfIAmatic. Zéro engagement. Nous vous expliquons les 3 leviers concrets utilisés par les cabinets à 1,8 % de no-show.</p>
+            <button class="btn btn-primary">Réserver un RDV Calendly →</button>
+            <div class="reassure">⏱ Créneau sous 48h · 🔒 Conforme RGPD · 📎 Vous ressortez avec un plan d'action, même sans achat</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky CTA (visible only when variant D is active) -->
+  <div class="d-sticky-cta">
+    <span class="t">Discutons de <strong>comment récupérer ces 42 380 €</strong></span>
+    <button class="btn btn-primary">Réserver un RDV →</button>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.sketch-toolbar button[data-v]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = btn.dataset.v;
+      document.querySelectorAll('.sketch-toolbar button[data-v]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.variant').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelector(`.variant[data-v="${v}"]`).classList.add('active');
+      document.body.classList.toggle('d-active', v === 'd' || v === 'a');
+    });
+  });
+  // Variant A already shows sticky CTA on load (.sticky-cta); add body class to enable the scoped sticky for D.
+  if (document.querySelector('.variant[data-v="a"].active')) {
+    document.body.classList.add('d-active');
+  }
+</script>
+</body>
+</html>

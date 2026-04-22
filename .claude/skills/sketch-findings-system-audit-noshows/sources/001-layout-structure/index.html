@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sketch 001 — Layout structure</title>
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  /* Sketch-specific styles */
+  .page { max-width: 960px; margin: 0 auto; padding: var(--s7) var(--s5) var(--s9); }
+  .eyebrow { color: var(--text-tertiary); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+
+  /* ═══ Variant A — Scrollytelling vertical ═══ */
+  .scroll-hero { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; padding: var(--s8) 0; border-bottom: 1px solid var(--border); }
+  .scroll-hero .big-num { font-family: var(--font-serif); font-size: clamp(64px, 12vw, 140px); line-height: 0.95; color: var(--red); letter-spacing: -0.04em; font-weight: 500; }
+  .scroll-hero .caption { font-size: 22px; color: var(--text); margin-top: var(--s4); max-width: 600px; }
+  .scroll-section { padding: var(--s8) 0; border-bottom: 1px solid var(--border); }
+  .scroll-section h2 { font-size: 36px; margin: 0 0 var(--s5); }
+  .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4); margin-top: var(--s5); }
+  .kpi-row .card .n { font-family: var(--font-serif); font-size: 44px; font-weight: 500; line-height: 1; margin-top: var(--s2); }
+  .kpi-row .card .l { font-size: 13px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+
+  .bar-chart { margin-top: var(--s4); }
+  .bar-row { display: grid; grid-template-columns: 80px 1fr 60px; align-items: center; gap: var(--s3); padding: var(--s2) 0; }
+  .bar-row .day { font-size: 14px; color: var(--text-secondary); }
+  .bar-row .bar { height: 10px; background: var(--bg-subtle); border-radius: 999px; overflow: hidden; }
+  .bar-row .bar i { display: block; height: 100%; background: var(--blue); border-radius: 999px; transition: width 1s ease; }
+  .bar-row.high .bar i { background: var(--red); }
+  .bar-row .v { font-size: 13px; color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ═══ Variant B — Grille Apple Health ═══ */
+  .health-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--s4); }
+  .tile { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--s5); position: relative; overflow: hidden; }
+  .tile .eyebrow { display: block; }
+  .tile .n { font-family: var(--font-display); font-size: 34px; font-weight: 600; margin-top: var(--s3); line-height: 1; letter-spacing: -0.02em; }
+  .tile .sub { font-size: 13px; color: var(--text-secondary); margin-top: var(--s1); }
+  .tile .trend { position: absolute; top: var(--s4); right: var(--s4); font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--red-soft); color: var(--red); font-weight: 600; }
+  .tile.span-3 { grid-column: span 3; }
+  .tile.span-2 { grid-column: span 2; }
+  .tile.span-4 { grid-column: span 4; }
+  .tile.span-6 { grid-column: span 6; }
+  .tile.dark { background: var(--text); color: white; }
+  .tile.dark .n { color: white; }
+  .tile.dark .sub, .tile.dark .eyebrow { color: rgba(255,255,255,0.6); }
+  .tile.hero-tile .n { font-family: var(--font-serif); font-size: 72px; color: var(--red); font-weight: 500; }
+  .ring { width: 120px; height: 120px; margin: var(--s3) auto 0; }
+  .ring-bg { fill: none; stroke: var(--bg-subtle); stroke-width: 12; }
+  .ring-fg { fill: none; stroke: var(--blue); stroke-width: 12; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 60px 60px; }
+  .ring-text { font-family: var(--font-display); font-size: 26px; font-weight: 600; text-anchor: middle; }
+  @media (max-width: 720px) {
+    .health-grid { grid-template-columns: repeat(2, 1fr); }
+    .tile.span-3, .tile.span-2, .tile.span-4, .tile.span-6 { grid-column: span 2; }
+  }
+
+  /* ═══ Variant C — Stepped reveal ═══ */
+  .stepper { display: flex; gap: var(--s2); margin: var(--s5) 0 var(--s6); }
+  .step-dot { flex: 1; height: 4px; background: var(--bg-subtle); border-radius: 999px; position: relative; }
+  .step-dot.done { background: var(--blue); }
+  .step-dot.current { background: var(--blue); }
+  .step-dot.current::after { content: ""; position: absolute; inset: -4px; border: 2px solid var(--blue); border-radius: 999px; }
+  .step-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--s7); min-height: 500px; position: relative; }
+  .step-card .step-num { position: absolute; top: var(--s5); right: var(--s5); font-family: var(--font-serif); font-size: 56px; color: var(--text-tertiary); font-weight: 500; opacity: 0.4; }
+  .step-card h2 { font-size: 32px; margin: 0 0 var(--s2); }
+  .step-card .lede { font-size: 18px; color: var(--text-secondary); margin-bottom: var(--s6); max-width: 560px; }
+  .step-nav { display: flex; justify-content: space-between; align-items: center; margin-top: var(--s7); padding-top: var(--s5); border-top: 1px solid var(--border); }
+  .step-nav .pos { color: var(--text-tertiary); font-size: 14px; }
+  .step-big { font-family: var(--font-serif); font-size: 96px; color: var(--red); font-weight: 500; line-height: 1; letter-spacing: -0.03em; }
+
+  /* Step graphs */
+  .step-graph { margin-top: var(--s5); }
+  .donut-wrap { display: flex; align-items: center; gap: var(--s7); margin-top: var(--s5); flex-wrap: wrap; }
+  .donut { width: 180px; height: 180px; flex-shrink: 0; }
+  .donut-bg { fill: none; stroke: var(--bg-subtle); stroke-width: 16; }
+  .donut-fg { fill: none; stroke-width: 16; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 90px 90px; }
+  .donut-text { font-family: var(--font-display); font-size: 36px; font-weight: 600; text-anchor: middle; }
+  .donut-sub { font-size: 12px; text-anchor: middle; fill: var(--text-tertiary); }
+  .legend { display: grid; gap: var(--s3); flex: 1; min-width: 220px; }
+  .legend-row { display: flex; align-items: center; gap: var(--s3); padding: var(--s3) 0; border-bottom: 1px solid var(--border); }
+  .legend-row:last-child { border-bottom: none; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .legend-label { flex: 1; font-size: 14px; color: var(--text-secondary); }
+  .legend-value { font-family: var(--font-serif); font-size: 22px; color: var(--text); font-variant-numeric: tabular-nums; }
+
+  /* Line sparkline */
+  .line-chart { width: 100%; height: 160px; margin-top: var(--s4); }
+  .line-grid { stroke: var(--border); stroke-dasharray: 2 4; }
+  .line-path { fill: none; stroke: var(--red); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .line-area { fill: url(#redGradient); opacity: 0.15; }
+  .line-dot { fill: var(--red); }
+
+  /* Score gauge big */
+  .gauge-big { width: 280px; height: 160px; margin: var(--s4) auto 0; display: block; }
+  .gauge-track { fill: none; stroke: var(--bg-subtle); stroke-width: 22; stroke-linecap: round; }
+  .gauge-fill { fill: none; stroke-width: 22; stroke-linecap: round; }
+  .gauge-val { font-family: var(--font-display); font-size: 54px; font-weight: 600; text-anchor: middle; letter-spacing: -0.02em; }
+  .gauge-sub { font-size: 13px; text-anchor: middle; fill: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+  /* Money animated build */
+  .money-stack { margin-top: var(--s5); display: grid; gap: var(--s3); max-width: 520px; }
+  .money-row { display: grid; grid-template-columns: 1fr auto; gap: var(--s3); padding: var(--s3) var(--s4); background: var(--bg-subtle); border-radius: var(--radius-sm); font-size: 14px; }
+  .money-row.total { background: var(--red-soft); color: var(--red); font-weight: 600; font-size: 18px; padding: var(--s4); border: 1px solid var(--red); }
+  .money-row .lab { color: var(--text-secondary); }
+  .money-row .val { font-family: var(--font-serif); font-variant-numeric: tabular-nums; color: var(--text); }
+  .money-row.total .val { color: var(--red); }
+
+  .cta-footer { margin-top: var(--s8); padding: var(--s7); background: var(--text); color: white; border-radius: var(--radius-lg); text-align: center; }
+  .cta-footer h3 { color: white; font-size: 28px; margin: 0 0 var(--s3); }
+  .cta-footer p { color: rgba(255,255,255,0.7); margin: 0 0 var(--s5); }
+  .cta-footer .btn-primary { background: white; color: var(--text); }
+  .cta-footer .btn-primary:hover { background: var(--bg-subtle); }
+</style>
+</head>
+<body>
+
+<!-- Sketch toolbar -->
+<div class="sketch-toolbar">
+  <strong>Sketch 001</strong>
+  <span class="tertiary">Layout structure for audit results page</span>
+  <div class="tabs">
+    <button data-v="a" class="active">A · Scrollytelling</button>
+    <button data-v="b">B · Grille Apple Health</button>
+    <button data-v="c" class="winner">C · Stepped reveal</button>
+  </div>
+</div>
+
+<div class="sketch-body">
+
+  <!-- ═══════════ VARIANT A — Scrollytelling vertical ═══════════ -->
+  <section class="variant active" data-v="a">
+    <div class="page">
+      <div class="eyebrow">Cabinet Dr. Durand · Rapport d'audit</div>
+
+      <div class="scroll-hero">
+        <div class="eyebrow" style="color: var(--red);">Revenus perdus sur 12 mois</div>
+        <div class="big-num tabular">42 380 €</div>
+        <p class="caption muted">C'est le chiffre d'affaires que votre cabinet laisse sur la table chaque année à cause des rendez-vous non honorés. Scrollez pour comprendre pourquoi.</p>
+      </div>
+
+      <div class="scroll-section">
+        <div class="eyebrow">Indicateurs clés</div>
+        <h2>Votre cabinet en 3 chiffres.</h2>
+        <div class="kpi-row">
+          <div class="card"><span class="l">Taux de no-show</span><div class="n serif" style="color: var(--red);">14,2 %</div><span class="muted" style="font-size:13px;">Moyenne sectorielle : 4 %</span></div>
+          <div class="card"><span class="l">Créneaux perdus / sem.</span><div class="n serif">18</div><span class="muted" style="font-size:13px;">≈ 2,5 jours de travail</span></div>
+          <div class="card"><span class="l">CA perdu / mois</span><div class="n serif" style="color: var(--red);">3 530 €</div><span class="muted" style="font-size:13px;">Soit 52 × ce montant / an</span></div>
+        </div>
+      </div>
+
+      <div class="scroll-section">
+        <div class="eyebrow">Répartition</div>
+        <h2>Le jeudi concentre 38 % de vos no-shows.</h2>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="day">Lundi</div><div class="bar"><i style="width: 22%;"></i></div><div class="v">7</div></div>
+          <div class="bar-row"><div class="day">Mardi</div><div class="bar"><i style="width: 31%;"></i></div><div class="v">10</div></div>
+          <div class="bar-row"><div class="day">Mercredi</div><div class="bar"><i style="width: 28%;"></i></div><div class="v">9</div></div>
+          <div class="bar-row high"><div class="day">Jeudi</div><div class="bar"><i style="width: 100%;"></i></div><div class="v">32</div></div>
+          <div class="bar-row"><div class="day">Vendredi</div><div class="bar"><i style="width: 47%;"></i></div><div class="v">15</div></div>
+          <div class="bar-row"><div class="day">Samedi</div><div class="bar"><i style="width: 12%;"></i></div><div class="v">4</div></div>
+        </div>
+      </div>
+
+      <div class="scroll-section">
+        <div class="eyebrow">Score global</div>
+        <h2>Votre cabinet obtient <span style="color: var(--red);">54 / 100</span>.</h2>
+        <p class="muted" style="max-width: 560px;">Ce score combine votre taux de no-show et la qualité de votre présence Google. Il situe votre cabinet dans le tiers bas du marché dentaire français.</p>
+      </div>
+
+      <div class="cta-footer">
+        <h3>Vous avez vu le problème. Discutons de la solution.</h3>
+        <p>30 minutes avec un expert PerfIAmatic · Zéro engagement</p>
+        <button class="btn btn-primary">Réserver un RDV →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ VARIANT B — Grille Apple Health ═══════════ -->
+  <section class="variant" data-v="b">
+    <div class="page">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--s5);">
+        <div>
+          <div class="eyebrow">Rapport d'audit · 22 avril 2026</div>
+          <h1 style="margin: 4px 0 0; font-size: 32px;">Dr. Durand — Cabinet dentaire</h1>
+        </div>
+        <button class="btn btn-ghost">⤓ Télécharger PDF</button>
+      </div>
+
+      <div class="health-grid">
+        <!-- Hero tile (full width) -->
+        <div class="tile hero-tile span-6" style="padding: var(--s7);">
+          <span class="eyebrow" style="color: var(--red);">Revenus perdus sur 12 mois</span>
+          <div class="n tabular">42 380 €</div>
+          <p class="sub" style="font-size: 15px; margin-top: var(--s3); max-width: 520px;">Estimation basée sur vos 2 847 rendez-vous analysés sur les 6 derniers mois. Annualisée à partir de votre historique réel.</p>
+        </div>
+
+        <!-- Row 1: 3 KPI tiles -->
+        <div class="tile span-2">
+          <span class="eyebrow">Taux no-show</span>
+          <span class="trend">× 3,5</span>
+          <div class="n tabular" style="color: var(--red);">14,2 <span style="font-size: 20px; color: var(--text-tertiary);">%</span></div>
+          <p class="sub">vs 4 % moyenne sectorielle</p>
+        </div>
+        <div class="tile span-2">
+          <span class="eyebrow">Créneaux perdus / semaine</span>
+          <div class="n tabular">18</div>
+          <p class="sub">≈ 2,5 jours de travail</p>
+        </div>
+        <div class="tile span-2">
+          <span class="eyebrow">Pic hebdomadaire</span>
+          <div class="n">Jeudi</div>
+          <p class="sub">38 % des no-shows concentrés</p>
+        </div>
+
+        <!-- Row 2: Score ring + breakdown -->
+        <div class="tile span-2" style="text-align: center;">
+          <span class="eyebrow">Score global</span>
+          <svg class="ring" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="48"/>
+            <circle class="ring-fg" cx="60" cy="60" r="48" stroke-dasharray="301.6" stroke-dashoffset="139" stroke="#FF3B30"/>
+            <text class="ring-text" x="60" y="68" fill="#1D1D1F">54</text>
+          </svg>
+          <p class="sub">/100 · Tiers bas</p>
+        </div>
+        <div class="tile span-4">
+          <span class="eyebrow">Répartition par jour</span>
+          <div class="bar-chart" style="margin-top: var(--s3);">
+            <div class="bar-row"><div class="day">Lun</div><div class="bar"><i style="width: 22%;"></i></div><div class="v">7</div></div>
+            <div class="bar-row"><div class="day">Mar</div><div class="bar"><i style="width: 31%;"></i></div><div class="v">10</div></div>
+            <div class="bar-row"><div class="day">Mer</div><div class="bar"><i style="width: 28%;"></i></div><div class="v">9</div></div>
+            <div class="bar-row high"><div class="day">Jeu</div><div class="bar"><i style="width: 100%;"></i></div><div class="v">32</div></div>
+            <div class="bar-row"><div class="day">Ven</div><div class="bar"><i style="width: 47%;"></i></div><div class="v">15</div></div>
+          </div>
+        </div>
+
+        <!-- Google block (optional / collapsed state) -->
+        <div class="tile span-6" style="border-style: dashed; background: transparent; text-align: center;">
+          <span class="eyebrow">Diagnostic Google · optionnel</span>
+          <p style="margin: var(--s3) 0;">Analyser aussi votre présence Google pour compléter le score ?</p>
+          <button class="btn btn-ghost" style="border: 1px solid var(--border);">+ Lancer le diagnostic Google</button>
+        </div>
+
+        <!-- CTA tile (full width, dark) -->
+        <div class="tile dark span-6" style="text-align: center; padding: var(--s7);">
+          <span class="eyebrow">Action recommandée</span>
+          <h3 style="color: white; font-size: 26px; margin: var(--s3) 0;">Discutons de comment récupérer ces 42 380 €</h3>
+          <p class="sub" style="margin-bottom: var(--s5);">30 minutes avec un expert PerfIAmatic</p>
+          <button class="btn btn-primary" style="background: white; color: var(--text);">Réserver un RDV →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ VARIANT C — Stepped reveal ═══════════ -->
+  <section class="variant" data-v="c">
+    <div class="page" style="max-width: 840px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="eyebrow">Cabinet Dr. Durand · Rapport d'audit</div>
+        <span class="tertiary" style="font-size: 13px;">Étape <strong id="step-cur" style="color: var(--text);">2</strong> / 5</span>
+      </div>
+
+      <div class="stepper">
+        <div class="step-dot done" data-step="1"></div>
+        <div class="step-dot current" data-step="2"></div>
+        <div class="step-dot" data-step="3"></div>
+        <div class="step-dot" data-step="4"></div>
+        <div class="step-dot" data-step="5"></div>
+      </div>
+
+      <div class="step-card" id="step-content">
+        <span class="step-num">02</span>
+        <div class="eyebrow" style="color: var(--red);">Détail des no-shows</div>
+        <h2>Votre cabinet perd <span class="serif" style="color: var(--red);">42 380 €</span> chaque année.</h2>
+        <p class="lede">Ce chiffre correspond aux créneaux laissés vides par des patients qui ne sont pas venus et n'ont pas prévenu. Il combine votre taux de no-show réel, votre volume de RDV, et un tarif moyen de 150 € par créneau.</p>
+
+        <div class="bar-chart" style="max-width: 560px;">
+          <div class="bar-row"><div class="day">Lun</div><div class="bar"><i style="width: 22%;"></i></div><div class="v">7</div></div>
+          <div class="bar-row"><div class="day">Mar</div><div class="bar"><i style="width: 31%;"></i></div><div class="v">10</div></div>
+          <div class="bar-row"><div class="day">Mer</div><div class="bar"><i style="width: 28%;"></i></div><div class="v">9</div></div>
+          <div class="bar-row high"><div class="day">Jeu</div><div class="bar"><i style="width: 100%;"></i></div><div class="v">32</div></div>
+          <div class="bar-row"><div class="day">Ven</div><div class="bar"><i style="width: 47%;"></i></div><div class="v">15</div></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost" id="prev">← Précédent</button>
+          <span class="pos">Section · Détail no-shows</span>
+          <button class="btn btn-primary" id="next">Continuer →</button>
+        </div>
+      </div>
+
+      <p class="muted" style="text-align: center; margin-top: var(--s5); font-size: 13px;">5 sections · ~2 minutes de lecture</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.sketch-toolbar button[data-v]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = btn.dataset.v;
+      document.querySelectorAll('.sketch-toolbar button[data-v]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.variant').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelector(`.variant[data-v="${v}"]`).classList.add('active');
+    });
+  });
+
+  // Variant C step navigation — each step includes a contextual graph
+  const graphs = {
+    synthese: `
+      <div class="step-graph">
+        <div class="donut-wrap">
+          <svg class="donut" viewBox="0 0 180 180">
+            <circle class="donut-bg" cx="90" cy="90" r="72"/>
+            <circle class="donut-fg" cx="90" cy="90" r="72" stroke-dasharray="452" stroke-dashoffset="388" stroke="#FF3B30"/>
+            <text class="donut-text" x="90" y="92" fill="#1D1D1F">14,2%</text>
+            <text class="donut-sub" x="90" y="112">Taux no-show</text>
+          </svg>
+          <div class="legend">
+            <div class="legend-row"><span class="legend-swatch" style="background: var(--red);"></span><span class="legend-label">Votre cabinet</span><span class="legend-value">14,2 %</span></div>
+            <div class="legend-row"><span class="legend-swatch" style="background: var(--green);"></span><span class="legend-label">Moyenne sectorielle</span><span class="legend-value">4,0 %</span></div>
+            <div class="legend-row"><span class="legend-swatch" style="background: var(--blue);"></span><span class="legend-label">Top 10 % cabinets</span><span class="legend-value">1,8 %</span></div>
+          </div>
+        </div>
+      </div>
+    `,
+    money: `
+      <div class="step-graph">
+        <div class="money-stack">
+          <div class="money-row"><span class="lab">Créneaux perdus / mois</span><span class="val">78</span></div>
+          <div class="money-row"><span class="lab">× Tarif moyen par créneau</span><span class="val">150 €</span></div>
+          <div class="money-row"><span class="lab">= Perte mensuelle</span><span class="val">3 530 €</span></div>
+          <div class="money-row total"><span class="lab">Perte annualisée</span><span class="val">42 380 €</span></div>
+        </div>
+      </div>
+    `,
+    bars: `
+      <div class="step-graph">
+        <div class="bar-chart" style="max-width: 560px;">
+          <div class="bar-row"><div class="day">Lundi</div><div class="bar"><i style="width: 22%;"></i></div><div class="v">7</div></div>
+          <div class="bar-row"><div class="day">Mardi</div><div class="bar"><i style="width: 31%;"></i></div><div class="v">10</div></div>
+          <div class="bar-row"><div class="day">Mercredi</div><div class="bar"><i style="width: 28%;"></i></div><div class="v">9</div></div>
+          <div class="bar-row high"><div class="day">Jeudi</div><div class="bar"><i style="width: 100%;"></i></div><div class="v">32</div></div>
+          <div class="bar-row"><div class="day">Vendredi</div><div class="bar"><i style="width: 47%;"></i></div><div class="v">15</div></div>
+          <div class="bar-row"><div class="day">Samedi</div><div class="bar"><i style="width: 12%;"></i></div><div class="v">4</div></div>
+        </div>
+      </div>
+    `,
+    trend: `
+      <div class="step-graph">
+        <svg class="line-chart" viewBox="0 0 600 160" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="redGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FF3B30"/>
+              <stop offset="100%" stop-color="#FF3B30" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <line class="line-grid" x1="0" y1="40" x2="600" y2="40"/>
+          <line class="line-grid" x1="0" y1="80" x2="600" y2="80"/>
+          <line class="line-grid" x1="0" y1="120" x2="600" y2="120"/>
+          <path class="line-area" d="M0,120 L100,110 L200,90 L300,70 L400,60 L500,40 L600,30 L600,160 L0,160 Z"/>
+          <path class="line-path" d="M0,120 L100,110 L200,90 L300,70 L400,60 L500,40 L600,30"/>
+          <circle class="line-dot" cx="0" cy="120" r="4"/>
+          <circle class="line-dot" cx="100" cy="110" r="4"/>
+          <circle class="line-dot" cx="200" cy="90" r="4"/>
+          <circle class="line-dot" cx="300" cy="70" r="4"/>
+          <circle class="line-dot" cx="400" cy="60" r="4"/>
+          <circle class="line-dot" cx="500" cy="40" r="4"/>
+          <circle class="line-dot" cx="600" cy="30" r="5"/>
+        </svg>
+        <div style="display: flex; justify-content: space-between; max-width: 100%; margin-top: var(--s2); font-size: 12px; color: var(--text-tertiary);">
+          <span>Nov</span><span>Déc</span><span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span>
+        </div>
+        <p class="muted" style="margin-top: var(--s4); font-size: 14px;">Tendance sur 6 mois — votre taux de no-show augmente de 0,8 pt/mois.</p>
+      </div>
+    `,
+    score: `
+      <div class="step-graph" style="text-align: center;">
+        <svg class="gauge-big" viewBox="0 0 280 160">
+          <path class="gauge-track" d="M 30 140 A 110 110 0 0 1 250 140"/>
+          <path class="gauge-fill" d="M 30 140 A 110 110 0 0 1 250 140"
+                stroke="#FF3B30"
+                stroke-dasharray="345.6" stroke-dashoffset="159"/>
+          <text class="gauge-val" x="140" y="118" fill="#FF3B30">54</text>
+          <text class="gauge-sub" x="140" y="150">Sur 100 · Tiers bas</text>
+        </svg>
+        <div style="display: flex; justify-content: space-between; max-width: 280px; margin: var(--s3) auto 0; font-size: 12px; color: var(--text-tertiary);">
+          <span>0</span><span>50</span><span>100</span>
+        </div>
+        <div class="legend" style="max-width: 400px; margin: var(--s5) auto 0;">
+          <div class="legend-row"><span class="legend-swatch" style="background: var(--red);"></span><span class="legend-label">Volet no-shows (40/50)</span><span class="legend-value">40</span></div>
+          <div class="legend-row"><span class="legend-swatch" style="background: var(--border-strong);"></span><span class="legend-label">Volet Google (non analysé)</span><span class="legend-value">— /50</span></div>
+        </div>
+      </div>
+    `,
+  };
+
+  const steps = [
+    { num: '01', eyebrow: 'Synthèse', h: 'Bienvenue, Dr. Durand.', p: "Nous avons analysé 2 847 rendez-vous de votre cabinet sur les 6 derniers mois. Voici comment votre taux de no-show se situe face au marché dentaire français.", color: 'var(--blue)', graph: 'synthese' },
+    { num: '02', eyebrow: 'Détail des no-shows', h: 'Votre cabinet perd <span class="serif" style="color:var(--red);">42 380 €</span> chaque année.', p: "Le calcul, ligne à ligne, à partir de votre propre CSV. Pas d'estimation au doigt mouillé — votre historique réel annualisé.", color: 'var(--red)', graph: 'money' },
+    { num: '03', eyebrow: 'Répartition hebdomadaire', h: "Le jeudi concentre <span class='serif'>38 %</span> de vos no-shows.", p: "Un jour à fort turnover mérite une stratégie de rappel spécifique. Vos autres jours sont proches de la moyenne sectorielle.", color: 'var(--orange)', graph: 'bars' },
+    { num: '04', eyebrow: 'Tendance 6 mois', h: "La situation <span style='color:var(--red);'>s'aggrave</span> depuis novembre.", p: "Votre taux de no-show a augmenté de 0,8 point par mois sur les 6 derniers mois. Sans intervention, la projection à 12 mois dépasse 20 %.", color: 'var(--red)', graph: 'trend' },
+    { num: '05', eyebrow: 'Score global', h: 'Votre cabinet obtient <span class="serif" style="color:var(--red);">54 / 100</span>.', p: "Score partiel — le volet Google n'a pas été analysé. Ajoutez votre cabinet sur la page suivante pour obtenir votre score complet.", color: 'var(--red)', graph: 'score' },
+    { num: '06', eyebrow: 'Action recommandée', h: 'Discutons de comment récupérer ces <span class="serif" style="color:var(--red);">42 380 €</span>.', p: "30 minutes avec un expert PerfIAmatic. Zéro engagement. Nous vous expliquons les 3 leviers concrets pour diviser votre taux de no-show par 3.", color: 'var(--blue)', cta: true },
+  ];
+
+  // Rebuild stepper to match new count
+  const stepper = document.querySelector('.variant[data-v="c"] .stepper');
+  if (stepper) {
+    stepper.innerHTML = steps.map((_, i) => `<div class="step-dot" data-step="${i + 1}"></div>`).join('');
+  }
+
+  let cur = 1;
+  function render() {
+    const s = steps[cur];
+    const html = `
+      <span class="step-num">${s.num}</span>
+      <div class="eyebrow" style="color: ${s.color};">${s.eyebrow}</div>
+      <h2>${s.h}</h2>
+      <p class="lede">${s.p}</p>
+      ${s.graph ? graphs[s.graph] : ''}
+      ${s.cta ? `<button class="btn btn-primary" style="font-size: 16px; padding: 16px 28px; margin-top: var(--s5);">Réserver un RDV Calendly →</button>` : ''}
+      <div class="step-nav">
+        <button class="btn btn-ghost" id="prev" ${cur === 0 ? 'disabled' : ''}>← Précédent</button>
+        <span class="pos">Section · ${s.eyebrow}</span>
+        <button class="btn btn-primary" id="next" ${cur === steps.length - 1 ? 'style="display:none"' : ''}>Continuer →</button>
+      </div>
+    `;
+    document.getElementById('step-content').innerHTML = html;
+    const stepCur = document.getElementById('step-cur');
+    if (stepCur) stepCur.textContent = cur + 1;
+    const stepTotal = document.querySelector('.variant[data-v="c"] .eyebrow + span strong + *');
+    document.querySelectorAll('.variant[data-v="c"] .step-dot').forEach((d, i) => {
+      d.classList.remove('done', 'current');
+      if (i < cur) d.classList.add('done');
+      if (i === cur) d.classList.add('current');
+    });
+    const nextBtn = document.getElementById('next');
+    const prevBtn = document.getElementById('prev');
+    if (nextBtn) nextBtn.addEventListener('click', () => { if (cur < steps.length - 1) { cur++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+    if (prevBtn) prevBtn.addEventListener('click', () => { if (cur > 0) { cur--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+  }
+  render();
+
+  // Update total step count in header
+  const totalLabel = document.querySelector('.variant[data-v="c"] .eyebrow + span');
+  if (totalLabel) totalLabel.innerHTML = `Étape <strong id="step-cur" style="color: var(--text);">2</strong> / ${steps.length}`;
+</script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sketch 002 — Hero KPI</title>
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  .page { max-width: 960px; margin: 0 auto; padding: var(--s7) var(--s5); }
+  .eyebrow { color: var(--text-tertiary); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+  .step-card-fake {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: var(--s7); min-height: 560px; position: relative;
+  }
+  .step-card-fake .step-num { position: absolute; top: var(--s5); right: var(--s5); font-family: var(--font-serif); font-size: 56px; color: var(--text-tertiary); font-weight: 500; opacity: 0.4; }
+  h2 { font-size: 32px; margin: 0 0 var(--s3); }
+  .lede { font-size: 17px; color: var(--text-secondary); max-width: 560px; margin: 0 0 var(--s6); }
+  .note { margin-top: var(--s7); padding-top: var(--s5); border-top: 1px solid var(--border); color: var(--text-tertiary); font-size: 13px; }
+
+  /* ═══ Variant A — Money build empilé ═══ */
+  .money-stack { display: grid; gap: var(--s3); max-width: 560px; }
+  .money-row { display: grid; grid-template-columns: 1fr auto; gap: var(--s3); padding: var(--s4); background: var(--bg-subtle); border-radius: var(--radius-sm); font-size: 15px; align-items: center; animation: slideIn 0.5s ease both; }
+  .money-row:nth-child(1) { animation-delay: 0.1s; }
+  .money-row:nth-child(2) { animation-delay: 0.4s; }
+  .money-row:nth-child(3) { animation-delay: 0.7s; }
+  .money-row.total { background: var(--red-soft); color: var(--red); font-weight: 600; font-size: 20px; padding: var(--s5); border: 1.5px solid var(--red); animation-delay: 1.1s; }
+  .money-row .lab { color: var(--text-secondary); }
+  .money-row .val { font-family: var(--font-serif); font-variant-numeric: tabular-nums; color: var(--text); font-size: 22px; }
+  .money-row.total .lab { color: var(--red); }
+  .money-row.total .val { color: var(--red); font-size: 32px; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ═══ Variant B — Compteur animé + contre-scénario ═══ */
+  .counter-wrap { text-align: center; padding: var(--s7) 0 var(--s5); }
+  .counter-label { color: var(--text-tertiary); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: var(--s4); }
+  .counter { font-family: var(--font-serif); font-size: clamp(80px, 14vw, 160px); line-height: 1; color: var(--red); font-weight: 500; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .counter-cursor { display: inline-block; width: 4px; height: 0.9em; background: var(--red); animation: blink 1s infinite; vertical-align: baseline; margin-left: 4px; }
+  @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+  .counter-unit { font-family: var(--font-display); font-size: 48px; color: var(--red); margin-left: 8px; font-weight: 500; }
+  .counter-sub { color: var(--text-secondary); font-size: 16px; max-width: 560px; margin: var(--s4) auto 0; }
+
+  .equivalents { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s3); margin-top: var(--s7); }
+  .equiv { padding: var(--s5); background: var(--bg-subtle); border-radius: var(--radius); text-align: center; border: 1px solid transparent; transition: all 0.2s ease; }
+  .equiv:hover { background: var(--bg-elevated); border-color: var(--border); transform: translateY(-2px); }
+  .equiv .emoji { font-size: 28px; margin-bottom: var(--s2); display: block; }
+  .equiv .big { font-family: var(--font-serif); font-size: 26px; color: var(--text); font-weight: 500; }
+  .equiv .lab { color: var(--text-secondary); font-size: 13px; margin-top: var(--s2); line-height: 1.4; }
+  @media (max-width: 720px) {
+    .equivalents { grid-template-columns: 1fr; }
+  }
+
+  /* ═══ Variant C — Split-screen comparatif ═══ */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); margin-top: var(--s5); }
+  .split-col { padding: var(--s7) var(--s5); min-height: 360px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+  .split-col.yours { background: var(--red-soft); }
+  .split-col.benchmark { background: var(--bg-subtle); border-left: 1px solid var(--border); }
+  .split-lab { color: var(--text-tertiary); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: var(--s3); }
+  .split-col.yours .split-lab { color: var(--red); }
+  .split-big { font-family: var(--font-serif); font-size: clamp(44px, 7vw, 76px); line-height: 1; color: var(--text); font-weight: 500; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .split-col.yours .split-big { color: var(--red); }
+  .split-sub { margin-top: var(--s3); color: var(--text-secondary); font-size: 15px; }
+  .split-vs {
+    position: absolute; left: 100%; top: 50%; transform: translate(-50%, -50%);
+    background: var(--text); color: white; width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px;
+    letter-spacing: 0.05em; z-index: 2;
+  }
+  .gap-card {
+    margin-top: var(--s5); padding: var(--s5);
+    background: var(--text); color: white; border-radius: var(--radius);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--s3);
+  }
+  .gap-card .lab { color: rgba(255,255,255,0.7); font-size: 14px; }
+  .gap-card .val { font-family: var(--font-serif); font-size: 40px; color: var(--red); font-weight: 500; }
+  @media (max-width: 720px) {
+    .split { grid-template-columns: 1fr; }
+    .split-col.benchmark { border-left: none; border-top: 1px solid var(--border); }
+    .split-vs { top: 100%; left: 50%; }
+  }
+
+  /* ═══ Variant D — Side-by-side reveal ═══ */
+  .page-d { max-width: 1180px; padding: var(--s5) var(--s5); }
+  .d-card { min-height: 0; padding: var(--s6) var(--s6) var(--s5); }
+  .d-title { font-size: 28px; margin: 0 0 var(--s5); }
+
+  .d-stage {
+    display: grid; grid-template-columns: 1fr 0fr;
+    gap: 0; align-items: stretch;
+    transition: grid-template-columns 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative; min-height: 320px;
+  }
+  .d-stage.revealed { grid-template-columns: 1fr 1fr; }
+  .d-pane { min-width: 0; transition: opacity 0.5s ease; }
+  .d-left { padding-right: var(--s6); }
+  .d-right {
+    opacity: 0; pointer-events: none; overflow: hidden;
+    padding-left: var(--s6); border-left: 1px solid var(--border);
+  }
+  .d-stage.revealed .d-right { opacity: 1; pointer-events: auto; transition-delay: 0.3s; }
+
+  .d-money .money-row { padding: var(--s3) var(--s4); font-size: 14px; }
+  .d-money .money-row .val { font-size: 18px; }
+  .d-money .money-row.total { padding: var(--s4); font-size: 16px; }
+  .d-money .money-row.total .val { font-size: 26px; }
+
+  /* Reveal button — centered on the divider */
+  .d-reveal {
+    position: absolute; top: 50%; left: 100%;
+    transform: translate(-50%, -50%);
+    background: var(--text); color: white; border: none;
+    padding: 12px 20px 12px 22px; border-radius: 999px;
+    font: inherit; font-weight: 500; cursor: pointer;
+    display: inline-flex; align-items: center; gap: var(--s3);
+    box-shadow: var(--shadow-lg); z-index: 3;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  .d-reveal:hover { background: var(--blue); transform: translate(-50%, -50%) scale(1.03); }
+  .d-reveal-arrow {
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    font-size: 18px;
+  }
+  .d-stage.revealed .d-reveal {
+    top: 100%; left: 50%;
+    padding: 8px 16px;
+    background: var(--bg-subtle); color: var(--text-secondary);
+    box-shadow: var(--shadow-sm);
+    font-size: 13px;
+  }
+  .d-stage.revealed .d-reveal-arrow { transform: rotate(180deg); }
+  .d-stage.revealed .d-reveal-label::before { content: "Masquer — "; }
+  .d-stage.revealed .d-reveal-label-initial { display: none; }
+
+  /* Right pane content (C, compact) */
+  .d-compare { display: grid; gap: var(--s3); }
+  .d-row {
+    padding: var(--s4); border-radius: var(--radius-sm);
+    display: grid; grid-template-columns: 1fr auto; gap: var(--s3); align-items: center;
+  }
+  .d-row-yours { background: var(--red-soft); border: 1px solid rgba(255,59,48,0.2); }
+  .d-row-bench { background: var(--bg-subtle); }
+  .d-row-lab { font-size: 12px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; grid-column: 1; }
+  .d-row-yours .d-row-lab { color: var(--red); }
+  .d-row-val { font-size: 30px; font-weight: 500; grid-column: 2; grid-row: 1 / span 2; color: var(--text); letter-spacing: -0.02em; }
+  .d-row-yours .d-row-val { color: var(--red); }
+  .d-row-sub { font-size: 12px; color: var(--text-secondary); grid-column: 1; }
+
+  .d-gap {
+    margin-top: var(--s2); padding: var(--s4);
+    background: var(--text); color: white; border-radius: var(--radius-sm);
+    display: grid; grid-template-columns: 1fr auto; gap: var(--s3); align-items: center;
+  }
+  .d-gap-lab { color: rgba(255,255,255,0.7); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+  .d-gap-sub { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 4px; }
+  .d-gap-val { color: var(--red); font-size: 28px; font-weight: 500; letter-spacing: -0.02em; }
+
+  .d-note { margin-top: var(--s5); padding-top: var(--s3); }
+
+  /* Animate right pane content on reveal */
+  .d-stage.revealed .d-row { animation: dSlide 0.5s both; }
+  .d-stage.revealed .d-row-yours { animation-delay: 0.4s; }
+  .d-stage.revealed .d-row-bench { animation-delay: 0.55s; }
+  .d-stage.revealed .d-gap { animation: dSlide 0.5s 0.8s both; }
+  @keyframes dSlide { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+
+  @media (max-width: 860px) {
+    .d-stage, .d-stage.revealed { grid-template-columns: 1fr; }
+    .d-left { padding-right: 0; padding-bottom: var(--s5); }
+    .d-right { padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: var(--s5); max-height: 0; }
+    .d-stage.revealed .d-right { max-height: 1000px; transition: max-height 0.6s ease, opacity 0.4s ease; }
+    .d-reveal { position: static; transform: none; margin: var(--s4) auto 0; display: flex; }
+    .d-stage.revealed .d-reveal { position: static; transform: none; margin: var(--s4) auto 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sketch-toolbar">
+  <strong>Sketch 002</strong>
+  <span class="tertiary">Hero KPI — le chiffre qui fait mal</span>
+  <div class="tabs">
+    <button data-v="a" class="active">A · Money build</button>
+    <button data-v="b">B · Compteur + équivalents</button>
+    <button data-v="c">C · Split comparatif</button>
+    <button data-v="d">D · A + C combinés ★</button>
+  </div>
+</div>
+
+<div class="sketch-body">
+
+  <!-- ═══ VARIANT A — Money build empilé ═══ -->
+  <section class="variant active" data-v="a">
+    <div class="page">
+      <div class="step-card-fake">
+        <span class="step-num">02</span>
+        <div class="eyebrow" style="color: var(--red);">Détail des no-shows</div>
+        <h2>Votre cabinet perd <span class="serif" style="color:var(--red);">42 380 €</span> chaque année.</h2>
+        <p class="lede">Le calcul, ligne à ligne, à partir de votre propre CSV. Pas d'estimation au doigt mouillé — votre historique réel annualisé.</p>
+
+        <div class="money-stack">
+          <div class="money-row"><span class="lab">Créneaux perdus / mois (moyenne sur 6 mois)</span><span class="val">78</span></div>
+          <div class="money-row"><span class="lab">× Tarif moyen par créneau</span><span class="val">150 €</span></div>
+          <div class="money-row"><span class="lab">= Perte mensuelle</span><span class="val">3 530 €</span></div>
+          <div class="money-row total"><span class="lab">Perte annualisée</span><span class="val">42 380 €</span></div>
+        </div>
+
+        <p class="note">Source : 2 847 RDV analysés depuis votre export Doctolib · Période nov. 2025 → avril 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VARIANT B — Compteur + équivalents ═══ -->
+  <section class="variant" data-v="b">
+    <div class="page">
+      <div class="step-card-fake">
+        <span class="step-num">02</span>
+        <div class="eyebrow" style="color: var(--red);">Détail des no-shows</div>
+
+        <div class="counter-wrap">
+          <div class="counter-label">Revenus perdus cette année</div>
+          <div class="counter"><span id="counter-val">0</span><span class="counter-unit">€</span></div>
+          <p class="counter-sub">Calcul en temps réel à partir de vos 2 847 RDV Doctolib. Vous lisez ce rapport depuis quelques secondes — pendant ce temps, voici ce que vous perdez.</p>
+        </div>
+
+        <div class="eyebrow" style="margin-top: var(--s7);">À quoi ça correspond concrètement ?</div>
+        <div class="equivalents">
+          <div class="equiv">
+            <span class="emoji">🚗</span>
+            <div class="big">Une Dacia Sandero neuve</div>
+            <div class="lab">chaque année · prix catalogue ~14 000 €</div>
+          </div>
+          <div class="equiv">
+            <span class="emoji">💼</span>
+            <div class="big">12 mois de salaire</div>
+            <div class="lab">pour votre assistante dentaire (base brut 3 500 €)</div>
+          </div>
+          <div class="equiv">
+            <span class="emoji">🦷</span>
+            <div class="big">85 implants</div>
+            <div class="lab">de prothèses complètes réalisés en pure perte</div>
+          </div>
+        </div>
+
+        <p class="note">Source : 2 847 RDV analysés depuis votre export Doctolib · Période nov. 2025 → avril 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VARIANT D — A à gauche, C révélé à droite (side-by-side, no scroll) ═══ -->
+  <section class="variant" data-v="d">
+    <div class="page page-d">
+      <div class="step-card-fake d-card">
+        <span class="step-num">02</span>
+        <div class="eyebrow" style="color: var(--red);">Détail des no-shows</div>
+        <h2 class="d-title">Votre cabinet perd <span class="serif" style="color:var(--red);">42 380 €</span> / an.</h2>
+
+        <div class="d-stage" id="d-stage">
+          <!-- Left pane: money build (A) -->
+          <div class="d-pane d-left">
+            <div class="eyebrow" style="margin-bottom: var(--s3);">Le calcul, ligne à ligne</div>
+            <div class="money-stack d-money">
+              <div class="money-row"><span class="lab">Créneaux perdus / mois</span><span class="val">78</span></div>
+              <div class="money-row"><span class="lab">× Tarif moyen / créneau</span><span class="val">150 €</span></div>
+              <div class="money-row"><span class="lab">= Perte mensuelle</span><span class="val">3 530 €</span></div>
+              <div class="money-row total"><span class="lab">Perte annualisée</span><span class="val">42 380 €</span></div>
+            </div>
+          </div>
+
+          <!-- Reveal button (centered on divider) -->
+          <button class="d-reveal" id="d-reveal" aria-label="Comparer au marché">
+            <span class="d-reveal-label">Comparer au marché</span>
+            <span class="d-reveal-arrow">→</span>
+          </button>
+
+          <!-- Right pane: split comparatif (C), hidden until reveal -->
+          <div class="d-pane d-right" aria-hidden="true">
+            <div class="eyebrow" style="margin-bottom: var(--s3);">Face au marché</div>
+            <div class="d-compare">
+              <div class="d-row d-row-yours">
+                <div class="d-row-lab">Votre cabinet</div>
+                <div class="d-row-val serif tabular">42 380 €</div>
+                <div class="d-row-sub">14,2 % no-show · 78 créneaux / mois</div>
+              </div>
+              <div class="d-row d-row-bench">
+                <div class="d-row-lab">Top 10 % dentistes FR</div>
+                <div class="d-row-val serif tabular">6 200 €</div>
+                <div class="d-row-sub">1,8 % no-show · 12 créneaux / mois</div>
+              </div>
+              <div class="d-gap">
+                <div>
+                  <div class="d-gap-lab">Écart à combler</div>
+                  <div class="d-gap-sub">En alignant vos rappels sur les meilleures pratiques</div>
+                </div>
+                <div class="d-gap-val serif tabular">36 180 €</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="note d-note">Source : 2 847 RDV analysés depuis votre Doctolib · Benchmark sectoriel FR 2025</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VARIANT C — Split comparatif ═══ -->
+  <section class="variant" data-v="c">
+    <div class="page">
+      <div class="step-card-fake">
+        <span class="step-num">02</span>
+        <div class="eyebrow" style="color: var(--red);">Détail des no-shows</div>
+        <h2>Votre cabinet perd <span class="serif" style="color:var(--red);">42 380 €</span> / an.</h2>
+        <p class="lede">Mais ce chiffre seul ne veut rien dire. Le voilà face à ce que perdent les cabinets qui gèrent bien leurs rappels.</p>
+
+        <div class="split">
+          <div class="split-col yours">
+            <div class="split-lab">Votre cabinet</div>
+            <div class="split-big tabular">42 380 €</div>
+            <div class="split-sub">Taux de no-show : 14,2 % · 78 créneaux perdus / mois</div>
+            <div class="split-vs">VS</div>
+          </div>
+          <div class="split-col benchmark">
+            <div class="split-lab">Top 10 % des cabinets dentaires FR</div>
+            <div class="split-big tabular muted">6 200 €</div>
+            <div class="split-sub">Taux de no-show : 1,8 % · 12 créneaux perdus / mois</div>
+          </div>
+        </div>
+
+        <div class="gap-card">
+          <div>
+            <div class="lab">Écart à combler — ce que vous pourriez récupérer</div>
+            <div style="margin-top: 6px; color: rgba(255,255,255,0.85); font-size: 13px;">En alignant vos rappels sur les meilleures pratiques du secteur</div>
+          </div>
+          <div class="val tabular">36 180 €</div>
+        </div>
+
+        <p class="note">Benchmark : données sectorielles dentistes FR 2025 · 2 847 RDV analysés depuis votre Doctolib</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.sketch-toolbar button[data-v]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = btn.dataset.v;
+      document.querySelectorAll('.sketch-toolbar button[data-v]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.variant').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelector(`.variant[data-v="${v}"]`).classList.add('active');
+      if (v === 'b') startCounter();
+    });
+  });
+
+  // Variant D — side-by-side reveal
+  const dReveal = document.getElementById('d-reveal');
+  const dStage = document.getElementById('d-stage');
+  if (dReveal && dStage) {
+    dReveal.addEventListener('click', () => {
+      dStage.classList.toggle('revealed');
+    });
+  }
+
+  // Counter animation for variant B
+  let counterStarted = false;
+  function startCounter() {
+    if (counterStarted) return;
+    counterStarted = true;
+    const el = document.getElementById('counter-val');
+    const target = 42380;
+    const duration = 2200;
+    const start = performance.now();
+    function tick(t) {
+      const progress = Math.min((t - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = Math.floor(target * eased);
+      el.textContent = val.toLocaleString('fr-FR');
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+</script>
+</body>
+</html>
