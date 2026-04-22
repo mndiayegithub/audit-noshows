@@ -23,5 +23,5 @@ un document médical sérieux plutôt qu'un dashboard produit.
 | # | Name | Design Question | Winner | Tags |
 |---|------|-----------------|--------|------|
 | 001 | layout-structure | Quelle structure globale pour la page de résultats ? | **C · Stepped reveal (6 steps + graph/section)** | layout, flow |
-| 002 | hero-kpi | Comment faire émerger le "chiffre qui fait mal" ? | TBD | hero, kpi |
+| 002 | hero-kpi | Comment faire émerger le "chiffre qui fait mal" ? | **D · Money build + reveal latéral du comparatif marché** | hero, kpi |
 | 003 | conversion-moment | Comment traiter score global + CTA Calendly ? | TBD | score, cta |
