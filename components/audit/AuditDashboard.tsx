@@ -6,6 +6,9 @@ import SyntheseKPIs from "./SyntheseKPIs";
 import MoneyBuildCard from "./MoneyBuildCard";
 import ChartParJour from "./ChartParJour";
 import ChartParHeure from "./ChartParHeure";
+import ScoreHero from "./ScoreHero";
+import PlanTimeline from "./PlanTimeline";
+import CalendlyEmbed from "./CalendlyEmbed";
 
 interface AuditDashboardProps {
   stats: AuditStats;
@@ -58,9 +61,7 @@ export default function AuditDashboard({
           eyebrowColor="text-[#064E3B]"
           title="Score cabinet"
         >
-          <div className="text-sm text-gray-400">
-            [Section Score — à remplir par Plan 02-05]
-          </div>
+          <ScoreHero stats={stats} />
         </AuditSection>
         <AuditSection
           id="plan-et-cta"
@@ -68,17 +69,18 @@ export default function AuditDashboard({
           eyebrowColor="text-kpiTaux-fg"
           title="Plan d'action"
         >
-          <div className="text-sm text-gray-400">
-            [Section Plan + CTA — à remplir par Plan 02-05]
+          <div className="space-y-6">
+            <PlanTimeline />
+            <CalendlyEmbed />
+            {rapport && (
+              <details className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
+                <summary className="cursor-pointer font-medium">
+                  Rapport détaillé
+                </summary>
+                <div className="mt-3 whitespace-pre-wrap">{rapport}</div>
+              </details>
+            )}
           </div>
-          {rapport && (
-            <details className="mt-6 rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
-              <summary className="cursor-pointer font-medium">
-                Rapport détaillé
-              </summary>
-              <div className="mt-3 whitespace-pre-wrap">{rapport}</div>
-            </details>
-          )}
         </AuditSection>
       </main>
     </div>
