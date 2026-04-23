@@ -10,7 +10,7 @@ export default function MiniDashboard() {
         <span className="h-2.5 w-2.5 rounded-full bg-gray-200" />
         <span className="h-2.5 w-2.5 rounded-full bg-gray-200" />
         <span className="h-2.5 w-2.5 rounded-full bg-gray-200" />
-        <span className="ml-3 text-xs text-slate-500">audit.getlostrevenue.fr</span>
+        <span className="ml-3 text-xs text-slate-500">Tableau de bord</span>
       </div>
 
       {/* 4 KPI pastels — grille 2x2, sémantique figée */}

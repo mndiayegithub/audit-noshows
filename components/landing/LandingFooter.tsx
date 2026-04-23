@@ -11,7 +11,14 @@ export default function LandingFooter() {
         <div className="grid gap-10 md:grid-cols-3">
           <div>
             <div className="flex items-center gap-2">
-              <span aria-hidden className="h-6 w-6 rounded-full bg-primaryDark" />
+              <span
+                aria-hidden
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-primaryDark text-white"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
+                  <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" />
+                </svg>
+              </span>
               <span className="font-semibold text-slate-900">GetLostRevenue</span>
             </div>
             <p className="mt-3 max-w-xs text-sm text-slate-600">
@@ -23,7 +30,7 @@ export default function LandingFooter() {
             <div className="text-xs font-medium uppercase tracking-wide text-slate-500">Produit</div>
             <ul className="mt-3 space-y-2 text-sm text-slate-700">
               <li><a href="#comment-ca-marche" className="hover:text-slate-900">Comment ça marche</a></li>
-              <li><a href="#pour-qui" className="hover:text-slate-900">Pour qui</a></li>
+              <li><a href="#pour-qui" className="hover:text-slate-900">Pour qui ?</a></li>
               <li><a href="#faq" className="hover:text-slate-900">FAQ</a></li>
               <li><Link href="/audit" className="hover:text-slate-900">Lancer un audit</Link></li>
             </ul>
@@ -38,8 +45,17 @@ export default function LandingFooter() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-gray-100 pt-6 text-xs text-slate-500">
-          © {year} GetLostRevenue — Placeholder brand. Tous droits réservés.
+        <div className="mt-10 flex flex-col gap-1 border-t border-gray-100 pt-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <span>© {year} GetLostRevenue — Tous droits réservés.</span>
+          <span>
+            Powered by{" "}
+            <a
+              href="https://perfiamatic.fr"
+              className="font-medium text-slate-700 hover:text-slate-900"
+            >
+              PerfIAmatic
+            </a>
+          </span>
         </div>
       </div>
     </footer>

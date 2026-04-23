@@ -24,14 +24,25 @@ export default function LandingNav() {
       <nav className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="h-6 w-6 rounded-full bg-primaryDark" aria-hidden />
+          <span
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-primaryDark text-white"
+            aria-hidden
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-3.5 w-3.5"
+            >
+              <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" />
+            </svg>
+          </span>
           <span className="font-semibold tracking-tight text-slate-900">GetLostRevenue</span>
         </Link>
 
         {/* Links desktop */}
         <ul className="hidden md:flex items-center gap-8 text-sm text-slate-600">
           <li><a href="#comment-ca-marche" className="hover:text-slate-900">Comment ça marche</a></li>
-          <li><a href="#pour-qui" className="hover:text-slate-900">Pour qui</a></li>
+          <li><a href="#pour-qui" className="hover:text-slate-900">Pour qui ?</a></li>
           <li><a href="#faq" className="hover:text-slate-900">FAQ</a></li>
         </ul>
 

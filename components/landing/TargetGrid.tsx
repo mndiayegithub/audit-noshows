@@ -22,7 +22,7 @@ const TARGETS: Target[] = [
 export default function TargetGrid() {
   return (
     <section id="pour-qui" className="mx-auto max-w-6xl px-6 py-20">
-      <p className="text-sm font-medium text-accentGreen">Pour qui</p>
+      <p className="text-sm font-medium text-accentGreen">Pour qui ?</p>
       <h2 className="mt-2 font-serif text-3xl text-slate-900 md:text-4xl">
         Pensé pour les cabinets qui veulent chiffrer leurs no-shows.
       </h2>
