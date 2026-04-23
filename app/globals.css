@@ -5,6 +5,16 @@
 /* Forced light mode — no dark variant on landing (SPEC REQ-02, SKILL banned) */
 html {
   color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+/* Smooth anchor navigation for audit dashboard chained sections (Plan 02-01, CONTEXT D-02 + D-06) */
+section[data-audit-section] {
+  scroll-margin-top: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 /* Reduce-motion best effort (CONTEXT D-03).
