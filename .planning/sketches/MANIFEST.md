@@ -40,7 +40,7 @@ dans le registre du document d'expertise — sérieux, chiffré, lisible, modern
 | 005 | audit-dashboard-layout | Architecture globale sidebar + sections scrollables | **B** ★ (fallback C) | audit, dashboard, layout |
 | 006 | audit-synthese-kpi | Détail zone Synthèse (4 KPI pastels grand format + contexte) | **B** ★ (fallback C) | audit, dashboard, kpi |
 | 007 | audit-money-build | Zone Manque à gagner — CA perdu violet plein + breakdown + reveal | **A** ★ | audit, dashboard, money |
-| 008 | audit-charts | Zone Où & Quand — bars par jour + angles complémentaires | — | audit, dashboard, chart |
+| 008 | audit-charts | Zone Où & Quand — bars par jour + angles complémentaires | **B** ★ | audit, dashboard, chart |
 | 009 | audit-score-plan-cta | Zones Score + Plan d'action + CTA Calendly final | — | audit, dashboard, score, cta |
 
 ## Archived (v1 dark-premium)

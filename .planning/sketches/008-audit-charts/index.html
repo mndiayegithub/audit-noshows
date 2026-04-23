@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 008 — Où & Quand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  :root {
+    --bg:#f9fafb; --surface:#fff; --ink:#0f172a; --muted:#64748b; --border:#e5e7eb;
+    --primary-dark:#064E3B; --accent-green:#10B981;
+    --signal-bg:#DCF4E6; --signal-fg:#059669;
+    --taux-bg:#FCEACC; --taux-fg:#EA580C;
+    --volume-bg:#DFF3FF; --volume-fg:#2563EB;
+    --argent-fg:#9333EA;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:'Inter', sans-serif; }
+
+  .tabbar { position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--border); padding:12px 24px; display:flex; gap:8px; align-items:center; }
+  .tabbar .title { font-weight:600; margin-right:24px; font-size:14px; color:var(--muted); }
+  .tab { padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:#fff; cursor:pointer; font:inherit; font-size:13px; color:var(--ink); }
+  .tab.active { background:var(--primary-dark); color:#fff; border-color:var(--primary-dark); }
+  .panel { display:none; } .panel.active { display:block; }
+
+  .shell { display:flex; min-height:calc(100vh - 56px); }
+  .sidebar { width:64px; background:#fff; border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:4px; position:sticky; top:56px; height:calc(100vh - 56px); }
+  .logo { width:36px; height:36px; border-radius:10px; background:var(--primary-dark); color:#fff; display:grid; place-items:center; font-weight:700; margin-bottom:16px; }
+  .nav-icon { width:40px; height:40px; border-radius:10px; display:grid; place-items:center; color:var(--muted); position:relative; }
+  .nav-icon svg { width:20px; height:20px; }
+  .nav-icon.active { background:#ecfdf5; color:var(--signal-fg); }
+  .nav-cta { margin-top:auto; width:40px; height:40px; border-radius:10px; background:var(--primary-dark); color:#fff; display:grid; place-items:center; }
+  .main { flex:1; min-width:0; }
+  .topbar { background:#fff; border-bottom:1px solid var(--border); padding:20px 40px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+  .topbar h1 { font-family:'Fraunces', serif; font-weight:500; font-size:26px; margin:0 0 6px; letter-spacing:-0.01em; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; }
+  .pill { font-size:12px; padding:4px 10px; border-radius:999px; background:#f1f5f9; color:var(--muted); }
+  .btn { font:inherit; font-size:13px; padding:9px 16px; border-radius:10px; cursor:pointer; border:1px solid var(--border); background:#fff; color:var(--ink); }
+  .btn-primary { background:var(--primary-dark); color:#fff; border-color:var(--primary-dark); }
+  .content { padding:40px; max-width:1200px; }
+
+  .section-eyebrow { font-size:12px; color:var(--signal-fg); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; }
+  .section-title { font-family:'Fraunces', serif; font-weight:500; font-size:32px; margin:8px 0; letter-spacing:-0.01em; }
+  .section-lede { color:var(--muted); font-size:15px; max-width:620px; }
+
+  /* Chart card shell */
+  .chart-card { background:#fff; border:1px solid var(--border); border-radius:20px; padding: 28px; }
+  .chart-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 20px; }
+  .chart-head h3 { font-family:'Fraunces', serif; font-weight:500; font-size:18px; margin:0; letter-spacing:-0.01em; }
+  .chart-head .chart-meta { font-size:12px; color:var(--muted); }
+
+  /* Bar chart base */
+  .bars { display:grid; grid-auto-flow:column; grid-auto-columns:1fr; align-items:end; gap:12px; height: 220px; padding-top: 20px; }
+  .bar-wrap { display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .bar { width:100%; max-width: 56px; background: var(--signal-bg); border-top-left-radius: 8px; border-top-right-radius: 8px; position:relative; transition: height .3s; }
+  .bar.peak { background: var(--signal-fg); }
+  .bar-val { position:absolute; top:-24px; left:50%; transform:translateX(-50%); font-family:'Fraunces', serif; font-weight:500; font-size:14px; color:var(--ink); }
+  .bar-lbl { font-size:12px; color:var(--muted); margin-top:8px; font-weight:500; }
+
+  .bars-hour .bar { background:var(--taux-bg); }
+  .bars-hour .bar.peak { background:var(--taux-fg); }
+  .bars-prat .bar { background:var(--volume-bg); }
+  .bars-prat .bar.peak { background:var(--volume-fg); }
+
+  .insight { margin-top: 16px; font-size:13px; color:var(--muted); display:flex; align-items:center; gap:8px; }
+  .insight::before { content:""; width:6px; height:6px; border-radius:50%; background: var(--signal-fg); display:inline-block; }
+
+  /* Variant B grid */
+  .chart-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top: 28px; }
+
+  /* Variant C grid */
+  .chart-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top: 28px; }
+  .chart-grid-3 .chart-card { padding:20px; }
+  .chart-grid-3 .bars { height: 160px; }
+  .chart-grid-3 .chart-head h3 { font-size:15px; }
+  .insight-big { margin-top:24px; background: #ecfdf5; border:1px solid #a7f3d0; border-radius:20px; padding: 24px 28px; display:flex; gap:20px; align-items:center; }
+  .insight-big .ic { width:48px; height:48px; border-radius:14px; background: var(--primary-dark); color:#fff; display:grid; place-items:center; flex-shrink:0; }
+  .insight-big .t { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--primary-dark); font-weight:600; }
+  .insight-big .v { font-family:'Fraunces', serif; font-weight:500; font-size:20px; color:var(--ink); margin-top: 2px; letter-spacing:-0.01em; line-height:1.35; }
+  .insight-big .v b { color:var(--primary-dark); }
+
+  .scroll-hint { margin-top:40px; padding:20px; border:1px dashed var(--border); border-radius:14px; color:var(--muted); font-size:13px; text-align:center; }
+
+  @media (max-width: 1000px) {
+    .chart-grid-2 { grid-template-columns:1fr; }
+    .chart-grid-3 { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="tabbar">
+  <span class="title">Sketch 008 — Où & Quand</span>
+  <button class="tab active" data-tab="A">A · Bars par jour seul</button>
+  <button class="tab" data-tab="B">B · Jour + Heure côte à côte ★</button>
+  <button class="tab" data-tab="C">C · Triptyque + insight rapport</button>
+</div>
+
+<!-- shared sidebar markup copied inline to keep one-file sketch -->
+
+<!-- ===================== VARIANT A ===================== -->
+<section class="panel active" data-panel="A">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="logo">G</div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="nav-icon active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div><h1>Cabinet dentaire Dupont</h1><div class="pills"><span class="pill">Généré le 23 avril 2026</span><span class="pill">Période : 01/01 → 31/03/26</span></div></div>
+        <div style="display:flex; gap:10px;"><button class="btn">Télécharger PDF</button><button class="btn btn-primary">Prendre RDV</button></div>
+      </div>
+      <div class="content">
+        <div class="section-eyebrow">Où & Quand</div>
+        <h2 class="section-title">Quand vos no-shows se concentrent-ils ?</h2>
+        <p class="section-lede">Répartition des rendez-vous non honorés par jour de la semaine sur la période analysée.</p>
+
+        <div class="chart-card" style="margin-top:28px;">
+          <div class="chart-head"><h3>No-shows par jour</h3><span class="chart-meta">57 no-shows au total</span></div>
+          <div class="bars">
+            <div class="bar-wrap"><span class="bar-val">6</span><div class="bar" style="height: 33%;"></div><div class="bar-lbl">Lun</div></div>
+            <div class="bar-wrap"><span class="bar-val">8</span><div class="bar" style="height: 45%;"></div><div class="bar-lbl">Mar</div></div>
+            <div class="bar-wrap"><span class="bar-val">7</span><div class="bar" style="height: 40%;"></div><div class="bar-lbl">Mer</div></div>
+            <div class="bar-wrap"><span class="bar-val">12</span><div class="bar peak" style="height: 100%;"></div><div class="bar-lbl">Jeu</div></div>
+            <div class="bar-wrap"><span class="bar-val">10</span><div class="bar" style="height: 75%;"></div><div class="bar-lbl">Ven</div></div>
+            <div class="bar-wrap"><span class="bar-val">11</span><div class="bar" style="height: 85%;"></div><div class="bar-lbl">Sam</div></div>
+            <div class="bar-wrap"><span class="bar-val">3</span><div class="bar" style="height: 18%;"></div><div class="bar-lbl">Dim</div></div>
+          </div>
+          <div class="insight">Pic le <b style="color:var(--signal-fg); margin:0 4px">jeudi</b> — 12 no-shows, soit 21 % du total.</div>
+        </div>
+
+        <div class="scroll-hint">↓ Zone suivante : Score cabinet + Plan d'action + CTA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VARIANT B ===================== -->
+<section class="panel" data-panel="B">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="logo">G</div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="nav-icon active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div><h1>Cabinet dentaire Dupont</h1><div class="pills"><span class="pill">Généré le 23 avril 2026</span><span class="pill">Période : 01/01 → 31/03/26</span></div></div>
+        <div style="display:flex; gap:10px;"><button class="btn">Télécharger PDF</button><button class="btn btn-primary">Prendre RDV</button></div>
+      </div>
+      <div class="content">
+        <div class="section-eyebrow">Où & Quand</div>
+        <h2 class="section-title">Quand vos no-shows se concentrent-ils ?</h2>
+        <p class="section-lede">Croisez jour de semaine et tranche horaire pour repérer vos créneaux à risque.</p>
+
+        <div class="chart-grid-2">
+          <div class="chart-card">
+            <div class="chart-head"><h3>Par jour</h3><span class="chart-meta">57 au total</span></div>
+            <div class="bars">
+              <div class="bar-wrap"><span class="bar-val">6</span><div class="bar" style="height:33%"></div><div class="bar-lbl">Lun</div></div>
+              <div class="bar-wrap"><span class="bar-val">8</span><div class="bar" style="height:45%"></div><div class="bar-lbl">Mar</div></div>
+              <div class="bar-wrap"><span class="bar-val">7</span><div class="bar" style="height:40%"></div><div class="bar-lbl">Mer</div></div>
+              <div class="bar-wrap"><span class="bar-val">12</span><div class="bar peak" style="height:100%"></div><div class="bar-lbl">Jeu</div></div>
+              <div class="bar-wrap"><span class="bar-val">10</span><div class="bar" style="height:75%"></div><div class="bar-lbl">Ven</div></div>
+              <div class="bar-wrap"><span class="bar-val">11</span><div class="bar" style="height:85%"></div><div class="bar-lbl">Sam</div></div>
+              <div class="bar-wrap"><span class="bar-val">3</span><div class="bar" style="height:18%"></div><div class="bar-lbl">Dim</div></div>
+            </div>
+            <div class="insight">Pic le <b style="color:var(--signal-fg); margin:0 4px">jeudi</b> — 21 % du total.</div>
+          </div>
+
+          <div class="chart-card bars-hour">
+            <div class="chart-head"><h3>Par tranche horaire</h3><span class="chart-meta">5 créneaux</span></div>
+            <div class="bars">
+              <div class="bar-wrap"><span class="bar-val">5</span><div class="bar" style="height:30%"></div><div class="bar-lbl">8–10h</div></div>
+              <div class="bar-wrap"><span class="bar-val">9</span><div class="bar" style="height:55%"></div><div class="bar-lbl">10–12h</div></div>
+              <div class="bar-wrap"><span class="bar-val">11</span><div class="bar" style="height:68%"></div><div class="bar-lbl">14–16h</div></div>
+              <div class="bar-wrap"><span class="bar-val">18</span><div class="bar peak" style="height:100%"></div><div class="bar-lbl">16–18h</div></div>
+              <div class="bar-wrap"><span class="bar-val">14</span><div class="bar" style="height:82%"></div><div class="bar-lbl">18–20h</div></div>
+            </div>
+            <div class="insight" style="color:var(--muted)"><span style="background:var(--taux-fg); width:6px; height:6px; border-radius:50%; display:inline-block"></span> Créneau critique <b style="color:var(--taux-fg); margin:0 4px">16h–18h</b> — 32 % des no-shows.</div>
+          </div>
+        </div>
+
+        <div class="scroll-hint">↓ Zone suivante : Score cabinet + Plan d'action + CTA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VARIANT C ===================== -->
+<section class="panel" data-panel="C">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="logo">G</div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="nav-icon active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div><h1>Cabinet dentaire Dupont</h1><div class="pills"><span class="pill">Généré le 23 avril 2026</span><span class="pill">Période : 01/01 → 31/03/26</span></div></div>
+        <div style="display:flex; gap:10px;"><button class="btn">Télécharger PDF</button><button class="btn btn-primary">Prendre RDV</button></div>
+      </div>
+      <div class="content">
+        <div class="section-eyebrow">Où & Quand</div>
+        <h2 class="section-title">Trois angles pour localiser la fuite.</h2>
+
+        <div class="chart-grid-3">
+          <div class="chart-card">
+            <div class="chart-head"><h3>Par jour</h3></div>
+            <div class="bars">
+              <div class="bar-wrap"><div class="bar" style="height:33%"></div><div class="bar-lbl">L</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:45%"></div><div class="bar-lbl">M</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:40%"></div><div class="bar-lbl">M</div></div>
+              <div class="bar-wrap"><div class="bar peak" style="height:100%"></div><div class="bar-lbl">J</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:75%"></div><div class="bar-lbl">V</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:85%"></div><div class="bar-lbl">S</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:18%"></div><div class="bar-lbl">D</div></div>
+            </div>
+          </div>
+          <div class="chart-card bars-hour">
+            <div class="chart-head"><h3>Par heure</h3></div>
+            <div class="bars">
+              <div class="bar-wrap"><div class="bar" style="height:30%"></div><div class="bar-lbl">8h</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:55%"></div><div class="bar-lbl">10h</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:68%"></div><div class="bar-lbl">14h</div></div>
+              <div class="bar-wrap"><div class="bar peak" style="height:100%"></div><div class="bar-lbl">16h</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:82%"></div><div class="bar-lbl">18h</div></div>
+            </div>
+          </div>
+          <div class="chart-card bars-prat">
+            <div class="chart-head"><h3>Par praticien</h3></div>
+            <div class="bars">
+              <div class="bar-wrap"><div class="bar peak" style="height:100%"></div><div class="bar-lbl">Laurent</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:55%"></div><div class="bar-lbl">Moreau</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:38%"></div><div class="bar-lbl">Tran</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="insight-big">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div>
+          <div>
+            <div class="t">Créneau à risque</div>
+            <div class="v"><b>Jeudi 16h–18h chez le Dr. Laurent</b> concentre <b>28 %</b> des no-shows alors qu'il ne représente que <b>11 %</b> des RDV planifiés.</div>
+          </div>
+        </div>
+
+        <div class="scroll-hint">↓ Zone suivante : Score cabinet + Plan d'action + CTA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    const k = t.dataset.tab;
+    document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === k));
+  }));
+</script>
+</body>
+</html>
