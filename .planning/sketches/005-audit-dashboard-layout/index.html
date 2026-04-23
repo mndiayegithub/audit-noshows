@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 005 — audit-dashboard-layout (Direction B clinique-claire)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  .variant-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: white; border-bottom: 1px solid var(--border-default);
+    display: flex; justify-content: center; gap: .25rem;
+    padding: .5rem; box-shadow: var(--shadow-sm);
+  }
+  .variant-tab {
+    background: transparent; border: 1px solid transparent;
+    color: var(--text-600); font-weight: 600; font-size: .8125rem;
+    padding: .375rem .75rem; border-radius: var(--radius-full);
+    cursor: pointer; font-family: var(--font-sans);
+  }
+  .variant-tab:hover { background: #F3F4F6; }
+  .variant-tab.active { background: var(--primary-dark); color: white; }
+  .variant-tab .star { color: #FBBF24; margin-left: .25rem; display: none; }
+  .variant-tab.winner .star { display: inline; }
+  .variant-panel { display: none; padding-top: 3.5rem; min-height: 100vh; background: var(--bg-page); }
+  .variant-panel.active { display: block; }
+
+  /* ---------- Shared section blocks ---------- */
+  .section-block {
+    scroll-margin-top: 5rem;
+    padding: 2.5rem 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .section-block h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.75rem;
+    margin: 0 0 .5rem;
+    color: var(--text-900);
+  }
+  .section-block .sub {
+    font-size: .875rem;
+    color: var(--text-500);
+    margin: 0 0 1.5rem;
+  }
+
+  /* KPI grid large for Synthèse */
+  .kpi-grid-large {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 900px) { .kpi-grid-large { grid-template-columns: repeat(2, 1fr); } }
+  .kpi-grid-large .kpi-card { padding: 1.25rem 1rem; }
+  .kpi-grid-large .kpi-value { font-size: 1.75rem; }
+  .kpi-grid-large .kpi-label { font-size: 11px; }
+
+  /* Money build card (violet dominant) */
+  .money-card {
+    background: var(--kpi-argent-bg);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    text-align: center;
+  }
+  .money-card .big-eur {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 4rem;
+    color: var(--kpi-argent-fg-strong);
+    line-height: 1;
+    margin: 0;
+  }
+  .money-card .caption {
+    color: var(--kpi-argent-fg);
+    font-size: .875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin: .75rem 0 1.5rem;
+  }
+  .money-card .breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(147, 51, 234, .2);
+    padding-top: 1.5rem;
+  }
+  .money-card .breakdown .item { text-align: center; }
+  .money-card .breakdown .v { font-weight: 800; color: var(--kpi-argent-fg-strong); font-size: 1.125rem; }
+  .money-card .breakdown .l { font-size: 11px; color: var(--kpi-argent-fg); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+
+  /* Bars chart mock */
+  .bars-card {
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+  }
+  .bars-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: .5rem;
+    align-items: flex-end;
+    height: 160px;
+    margin: 1rem 0 .5rem;
+  }
+  .bar { background: var(--accent-green); border-radius: 4px 4px 0 0; position: relative; }
+  .bar .v { position: absolute; top: -18px; left: 0; right: 0; text-align: center; font-size: 10px; font-weight: 700; color: var(--text-700); }
+  .bars-labels { display: grid; grid-template-columns: repeat(7, 1fr); gap: .5rem; text-align: center; font-size: 11px; color: var(--text-500); font-weight: 600; }
+
+  /* Score card large */
+  .score-block {
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (max-width: 700px) { .score-block { grid-template-columns: 1fr; text-align: center; } }
+  .score-ring-large { width: 10rem; height: 10rem; position: relative; }
+  .score-ring-large svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .score-ring-large .num {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--text-800);
+  }
+  .score-block .label { font-size: 11px; color: var(--text-500); text-transform: uppercase; letter-spacing: .05em; font-weight: 700; margin-bottom: .5rem; }
+  .score-block .title { font-weight: 700; font-size: 1.25rem; color: var(--text-900); margin-bottom: .5rem; }
+  .score-block p { font-size: .875rem; color: var(--text-600); margin: 0 0 1rem; }
+  .score-block .mini-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .score-block .mini { display: flex; flex-direction: column; padding: .5rem .75rem; border-radius: var(--radius-md); background: var(--bg-page); }
+  .score-block .mini .mv { font-weight: 800; color: var(--text-900); font-size: 1rem; }
+  .score-block .mini .ml { font-size: 10px; color: var(--text-500); text-transform: uppercase; font-weight: 600; }
+
+  /* Plan of action */
+  .plan-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media (max-width: 900px) { .plan-list { grid-template-columns: 1fr; } }
+  .plan-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-xl);
+    border: 1px solid;
+  }
+  .plan-card .num {
+    display: inline-flex;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    align-items: center; justify-content: center;
+    color: white; font-weight: 800;
+    margin-bottom: .75rem;
+  }
+  .plan-card h3 { margin: 0 0 .5rem; font-size: 1rem; font-weight: 700; color: var(--text-900); }
+  .plan-card p { margin: 0; font-size: .8125rem; color: var(--text-600); }
+  .plan-card:nth-child(1) { background: var(--step-blue-bg); border-color: var(--step-blue-border); }
+  .plan-card:nth-child(1) .num { background: var(--step-blue-icon-fg); }
+  .plan-card:nth-child(2) { background: var(--step-emerald-bg); border-color: var(--step-emerald-border); }
+  .plan-card:nth-child(2) .num { background: var(--step-emerald-icon-fg); }
+  .plan-card:nth-child(3) { background: var(--step-orange-bg); border-color: var(--step-orange-border); }
+  .plan-card:nth-child(3) .num { background: var(--step-orange-icon-fg); }
+
+  .final-cta-block {
+    margin-top: 2.5rem;
+    background: var(--primary-dark);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    color: white;
+    text-align: center;
+  }
+  .final-cta-block h3 { color: white; margin: 0 0 .5rem; font-size: 1.25rem; font-weight: 700; }
+  .final-cta-block p { color: #A7F3D0; margin: 0 0 1.25rem; font-size: .875rem; }
+  .final-cta-block button { background: white; color: var(--primary-dark); padding: .875rem 2rem; border-radius: var(--radius-lg); font-weight: 700; border: none; cursor: pointer; font-size: 1rem; box-shadow: var(--shadow-lg); }
+
+  /* ===================================================================
+     Variant A — Classic sidebar (logo + 5 liens + CTA)
+     =================================================================== */
+  .A-shell { display: flex; min-height: calc(100vh - 3.5rem); }
+  .A-sidebar {
+    position: sticky; top: 3.5rem; align-self: flex-start;
+    width: 240px; flex-shrink: 0;
+    background: white;
+    border-right: 1px solid var(--border-default);
+    padding: 2rem 1.25rem;
+    height: calc(100vh - 3.5rem);
+    overflow-y: auto;
+  }
+  .A-sidebar .s-logo {
+    display: flex; align-items: center; gap: .25rem;
+    font-weight: 700; font-size: 1rem; color: var(--primary-dark);
+    margin-bottom: 2rem;
+  }
+  .A-sidebar .s-logo svg { width: 24px; height: 24px; }
+  .A-sidebar .s-cabinet {
+    margin-bottom: 1.5rem; padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .A-sidebar .s-cabinet .cn { font-weight: 700; font-size: .875rem; color: var(--text-900); }
+  .A-sidebar .s-cabinet .cd { font-size: .75rem; color: var(--text-500); margin-top: .25rem; }
+  .A-sidebar .s-nav { list-style: none; padding: 0; margin: 0 0 2rem; }
+  .A-sidebar .s-nav li { }
+  .A-sidebar .s-nav a {
+    display: flex; align-items: center; gap: .625rem;
+    padding: .5rem .75rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-size: .875rem; font-weight: 500;
+    color: var(--text-600);
+    margin-bottom: .125rem;
+  }
+  .A-sidebar .s-nav a:hover { background: #F3F4F6; color: var(--text-900); }
+  .A-sidebar .s-nav a.current { background: #ECFDF5; color: var(--primary-dark); font-weight: 600; }
+  .A-sidebar .s-nav .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-400); flex-shrink: 0; }
+  .A-sidebar .s-nav a[data-c="volume"] .dot { background: var(--kpi-volume-fg); }
+  .A-sidebar .s-nav a[data-c="argent"] .dot { background: var(--kpi-argent-fg); }
+  .A-sidebar .s-nav a[data-c="signal"] .dot { background: var(--kpi-signal-fg); }
+  .A-sidebar .s-nav a[data-c="score"] .dot { background: var(--primary-dark); }
+  .A-sidebar .s-nav a[data-c="plan"] .dot { background: var(--kpi-taux-fg); }
+  .A-sidebar .s-cta {
+    background: var(--primary-dark); color: white; border: none;
+    padding: .75rem 1rem; border-radius: var(--radius-md);
+    font-weight: 600; font-size: .875rem; cursor: pointer;
+    width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+  }
+
+  .A-main { flex: 1; }
+  .A-topbar {
+    position: sticky; top: 3.5rem; z-index: 10;
+    background: rgba(249, 250, 251, .9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-soft);
+    padding: 1rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .A-topbar .title { font-weight: 700; color: var(--text-900); }
+  .A-topbar .actions { display: flex; gap: .5rem; }
+  .A-btn-ghost {
+    background: white; color: var(--text-700);
+    border: 1px solid var(--border-default);
+    padding: .5rem .875rem; border-radius: var(--radius-md);
+    font-size: .8125rem; font-weight: 600; cursor: pointer;
+  }
+
+  /* ===================================================================
+     Variant B — Icon-compact sidebar + horizontal topbar
+     =================================================================== */
+  .B-shell { display: flex; min-height: calc(100vh - 3.5rem); }
+  .B-sidebar {
+    position: sticky; top: 3.5rem; align-self: flex-start;
+    width: 64px; flex-shrink: 0;
+    background: white;
+    border-right: 1px solid var(--border-default);
+    padding: 1rem 0;
+    height: calc(100vh - 3.5rem);
+    display: flex; flex-direction: column; align-items: center; gap: .25rem;
+  }
+  .B-sidebar .s-logo { color: var(--primary-dark); margin-bottom: 1rem; }
+  .B-sidebar .s-logo svg { width: 28px; height: 28px; }
+  .B-sidebar .s-nav { list-style: none; padding: 0; margin: 0; flex: 1; display: flex; flex-direction: column; gap: .25rem; }
+  .B-sidebar .s-nav a {
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px;
+    border-radius: var(--radius-md);
+    color: var(--text-500);
+    text-decoration: none;
+    position: relative;
+  }
+  .B-sidebar .s-nav a:hover { background: #F3F4F6; color: var(--text-900); }
+  .B-sidebar .s-nav a.current { background: #ECFDF5; color: var(--primary-dark); }
+  .B-sidebar .s-nav a svg { width: 18px; height: 18px; }
+  .B-sidebar .s-nav a .tt {
+    position: absolute; left: 48px; top: 50%; transform: translateY(-50%);
+    background: var(--text-900); color: white;
+    padding: .25rem .5rem; border-radius: var(--radius-sm);
+    font-size: .75rem; font-weight: 600;
+    white-space: nowrap;
+    opacity: 0; pointer-events: none;
+    transition: opacity .15s;
+  }
+  .B-sidebar .s-nav a:hover .tt { opacity: 1; }
+  .B-sidebar .s-cta {
+    width: 40px; height: 40px;
+    background: var(--primary-dark); color: white; border: none;
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; margin-bottom: 1rem;
+  }
+  .B-sidebar .s-cta svg { width: 18px; height: 18px; }
+
+  .B-main { flex: 1; }
+  .B-topbar {
+    position: sticky; top: 3.5rem; z-index: 10;
+    background: white;
+    border-bottom: 1px solid var(--border-default);
+    padding: .875rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem;
+  }
+  .B-topbar .info { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .B-topbar .cabinet-name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.125rem; color: var(--text-900); }
+  .B-topbar .period { font-size: .75rem; color: var(--text-500); padding: .125rem .5rem; background: var(--bg-page); border-radius: var(--radius-full); font-weight: 600; }
+  .B-topbar .actions { display: flex; gap: .5rem; }
+
+  /* ===================================================================
+     Variant C — Rich sidebar with cabinet card + sticky section headers
+     =================================================================== */
+  .C-shell { display: flex; min-height: calc(100vh - 3.5rem); }
+  .C-sidebar {
+    position: sticky; top: 3.5rem; align-self: flex-start;
+    width: 280px; flex-shrink: 0;
+    background: white;
+    border-right: 1px solid var(--border-default);
+    padding: 1.5rem 1.25rem;
+    height: calc(100vh - 3.5rem);
+    overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .C-sidebar .s-logo { display: flex; align-items: center; gap: .25rem; font-weight: 700; font-size: 1rem; color: var(--primary-dark); margin-bottom: 1.25rem; }
+  .C-sidebar .s-logo svg { width: 22px; height: 22px; }
+  .C-cabinet-card {
+    background: var(--bg-page);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .C-cabinet-card .cn { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; color: var(--text-900); margin: 0 0 .5rem; }
+  .C-cabinet-card .meta { display: flex; flex-direction: column; gap: .375rem; font-size: .75rem; color: var(--text-500); }
+  .C-cabinet-card .meta .row { display: flex; justify-content: space-between; }
+  .C-cabinet-card .meta .k { text-transform: uppercase; letter-spacing: .04em; font-weight: 600; font-size: 10px; }
+  .C-cabinet-card .meta .v { color: var(--text-800); font-weight: 600; }
+  .C-sidebar .s-nav-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--text-400); margin: 0 0 .5rem .75rem;
+  }
+  .C-sidebar .s-nav { list-style: none; padding: 0; margin: 0; flex: 1; }
+  .C-sidebar .s-nav a {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .625rem .75rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-size: .875rem; font-weight: 500;
+    color: var(--text-600);
+    margin-bottom: .125rem;
+    position: relative;
+  }
+  .C-sidebar .s-nav a:hover { background: #F3F4F6; color: var(--text-900); }
+  .C-sidebar .s-nav a.current { background: #ECFDF5; color: var(--primary-dark); font-weight: 600; }
+  .C-sidebar .s-nav a.current::before { content: ''; position: absolute; left: -1.25rem; top: 0; bottom: 0; width: 3px; background: var(--primary-dark); }
+  .C-sidebar .s-nav .n { font-family: 'Fraunces', serif; font-weight: 700; font-size: .875rem; min-width: 1.25rem; }
+  .C-sidebar .s-nav a.current .n { color: var(--primary-dark); }
+  .C-sidebar .s-cta-block {
+    background: var(--primary-dark); color: white;
+    border-radius: var(--radius-lg); padding: 1rem;
+    margin-top: 1.25rem;
+  }
+  .C-sidebar .s-cta-block .headline { font-weight: 700; font-size: .875rem; margin: 0 0 .25rem; }
+  .C-sidebar .s-cta-block .sub { font-size: .75rem; color: #A7F3D0; margin: 0 0 .75rem; }
+  .C-sidebar .s-cta-block button { background: white; color: var(--primary-dark); width: 100%; padding: .5rem; border-radius: var(--radius-md); font-weight: 600; font-size: .8125rem; border: none; cursor: pointer; }
+
+  .C-main { flex: 1; }
+  .C-section-header {
+    position: sticky; top: 3.5rem; z-index: 10;
+    background: rgba(249, 250, 251, .92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-soft);
+    padding: .875rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+    font-size: .8125rem;
+  }
+  .C-section-header .crumb { color: var(--text-500); }
+  .C-section-header .crumb b { color: var(--text-900); font-weight: 700; font-family: 'Fraunces', serif; font-size: .9375rem; }
+  .C-section-header .crumb .sep { margin: 0 .5rem; color: var(--text-400); }
+  .C-section-header .jump { font-weight: 600; color: var(--text-600); display: flex; gap: .5rem; }
+  .C-section-header .jump button { background: none; border: none; color: var(--text-500); cursor: pointer; font-size: .8125rem; padding: .25rem .5rem; border-radius: var(--radius-sm); }
+  .C-section-header .jump button:hover { background: #F3F4F6; color: var(--text-900); }
+
+  /* ---------- Toolbar ---------- */
+  .sketch-toolbar {
+    position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+    background: white; border: 1px solid var(--border-default);
+    border-radius: var(--radius-full); padding: .5rem .75rem;
+    box-shadow: var(--shadow-lg); z-index: 100;
+    font-size: 11px; color: var(--text-600);
+    display: flex; gap: .75rem; align-items: center;
+  }
+  .sketch-toolbar b { color: var(--text-900); }
+</style>
+</head>
+<body>
+
+<nav class="variant-bar" role="tablist">
+  <button class="variant-tab active" data-variant="A">Variant A — Classic sidebar<span class="star">★</span></button>
+  <button class="variant-tab winner" data-variant="B">Variant B — Icon-compact + topbar<span class="star">★</span></button>
+  <button class="variant-tab" data-variant="C">Variant C — Rich sidebar + sticky headers<span class="star">★</span></button>
+</nav>
+
+<!-- ============================== VARIANT A ============================== -->
+<section class="variant-panel active" data-variant="A">
+  <div class="A-shell">
+    <aside class="A-sidebar">
+      <div class="s-logo">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+        <span>GetLostRevenue</span>
+      </div>
+      <div class="s-cabinet">
+        <div class="cn">Cabinet Dentaire Dupont</div>
+        <div class="cd">Audit du 23 avril 2026</div>
+      </div>
+      <ul class="s-nav">
+        <li><a href="#A-synthese" class="current" data-c="volume"><span class="dot"></span>Synthèse</a></li>
+        <li><a href="#A-money" data-c="argent"><span class="dot"></span>Manque à gagner</a></li>
+        <li><a href="#A-timing" data-c="signal"><span class="dot"></span>Où & Quand</a></li>
+        <li><a href="#A-score" data-c="score"><span class="dot"></span>Score cabinet</a></li>
+        <li><a href="#A-plan" data-c="plan"><span class="dot"></span>Plan d'action</a></li>
+      </ul>
+      <button class="s-cta">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+        Prendre RDV
+      </button>
+    </aside>
+
+    <div class="A-main">
+      <div class="A-topbar">
+        <div class="title">Rapport d'audit — Cabinet Dupont</div>
+        <div class="actions">
+          <button class="A-btn-ghost">Télécharger PDF</button>
+        </div>
+      </div>
+
+      <section class="section-block" id="A-synthese">
+        <h2>Synthèse</h2>
+        <p class="sub">Les 4 chiffres clés de votre activité sur la période analysée.</p>
+        <div class="kpi-grid-large">
+          <div class="kpi-card kpi-card--volume"><span class="kpi-label">RDV analysés</span><div class="kpi-value">4 520</div></div>
+          <div class="kpi-card kpi-card--signal"><span class="kpi-label">No-shows</span><div class="kpi-value">542</div></div>
+          <div class="kpi-card kpi-card--taux"><span class="kpi-label">Taux</span><div class="kpi-value">12 %</div></div>
+          <div class="kpi-card kpi-card--argent"><span class="kpi-label">CA perdu / an</span><div class="kpi-value">22 400 €</div></div>
+        </div>
+      </section>
+
+      <section class="section-block" id="A-money">
+        <h2>Manque à gagner annuel</h2>
+        <p class="sub">Projection annualisée du chiffre d'affaires non encaissé sur la base de votre activité.</p>
+        <div class="money-card">
+          <p class="big-eur">22 400 €</p>
+          <div class="caption">Perdus chaque année</div>
+          <div class="breakdown">
+            <div class="item"><div class="v">7 840 €</div><div class="l">Dont implant</div></div>
+            <div class="item"><div class="v">9 120 €</div><div class="l">Dont ortho</div></div>
+            <div class="item"><div class="v">5 440 €</div><div class="l">Dont omni</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block" id="A-timing">
+        <h2>Où & Quand vos no-shows frappent</h2>
+        <p class="sub">Répartition par jour de la semaine — identifier les créneaux à risque.</p>
+        <div class="bars-card">
+          <div class="bars-grid">
+            <div class="bar" style="height: 60%"><span class="v">48</span></div>
+            <div class="bar" style="height: 85%"><span class="v">72</span></div>
+            <div class="bar" style="height: 45%"><span class="v">32</span></div>
+            <div class="bar" style="height: 100%"><span class="v">95</span></div>
+            <div class="bar" style="height: 75%"><span class="v">62</span></div>
+            <div class="bar" style="height: 30%"><span class="v">18</span></div>
+            <div class="bar" style="height: 15%"><span class="v">7</span></div>
+          </div>
+          <div class="bars-labels"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+        </div>
+      </section>
+
+      <section class="section-block" id="A-score">
+        <h2>Score cabinet</h2>
+        <p class="sub">Comparaison avec la moyenne sectorielle dentaire.</p>
+        <div class="score-block">
+          <div class="score-ring-large">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#F3F4F6" stroke-width="10"/>
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#065f46" stroke-dasharray="251.2" stroke-dashoffset="70.34" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+            <div class="num">72</div>
+          </div>
+          <div>
+            <div class="label">Sur 100</div>
+            <div class="title">Bon, mais peut être amélioré</div>
+            <p>Le score moyen observé sur +200 cabinets dentaires est de 68/100. Vous êtes légèrement au-dessus de la moyenne.</p>
+            <div class="mini-row">
+              <div class="mini"><span class="mv">68</span><span class="ml">Moyenne</span></div>
+              <div class="mini"><span class="mv">84</span><span class="ml">Top 10 %</span></div>
+              <div class="mini"><span class="mv">+4</span><span class="ml">Écart</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block" id="A-plan">
+        <h2>Votre plan d'action</h2>
+        <p class="sub">Trois actions concrètes validées par nos +200 cabinets audités.</p>
+        <div class="plan-list">
+          <div class="plan-card"><span class="num">1</span><h3>Système de rappel 48h</h3><p>SMS automatique à J-2 avec confirmation one-tap. Réduction no-shows −35 % en moyenne.</p></div>
+          <div class="plan-card"><span class="num">2</span><h3>Acompte sur 1er RDV</h3><p>20 € débités lors de la prise de RDV en ligne, déduits de la consultation. Réduction −55 %.</p></div>
+          <div class="plan-card"><span class="num">3</span><h3>Liste de rappel express</h3><p>File d'attente patients disponibles &lt;24 h pour combler les créneaux libérés. Récupération +80 %.</p></div>
+        </div>
+        <div class="final-cta-block">
+          <h3>Prêt à récupérer vos revenus ?</h3>
+          <p>30 min avec un expert pour mettre en place le plan adapté à votre cabinet.</p>
+          <button>Réserver mon créneau</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== VARIANT B ============================== -->
+<section class="variant-panel" data-variant="B">
+  <div class="B-shell">
+    <aside class="B-sidebar">
+      <div class="s-logo">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+      </div>
+      <ul class="s-nav">
+        <li><a href="#B-synthese" class="current"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tt">Synthèse</span></a></li>
+        <li><a href="#B-money"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8v1m0 8v1m8-5a8 8 0 11-16 0 8 8 0 0116 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tt">Manque à gagner</span></a></li>
+        <li><a href="#B-timing"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tt">Où & Quand</span></a></li>
+        <li><a href="#B-score"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tt">Score cabinet</span></a></li>
+        <li><a href="#B-plan"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tt">Plan d'action</span></a></li>
+      </ul>
+      <button class="s-cta" title="Prendre RDV">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+      </button>
+    </aside>
+
+    <div class="B-main">
+      <div class="B-topbar">
+        <div class="info">
+          <span class="cabinet-name">Cabinet Dentaire Dupont</span>
+          <span class="period">Audit 23 avril 2026</span>
+          <span class="period">Période : oct. 2025 – mars 2026</span>
+        </div>
+        <div class="actions">
+          <button class="A-btn-ghost">Télécharger PDF</button>
+          <button class="A-btn-ghost" style="background: var(--primary-dark); color: white; border-color: var(--primary-dark);">Prendre RDV</button>
+        </div>
+      </div>
+
+      <section class="section-block" id="B-synthese">
+        <h2>Synthèse</h2>
+        <p class="sub">Les 4 chiffres clés de votre activité sur la période analysée.</p>
+        <div class="kpi-grid-large">
+          <div class="kpi-card kpi-card--volume"><span class="kpi-label">RDV analysés</span><div class="kpi-value">4 520</div></div>
+          <div class="kpi-card kpi-card--signal"><span class="kpi-label">No-shows</span><div class="kpi-value">542</div></div>
+          <div class="kpi-card kpi-card--taux"><span class="kpi-label">Taux</span><div class="kpi-value">12 %</div></div>
+          <div class="kpi-card kpi-card--argent"><span class="kpi-label">CA perdu / an</span><div class="kpi-value">22 400 €</div></div>
+        </div>
+      </section>
+
+      <section class="section-block" id="B-money">
+        <h2>Manque à gagner annuel</h2>
+        <p class="sub">Projection annualisée du CA non encaissé.</p>
+        <div class="money-card">
+          <p class="big-eur">22 400 €</p>
+          <div class="caption">Perdus chaque année</div>
+          <div class="breakdown">
+            <div class="item"><div class="v">7 840 €</div><div class="l">Dont implant</div></div>
+            <div class="item"><div class="v">9 120 €</div><div class="l">Dont ortho</div></div>
+            <div class="item"><div class="v">5 440 €</div><div class="l">Dont omni</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block" id="B-timing">
+        <h2>Où & Quand vos no-shows frappent</h2>
+        <p class="sub">Répartition par jour de la semaine.</p>
+        <div class="bars-card">
+          <div class="bars-grid">
+            <div class="bar" style="height: 60%"><span class="v">48</span></div>
+            <div class="bar" style="height: 85%"><span class="v">72</span></div>
+            <div class="bar" style="height: 45%"><span class="v">32</span></div>
+            <div class="bar" style="height: 100%"><span class="v">95</span></div>
+            <div class="bar" style="height: 75%"><span class="v">62</span></div>
+            <div class="bar" style="height: 30%"><span class="v">18</span></div>
+            <div class="bar" style="height: 15%"><span class="v">7</span></div>
+          </div>
+          <div class="bars-labels"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+        </div>
+      </section>
+
+      <section class="section-block" id="B-score">
+        <h2>Score cabinet</h2>
+        <p class="sub">Position vs. moyenne sectorielle.</p>
+        <div class="score-block">
+          <div class="score-ring-large">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#F3F4F6" stroke-width="10"/>
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#065f46" stroke-dasharray="251.2" stroke-dashoffset="70.34" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+            <div class="num">72</div>
+          </div>
+          <div>
+            <div class="label">Sur 100</div>
+            <div class="title">Bon, mais peut être amélioré</div>
+            <p>Moyenne sectorielle 68/100 sur +200 cabinets dentaires.</p>
+            <div class="mini-row">
+              <div class="mini"><span class="mv">68</span><span class="ml">Moyenne</span></div>
+              <div class="mini"><span class="mv">84</span><span class="ml">Top 10 %</span></div>
+              <div class="mini"><span class="mv">+4</span><span class="ml">Écart</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block" id="B-plan">
+        <h2>Votre plan d'action</h2>
+        <p class="sub">Trois actions concrètes validées par nos +200 cabinets audités.</p>
+        <div class="plan-list">
+          <div class="plan-card"><span class="num">1</span><h3>Système de rappel 48h</h3><p>SMS automatique à J-2. Réduction −35 %.</p></div>
+          <div class="plan-card"><span class="num">2</span><h3>Acompte sur 1er RDV</h3><p>20 € à la prise de RDV. Réduction −55 %.</p></div>
+          <div class="plan-card"><span class="num">3</span><h3>Liste d'attente</h3><p>File de patients disponibles &lt;24 h. Récupération +80 %.</p></div>
+        </div>
+        <div class="final-cta-block">
+          <h3>Prêt à récupérer vos revenus ?</h3>
+          <p>30 min avec un expert pour votre plan personnalisé.</p>
+          <button>Réserver mon créneau</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== VARIANT C ============================== -->
+<section class="variant-panel" data-variant="C">
+  <div class="C-shell">
+    <aside class="C-sidebar">
+      <div class="s-logo">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+        <span>GetLostRevenue</span>
+      </div>
+      <div class="C-cabinet-card">
+        <h3 class="cn">Cabinet Dentaire Dupont</h3>
+        <div class="meta">
+          <div class="row"><span class="k">Généré le</span><span class="v">23 avr 2026</span></div>
+          <div class="row"><span class="k">Période</span><span class="v">Oct 25 – Mar 26</span></div>
+          <div class="row"><span class="k">RDV analysés</span><span class="v">4 520</span></div>
+        </div>
+      </div>
+      <div class="s-nav-label">SECTIONS</div>
+      <ul class="s-nav">
+        <li><a href="#C-synthese" class="current"><span class="n">1</span><span>Synthèse</span></a></li>
+        <li><a href="#C-money"><span class="n">2</span><span>Manque à gagner</span></a></li>
+        <li><a href="#C-timing"><span class="n">3</span><span>Où & Quand</span></a></li>
+        <li><a href="#C-score"><span class="n">4</span><span>Score cabinet</span></a></li>
+        <li><a href="#C-plan"><span class="n">5</span><span>Plan d'action</span></a></li>
+      </ul>
+      <div class="s-cta-block">
+        <h4 class="headline">Réservez 30 min</h4>
+        <p class="sub">Un expert vous aide à mettre en place le plan.</p>
+        <button>Prendre RDV</button>
+      </div>
+    </aside>
+
+    <div class="C-main">
+      <div class="C-section-header">
+        <div class="crumb">Rapport<span class="sep">·</span><b>Synthèse</b></div>
+        <div class="jump">
+          <button>Télécharger PDF</button>
+          <button>Partager</button>
+        </div>
+      </div>
+
+      <section class="section-block" id="C-synthese">
+        <h2>1. Synthèse</h2>
+        <p class="sub">Les 4 chiffres clés de votre activité sur la période analysée.</p>
+        <div class="kpi-grid-large">
+          <div class="kpi-card kpi-card--volume"><span class="kpi-label">RDV analysés</span><div class="kpi-value">4 520</div></div>
+          <div class="kpi-card kpi-card--signal"><span class="kpi-label">No-shows</span><div class="kpi-value">542</div></div>
+          <div class="kpi-card kpi-card--taux"><span class="kpi-label">Taux</span><div class="kpi-value">12 %</div></div>
+          <div class="kpi-card kpi-card--argent"><span class="kpi-label">CA perdu / an</span><div class="kpi-value">22 400 €</div></div>
+        </div>
+      </section>
+
+      <section class="section-block" id="C-money">
+        <h2>2. Manque à gagner annuel</h2>
+        <p class="sub">Projection annualisée du CA non encaissé.</p>
+        <div class="money-card">
+          <p class="big-eur">22 400 €</p>
+          <div class="caption">Perdus chaque année</div>
+          <div class="breakdown">
+            <div class="item"><div class="v">7 840 €</div><div class="l">Dont implant</div></div>
+            <div class="item"><div class="v">9 120 €</div><div class="l">Dont ortho</div></div>
+            <div class="item"><div class="v">5 440 €</div><div class="l">Dont omni</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block" id="C-timing">
+        <h2>3. Où & Quand vos no-shows frappent</h2>
+        <p class="sub">Répartition par jour de la semaine.</p>
+        <div class="bars-card">
+          <div class="bars-grid">
+            <div class="bar" style="height: 60%"><span class="v">48</span></div>
+            <div class="bar" style="height: 85%"><span class="v">72</span></div>
+            <div class="bar" style="height: 45%"><span class="v">32</span></div>
+            <div class="bar" style="height: 100%"><span class="v">95</span></div>
+            <div class="bar" style="height: 75%"><span class="v">62</span></div>
+            <div class="bar" style="height: 30%"><span class="v">18</span></div>
+            <div class="bar" style="height: 15%"><span class="v">7</span></div>
+          </div>
+          <div class="bars-labels"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+        </div>
+      </section>
+
+      <section class="section-block" id="C-score">
+        <h2>4. Score cabinet</h2>
+        <p class="sub">Position vs. moyenne sectorielle.</p>
+        <div class="score-block">
+          <div class="score-ring-large">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#F3F4F6" stroke-width="10"/>
+              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#065f46" stroke-dasharray="251.2" stroke-dashoffset="70.34" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+            <div class="num">72</div>
+          </div>
+          <div>
+            <div class="label">Sur 100</div>
+            <div class="title">Bon, mais peut être amélioré</div>
+            <p>Moyenne sectorielle 68/100 sur +200 cabinets dentaires.</p>
+            <div class="mini-row">
+              <div class="mini"><span class="mv">68</span><span class="ml">Moyenne</span></div>
+              <div class="mini"><span class="mv">84</span><span class="ml">Top 10 %</span></div>
+              <div class="mini"><span class="mv">+4</span><span class="ml">Écart</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block" id="C-plan">
+        <h2>5. Plan d'action</h2>
+        <p class="sub">Trois actions concrètes validées par nos +200 cabinets audités.</p>
+        <div class="plan-list">
+          <div class="plan-card"><span class="num">1</span><h3>Système de rappel 48h</h3><p>SMS automatique à J-2. Réduction −35 %.</p></div>
+          <div class="plan-card"><span class="num">2</span><h3>Acompte sur 1er RDV</h3><p>20 € à la prise de RDV. Réduction −55 %.</p></div>
+          <div class="plan-card"><span class="num">3</span><h3>Liste d'attente</h3><p>File de patients disponibles &lt;24 h. Récupération +80 %.</p></div>
+        </div>
+        <div class="final-cta-block">
+          <h3>Prêt à récupérer vos revenus ?</h3>
+          <p>30 min avec un expert pour votre plan personnalisé.</p>
+          <button>Réserver mon créneau</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<div class="sketch-toolbar" role="status">
+  <b>Sketch 005</b><span>audit-dashboard-layout</span><span>•</span><span>Direction B</span><span>•</span><span id="current-variant">Variant A</span>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.variant-tab');
+  const panels = document.querySelectorAll('.variant-panel');
+  const label = document.getElementById('current-variant');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const v = tab.dataset.variant;
+      tabs.forEach(t => { t.classList.toggle('active', t === tab); t.setAttribute('aria-selected', t === tab); });
+      panels.forEach(p => p.classList.toggle('active', p.dataset.variant === v));
+      label.textContent = 'Variant ' + v;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  });
+</script>
+
+</body>
+</html>
+</content>
+</invoke>

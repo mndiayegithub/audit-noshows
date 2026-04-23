@@ -31,15 +31,17 @@ dans le registre du document d'expertise — sérieux, chiffré, lisible, modern
 | 003 | landing-how-value | "Comment ça marche" 3 étapes tricolores + "Ce que révèle" + score card | **C** ★ | landing, how-it-works, score |
 | 004 | landing-testimonial-faq-cta | Témoignage + FAQ accordéon + bandeau CTA final primary-dark | **B** ★ | landing, faq, cta |
 
-### Phase 2 — Audit flow (5 steps)
+### Phase 2 — Audit dashboard (direction B : sidebar + sections scrollables)
+
+**Architecture pivotée** : fini le flow séquentiel 5 steps, on passe à un **tableau de bord navigable** avec sidebar fixe et 5 sections toujours visibles en scroll continu.
 
 | # | Name | Design Question | Winner | Tags |
 |---|------|----------------|--------|------|
-| 005 | audit-step01-synthese | Step Synthèse — 4 KPI pastels + mini chart courbe | — | audit, step, kpi |
-| 006 | audit-step02-money-build | Step Money Build — CA perdu violet plein + reveal | — | audit, step, money |
-| 007 | audit-step03-ou-quand | Step Où & Quand — bars émeraude par jour + sparkline | — | audit, step, chart |
-| 008 | audit-step04-score | Step Score — jauge 72/100 circulaire + breakdown pastels | — | audit, step, score |
-| 009 | audit-step05-plan-cta | Step Plan d'action — 3 cards tricolores + bandeau CTA final | — | audit, step, cta |
+| 005 | audit-dashboard-layout | Architecture globale sidebar + sections scrollables | **B** ★ (icon-compact sidebar 64px + topbar horizontale riche) | audit, dashboard, layout |
+| 006 | audit-synthese-kpi | Détail zone Synthèse (4 KPI pastels grand format + contexte) | — | audit, dashboard, kpi |
+| 007 | audit-money-build | Zone Manque à gagner — CA perdu violet plein + breakdown + reveal | — | audit, dashboard, money |
+| 008 | audit-charts | Zone Où & Quand — bars par jour + angles complémentaires | — | audit, dashboard, chart |
+| 009 | audit-score-plan-cta | Zones Score + Plan d'action + CTA Calendly final | — | audit, dashboard, score, cta |
 
 ## Archived (v1 dark-premium)
 
