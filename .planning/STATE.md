@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 ## Current Position
 
 Phase: 02 of 08 (refonte-audit-v2)
-Plan: 02 of 07 in current phase
-Status: In progress (Wave 1 complete)
-Last activity: 2026-04-24 — Plan 02-01 complete (lib/score.ts + app/audit/layout.tsx light scope + smooth scroll)
+Plan: 03 of 07 in current phase
+Status: In progress (Wave 2 complete — shell livré)
+Last activity: 2026-04-24 — Plan 02-02 complete (useScrollSpy + AuditSidebar + AuditSection + AuditDashboard + page wiring)
 
-Progress: [███░░░░░░░] 25%
+Progress: [████░░░░░░] 33%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: ~16 min
-- Total execution time: ~31 min
+- Total plans completed: 3
+- Average duration: ~14 min
+- Total execution time: ~41 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 1/5 | ~25 min | ~25 min |
-| 02 | 1/7 | ~6 min  | ~6 min   |
+| 02 | 2/7 | ~16 min | ~8 min   |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (25 min), 02-01 (6 min)
-- Trend: ⬇️ (scaffolding plan, most artifacts pre-seeded)
+- Last 5 plans: 01-01 (25 min), 02-01 (6 min), 02-02 (~10 min)
+- Trend: ↗️ modéré (shell + wiring > scaffolding pur)
 
 ## Accumulated Context
 
@@ -49,6 +49,9 @@ Recent decisions affecting current work:
 - Plan 02-01: `text-ink` fallback → `text-slate-900` (not defined in config, plan-sanctioned)
 - Plan 02-01: TDD honored via inline Node assertion (no Vitest installed yet — deferred to Phase 6)
 - Plan 02-01: Task 3 no-op commit skipped — tokens already seeded by Phase 1 (audit-only)
+- Plan 02-02: Shell dashboard wired — AuditSidebar (240px desktop + mobile top-bar), useScrollSpy rootMargin -40%, 5 placeholder sections ready for Wave 3
+- Plan 02-02: Rule 1 auto-fix — realigned `stats.global.total_rdv` / `stats.periode.nb_mois` vs plan snippet (which referenced non-existent flat fields)
+- Plan 02-02: Legacy imports in app/audit/page.tsx intentionally kept (cleanup scoped to plan 02-06)
 
 ### Pending Todos
 
@@ -66,6 +69,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24 00:25
-Stopped at: Plan 02-01 complete — Wave 1 scaffolding shipped (lib/score.ts, /audit light layout, smooth scroll). Ready for Plan 02-02 (dashboard shell).
+Last session: 2026-04-24 00:45
+Stopped at: Plan 02-02 complete — Wave 2 dashboard shell shipped (useScrollSpy + AuditSidebar + AuditSection + AuditDashboard + page.tsx wiring). Ready for Plan 02-03 (sections Synthèse + Manque à gagner, parallèle possible avec 02-04 et 02-05 en Wave 3).
 Resume file: None

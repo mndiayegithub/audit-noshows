@@ -72,7 +72,7 @@ Architecture sidebar validée en 005 A (classic 240 px + bloc infos cabinet + 5 
 
 Plans:
 - [x] 02-01-PLAN.md — Scaffolding (layout light, score helper, tokens audit)
-- [ ] 02-02-PLAN.md — Dashboard shell (sidebar + scrollspy + AuditSection wrapper + page wiring)
+- [x] 02-02-PLAN.md — Dashboard shell (sidebar + scrollspy + AuditSection wrapper + page wiring)
 - [ ] 02-03-PLAN.md — Section 1 Synthèse + Section 2 Manque à gagner (violet-plein, ca_perdu verbatim)
 - [ ] 02-04-PLAN.md — Section 3 Où & Quand (ChartParJour + ChartParHeure, DOM bars)
 - [ ] 02-05-PLAN.md — Section 4 Score + Section 5 Plan + Calendly
