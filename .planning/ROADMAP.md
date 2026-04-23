@@ -75,7 +75,7 @@ Plans:
 - [x] 02-02-PLAN.md — Dashboard shell (sidebar + scrollspy + AuditSection wrapper + page wiring)
 - [x] 02-03-PLAN.md — Section 1 Synthèse + Section 2 Manque à gagner (violet-plein, ca_perdu verbatim)
 - [x] 02-04-PLAN.md — Section 3 Où & Quand (ChartParJour + ChartParHeure, DOM bars)
-- [ ] 02-05-PLAN.md — Section 4 Score + Section 5 Plan + Calendly
+- [x] 02-05-PLAN.md — Section 4 Score + Section 5 Plan + Calendly
 - [ ] 02-06-PLAN.md — Cleanup (delete v1 Gauge/Graphique/Score) + RapportPDF refonte light
 - [ ] 02-07-PLAN.md — UAT checkpoint (visual + a11y + responsive + ca_perdu invariant)
 

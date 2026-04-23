@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 ## Current Position
 
 Phase: 02 of 08 (refonte-audit-v2)
-Plan: 05 of 07 in current phase
-Status: In progress (Wave 3 partial — sections 1, 2 & 3 livrées)
-Last activity: 2026-04-24 — Plan 02-04 complete (ChartParJour + ChartParHeure DOM-bars + wiring Section 3)
+Plan: 06 of 07 in current phase
+Status: In progress (Wave 3 complete — sections 1 à 5 livrées)
+Last activity: 2026-04-24 — Plan 02-05 complete (ScoreHero + PlanTimeline + CalendlyEmbed + wiring Sections 4+5)
 
-Progress: [██████░░░░] 55%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
+- Total plans completed: 6
 - Average duration: ~11 min
-- Total execution time: ~57 min
+- Total execution time: ~64 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 1/5 | ~25 min | ~25 min |
-| 02 | 4/7 | ~32 min | ~8 min   |
+| 02 | 5/7 | ~39 min | ~8 min   |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (25 min), 02-01 (6 min), 02-02 (~10 min), 02-03 (~8 min), 02-04 (~8 min)
+- Last 5 plans: 02-01 (6 min), 02-02 (~10 min), 02-03 (~8 min), 02-04 (~8 min), 02-05 (~7 min)
 - Trend: ↗️ stable (composants content + wiring léger)
 
 ## Accumulated Context
@@ -58,6 +58,10 @@ Recent decisions affecting current work:
 - Plan 02-04: DOM bars Tailwind purs retenus — aucun import chart.js/react-chartjs-2 dans ChartParJour / ChartParHeure (per D-07, Chart.js retrait programmé plan 02-06)
 - Plan 02-04: Support polymorphe `stats.par_jour || stats.stats_par_jour` + field `count | no_shows | noShows | value` — couvre les 3 shapes n8n observées
 - Plan 02-04: `par_heure` non typé dans AuditStats (narrow-cast localisé) — empty state "Données horaires non disponibles" tant que n8n extension Phase 3 absente
+- Plan 02-05: Score input via `stats.global.taux` (path réel AuditStats) — Rule 1 auto-fix vs plan snippet `stats.taux_noshow` (champ flat inexistant)
+- Plan 02-05: Badge pill tone-aware (good emerald / warn amber / bad rose) — Rule 2 preventive, évite qu'un score "Critique" apparaisse en badge émeraude
+- Plan 02-05: CalendlyEmbed iframe-only (pas de widget Calendly.js) — D-10 confirmé, placeholder vert-sapin garanti tant que NEXT_PUBLIC_CALENDLY_URL non défini
+- Plan 02-05: `computeScore` + `scoreBadge` réutilisés depuis lib/score.ts — zero duplication de la formule 100 - taux × 3.2
 
 ### Pending Todos
 
@@ -75,6 +79,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24 01:13
-Stopped at: Plan 02-04 complete — Wave 3 partial (sections 1, 2 & 3 livrées). ChartParJour + ChartParHeure DOM-bars Tailwind wirés dans Section 3 (grid-cols-1 lg:grid-cols-2), empty state par_heure actif, zero Chart.js dans les nouveaux composants, build green. Ready for Plan 02-05 (sections 4 Score + 5 Plan d'action).
+Last session: 2026-04-24 01:22
+Stopped at: Plan 02-05 complete — Wave 3 complete (sections 1 à 5 content-filled). ScoreHero primary-dark avec ring 220px SVG piloté par computeScore(stats.global.taux), PlanTimeline 3-items tricolore (Volume/Signal/Taux) + narratif, CalendlyEmbed iframe env-driven (placeholder vert-sapin si NEXT_PUBLIC_CALENDLY_URL absent). AuditDashboard sections 4+5 wirées. Build green (/audit = 26.9 kB). Ready for Plan 02-06 (cleanup legacy Gauge/Graphique/Score + RapportPDF refonte light).
 Resume file: None
