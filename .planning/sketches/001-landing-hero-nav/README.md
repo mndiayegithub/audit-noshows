@@ -2,8 +2,8 @@
 sketch: 001
 name: landing-hero-nav
 question: "Quelle composition hero + nav amène le mieux les 4 KPI pastels et le positionnement clinique-claire ?"
-winner: C
-fallback: B
+winner: B
+fallback: C
 tags: [landing, hero, nav, phase-01]
 ---
 
@@ -43,8 +43,8 @@ Les 3 variants se basculent via la barre d'onglets en haut.
 
 ## Decision
 
-**Winner : C — Compact + KPI strip** (validé 2026-04-23).
+**Winner : B — Split 2-col** (ré-arbitré 2026-04-23 après build réel ; variante C paraissait trop légère).
 
-**Fallback : B — Split 2-col** conservé comme option de repli si C paraît trop léger après le build réel. À ré-arbitrer au moment du Plan.
+**Fallback : C — Compact + KPI strip** conservé comme option de repli.
 </content>
 </invoke>

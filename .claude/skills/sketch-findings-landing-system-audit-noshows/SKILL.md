@@ -83,19 +83,19 @@ Jamais `font-family: system-ui` nu. Jamais SF Pro.
 
 ## Structure de `app/page.tsx` — 5 sections (issues des 4 sketches validés)
 
-### 1. Sticky Nav + Hero (sketch 001 — variante **C**, fallback B)
+### 1. Sticky Nav + Hero (sketch 001 — variante **B**, fallback C)
 
 - **Nav sticky** 72 px, bg `bg-white/90` + backdrop-blur léger, bordure bas `border-gray-200`
 - Logo "GetLostRevenue" en Fraunces ou Inter 600 + pastille vert sapin (pas de svg complexe)
 - Liens : "Comment ça marche", "Pour qui", "FAQ"
 - CTA nav : bouton primary-dark `bg-[#064E3B] text-white rounded-xl`
-- **Hero compact** (variante C) :
-  - Layout split 2 col desktop, stacked mobile
+- **Hero split 2-col** (variante B) :
+  - Layout split 2 col desktop, stacked mobile (`grid md:grid-cols-2`, `max-w-6xl`)
   - Badge pill interrogatif au-dessus du H1 (`bg-emerald-50 text-emerald-700`)
   - H1 Fraunces serif XXL, max 2 lignes, ton interrogatif (pas "Découvrez" / "Révolutionnez")
   - Sous-titre Inter regular, 1 phrase factuelle
   - 2 CTA : primary-dark plein + secondaire ghost
-  - Côté droit : **mini dashboard mockup** avec les 4 KPI pastels (mini versions), pas de chart complexe — juste poser la signature visuelle d'entrée
+  - Côté droit : **mini dashboard mockup** (`MiniDashboard`) avec les 4 KPI pastels, pas de chart complexe — juste poser la signature visuelle d'entrée
 
 ### 2. Stats + Target (sketch 002 — variante **B**)
 
