@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 ## Current Position
 
 Phase: 02 of 08 (refonte-audit-v2)
-Plan: 03 of 07 in current phase
-Status: In progress (Wave 2 complete — shell livré)
-Last activity: 2026-04-24 — Plan 02-02 complete (useScrollSpy + AuditSidebar + AuditSection + AuditDashboard + page wiring)
+Plan: 04 of 07 in current phase
+Status: In progress (Wave 3 partial — sections 1 & 2 livrées)
+Last activity: 2026-04-24 — Plan 02-03 complete (SyntheseKPIs + MoneyBuildCard + wiring AuditDashboard)
 
-Progress: [████░░░░░░] 33%
+Progress: [█████░░░░░] 44%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: ~14 min
-- Total execution time: ~41 min
+- Total plans completed: 4
+- Average duration: ~12 min
+- Total execution time: ~49 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 1/5 | ~25 min | ~25 min |
-| 02 | 2/7 | ~16 min | ~8 min   |
+| 02 | 3/7 | ~24 min | ~8 min   |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (25 min), 02-01 (6 min), 02-02 (~10 min)
-- Trend: ↗️ modéré (shell + wiring > scaffolding pur)
+- Last 5 plans: 01-01 (25 min), 02-01 (6 min), 02-02 (~10 min), 02-03 (~8 min)
+- Trend: ↗️ stable (composants content + wiring léger)
 
 ## Accumulated Context
 
@@ -52,6 +52,9 @@ Recent decisions affecting current work:
 - Plan 02-02: Shell dashboard wired — AuditSidebar (240px desktop + mobile top-bar), useScrollSpy rootMargin -40%, 5 placeholder sections ready for Wave 3
 - Plan 02-02: Rule 1 auto-fix — realigned `stats.global.total_rdv` / `stats.periode.nb_mois` vs plan snippet (which referenced non-existent flat fields)
 - Plan 02-02: Legacy imports in app/audit/page.tsx intentionally kept (cleanup scoped to plan 02-06)
+- Plan 02-03: Rule 1 continuation — schema remap (stats.global.ca_perdu_an / ca_moyen, stats.periode.nb_mois) + CountUpNumber real signature (target/decimals/suffix)
+- Plan 02-03: Invariant ca_perdu confirmé — stats.global.ca_perdu_an affiché verbatim (2× MoneyBuildCard + 1× SyntheseKPIs), 0 multiplication
+- Plan 02-03: #6B21A8 confiné à MoneyBuildCard.tsx (1 seul fichier dans components/audit/)
 
 ### Pending Todos
 
@@ -69,6 +72,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24 00:45
-Stopped at: Plan 02-02 complete — Wave 2 dashboard shell shipped (useScrollSpy + AuditSidebar + AuditSection + AuditDashboard + page.tsx wiring). Ready for Plan 02-03 (sections Synthèse + Manque à gagner, parallèle possible avec 02-04 et 02-05 en Wave 3).
+Last session: 2026-04-24 00:58
+Stopped at: Plan 02-03 complete — Wave 3 partial (sections 1 Synthèse + 2 Manque à gagner livrées). SyntheseKPIs + MoneyBuildCard wirés dans AuditDashboard, build green, invariant ca_perdu respecté. Ready for Plan 02-04 (section 3 Où & Quand) et 02-05 (sections 4 Score + 5 Plan).
 Resume file: None
