@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 ## Current Position
 
 Phase: 02 of 08 (refonte-audit-v2)
-Plan: 06 of 07 in current phase
-Status: In progress (Wave 3 complete — sections 1 à 5 livrées)
-Last activity: 2026-04-24 — Plan 02-05 complete (ScoreHero + PlanTimeline + CalendlyEmbed + wiring Sections 4+5)
+Plan: 07 of 07 in current phase
+Status: In progress (Wave 4 cleanup done — legacy v1 supprimé, PDF refonte SKIPPED par override utilisateur)
+Last activity: 2026-04-24 — Plan 02-06 complete (delete Gauge/Graphique/ScoreGlobal + câblage bouton PDF dans AuditDashboard ; RapportPDF.tsx conservé inchangé)
 
-Progress: [███████░░░] 70%
+Progress: [████████░░] 85%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: ~11 min
-- Total execution time: ~64 min
+- Total plans completed: 7
+- Average duration: ~10 min
+- Total execution time: ~68 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 1/5 | ~25 min | ~25 min |
-| 02 | 5/7 | ~39 min | ~8 min   |
+| 02 | 6/7 | ~43 min | ~7 min   |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (6 min), 02-02 (~10 min), 02-03 (~8 min), 02-04 (~8 min), 02-05 (~7 min)
-- Trend: ↗️ stable (composants content + wiring léger)
+- Last 5 plans: 02-02 (~10 min), 02-03 (~8 min), 02-04 (~8 min), 02-05 (~7 min), 02-06 (~4 min)
+- Trend: ↘️ plan cleanup court (1 task exécutée sur 2 — override utilisateur)
 
 ## Accumulated Context
 
@@ -62,6 +62,9 @@ Recent decisions affecting current work:
 - Plan 02-05: Badge pill tone-aware (good emerald / warn amber / bad rose) — Rule 2 preventive, évite qu'un score "Critique" apparaisse en badge émeraude
 - Plan 02-05: CalendlyEmbed iframe-only (pas de widget Calendly.js) — D-10 confirmé, placeholder vert-sapin garanti tant que NEXT_PUBLIC_CALENDLY_URL non défini
 - Plan 02-05: `computeScore` + `scoreBadge` réutilisés depuis lib/score.ts — zero duplication de la formule 100 - taux × 3.2
+- Plan 02-06: Task 2 (RapportPDF refonte light palette) SKIPPED par override utilisateur explicite — RapportPDF.tsx conservé verbatim en palette dark/gold v1, REQ-2 reporté vers milestone "PDF refonte clinique" backlog
+- Plan 02-06: Bouton PDF déplacé de page.tsx vers AuditDashboard Section 5 (props `onDownloadPDF` + `isGeneratingPDF`) — aligné avec la nouvelle arborescence par sections
+- Plan 02-06: Suppression 3 composants legacy v1 (GaugeBenchmark / GraphiqueParJour / ScoreGlobal) + nettoyage massif des imports dans page.tsx (ScoreCard inline, ReactMarkdown, Framer Motion, Font.register redondants)
 
 ### Pending Todos
 
@@ -79,6 +82,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24 01:22
-Stopped at: Plan 02-05 complete — Wave 3 complete (sections 1 à 5 content-filled). ScoreHero primary-dark avec ring 220px SVG piloté par computeScore(stats.global.taux), PlanTimeline 3-items tricolore (Volume/Signal/Taux) + narratif, CalendlyEmbed iframe env-driven (placeholder vert-sapin si NEXT_PUBLIC_CALENDLY_URL absent). AuditDashboard sections 4+5 wirées. Build green (/audit = 26.9 kB). Ready for Plan 02-06 (cleanup legacy Gauge/Graphique/Score + RapportPDF refonte light).
+Last session: 2026-04-24 01:34
+Stopped at: Plan 02-06 complete (scope narrowed) — 3 composants legacy v1 supprimés (Gauge/Graphique/ScoreGlobal), app/audit/page.tsx nettoyé (192 lignes retirées, bouton PDF transmis via props à AuditDashboard), bouton "Télécharger le rapport PDF" primary-dark câblé dans AuditDashboard Section 5. RapportPDF.tsx CONSERVÉ INCHANGÉ (palette dark/gold v1) par override utilisateur explicite — Task 2 du plan skipped, REQ-2 reporté. Build green (/audit = 27.4 kB, First Load JS 153 kB). Ready for Plan 02-07 (UAT checkpoint).
 Resume file: None

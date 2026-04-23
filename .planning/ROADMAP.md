@@ -76,7 +76,7 @@ Plans:
 - [x] 02-03-PLAN.md — Section 1 Synthèse + Section 2 Manque à gagner (violet-plein, ca_perdu verbatim)
 - [x] 02-04-PLAN.md — Section 3 Où & Quand (ChartParJour + ChartParHeure, DOM bars)
 - [x] 02-05-PLAN.md — Section 4 Score + Section 5 Plan + Calendly
-- [ ] 02-06-PLAN.md — Cleanup (delete v1 Gauge/Graphique/Score) + RapportPDF refonte light
+- [x] 02-06-PLAN.md — Cleanup (delete v1 Gauge/Graphique/Score) + wire PDF button (RapportPDF refonte **skipped** par override utilisateur — voir backlog "PDF refonte clinique")
 - [ ] 02-07-PLAN.md — UAT checkpoint (visual + a11y + responsive + ca_perdu invariant)
 
 **Next:** `/gsd-execute-phase 2`
