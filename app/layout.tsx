@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import { Agentation } from "agentation";
 import "./globals.css";
 
 const inter = Inter({
@@ -36,6 +37,7 @@ export default function RootLayout({
           position="top-center"
           toastOptions={{ duration: 4000 }}
         />
+        {process.env.NODE_ENV === "development" && <Agentation />}
       </body>
     </html>
   );
