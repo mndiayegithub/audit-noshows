@@ -2,10 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Auto-loaded skills
+## Design system source of truth
 
-- **Sketch findings for system-audit-noshows** (validated design decisions, CSS patterns, visual direction for the audit report v2 — stepped reveal, Apple Health clinical style) → `Skill("sketch-findings-system-audit-noshows")`
-- **Sketch findings for landing page** (validated design decisions for the landing v2 — dark premium, split hero, marquee stats, FAQ minimal) → `Skill("sketch-findings-landing-system-audit-noshows")`
+- `new_design.md` + `new_design_audit.html` are the canonical DA spec (clinique-claire, Inter, bg-gray-50, primary `#064E3B`, 4 pastel KPI semantic: bleu Volume / émeraude Signal / orange Taux / violet Argent). Use these when touching landing or audit-step UI.
+- Old dark-premium skills are archived under `.claude/skills/_archive_v1-dark/` — do not reference.
 
 ## Commands
 

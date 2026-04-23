@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GetLostRevenue - Audit Financier IA</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="typography">
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+<style data-purpose="custom-colors">
+    :root {
+      --primary-dark: #064E3B;
+      --accent-green: #10B981;
+    }
+    .bg-primary-dark { background-color: var(--primary-dark); }
+    .text-primary-dark { color: var(--primary-dark); }
+    .border-primary-dark { border-color: var(--primary-dark); }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-gray-50 text-slate-900 overflow-x-hidden">
+<!-- BEGIN: MainHeader -->
+<header class="bg-white border-b sticky top-0 z-50">
+<nav class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<!-- Logo Representation -->
+<div class="flex items-center gap-1 font-bold text-xl text-primary-dark">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>GetLostRevenue</span>
+</div>
+</div>
+<!-- Mobile Burger Menu Button -->
+<button aria-label="Menu" class="md:hidden p-2 text-slate-600">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<!-- Desktop Nav (Hidden on mobile as requested) -->
+<div class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium hover:text-green-700" href="#">Audit</a>
+<a class="text-sm font-medium hover:text-green-700" href="#">How it works</a>
+<a class="text-sm font-medium hover:text-green-700" href="#">Pricing</a>
+<a class="text-sm font-medium hover:text-green-700" href="#">Resources</a>
+<button class="bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-semibold">Lancer mon audit gratuit</button>
+</div>
+</nav>
+</header>
+<!-- END: MainHeader -->
+<main>
+<!-- BEGIN: HeroSection -->
+<section class="pt-12 pb-8 px-4 text-center">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-semibold text-slate-600 mb-6">
+<span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+        Audit financier IA — Version 2.0
+      </div>
+<h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4 px-2">
+        Combien votre cabinet perd-il vraiment chaque année en rendez-vous manqués ?
+      </h1>
+<p class="text-slate-600 text-sm md:text-lg max-w-2xl mx-auto mb-8">
+        Analysez vos données et découvrez votre potentiel de récupération en téléchargeant votre fichier CSV. Analyse complète en 3 minutes par notre IA.
+      </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center max-w-2xl mx-auto mb-12"><button class="w-full sm:w-auto px-8 py-4 bg-primary-dark text-white rounded-xl font-bold text-lg shadow-lg whitespace-nowrap">
+          Lancer mon audit gratuit
+        </button>
+<button class="w-full sm:w-auto px-8 py-4 border border-slate-300 text-slate-700 rounded-xl font-bold text-lg bg-white whitespace-nowrap">
+          Voir un exemple de rapport
+        </button></div>
+<!-- Dashboard Preview Graphic -->
+<div class="relative max-w-xl mx-auto">
+<div class="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 overflow-hidden">
+<div class="flex items-center gap-1 mb-4 border-b pb-2">
+<div class="w-2 h-2 rounded-full bg-red-400"></div>
+<div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="w-2 h-2 rounded-full bg-green-400"></div>
+<div class="ml-4 h-4 bg-gray-100 rounded-full w-48"></div>
+</div>
+<h3 class="text-left font-bold text-lg mb-4">Synthèse</h3>
+<div class="grid grid-cols-2 gap-2 mb-6">
+<div class="bg-[#dff3ff] p-3 rounded-lg text-left">
+<span class="text-[10px] text-blue-600 font-bold uppercase">RDV analysés</span>
+<div class="text-xl font-extrabold">4,520</div>
+</div>
+<div class="bg-[#dcf4e6] p-3 rounded-lg text-left">
+<span class="text-[10px] text-emerald-600 font-bold uppercase">No-shows</span>
+<div class="text-xl font-extrabold">542</div>
+</div>
+<div class="bg-[#fceacc] p-3 rounded-lg text-left">
+<span class="text-[10px] text-orange-600 font-bold uppercase">Taux</span>
+<div class="text-xl font-extrabold">12%</div>
+</div>
+<div class="bg-[#eccdf8] p-3 rounded-lg text-left">
+<span class="text-[10px] text-purple-600 font-bold uppercase">CA perdu</span>
+<div class="text-xl font-extrabold text-purple-800">€22,400</div>
+</div>
+</div>
+<div class="h-24 w-full bg-gray-50 rounded-lg flex items-end p-2 gap-1">
+<!-- Simplified Chart Representation -->
+<div class="h-3/4 w-full bg-gradient-to-t from-emerald-100 to-transparent rounded-t-lg relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
+<path d="M0,40 Q25,10 50,30 T100,20 L100,40 L0,40 Z" fill="#10B981" fill-opacity="0.2"></path>
+<path d="M0,40 Q25,10 50,30 T100,20" fill="none" stroke="#10B981" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: StatsSection -->
+<section class="bg-white py-12 border-y border-gray-100">
+<div class="max-w-4xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="text-center">
+<div class="text-3xl font-black text-slate-900">+200</div>
+<div class="text-[11px] text-slate-500 uppercase tracking-tight">cabinets sudités</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-black text-slate-900">+200</div>
+<div class="text-[11px] text-slate-500 uppercase tracking-tight">Taux d'absentéisme moyen</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-black text-slate-900">+200</div>
+<div class="text-[11px] text-slate-500 uppercase tracking-tight">Perte annuelle moyenne</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-black text-slate-900">+200</div>
+<div class="text-[11px] text-slate-500 uppercase tracking-tight">Pour obtenir votre rapport</div>
+</div>
+</div>
+</section>
+<!-- END: StatsSection -->
+<!-- BEGIN: TargetAudience -->
+<section class="py-16 px-4">
+<h2 class="text-2xl font-bold text-center mb-10">Pour qui</h2>
+<div class="grid grid-cols-2 gap-4 max-w-lg mx-auto"><div class="border border-gray-200 bg-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-4xl text-slate-700">dentistry</span>
+<span class="text-sm font-semibold text-center">Dentistes</span>
+</div>
+<div class="border border-gray-200 bg-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-4xl text-slate-700">physical_therapy</span>
+<span class="text-sm font-semibold text-center">Kinésithérapeutes</span>
+</div>
+<div class="border border-gray-200 bg-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-4xl text-slate-700">skeleton</span>
+<span class="text-sm font-semibold text-center">Ostéopathes</span>
+</div>
+<div class="border border-gray-200 bg-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-4xl text-slate-700">stethoscope</span>
+<span class="text-sm font-semibold text-center">Médecins</span>
+</div></div>
+<p class="text-center text-xs text-slate-400 mt-6 font-medium">Compatible avec tous les logiciels de gestion vis export CSV.</p>
+</section>
+<!-- END: TargetAudience -->
+<!-- BEGIN: HowItWorks -->
+<section class="py-16 px-4 bg-white">
+<h2 class="text-2xl font-bold text-center mb-10">Comment ça marche</h2>
+<div class="space-y-4 max-w-sm mx-auto">
+<div class="bg-blue-50 border border-blue-100 p-6 rounded-2xl flex items-center gap-6">
+<div class="bg-blue-200/50 p-3 rounded-lg">
+<svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+</svg>
+</div>
+<span class="font-bold text-slate-800">1. Exportez votre CSV</span>
+</div>
+<div class="bg-emerald-50 border border-emerald-100 p-6 rounded-2xl flex items-center gap-6">
+<div class="bg-emerald-200/50 p-3 rounded-lg">
+<svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+</svg>
+</div>
+<span class="font-bold text-slate-800">2. Audit IA</span>
+</div>
+<div class="bg-orange-50 border border-orange-100 p-6 rounded-2xl flex items-center gap-6">
+<div class="bg-orange-200/50 p-3 rounded-lg">
+<svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+</svg>
+</div>
+<span class="font-bold text-slate-800">3. Rapport PDF instantané</span>
+</div>
+</div>
+</section>
+<!-- END: HowItWorks -->
+<!-- BEGIN: ValuePropSection -->
+<section class="py-16 px-4">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-12 items-center">
+<div class="w-full">
+<h2 class="text-2xl font-bold mb-6">Ce que révèle votre audit</h2>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+</svg>
+<span class="text-sm font-medium text-slate-700">Volume de rendez-vous manqués et impact financier.</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+</svg>
+<span class="text-sm font-medium text-slate-700">Identification des patients à risque de no-show.</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+</svg>
+<span class="text-sm font-medium text-slate-700">Comparaison de votre taux avec la moyenne sectorielle.</span>
+</li>
+<li class="flex items-start gap-3">
+<svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+</svg>
+<span class="text-sm font-medium text-slate-700">Recommandations personnalisées pour réduire les no-shews.</span>
+</li>
+</ul>
+</div>
+<!-- Score Card -->
+<div class="w-full max-w-xs bg-white p-6 rounded-3xl border border-gray-100 shadow-xl text-center">
+<div class="relative w-32 h-32 mx-auto mb-4">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#f3f4f6" stroke-width="10"></circle>
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#065f46" stroke-dasharray="251.2" stroke-dashoffset="70" stroke-width="10"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-2xl font-black text-slate-800 leading-none">72/100</span>
+</div>
+</div>
+<div class="font-bold text-slate-800">Score cabinet</div>
+<p class="text-xs text-slate-500 mt-1">Bon, mais peut être amélioré</p>
+</div>
+</div>
+</section>
+<!-- END: ValuePropSection -->
+<!-- BEGIN: Testimonial -->
+<section class="py-16 px-4 bg-slate-50/50">
+<div class="max-w-2xl mx-auto text-center">
+<img alt="Dr. Laurent M." class="w-20 h-20 rounded-full mx-auto mb-6 border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx0cGwB3LNiNyNZ4dz-yzvvnNIyQa79dtd9SmdeVTFylkT8knAmnd2sYv1ltEvRQSRJHJHcIty4-jG_ZOoWYaBoXPJzIxAgAS3TZYCdi8viW9CDXaITbcV3aR5l1jMTHwUqg50LiPJ_-0xnscg-xJFd3Ep8AogoL6TU8A4S6C8GlBJ77oFbA2d8jGiEED5Kzt6YWzow6LTIHE_MvDf37D7ZrlKDkFHUGxgB7VUYaqIPjI-b8DC79bBRKKpUzymbknSoLkLfpjASabl"/>
+<blockquote class="text-lg font-bold text-slate-800 mb-4 leading-relaxed">
+          "GetLostRevenue a transformé notre approche des rendez-vous manqués. L'audit nous a permis de récupérer plus de 15k€ en seulement quelques mois. Incroyable !"
+        </blockquote>
+<cite class="text-slate-600 font-semibold not-italic">Dr. Laurent M.</cite>
+</div>
+</section>
+<!-- END: Testimonial -->
+<!-- BEGIN: FAQ -->
+<section class="py-16 px-4 max-w-2xl mx-auto">
+<h2 class="text-2xl font-bold text-center mb-8">FAQ</h2>
+<div class="divide-y border-t border-b">
+<details class="group py-4">
+<summary class="flex items-center justify-between font-bold text-slate-800 cursor-pointer list-none">
+            La sécurité de mes données est-elle garantie ?
+            <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+</summary>
+<p class="mt-2 text-sm text-slate-600">Vos données sont traitées de manière totalement anonyme et sécurisée conformément au RGPD.</p>
+</details>
+<details class="group py-4">
+<summary class="flex items-center justify-between font-bold text-slate-800 cursor-pointer list-none">
+            Quel format de fichier dois-je utiliser ?
+            <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+</summary>
+<p class="mt-2 text-sm text-slate-600">Nous acceptons uniquement les fichiers au format CSV standard exportés de votre logiciel.</p>
+</details>
+<details class="group py-4">
+<summary class="flex items-center justify-between font-bold text-slate-800 cursor-pointer list-none">
+            Combien de temps prend l'analyse ?
+            <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+</summary>
+<p class="mt-2 text-sm text-slate-600">En moyenne, l'IA génère votre rapport complet en moins de 3 minutes.</p>
+</details>
+</div>
+</section>
+<!-- END: FAQ -->
+<!-- BEGIN: FinalCTA -->
+<section class="bg-primary-dark py-16 px-4 text-center">
+<div class="max-w-xl mx-auto">
+<h2 class="text-2xl font-bold text-white mb-4">Ne laissez plus filer vos revenus.</h2>
+<p class="text-emerald-100 mb-10 font-medium">Commencez votre audit gratuit dès maintenant.</p>
+<button class="bg-white text-primary-dark px-10 py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-gray-100 transition-colors">
+          Lancer mon audit maintenant
+        </button>
+</div>
+</section>
+<!-- END: FinalCTA -->
+</main>
+<!-- BEGIN: Footer -->
+<footer class="bg-white py-12 px-4 border-t">
+<div class="max-w-7xl mx-auto text-center">
+<div class="flex items-center justify-center gap-1 font-bold text-xl text-primary-dark mb-8">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>GetLostRevenue</span>
+</div>
+<div class="flex flex-wrap justify-center gap-4 text-xs font-semibold text-slate-500 mb-8">
+<a class="hover:text-primary-dark" href="#">Contact</a>
+<a class="hover:text-primary-dark" href="#">Mentions légales</a>
+<a class="hover:text-primary-dark" href="#">Politique de confidentialité</a>
+<a class="hover:text-primary-dark" href="#">Hébergement et Sécurité</a>
+</div>
+<p class="text-[10px] text-slate-400 uppercase tracking-widest">
+        © 2024 GetLostRevenue. Tous droits réservés. Hébergé en France. Conforme RGPD.
+      </p>
+</div>
+</footer>
+<!-- END: Footer -->
+</body></html>
