@@ -28,7 +28,17 @@ glass, pas de néon.
 
 **Archivé:** `.planning/phases/_archive_v1-dark/phase-01-refonte-landing-v1/`
 
-**Next:** `/gsd-spec-phase 1` pour figer les requirements clinique-claire.
+**Plans:** 6 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Foundations: tailwind tokens + globals.css + layout (Inter+Fraunces, bg-gray-50)
+- [ ] 01-02-PLAN.md — LandingNav + LandingHero + MiniDashboard (sketch 001 C)
+- [ ] 01-03-PLAN.md — StatsBar + TargetGrid + HowItWorksTimeline + ValueProps + ScorePill (sketches 002 B & 003 C)
+- [ ] 01-04-PLAN.md — Testimonial + FAQCards + CTABand + LandingFooter (sketch 004 B)
+- [ ] 01-05-PLAN.md — Orchestrate app/page.tsx + ScrollFadeUp + build + Lighthouse
+- [ ] 01-06-PLAN.md — UAT /gsd-verify-work checkpoint
+
+**Next:** `/gsd-execute-phase 1` (4 waves: Wave 1 foundations → Waves 2 composants (02/03/04 parallèles) → Wave 3 orchestration → Wave 4 UAT).
 
 ---
 
