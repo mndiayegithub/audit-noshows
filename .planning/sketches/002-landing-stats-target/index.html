@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 002 — landing-stats-target (clinique-claire)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  .variant-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: white; border-bottom: 1px solid var(--border-default);
+    display: flex; justify-content: center; gap: .25rem;
+    padding: .5rem; box-shadow: var(--shadow-sm);
+  }
+  .variant-tab {
+    background: transparent; border: 1px solid transparent;
+    color: var(--text-600); font-weight: 600; font-size: .8125rem;
+    padding: .375rem .75rem; border-radius: var(--radius-full);
+    cursor: pointer; font-family: var(--font-sans);
+  }
+  .variant-tab:hover { background: #F3F4F6; }
+  .variant-tab.active { background: var(--primary-dark); color: white; }
+  .variant-tab .star { color: #FBBF24; margin-left: .25rem; display: none; }
+  .variant-tab.winner .star { display: inline; }
+  .variant-panel { display: none; padding-top: 3.5rem; }
+  .variant-panel.active { display: block; }
+
+  /* ---------- Sections shared ---------- */
+  section.stats, section.target {
+    padding: 3rem 1rem;
+  }
+  section.stats { background: white; border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); }
+  section.target { background: var(--bg-page); }
+  section.target h2,
+  section.stats h2 {
+    text-align: center; font-weight: 700; font-size: 1.5rem; margin: 0 0 2.5rem;
+    color: var(--text-900);
+  }
+  .stat-value { font-weight: 900; color: var(--text-900); }
+  .stat-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.025em; color: var(--text-500);
+  }
+
+  /* ---------- Variant A: flat + grid 2x2 ---------- */
+  .A-stats-grid {
+    max-width: 56rem; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+    text-align: center;
+  }
+  @media (max-width: 700px) { .A-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .A-stats-grid .stat-value { font-size: 1.875rem; margin-bottom: .25rem; }
+  .A-target-grid {
+    max-width: 32rem; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+  }
+  .A-target-card {
+    background: white; border: 1px solid var(--border-default);
+    padding: 1rem; border-radius: var(--radius-lg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: .5rem; box-shadow: var(--shadow-sm);
+  }
+  .A-target-card .material-symbols-outlined { font-size: 2.5rem; color: var(--text-700); }
+  .A-target-card span.label { font-size: .875rem; font-weight: 600; text-align: center; }
+  .A-target-caption {
+    text-align: center; font-size: .75rem; color: var(--text-400);
+    margin-top: 1.5rem; font-weight: 500;
+  }
+
+  /* ---------- Variant B: accountant-style serif stats + inline target ---------- */
+  .B-stats-grid {
+    max-width: 64rem; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    text-align: center;
+    border-left: 1px solid var(--border-soft);
+  }
+  @media (max-width: 700px) { .B-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .B-stat-cell {
+    padding: .5rem 1rem;
+    border-right: 1px solid var(--border-soft);
+  }
+  .B-stat-cell .stat-value {
+    font-family: 'Fraunces', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    line-height: 1.1;
+  }
+  .B-stat-cell .stat-label {
+    margin-top: .5rem;
+  }
+  .B-target-row {
+    max-width: 64rem; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 700px) { .B-target-row { grid-template-columns: repeat(2, 1fr); } }
+  .B-target-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: .75rem; padding: 1.25rem .5rem;
+    border: 1px solid var(--border-soft);
+    background: white;
+    border-radius: var(--radius-lg);
+  }
+  .B-target-item .material-symbols-outlined {
+    font-size: 2rem;
+    color: var(--primary-dark);
+  }
+  .B-target-item .label {
+    font-size: .8125rem; font-weight: 600;
+    color: var(--text-800); text-align: center;
+  }
+
+  /* ---------- Variant C: stat mini-cards + illustrated list ---------- */
+  .C-stats-grid {
+    max-width: 56rem; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+  }
+  @media (max-width: 700px) { .C-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .C-stat-card {
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .C-stat-card .stat-value {
+    font-size: 1.875rem;
+    margin-bottom: .5rem;
+    display: block;
+  }
+  .C-target-list {
+    max-width: 40rem; margin: 0 auto;
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .C-target-item {
+    display: flex; align-items: center; gap: 1rem;
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+  }
+  .C-target-item .icon-wrap {
+    width: 2.75rem; height: 2.75rem;
+    border-radius: var(--radius-md);
+    background: var(--step-blue-bg);
+    color: var(--step-blue-icon-fg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .C-target-item:nth-child(2) .icon-wrap { background: var(--step-emerald-bg); color: var(--step-emerald-icon-fg); }
+  .C-target-item:nth-child(3) .icon-wrap { background: var(--step-orange-bg); color: var(--step-orange-icon-fg); }
+  .C-target-item:nth-child(4) .icon-wrap { background: #F3E8FF; color: #9333EA; }
+  .C-target-item .icon-wrap .material-symbols-outlined { font-size: 1.5rem; }
+  .C-target-item .body { flex: 1; }
+  .C-target-item .body .label { font-size: .9375rem; font-weight: 600; color: var(--text-900); display: block; }
+  .C-target-item .body .sub { font-size: .8125rem; color: var(--text-500); }
+
+  /* ---------- Sketch toolbar ---------- */
+  .sketch-toolbar {
+    position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+    background: white; border: 1px solid var(--border-default);
+    border-radius: var(--radius-full); padding: .5rem .75rem;
+    box-shadow: var(--shadow-lg); z-index: 100;
+    font-size: 11px; color: var(--text-600);
+    display: flex; gap: .75rem; align-items: center;
+  }
+  .sketch-toolbar b { color: var(--text-900); }
+</style>
+</head>
+<body>
+
+<nav class="variant-bar" role="tablist">
+  <button class="variant-tab active" data-variant="A">Variant A — Flat + 2×2 grid<span class="star">★</span></button>
+  <button class="variant-tab winner" data-variant="B">Variant B — Serif comptable<span class="star">★</span></button>
+  <button class="variant-tab" data-variant="C">Variant C — Mini-cards + illustrated list<span class="star">★</span></button>
+</nav>
+
+<!-- =========================== VARIANT A =========================== -->
+<section class="variant-panel active" data-variant="A">
+  <section class="stats">
+    <div class="A-stats-grid">
+      <div><div class="stat-value">+200</div><div class="stat-label">Cabinets audités</div></div>
+      <div><div class="stat-value">12 %</div><div class="stat-label">Taux d'absentéisme moyen</div></div>
+      <div><div class="stat-value">22 k€</div><div class="stat-label">Perte annuelle moyenne</div></div>
+      <div><div class="stat-value">3 min</div><div class="stat-label">Pour obtenir votre rapport</div></div>
+    </div>
+  </section>
+
+  <section class="target">
+    <h2>Pour qui</h2>
+    <div class="A-target-grid">
+      <div class="A-target-card"><span class="material-symbols-outlined">dentistry</span><span class="label">Dentistes</span></div>
+      <div class="A-target-card"><span class="material-symbols-outlined">physical_therapy</span><span class="label">Kinésithérapeutes</span></div>
+      <div class="A-target-card"><span class="material-symbols-outlined">skeleton</span><span class="label">Ostéopathes</span></div>
+      <div class="A-target-card"><span class="material-symbols-outlined">stethoscope</span><span class="label">Médecins</span></div>
+    </div>
+    <p class="A-target-caption">Compatible avec tous les logiciels de gestion via export CSV.</p>
+  </section>
+</section>
+
+<!-- =========================== VARIANT B =========================== -->
+<section class="variant-panel" data-variant="B">
+  <section class="stats">
+    <div class="B-stats-grid">
+      <div class="B-stat-cell"><div class="stat-value">+200</div><div class="stat-label">Cabinets audités</div></div>
+      <div class="B-stat-cell"><div class="stat-value">12%</div><div class="stat-label">Taux d'absentéisme moyen</div></div>
+      <div class="B-stat-cell"><div class="stat-value">22k€</div><div class="stat-label">Perte annuelle moyenne</div></div>
+      <div class="B-stat-cell"><div class="stat-value">3min</div><div class="stat-label">Pour obtenir votre rapport</div></div>
+    </div>
+  </section>
+
+  <section class="target">
+    <h2>Pour qui</h2>
+    <div class="B-target-row">
+      <div class="B-target-item"><span class="material-symbols-outlined">dentistry</span><span class="label">Dentistes</span></div>
+      <div class="B-target-item"><span class="material-symbols-outlined">physical_therapy</span><span class="label">Kinésithérapeutes</span></div>
+      <div class="B-target-item"><span class="material-symbols-outlined">skeleton</span><span class="label">Ostéopathes</span></div>
+      <div class="B-target-item"><span class="material-symbols-outlined">stethoscope</span><span class="label">Médecins</span></div>
+    </div>
+    <p class="A-target-caption" style="margin-top:1.5rem;">Compatible avec tous les logiciels de gestion via export CSV.</p>
+  </section>
+</section>
+
+<!-- =========================== VARIANT C =========================== -->
+<section class="variant-panel" data-variant="C">
+  <section class="stats">
+    <div class="C-stats-grid">
+      <div class="C-stat-card"><div class="stat-value">+200</div><div class="stat-label">Cabinets audités</div></div>
+      <div class="C-stat-card"><div class="stat-value">12 %</div><div class="stat-label">Taux moyen</div></div>
+      <div class="C-stat-card"><div class="stat-value">22 k€</div><div class="stat-label">Perte annuelle moyenne</div></div>
+      <div class="C-stat-card"><div class="stat-value">3 min</div><div class="stat-label">Pour le rapport</div></div>
+    </div>
+  </section>
+
+  <section class="target">
+    <h2>Pour qui</h2>
+    <div class="C-target-list">
+      <div class="C-target-item">
+        <div class="icon-wrap"><span class="material-symbols-outlined">dentistry</span></div>
+        <div class="body"><span class="label">Dentistes</span><span class="sub">Implantologie, orthodontie, omnipratique.</span></div>
+      </div>
+      <div class="C-target-item">
+        <div class="icon-wrap"><span class="material-symbols-outlined">physical_therapy</span></div>
+        <div class="body"><span class="label">Kinésithérapeutes</span><span class="sub">Rééducation, sport, ostéo douce.</span></div>
+      </div>
+      <div class="C-target-item">
+        <div class="icon-wrap"><span class="material-symbols-outlined">skeleton</span></div>
+        <div class="body"><span class="label">Ostéopathes</span><span class="sub">Structurel, viscéral, pédiatrie.</span></div>
+      </div>
+      <div class="C-target-item">
+        <div class="icon-wrap"><span class="material-symbols-outlined">stethoscope</span></div>
+        <div class="body"><span class="label">Médecins libéraux</span><span class="sub">Généralistes, spécialistes en cabinet.</span></div>
+      </div>
+    </div>
+    <p class="A-target-caption" style="margin-top:1.5rem;">Compatible avec tous les logiciels de gestion via export CSV.</p>
+  </section>
+</section>
+
+<div class="sketch-toolbar" role="status">
+  <b>Sketch 002</b><span>landing-stats-target</span><span>•</span><span>Clinique-claire v2</span><span>•</span><span id="current-variant">Variant A</span>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.variant-tab');
+  const panels = document.querySelectorAll('.variant-panel');
+  const label = document.getElementById('current-variant');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const v = tab.dataset.variant;
+      tabs.forEach(t => { t.classList.toggle('active', t === tab); t.setAttribute('aria-selected', t === tab); });
+      panels.forEach(p => p.classList.toggle('active', p.dataset.variant === v));
+      label.textContent = 'Variant ' + v;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  });
+</script>
+
+</body>
+</html>
+</content>
+</invoke>
