@@ -4,6 +4,8 @@ import AuditSidebar from "./AuditSidebar";
 import AuditSection from "./AuditSection";
 import SyntheseKPIs from "./SyntheseKPIs";
 import MoneyBuildCard from "./MoneyBuildCard";
+import ChartParJour from "./ChartParJour";
+import ChartParHeure from "./ChartParHeure";
 
 interface AuditDashboardProps {
   stats: AuditStats;
@@ -45,8 +47,9 @@ export default function AuditDashboard({
           eyebrowColor="text-kpiSignal-fg"
           title="Où & Quand"
         >
-          <div className="text-sm text-gray-400">
-            [Section Où & Quand — à remplir par Plan 02-04]
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <ChartParJour stats={stats} />
+            <ChartParHeure stats={stats} />
           </div>
         </AuditSection>
         <AuditSection
