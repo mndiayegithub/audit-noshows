@@ -13,6 +13,8 @@ import CalendlyEmbed from "./CalendlyEmbed";
 interface AuditDashboardProps {
   stats: AuditStats;
   rapport: string;
+  onDownloadPDF?: () => void;
+  isGeneratingPDF?: boolean;
 }
 
 /**
@@ -22,6 +24,8 @@ interface AuditDashboardProps {
 export default function AuditDashboard({
   stats,
   rapport,
+  onDownloadPDF,
+  isGeneratingPDF,
 }: AuditDashboardProps) {
   return (
     <div className="min-h-screen">
@@ -72,6 +76,18 @@ export default function AuditDashboard({
           <div className="space-y-6">
             <PlanTimeline />
             <CalendlyEmbed />
+            {onDownloadPDF && (
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={onDownloadPDF}
+                  disabled={isGeneratingPDF}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#064E3B] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#053f31] disabled:opacity-60 disabled:cursor-wait"
+                >
+                  {isGeneratingPDF ? "Génération du PDF…" : "Télécharger le rapport PDF"}
+                </button>
+              </div>
+            )}
             {rapport && (
               <details className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
                 <summary className="cursor-pointer font-medium">

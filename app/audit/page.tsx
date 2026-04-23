@@ -1,191 +1,17 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, createElement } from "react";
+import { useState, useCallback, createElement } from "react";
 import { useDropzone } from "react-dropzone";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
 import {
   UploadCloud, ShieldCheck, TrendingUp, Activity, Sparkles,
-  CheckCircle, FileText, Search,
+  FileText,
 } from "lucide-react";
-import GraphiqueParJour from "@/components/GraphiqueParJour";
-import GaugeBenchmark from "@/components/GaugeBenchmark";
-import DiagnosticGoogle from "@/components/audit/DiagnosticGoogle";
-import ScoreGlobal from "@/components/audit/ScoreGlobal";
-import CTACalendly from "@/components/audit/CTACalendly";
 import AuditDashboard from "@/components/audit/AuditDashboard";
-import type { AuditResponse, GoogleData } from "@/types/audit";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { delay: i * 0.06, duration: 0.4 },
-  }),
-};
-const sectionVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
+import type { AuditResponse } from "@/types/audit";
 
 type Etat = "formulaire" | "loading" | "resultats" | "erreur";
-
-function calcScore(taux: number): number {
-  return Math.max(0, Math.min(100, Math.round(100 - taux * 3.2)));
-}
-
-function getScoreConfig(score: number) {
-  if (score >= 80) return { label: "Optimal",   color: "#10B981", tw: "text-success", bgTw: "bg-success/10", borderTw: "border-success/30" };
-  if (score >= 60) return { label: "Moyen",      color: "#F59E0B", tw: "text-warning", bgTw: "bg-warning/10", borderTw: "border-warning/30" };
-  return             { label: "Critique",    color: "#EF4444", tw: "text-danger",  bgTw: "bg-danger/10",  borderTw: "border-danger/30"  };
-}
-
-/* ─── ScoreCard (dark) ─── */
-function ScoreCard({ stats }: { stats: import("@/types/audit").AuditStats }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  const [displayed, setDisplayed] = useState(0);
-
-  const score  = calcScore(stats.global.taux);
-  const config = getScoreConfig(score);
-
-  const R    = 72;
-  const CX   = 96;
-  const CY   = 96;
-  const CIRC = 2 * Math.PI * R;
-  const ARC  = CIRC * 0.75;
-  const GAP  = CIRC - ARC;
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.25 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!visible) return;
-    let raf: number;
-    const start = performance.now();
-    const duration = 1400;
-    const run = (now: number) => {
-      const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setDisplayed(Math.round(eased * score));
-      if (t < 1) raf = requestAnimationFrame(run);
-    };
-    raf = requestAnimationFrame(run);
-    return () => cancelAnimationFrame(raf);
-  }, [visible, score]);
-
-  const progressArc = ARC * (displayed / 100);
-
-  const taux = stats.global.taux;
-  const categories = [
-    {
-      label: "Taux no-shows",
-      value: `${taux}%`,
-      status: taux <= 5  ? "OPTIMAL"      : taux <= 10 ? "À SURVEILLER" : "À RISQUE",
-      statusCls: taux <= 5 ? "text-success bg-success/10 border-success/30" : taux <= 10 ? "text-warning bg-warning/10 border-warning/30" : "text-danger bg-danger/10 border-danger/30",
-    },
-    {
-      label: "Vs benchmark secteur",
-      value: stats.benchmark.optimal,
-      status: stats.benchmark.ecart <= 1 ? "CONFORME" : `+${stats.benchmark.ecart.toFixed(1)} pts`,
-      statusCls: stats.benchmark.ecart <= 1 ? "text-success bg-success/10 border-success/30" : "text-warning bg-warning/10 border-warning/30",
-    },
-    {
-      label: "CA perdu / an",
-      value: `${stats.global.ca_perdu_an.toLocaleString("fr-FR")} €`,
-      status: stats.global.ca_perdu_an > 30000 ? "IMPACT FORT" : stats.global.ca_perdu_an > 10000 ? "IMPACT MOYEN" : "IMPACT FAIBLE",
-      statusCls: stats.global.ca_perdu_an > 30000 ? "text-danger bg-danger/10 border-danger/30" : stats.global.ca_perdu_an > 10000 ? "text-warning bg-warning/10 border-warning/30" : "text-success bg-success/10 border-success/30",
-    },
-    {
-      label: "Créneaux à risque",
-      value: `${stats.top_3_pires?.length ?? 0} identifiés`,
-      status: (stats.top_3_pires?.length ?? 0) > 0 ? "À TRAITER" : "RAS",
-      statusCls: (stats.top_3_pires?.length ?? 0) > 0 ? "text-warning bg-warning/10 border-warning/30" : "text-success bg-success/10 border-success/30",
-    },
-  ];
-
-  return (
-    <motion.div
-      ref={ref}
-      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
-      initial="hidden"
-      animate="visible"
-      className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
-    >
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-slate-100">
-        <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Score de performance</p>
-        <p className="text-xs text-slate-400 hidden sm:block">VOS RÉSULTATS PERSONNALISÉS</p>
-      </div>
-
-      <div className="flex flex-col md:flex-row items-center gap-6 p-6">
-        {/* Gauge SVG */}
-        <div className="flex-shrink-0 flex flex-col items-center gap-3">
-          <svg width="192" height="192" viewBox="0 0 192 192" aria-label={`Score ${score}/100`}>
-            <circle cx={CX} cy={CY} r={R} fill="none" stroke="#F1F5F9"
-              strokeWidth="14" strokeDasharray={`${ARC} ${GAP}`} strokeLinecap="round"
-              transform={`rotate(135 ${CX} ${CY})`} />
-            <circle cx={CX} cy={CY} r={R} fill="none" stroke={config.color}
-              strokeWidth="14" strokeDasharray={`${progressArc} ${CIRC - progressArc}`}
-              strokeLinecap="round" transform={`rotate(135 ${CX} ${CY})`} />
-            <text x={CX} y={CY - 6} textAnchor="middle" fill="#0F172A" fontSize="38" fontWeight="bold" fontFamily="Plus Jakarta Sans, sans-serif">
-              {displayed}
-            </text>
-            <text x={CX} y={CY + 16} textAnchor="middle" fill="#64748B" fontSize="15" fontFamily="Plus Jakarta Sans, sans-serif">
-              /100
-            </text>
-          </svg>
-
-          <span className={`text-sm font-bold px-4 py-1.5 rounded-full border ${config.bgTw} ${config.tw} ${config.borderTw}`}>
-            {config.label}
-          </span>
-
-          <div className="flex gap-3 text-xs text-slate-500 mt-1 font-medium">
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-danger inline-block" aria-hidden="true" />Critique</span>
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-warning inline-block" aria-hidden="true" />Moyen</span>
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-success inline-block" aria-hidden="true" />Optimal</span>
-          </div>
-        </div>
-
-        <div className="hidden md:block self-stretch w-px bg-slate-200 mx-2" aria-hidden="true" />
-
-        {/* Indicateurs */}
-        <div className="flex-1 w-full space-y-2.5">
-          {categories.map((cat) => (
-            <div key={cat.label} className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-slate-50 border border-slate-100">
-              <span className="text-slate-600 font-medium text-sm">{cat.label}</span>
-              <div className="flex items-center gap-2.5 shrink-0">
-                <span className="text-slate-900 font-bold text-sm">{cat.value}</span>
-                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap border ${cat.statusCls}`}>
-                  {cat.status}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom strip */}
-      <div className="bg-yellow-50 border-t border-yellow-100 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <span className="text-yellow-700 text-sm font-semibold">Potentiel récupérable estimé</span>
-        <span className="text-yellow-600 font-heading font-bold text-xl md:text-2xl tracking-tight tabular-nums">
-          +{stats.potentiel.passage_45.toLocaleString("fr-FR")} €/an
-        </span>
-      </div>
-    </motion.div>
-  );
-}
 
 const ETAPES_LOADING = [
   { id: 1, texte: "Lecture du fichier CSV...", delai: 0 },
@@ -204,8 +30,6 @@ export default function AuditPage() {
   const [erreur, setErreur] = useState("");
   const [etapeActuelle, setEtapeActuelle] = useState(0);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const [googleData, setGoogleData] = useState<GoogleData | null>(null);
-  const [showGoogleSection, setShowGoogleSection] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) setFile(acceptedFiles[0]);
@@ -265,24 +89,10 @@ export default function AuditPage() {
     if (!resultats) return;
     setIsGeneratingPDF(true);
     try {
-      const [{ pdf, Font }, { default: RapportPDF }] = await Promise.all([
+      const [{ pdf }, { default: RapportPDF }] = await Promise.all([
         import("@react-pdf/renderer"),
         import("@/components/audit/RapportPDF"),
       ]);
-      const base = window.location.origin;
-      Font.register({ family: "PlusJakartaSans", fonts: [
-        { src: `${base}/fonts/PlusJakartaSans-Bold.woff`, fontWeight: 700 },
-        { src: `${base}/fonts/PlusJakartaSans-ExtraBold.woff`, fontWeight: 800 },
-      ]});
-      Font.register({ family: "Inter", fonts: [
-        { src: `${base}/fonts/Inter-Regular.woff`, fontWeight: 400 },
-        { src: `${base}/fonts/Inter-Medium.woff`, fontWeight: 500 },
-        { src: `${base}/fonts/Inter-Bold.woff`, fontWeight: 700 },
-      ]});
-      Font.register({ family: "Mono", fonts: [
-        { src: `${base}/fonts/JetBrainsMono-Regular.ttf`, fontWeight: 400 },
-        { src: `${base}/fonts/JetBrainsMono-Bold.ttf`, fontWeight: 700 },
-      ]});
       type PdfRenderer = (el: ReturnType<typeof createElement>) => { toBlob: () => Promise<Blob> };
       const blob = await (pdf as unknown as PdfRenderer)(createElement(RapportPDF, { resultats })).toBlob();
       const url = URL.createObjectURL(blob);
@@ -477,6 +287,8 @@ export default function AuditPage() {
           <AuditDashboard
             stats={resultats.stats}
             rapport={resultats.rapport_texte ?? ""}
+            onDownloadPDF={handleDownloadPDF}
+            isGeneratingPDF={isGeneratingPDF}
           />
         )}
 
