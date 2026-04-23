@@ -8,41 +8,57 @@ RGPD renforcé), sécuriser le delivery (tests, deploy, monitoring).
 
 ---
 
-### Phase 1 · Refonte Landing page
+### Phase 1 · Refonte Landing page (clinique-claire v2)
 
-**Status:** 📋 Planifiée · 5 plans · 14 REQs
-**Goal:** Remplacer `app/page.tsx` par une landing B2B dark premium (toggle dark/light via `next-themes`) ciblant les cabinets médicaux FR. 5 sections ordonnées (Nav sticky → Hero split → How-it-works 3 steps → Social proof marquee+stats → FAQ 4Q + Final CTA full-bleed → Footer). CTA unique vers `/audit`. Archivage des 3 HTML legacy.
+**Status:** 📝 À spec (pivot DA 2026-04-23 — v1 dark-premium archivé)
+**Goal:** Remplacer `app/page.tsx` par une landing en direction **clinique-claire**
+(rapport d'expertise comptable moderne — `bg-gray-50`, Inter + Fraunces, primary
+vert sapin `#064E3B`, 4 KPI pastels sémantiques figés Volume/Signal/Taux/Argent).
+Brand placeholder **GetLostRevenue**. 5 sections issues des sketches 001–004
+validés : Sticky nav + Hero interrogatif (001 C) → Stats + Pour qui (002 B) →
+Timeline tricolore + Score pill (003 C) → Témoignage + FAQ cards + CTA
+primary-dark (004 B) → Footer. CTA unique `/audit`. **Pas de dark mode**, pas de
+glass, pas de néon.
 
-**Plans:** 5 plans
+**Sources of truth:**
+- `new_design.md` — spec DA complète
+- `new_design_audit.html` — maquette Google Stitch validée
+- `.planning/sketches/001-*` à `004-*` — 4 sketches landing validés
+- `.claude/skills/sketch-findings-landing-system-audit-noshows/` — skill auto-load
 
-Plans:
-- [ ] 01-01-PLAN.md — Foundation (next-themes install, Tailwind darkMode, CSS vars, next/font, ThemeProvider, ThemeToggle, CountUpNumber, audit/layout)
-- [ ] 01-02-PLAN.md — LandingNav + LandingHero + ReportPreview (above-the-fold)
-- [ ] 01-03-PLAN.md — Marquee + LandingHowItWorks + LandingSocialProof (mid-page)
-- [ ] 01-04-PLAN.md — LandingFaqCta + LandingFooter (bottom)
-- [ ] 01-05-PLAN.md — Orchestration shell + archive HTMLs + build/regression/Lighthouse checkpoint
+**Archivé:** `.planning/phases/_archive_v1-dark/phase-01-refonte-landing-v1/`
 
-**Canonical references:**
-- SPEC: `.planning/phases/phase-01-refonte-landing-v2/01-SPEC.md` (14 REQs lockés)
-- CONTEXT: `.planning/phases/phase-01-refonte-landing-v2/01-CONTEXT.md` (12 locked decisions)
-- RESEARCH: `.planning/phases/phase-01-refonte-landing-v2/01-RESEARCH.md`
-- Skill: `.claude/skills/sketch-findings-landing-system-audit-noshows/`
+**Next:** `/gsd-spec-phase 1` pour figer les requirements clinique-claire.
 
 ---
 
-### Phase 2 · Refonte Audit (stepped reveal)
+### Phase 2 · Refonte Audit (dashboard clinique-claire v2)
 
-**Status:** ✅ SPEC locké · 14 REQs
-**Goal:** Remplacer `app/audit/page.tsx` par un stepped reveal 5-6 steps
-en direction clinique Apple Health, conformément aux sketches 001-004
-validés et au skill `sketch-findings-system-audit-noshows`.
+**Status:** 📝 À spec (pivot DA + archi 2026-04-23 — v1 stepped-reveal archivé)
+**Goal:** Remplacer `app/audit/page.tsx` par un **tableau de bord navigable**
+(sidebar 240 px + 5 sections scrollables avec scrollspy), direction clinique-claire.
+Les 5 sections issues des sketches 005–009 validés :
+1. Synthèse — 4 KPI pastels grille égale (006 A)
+2. Manque à gagner — card violet plein `#6B21A8` + breakdown inline (007 A)
+3. Où & Quand — bars par jour émeraude + bars par heure orange côte à côte (008 B)
+4. Score cabinet — hero primary-dark `#064E3B` + ring blanc (009 C)
+5. Plan d'action timeline tricolore + Calendly embed inline (009 C)
 
-**SPEC:** `.planning/phases/phase-02-refonte-audit-v2/02-SPEC.md`
-**Ambiguity:** 0.1025 (gate ✓)
-**Next:** `/gsd-discuss-phase 2` pour les décisions d'implémentation
+Architecture sidebar validée en 005 A (classic 240 px + bloc infos cabinet + 5 liens pastilles + CTA bas).
 
-**Depends on:** DEP-2.5 (n8n `stats_par_mois[]` — livré par phase 3,
-sinon step 04 supprimé du parcours et on passe à 5 steps)
+**Règle critique:** `ca_perdu` est déjà annualisé par n8n — jamais remultiplier.
+
+**Sources of truth:**
+- `new_design.md` — spec DA complète
+- `.planning/sketches/005-*` à `009-*` — 5 sketches audit validés
+- `.claude/skills/sketch-findings-audit-system-audit-noshows/` — skill auto-load
+
+**Archivé:** `.planning/phases/_archive_v1-dark/phase-02-refonte-audit-v1/`
+
+**Depends on:** DEP-2.5 (n8n `stats_par_mois[]` — livré par phase 3, sinon angle
+"tendance 6 mois" non ajouté au dashboard)
+
+**Next:** `/gsd-spec-phase 2` après Phase 1 spec.
 
 ---
 
