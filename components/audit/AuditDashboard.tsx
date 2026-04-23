@@ -2,6 +2,8 @@
 import type { AuditStats } from "@/types/audit";
 import AuditSidebar from "./AuditSidebar";
 import AuditSection from "./AuditSection";
+import SyntheseKPIs from "./SyntheseKPIs";
+import MoneyBuildCard from "./MoneyBuildCard";
 
 interface AuditDashboardProps {
   stats: AuditStats;
@@ -26,20 +28,16 @@ export default function AuditDashboard({
           eyebrowColor="text-kpiVolume-fg"
           title="Synthèse"
         >
-          {/* Plan 02-03 will replace this with <SyntheseKPIs stats={stats} /> */}
-          <div className="text-sm text-gray-400">
-            [Section Synthèse — à remplir par Plan 02-03]
-          </div>
+          <SyntheseKPIs stats={stats} />
         </AuditSection>
         <AuditSection
           id="manque-a-gagner"
           eyebrow="Manque à gagner"
           eyebrowColor="text-kpiArgent-fg"
           title="Manque à gagner"
+          lede="CA perdu sur la période analysée, extrapolé sur 12 mois — valeur annualisée renvoyée par l'analyse."
         >
-          <div className="text-sm text-gray-400">
-            [Section Manque à gagner — à remplir par Plan 02-03]
-          </div>
+          <MoneyBuildCard stats={stats} />
         </AuditSection>
         <AuditSection
           id="ou-et-quand"
