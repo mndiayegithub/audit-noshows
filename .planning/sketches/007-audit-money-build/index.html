@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 007 — Manque à gagner (Money Build)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  :root {
+    --bg: #f9fafb; --surface: #fff; --ink: #0f172a; --muted: #64748b; --border: #e5e7eb;
+    --primary-dark: #064E3B; --accent-green: #10B981;
+    --argent-bg: #ECCDF8; --argent-fg: #9333EA; --argent-deep: #6B21A8; --argent-darker: #581c87;
+    --signal-bg: #DCF4E6; --signal-fg: #059669;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--bg); color: var(--ink); font-family:'Inter', sans-serif; }
+
+  .tabbar { position: sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--border); padding:12px 24px; display:flex; gap:8px; align-items:center; }
+  .tabbar .title { font-weight:600; margin-right:24px; font-size:14px; color:var(--muted); }
+  .tab { padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:#fff; cursor:pointer; font:inherit; font-size:13px; color:var(--ink); }
+  .tab.active { background: var(--primary-dark); color:#fff; border-color: var(--primary-dark); }
+  .panel { display:none; } .panel.active { display:block; }
+
+  .shell { display:flex; min-height: calc(100vh - 56px); }
+  .sidebar { width:64px; background:#fff; border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:4px; position:sticky; top:56px; height: calc(100vh - 56px); }
+  .logo { width:36px; height:36px; border-radius:10px; background: var(--primary-dark); color:#fff; display:grid; place-items:center; font-weight:700; margin-bottom:16px; }
+  .nav-icon { width:40px; height:40px; border-radius:10px; display:grid; place-items:center; color:var(--muted); position:relative; }
+  .nav-icon svg { width:20px; height:20px; }
+  .nav-icon.active { background:#f5f3ff; color: var(--argent-fg); }
+  .nav-dot { position:absolute; top:8px; right:8px; width:6px; height:6px; border-radius:50%; }
+  .nav-cta { margin-top:auto; width:40px; height:40px; border-radius:10px; background: var(--primary-dark); color:#fff; display:grid; place-items:center; }
+  .main { flex:1; min-width:0; }
+  .topbar { background:#fff; border-bottom:1px solid var(--border); padding:20px 40px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+  .topbar h1 { font-family:'Fraunces', serif; font-weight:500; font-size:26px; margin:0 0 6px; letter-spacing:-0.01em; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; }
+  .pill { font-size:12px; padding:4px 10px; border-radius:999px; background:#f1f5f9; color:var(--muted); }
+  .btn { font:inherit; font-size:13px; padding:9px 16px; border-radius:10px; cursor:pointer; border:1px solid var(--border); background:#fff; color:var(--ink); }
+  .btn-primary { background: var(--primary-dark); color:#fff; border-color: var(--primary-dark); }
+  .content { padding:40px; max-width:1200px; }
+  .section-eyebrow { font-size:12px; color: var(--argent-fg); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; }
+  .section-title { font-family:'Fraunces', serif; font-weight:500; font-size:32px; margin:8px 0; letter-spacing:-0.01em; }
+  .section-lede { color: var(--muted); font-size:15px; max-width:620px; }
+
+  /* ======= VARIANT A — dense card ======= */
+  .money-a { margin-top: 28px; background: var(--argent-deep); color: #fff; border-radius: 28px; padding: 40px 44px; display:grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; position:relative; overflow:hidden; }
+  .money-a::before { content:""; position:absolute; inset:0; background: radial-gradient(circle at 20% 0%, rgba(236,205,248,.25), transparent 50%); pointer-events:none; }
+  .money-a .eyebrow { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:#e9d5ff; font-weight:600; }
+  .money-a .big { font-family:'Fraunces', serif; font-weight:500; font-size:96px; line-height:0.95; margin-top:10px; letter-spacing:-0.03em; }
+  .money-a .sub { font-size:15px; color:#f3e8ff; margin-top:12px; max-width:420px; }
+  .breakdown { background: rgba(255,255,255,0.10); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.18); border-radius: 20px; padding: 22px 24px; position:relative; z-index:1; }
+  .b-row { display:flex; justify-content: space-between; align-items:baseline; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.14); font-size:14px; }
+  .b-row:first-child { border-top: 0; }
+  .b-row .k { color:#f3e8ff; }
+  .b-row .v { font-family:'Fraunces', serif; font-weight:500; font-size:18px; }
+  .b-row.total { margin-top:4px; padding-top:14px; border-top: 1px solid rgba(255,255,255,0.35); }
+  .b-row.total .v { font-size: 26px; color:#fff; }
+
+  /* ======= VARIANT B — reveal 3 temps ======= */
+  .money-b { margin-top: 28px; background: var(--argent-deep); color: #fff; border-radius: 28px; padding: 40px 44px; position:relative; overflow:hidden; }
+  .money-b::before { content:""; position:absolute; top:-80px; right:-80px; width:280px; height:280px; border-radius:50%; background: rgba(236,205,248,.18); }
+  .money-b .eyebrow { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:#e9d5ff; font-weight:600; position:relative; z-index:1; }
+  .money-b .title-b { font-family:'Fraunces', serif; font-weight:500; font-size:28px; margin:8px 0 28px; color:#fff; position:relative; z-index:1; max-width:640px; }
+  .steps-b { display:flex; flex-direction:column; gap:14px; position:relative; z-index:1; }
+  .step-b { display:grid; grid-template-columns: 48px 1fr auto; gap:20px; align-items:center; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding: 18px 22px; opacity:0; transform: translateY(8px); animation: stepIn 0.6s forwards; }
+  .step-b:nth-child(1) { animation-delay: 0.2s; }
+  .step-b:nth-child(2) { animation-delay: 0.8s; }
+  .step-b:nth-child(3) { animation-delay: 1.4s; background: #fff; color: var(--argent-deep); border: 0; box-shadow: 0 12px 40px -16px rgba(88,28,135,.5); }
+  @keyframes stepIn { to { opacity:1; transform: translateY(0); } }
+  .step-b .num { width:40px; height:40px; border-radius:12px; background: rgba(255,255,255,0.14); display:grid; place-items:center; font-family:'Fraunces', serif; font-size:18px; font-weight:500; }
+  .step-b:nth-child(3) .num { background: var(--argent-deep); color:#fff; }
+  .step-b .op { font-size: 13px; color:#e9d5ff; }
+  .step-b:nth-child(3) .op { color: #6b21a8aa; }
+  .step-b .op b { color:#fff; font-weight:600; }
+  .step-b:nth-child(3) .op b { color: var(--argent-deep); }
+  .step-b .res { font-family:'Fraunces', serif; font-weight:500; font-size:26px; letter-spacing:-0.01em; }
+  .step-b:nth-child(3) .res { font-size: 44px; color: var(--argent-deep); }
+  .outro-b { margin-top: 24px; font-size: 14px; color:#f3e8ff; position:relative; z-index:1; font-style: italic; }
+
+  /* ======= VARIANT C — hero + stacked bar ======= */
+  .hero-c { margin-top: 28px; background:#fff; border:1px solid var(--border); border-radius: 24px; padding: 32px; }
+  .hero-c .label { font-size:13px; color:var(--argent-fg); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+  .hero-c .big { font-family:'Fraunces', serif; font-weight:500; font-size: 84px; line-height:0.95; color: var(--argent-deep); margin: 8px 0 6px; letter-spacing:-0.03em; }
+  .hero-c .sub { color: var(--muted); font-size: 15px; max-width: 620px; }
+  .stack-wrap { margin-top: 28px; }
+  .stack-title { display:flex; justify-content: space-between; align-items:flex-end; margin-bottom: 10px; }
+  .stack-title h4 { font-family:'Fraunces', serif; font-weight:500; font-size:18px; margin:0; }
+  .stack-title .total { font-size: 13px; color:var(--muted); }
+  .stack-bar { display:flex; height: 54px; border-radius: 14px; overflow:hidden; border:1px solid var(--border); }
+  .stack-seg { display:flex; flex-direction:column; justify-content:center; padding: 0 20px; font-size: 13px; position:relative; }
+  .seg-gagne { background: var(--signal-bg); color: var(--signal-fg); flex: 8.7; }
+  .seg-perdu { background: var(--argent-deep); color: #fff; flex: 1.38; }
+  .seg-gagne .v, .seg-perdu .v { font-family:'Fraunces', serif; font-weight:500; font-size: 20px; letter-spacing:-0.01em; }
+  .seg-gagne .k, .seg-perdu .k { font-size: 11px; text-transform:uppercase; letter-spacing:0.06em; opacity:0.85; }
+  .legend { display:flex; gap: 20px; margin-top: 14px; font-size:13px; color: var(--muted); }
+  .legend span { display:inline-flex; align-items:center; gap:6px; }
+  .legend i { width:12px; height:12px; border-radius:4px; display:inline-block; }
+  .c-stats { display:grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 28px; }
+  .c-mini { background: #faf5ff; border:1px solid #e9d5ff; border-radius:16px; padding: 16px 18px; }
+  .c-mini .k { font-size: 12px; text-transform:uppercase; letter-spacing:0.06em; color: var(--argent-fg); font-weight:600; }
+  .c-mini .v { font-family:'Fraunces', serif; font-weight:500; font-size: 26px; color: var(--argent-deep); margin-top:4px; letter-spacing:-0.01em; }
+  .c-mini .s { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .scroll-hint { margin-top:40px; padding:20px; border:1px dashed var(--border); border-radius:14px; color:var(--muted); font-size:13px; text-align:center; }
+
+  @media (max-width: 1000px) {
+    .money-a { grid-template-columns: 1fr; }
+    .money-a .big { font-size: 64px; }
+    .hero-c .big { font-size: 54px; }
+    .step-b { grid-template-columns: 40px 1fr; }
+    .step-b .res { grid-column: 1 / -1; text-align: right; }
+  }
+</style>
+</head>
+<body>
+
+<div class="tabbar">
+  <span class="title">Sketch 007 — Manque à gagner</span>
+  <button class="tab active" data-tab="A">A · Card violet dense + breakdown</button>
+  <button class="tab" data-tab="B">B · Reveal narratif 3 temps ★</button>
+  <button class="tab" data-tab="C">C · Hero + stacked bar proportionnelle</button>
+</div>
+
+<!-- ============ shell helper ============ -->
+<template id="shell-tpl">
+  <aside class="sidebar">
+    <div class="logo">G</div>
+    <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+    <div class="nav-icon active"><span class="nav-dot" style="background:#9333EA"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+    <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+    <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+    <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+    <div class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+  </aside>
+</template>
+
+<!-- ===================== VARIANT A ===================== -->
+<section class="panel active" data-panel="A">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="logo">G</div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div class="nav-icon active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div><h1>Cabinet dentaire Dupont</h1><div class="pills"><span class="pill">Généré le 23 avril 2026</span><span class="pill">Période : 01/01 → 31/03/26</span></div></div>
+        <div style="display:flex; gap:10px;"><button class="btn">Télécharger PDF</button><button class="btn btn-primary">Prendre RDV</button></div>
+      </div>
+      <div class="content">
+        <div class="section-eyebrow">Manque à gagner</div>
+        <h2 class="section-title">Ce que les no-shows vous coûtent, chiffré.</h2>
+        <p class="section-lede">La perte s'accumule rendez-vous après rendez-vous. Voici le calcul ligne par ligne.</p>
+
+        <div class="money-a">
+          <div>
+            <div class="eyebrow">CA perdu / an — extrapolé</div>
+            <div class="big">47 200 €</div>
+            <div class="sub">Soit l'équivalent de 3,8 semaines de CA qui s'évaporent chaque année à cause des rendez-vous non honorés.</div>
+          </div>
+          <div class="breakdown">
+            <div class="b-row"><span class="k">No-shows détectés (3 mois)</span><span class="v">57</span></div>
+            <div class="b-row"><span class="k">CA moyen par RDV</span><span class="v">95 €</span></div>
+            <div class="b-row"><span class="k">Perte sur la période</span><span class="v">5 415 €</span></div>
+            <div class="b-row"><span class="k">Extrapolation 12 mois</span><span class="v">× 4</span></div>
+            <div class="b-row total"><span class="k">CA perdu annualisé</span><span class="v">47 200 €</span></div>
+          </div>
+        </div>
+
+        <div class="scroll-hint">↓ Zone suivante : Où & Quand (répartition par jour)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VARIANT B ===================== -->
+<section class="panel" data-panel="B">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="logo">G</div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div class="nav-icon active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div><h1>Cabinet dentaire Dupont</h1><div class="pills"><span class="pill">Généré le 23 avril 2026</span><span class="pill">Période : 01/01 → 31/03/26</span></div></div>
+        <div style="display:flex; gap:10px;"><button class="btn">Télécharger PDF</button><button class="btn btn-primary">Prendre RDV</button></div>
+      </div>
+      <div class="content">
+        <div class="section-eyebrow">Manque à gagner</div>
+        <h2 class="section-title">Comment arrive-t-on à 47 200 € ?</h2>
+        <p class="section-lede">Le calcul se construit en 3 temps. Rien d'opaque : c'est votre CA moyen multiplié par vos no-shows, étalé sur l'année.</p>
+
+        <div class="money-b">
+          <div class="eyebrow">Calcul du CA perdu</div>
+          <div class="title-b">57 rendez-vous non honorés, à 95 € en moyenne, sur 12 mois.</div>
+          <div class="steps-b">
+            <div class="step-b"><div class="num">1</div><div class="op"><b>57 no-shows</b> détectés sur la période (3 mois)</div><div class="res">57</div></div>
+            <div class="step-b"><div class="num">2</div><div class="op">× <b>95 €</b> de CA moyen par RDV = perte trimestrielle</div><div class="res">5 415 €</div></div>
+            <div class="step-b"><div class="num">3</div><div class="op">× <b>4</b> pour l'année = <b>CA perdu annualisé</b></div><div class="res">47 200 €</div></div>
+          </div>
+          <div class="outro-b">Soit l'équivalent de <b>3,8 semaines</b> de chiffre d'affaires qui disparaissent chaque année.</div>
+        </div>
+
+        <div class="scroll-hint">↓ Zone suivante : Où & Quand (répartition par jour)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VARIANT C ===================== -->
+<section class="panel" data-panel="C">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="logo">G</div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div class="nav-icon active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <div class="nav-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div><h1>Cabinet dentaire Dupont</h1><div class="pills"><span class="pill">Généré le 23 avril 2026</span><span class="pill">Période : 01/01 → 31/03/26</span></div></div>
+        <div style="display:flex; gap:10px;"><button class="btn">Télécharger PDF</button><button class="btn btn-primary">Prendre RDV</button></div>
+      </div>
+      <div class="content">
+        <div class="section-eyebrow">Manque à gagner</div>
+        <h2 class="section-title">La part du CA qui vous échappe chaque année.</h2>
+
+        <div class="hero-c">
+          <div class="label">CA perdu / an</div>
+          <div class="big">47 200 €</div>
+          <div class="sub">Soit 12,6 % du CA annuel estimé du cabinet. Autrement dit : sur chaque tranche de 8 €, il y en a 1 qui ne rentre jamais.</div>
+
+          <div class="stack-wrap">
+            <div class="stack-title"><h4>Répartition du CA annuel (estimé)</h4><div class="total">Total : 375 000 €</div></div>
+            <div class="stack-bar">
+              <div class="stack-seg seg-gagne"><div class="k">CA encaissé</div><div class="v">327 800 €</div></div>
+              <div class="stack-seg seg-perdu"><div class="k">CA perdu</div><div class="v">47 200 €</div></div>
+            </div>
+            <div class="legend">
+              <span><i style="background:var(--signal-bg)"></i> CA encaissé (87,4 %)</span>
+              <span><i style="background:var(--argent-deep)"></i> CA perdu (12,6 %)</span>
+            </div>
+          </div>
+
+          <div class="c-stats">
+            <div class="c-mini"><div class="k">No-shows / an (estimés)</div><div class="v">228</div><div class="s">Extrapolé depuis la période analysée</div></div>
+            <div class="c-mini"><div class="k">CA moyen / RDV</div><div class="v">95 €</div><div class="s">Saisi par le cabinet</div></div>
+            <div class="c-mini"><div class="k">Équivalent temps</div><div class="v">3,8 sem.</div><div class="s">De CA qui s'évaporent</div></div>
+          </div>
+        </div>
+
+        <div class="scroll-hint">↓ Zone suivante : Où & Quand (répartition par jour)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    const k = t.dataset.tab;
+    document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === k));
+    // Replay reveal on tab B
+    if (k === 'B') {
+      document.querySelectorAll('[data-panel="B"] .step-b').forEach(s => {
+        s.style.animation = 'none'; s.offsetHeight; s.style.animation = '';
+      });
+    }
+  }));
+</script>
+</body>
+</html>
