@@ -77,9 +77,10 @@ Plans:
 - [x] 02-04-PLAN.md — Section 3 Où & Quand (ChartParJour + ChartParHeure, DOM bars)
 - [x] 02-05-PLAN.md — Section 4 Score + Section 5 Plan + Calendly
 - [x] 02-06-PLAN.md — Cleanup (delete v1 Gauge/Graphique/Score) + wire PDF button (RapportPDF refonte **skipped** par override utilisateur — voir backlog "PDF refonte clinique")
-- [ ] 02-07-PLAN.md — UAT checkpoint (visual + a11y + responsive + ca_perdu invariant)
+- [x] 02-07-PLAN.md — UAT checkpoint auto-approuvé par `--auto` (7 points humains persistés dans `02-HUMAN-UAT.md`, à tester via `/gsd-verify-work 2`)
 
-**Next:** `/gsd-execute-phase 2`
+**Status:** ✅ Phase 2 exécutée (2026-04-24) — refonte-audit-v2 livrée, UAT humain en attente
+**Next:** `/gsd-verify-work 2` pour valider l'UAT manuel, puis phase 3
 
 ---
 

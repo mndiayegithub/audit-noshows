@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 
 ## Current Position
 
-Phase: 02 of 08 (refonte-audit-v2)
-Plan: 07 of 07 in current phase
-Status: In progress (Wave 4 cleanup done — legacy v1 supprimé, PDF refonte SKIPPED par override utilisateur)
-Last activity: 2026-04-24 — Plan 02-06 complete (delete Gauge/Graphique/ScoreGlobal + câblage bouton PDF dans AuditDashboard ; RapportPDF.tsx conservé inchangé)
+Phase: 02 of 08 (refonte-audit-v2) — ✅ exécutée (UAT humain en attente)
+Plan: 07/07 complete (Plan 02-07 UAT auto-approuvé par --auto, 7 points persistés en 02-HUMAN-UAT.md)
+Status: Phase complete — awaiting human UAT via /gsd-verify-work 2
+Last activity: 2026-04-24 — Plan 02-07 auto-approved, phase 02 closed
 
-Progress: [████████░░] 85%
+Progress: [██████████] 100% (phase 02 livrée, UAT humain pending)
 
 ## Performance Metrics
 
