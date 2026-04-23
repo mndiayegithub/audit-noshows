@@ -27,8 +27,8 @@ dans le registre du document d'expertise — sérieux, chiffré, lisible, modern
 | # | Name | Design Question | Winner | Tags |
 |---|------|----------------|--------|------|
 | 001 | landing-hero-nav | Sticky nav + hero interrogatif + dashboard mockup 4 KPI pastels | **C** ★ (fallback B) | landing, hero, nav |
-| 002 | landing-stats-target | Bandeau stats chiffrés + section "Pour qui" (cards icônes) | **B** ★ (copy "Pour qui" → types de cabinets, pas professions) | landing, stats, audience |
-| 003 | landing-how-value | "Comment ça marche" 3 étapes tricolores + "Ce que révèle" + score card | — | landing, how-it-works, score |
+| 002 | landing-stats-target | Bandeau stats chiffrés + section "Pour qui" (cards icônes) | **B** ★ | landing, stats, audience |
+| 003 | landing-how-value | "Comment ça marche" 3 étapes tricolores + "Ce que révèle" + score card | **C** ★ | landing, how-it-works, score |
 | 004 | landing-testimonial-faq-cta | Témoignage + FAQ accordéon + bandeau CTA final primary-dark | — | landing, faq, cta |
 
 ### Phase 2 — Audit flow (5 steps)

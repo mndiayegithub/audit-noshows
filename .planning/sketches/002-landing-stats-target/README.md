@@ -37,19 +37,6 @@ open .planning/sketches/002-landing-stats-target/index.html
 
 ## Decision
 
-**Winner : B — Serif comptable** (validé 2026-04-23).
-
-### ⚠️ Copy change au moment du build final
-
-Dans la version implémentée, **la section "Pour qui" doit cibler les types de cabinets** (structures) et non les professions individuelles.
-
-Reformuler les 4 items depuis :
-- ❌ *Dentistes / Kinésithérapeutes / Ostéopathes / Médecins*
-
-Vers des types de cabinets, par exemple :
-- ✅ *Cabinets dentaires / Cabinets de kinésithérapie / Cabinets d'ostéopathie / Cabinets médicaux*
-- ou variante plus fine : *Cabinets libéraux / Cabinets de groupe / Centres de santé / Maisons médicales*
-
-À arbitrer dans le SPEC de Phase 01 — liste définitive à verrouiller là.
+**Winner : B — Serif comptable** (validé 2026-04-23). Contenu du sketch tel quel — ajustements copy éventuels au moment du rendu final.
 </content>
 </invoke>
