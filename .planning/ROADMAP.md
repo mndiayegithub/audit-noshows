@@ -44,7 +44,7 @@ Plans:
 
 ### Phase 2 · Refonte Audit (dashboard clinique-claire v2)
 
-**Status:** 📝 À spec (pivot DA + archi 2026-04-23 — v1 stepped-reveal archivé)
+**Status:** 🗂️ Plans créés (7 plans, 5 waves) — ready for /gsd-execute-phase 2
 **Goal:** Remplacer `app/audit/page.tsx` par un **tableau de bord navigable**
 (sidebar 240 px + 5 sections scrollables avec scrollspy), direction clinique-claire.
 Les 5 sections issues des sketches 005–009 validés :
@@ -68,7 +68,18 @@ Architecture sidebar validée en 005 A (classic 240 px + bloc infos cabinet + 5 
 **Depends on:** DEP-2.5 (n8n `stats_par_mois[]` — livré par phase 3, sinon angle
 "tendance 6 mois" non ajouté au dashboard)
 
-**Next:** `/gsd-spec-phase 2` après Phase 1 spec.
+**Plans:** 7 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Scaffolding (layout light, score helper, tokens audit)
+- [ ] 02-02-PLAN.md — Dashboard shell (sidebar + scrollspy + AuditSection wrapper + page wiring)
+- [ ] 02-03-PLAN.md — Section 1 Synthèse + Section 2 Manque à gagner (violet-plein, ca_perdu verbatim)
+- [ ] 02-04-PLAN.md — Section 3 Où & Quand (ChartParJour + ChartParHeure, DOM bars)
+- [ ] 02-05-PLAN.md — Section 4 Score + Section 5 Plan + Calendly
+- [ ] 02-06-PLAN.md — Cleanup (delete v1 Gauge/Graphique/Score) + RapportPDF refonte light
+- [ ] 02-07-PLAN.md — UAT checkpoint (visual + a11y + responsive + ca_perdu invariant)
+
+**Next:** `/gsd-execute-phase 2`
 
 ---
 
