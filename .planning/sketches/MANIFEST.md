@@ -37,7 +37,7 @@ dans le registre du document d'expertise — sérieux, chiffré, lisible, modern
 
 | # | Name | Design Question | Winner | Tags |
 |---|------|----------------|--------|------|
-| 005 | audit-dashboard-layout | Architecture globale sidebar + sections scrollables | **B** ★ (icon-compact sidebar 64px + topbar horizontale riche) | audit, dashboard, layout |
+| 005 | audit-dashboard-layout | Architecture globale sidebar + sections scrollables | **B** ★ (fallback C) | audit, dashboard, layout |
 | 006 | audit-synthese-kpi | Détail zone Synthèse (4 KPI pastels grand format + contexte) | — | audit, dashboard, kpi |
 | 007 | audit-money-build | Zone Manque à gagner — CA perdu violet plein + breakdown + reveal | — | audit, dashboard, money |
 | 008 | audit-charts | Zone Où & Quand — bars par jour + angles complémentaires | — | audit, dashboard, chart |

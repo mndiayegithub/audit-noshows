@@ -3,6 +3,7 @@ sketch: 005
 name: audit-dashboard-layout
 question: "Quelle architecture de sidebar + sections scrollables pour le tableau de bord d'audit (direction B) ?"
 winner: B
+fallback: C
 tags: [audit, dashboard, layout, phase-02]
 ---
 
@@ -39,6 +40,8 @@ open .planning/sketches/005-audit-dashboard-layout/index.html
 ## Decision
 
 **Winner : B — Icon-compact sidebar (64 px) + topbar horizontale riche** (validé 2026-04-23).
+
+**Fallback : C — Rich sidebar + sticky breadcrumb** conservé en option de repli si B paraît trop minimal au build réel. À ré-arbitrer au moment du Plan.
 
 Next step : décomposer en sous-sketches pour les zones détaillées du dashboard (money build reveal, bars chart, plan d'action, CTA Calendly embed).
 
