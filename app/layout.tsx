@@ -1,11 +1,26 @@
 import type { Metadata } from "next";
+import { Inter, Fraunces } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  axes: ["opsz"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "PerfIAmatic — Audit No-Shows IA pour Cabinets Dentaires",
+  title: "GetLostRevenue — Audit No-Shows pour Cabinets Dentaires",
   description:
-    "Découvrez exactement ce que vous perdez chaque mois. Analysez vos données Doctolib en 60 secondes, gratuit et sans inscription.",
+    "Combien les no-shows coûtent-ils vraiment à votre cabinet ? Audit chiffré en 60 secondes à partir de votre export Doctolib.",
 };
 
 export default function RootLayout({
@@ -14,14 +29,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <body className="antialiased min-h-screen bg-ink text-white">
+    <html lang="fr" className={`${inter.variable} ${fraunces.variable}`}>
+      <body className="antialiased min-h-screen bg-gray-50 text-slate-900 font-sans">
         {children}
         <Toaster
           position="top-center"
-          toastOptions={{
-            duration: 4000,
-          }}
+          toastOptions={{ duration: 4000 }}
         />
       </body>
     </html>
