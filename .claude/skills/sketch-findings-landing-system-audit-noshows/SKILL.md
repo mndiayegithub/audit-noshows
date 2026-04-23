@@ -89,13 +89,15 @@ Jamais `font-family: system-ui` nu. Jamais SF Pro.
 - Logo "GetLostRevenue" en Fraunces ou Inter 600 + pastille vert sapin (pas de svg complexe)
 - Liens : "Comment ça marche", "Pour qui", "FAQ"
 - CTA nav : bouton primary-dark `bg-[#064E3B] text-white rounded-xl`
-- **Hero compact** (variante C) :
-  - Layout split 2 col desktop, stacked mobile
+- **Hero compact + KPI strip** (variante C) :
+  - Layout **centré** (pas de split 2-col), contenu en `max-w-4xl` / `text-center`
   - Badge pill interrogatif au-dessus du H1 (`bg-emerald-50 text-emerald-700`)
   - H1 Fraunces serif XXL, max 2 lignes, ton interrogatif (pas "Découvrez" / "Révolutionnez")
   - Sous-titre Inter regular, 1 phrase factuelle
-  - 2 CTA : primary-dark plein + secondaire ghost
-  - Côté droit : **mini dashboard mockup** avec les 4 KPI pastels (mini versions), pas de chart complexe — juste poser la signature visuelle d'entrée
+  - 2 CTA centrés : primary-dark plein + secondaire ghost ("Voir un exemple de rapport")
+  - Caption uppercase `text-xs font-semibold tracking-wider text-slate-500` : "Exemple de résultats"
+  - **Bande horizontale des 4 KPI pastels** (label + valeur Fraunces) en grid 4 col desktop / 2 col mobile — **pas** de mini dashboard mockup en hero, pas de chart, pas de barre macOS
+  - Le mockup complet (`MiniDashboard` avec chart + scoring) est **reporté plus bas dans la page**, typiquement après `HowItWorksTimeline` comme "Aperçu du rapport"
 
 ### 2. Stats + Target (sketch 002 — variante **B**)
 
