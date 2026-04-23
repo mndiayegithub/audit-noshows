@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 004 — landing-testimonial-faq-cta (clinique-claire)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  .variant-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: white; border-bottom: 1px solid var(--border-default);
+    display: flex; justify-content: center; gap: .25rem;
+    padding: .5rem; box-shadow: var(--shadow-sm);
+  }
+  .variant-tab {
+    background: transparent; border: 1px solid transparent;
+    color: var(--text-600); font-weight: 600; font-size: .8125rem;
+    padding: .375rem .75rem; border-radius: var(--radius-full);
+    cursor: pointer; font-family: var(--font-sans);
+  }
+  .variant-tab:hover { background: #F3F4F6; }
+  .variant-tab.active { background: var(--primary-dark); color: white; }
+  .variant-tab .star { color: #FBBF24; margin-left: .25rem; display: none; }
+  .variant-tab.winner .star { display: inline; }
+  .variant-panel { display: none; padding-top: 3.5rem; }
+  .variant-panel.active { display: block; }
+
+  section.testimonial { padding: 4rem 1rem; background: #F9FAFB; }
+  section.faq { padding: 4rem 1rem; }
+  section.cta-final { padding: 4rem 1rem; background: var(--primary-dark); text-align: center; }
+  footer { padding: 3rem 1rem; background: white; border-top: 1px solid var(--border-default); text-align: center; }
+
+  h2.section-title {
+    text-align: center; font-weight: 700; font-size: 1.5rem;
+    margin: 0 0 2rem; color: var(--text-900);
+  }
+
+  /* ---------- CTA final shared ---------- */
+  .cta-final h2 { color: white; font-weight: 700; font-size: 1.5rem; margin: 0 0 1rem; }
+  .cta-final p { color: #A7F3D0; font-weight: 500; margin: 0 0 2.5rem; }
+  .cta-white {
+    background: white; color: var(--primary-dark);
+    padding: 1rem 2.5rem;
+    border-radius: var(--radius-lg);
+    font-weight: 700; font-size: 1.125rem;
+    border: none; cursor: pointer;
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* ---------- Footer shared ---------- */
+  footer .f-logo {
+    display: inline-flex; align-items: center; gap: .25rem;
+    font-weight: 700; font-size: 1.25rem; color: var(--primary-dark);
+    margin-bottom: 2rem;
+  }
+  footer .f-logo svg { width: 24px; height: 24px; }
+  footer .f-links {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;
+    font-size: .75rem; font-weight: 600; color: var(--text-500);
+    margin-bottom: 2rem;
+  }
+  footer .f-links a { color: var(--text-500); text-decoration: none; }
+  footer .f-links a:hover { color: var(--primary-dark); }
+  footer .copyright {
+    font-size: 10px; color: var(--text-400);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  /* ============ Variant A — 1:1 new_design_audit.html ============ */
+  .A-testimonial {
+    max-width: 42rem; margin: 0 auto; text-align: center;
+  }
+  .A-avatar {
+    width: 5rem; height: 5rem; border-radius: 50%;
+    border: 4px solid white; box-shadow: var(--shadow-sm);
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, #94A3B8, #64748B);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 1.5rem;
+  }
+  .A-quote {
+    font-size: 1.125rem; font-weight: 700;
+    color: var(--text-800); line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .A-cite { color: var(--text-600); font-weight: 600; font-style: normal; }
+
+  .A-faq { max-width: 42rem; margin: 0 auto; border-top: 1px solid var(--border-default); border-bottom: 1px solid var(--border-default); }
+  .A-faq details { padding: 1rem 0; border-bottom: 1px solid var(--border-default); }
+  .A-faq details:last-of-type { border-bottom: none; }
+  .A-faq summary {
+    display: flex; align-items: center; justify-content: space-between;
+    font-weight: 700; color: var(--text-800); cursor: pointer; list-style: none;
+  }
+  .A-faq summary::-webkit-details-marker { display: none; }
+  .A-faq summary svg { width: 1.25rem; height: 1.25rem; color: var(--text-400); transition: transform .2s; }
+  .A-faq details[open] summary svg { transform: rotate(180deg); }
+  .A-faq p { margin: .5rem 0 0; font-size: .875rem; color: var(--text-600); }
+
+  .A-cta-final { max-width: 36rem; margin: 0 auto; }
+
+  /* ============ Variant B — cards everywhere + 2-col CTA ============ */
+  .B-testimonial {
+    max-width: 42rem; margin: 0 auto;
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    display: flex; gap: 1.5rem; align-items: center;
+  }
+  @media (max-width: 600px) { .B-testimonial { flex-direction: column; text-align: center; } }
+  .B-avatar {
+    width: 4.5rem; height: 4.5rem; border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #94A3B8, #64748B);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 1.25rem;
+  }
+  .B-testimonial blockquote {
+    margin: 0; font-size: 1rem; font-weight: 600;
+    color: var(--text-800); line-height: 1.5;
+  }
+  .B-testimonial cite {
+    font-style: normal; font-size: .8125rem; font-weight: 600;
+    color: var(--text-500); display: block; margin-top: .75rem;
+  }
+
+  .B-faq { max-width: 42rem; margin: 0 auto; display: flex; flex-direction: column; gap: .5rem; }
+  .B-faq details {
+    background: white; border: 1px solid var(--border-soft);
+    border-radius: var(--radius-xl); padding: 1rem 1.25rem;
+    transition: border-color .2s;
+  }
+  .B-faq details[open] { border-color: var(--step-emerald-border); background: var(--step-emerald-bg); }
+  .B-faq summary {
+    display: flex; align-items: center; justify-content: space-between;
+    font-weight: 700; color: var(--text-800); cursor: pointer; list-style: none;
+  }
+  .B-faq summary::-webkit-details-marker { display: none; }
+  .B-faq summary svg { width: 1.25rem; height: 1.25rem; color: var(--text-400); transition: transform .2s; flex-shrink: 0; margin-left: 1rem; }
+  .B-faq details[open] summary svg { transform: rotate(180deg); color: var(--step-emerald-icon-fg); }
+  .B-faq p { margin: .75rem 0 0; font-size: .875rem; color: var(--text-600); }
+
+  .B-cta-wrap {
+    max-width: 56rem; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr auto; gap: 2rem;
+    align-items: center; text-align: left;
+  }
+  @media (max-width: 700px) { .B-cta-wrap { grid-template-columns: 1fr; text-align: center; } }
+  .B-cta-wrap h2 { text-align: left; margin-bottom: .5rem; }
+  .B-cta-wrap p { margin: 0; }
+  @media (max-width: 700px) { .B-cta-wrap h2 { text-align: center; } }
+
+  /* ============ Variant C — pull quote serif + compact FAQ + CTA w/ stats ============ */
+  .C-testimonial {
+    max-width: 44rem; margin: 0 auto; text-align: center;
+    position: relative;
+  }
+  .C-testimonial::before {
+    content: '“';
+    font-family: 'Fraunces', serif;
+    font-size: 6rem; line-height: 1;
+    color: var(--accent-green);
+    opacity: .35;
+    position: absolute; top: -2rem; left: 50%; transform: translateX(-50%);
+  }
+  .C-pull-quote {
+    font-family: 'Fraunces', serif;
+    font-weight: 500; font-style: italic;
+    font-size: 1.5rem; color: var(--text-800);
+    line-height: 1.4;
+    margin: 1rem 0;
+    position: relative;
+  }
+  .C-attribution {
+    display: flex; align-items: center; justify-content: center; gap: .75rem;
+    margin-top: 1.5rem;
+  }
+  .C-avatar-small {
+    width: 2.25rem; height: 2.25rem; border-radius: 50%;
+    background: linear-gradient(135deg, #94A3B8, #64748B);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: .8125rem;
+  }
+  .C-attribution .who { font-size: .875rem; font-weight: 600; color: var(--text-700); }
+  .C-attribution .role { font-size: .75rem; color: var(--text-500); }
+
+  .C-faq { max-width: 42rem; margin: 0 auto; }
+  .C-faq details {
+    padding: .875rem 0;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .C-faq details:last-of-type { border-bottom: none; }
+  .C-faq summary {
+    display: flex; align-items: center; justify-content: space-between;
+    font-weight: 700; color: var(--text-800); cursor: pointer; list-style: none;
+    font-size: .9375rem;
+  }
+  .C-faq summary::-webkit-details-marker { display: none; }
+  .C-faq .chev {
+    width: 1rem; height: 1rem; border-radius: 50%;
+    background: var(--step-emerald-bg); color: var(--step-emerald-icon-fg);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .25s ease;
+    flex-shrink: 0; margin-left: 1rem;
+  }
+  .C-faq .chev svg { width: .625rem; height: .625rem; }
+  .C-faq details[open] .chev { transform: rotate(180deg); }
+  .C-faq p { margin: .5rem 0 0; font-size: .8125rem; color: var(--text-600); }
+
+  .C-cta-final { max-width: 48rem; margin: 0 auto; }
+  .C-stats-strip {
+    display: flex; justify-content: center; gap: 2.5rem;
+    margin-bottom: 2rem;
+    font-family: 'Fraunces', serif;
+    color: white;
+  }
+  @media (max-width: 600px) { .C-stats-strip { gap: 1.5rem; flex-wrap: wrap; } }
+  .C-stats-strip .item { text-align: center; }
+  .C-stats-strip .v { font-size: 1.875rem; font-weight: 600; display: block; line-height: 1; }
+  .C-stats-strip .l {
+    font-family: var(--font-sans);
+    font-size: 10px; color: #A7F3D0;
+    text-transform: uppercase; letter-spacing: .05em;
+    margin-top: .25rem; display: block; font-weight: 600;
+  }
+
+  /* ---------- Sketch toolbar ---------- */
+  .sketch-toolbar {
+    position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+    background: white; border: 1px solid var(--border-default);
+    border-radius: var(--radius-full); padding: .5rem .75rem;
+    box-shadow: var(--shadow-lg); z-index: 100;
+    font-size: 11px; color: var(--text-600);
+    display: flex; gap: .75rem; align-items: center;
+  }
+  .sketch-toolbar b { color: var(--text-900); }
+</style>
+</head>
+<body>
+
+<nav class="variant-bar" role="tablist">
+  <button class="variant-tab active" data-variant="A">Variant A — 1:1 maquette<span class="star">★</span></button>
+  <button class="variant-tab winner" data-variant="B">Variant B — Cards + 2-col CTA<span class="star">★</span></button>
+  <button class="variant-tab" data-variant="C">Variant C — Pull quote serif + stats<span class="star">★</span></button>
+</nav>
+
+<!-- =========================== VARIANT A =========================== -->
+<section class="variant-panel active" data-variant="A">
+  <section class="testimonial">
+    <div class="A-testimonial">
+      <div class="A-avatar">LM</div>
+      <blockquote class="A-quote">« GetLostRevenue a transformé notre approche des rendez-vous manqués. L'audit nous a permis de récupérer plus de 15 k€ en seulement quelques mois. Incroyable ! »</blockquote>
+      <cite class="A-cite">Dr. Laurent M.</cite>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2 class="section-title">FAQ</h2>
+    <div class="A-faq">
+      <details><summary>La sécurité de mes données est-elle garantie ?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Vos données sont traitées de manière totalement anonyme et sécurisée conformément au RGPD.</p></details>
+      <details><summary>Quel format de fichier dois-je utiliser ?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Nous acceptons uniquement les fichiers au format CSV standard exportés de votre logiciel.</p></details>
+      <details><summary>Combien de temps prend l'analyse ?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>En moyenne, l'IA génère votre rapport complet en moins de 3 minutes.</p></details>
+      <details><summary>Est-ce vraiment gratuit ?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Oui, l'audit complet est gratuit. Vous recevez votre rapport PDF sans engagement.</p></details>
+    </div>
+  </section>
+
+  <section class="cta-final">
+    <div class="A-cta-final">
+      <h2>Ne laissez plus filer vos revenus.</h2>
+      <p>Commencez votre audit gratuit dès maintenant.</p>
+      <button class="cta-white">Lancer mon audit maintenant</button>
+    </div>
+  </section>
+  <footer>
+    <div class="f-logo"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><span>GetLostRevenue</span></div>
+    <div class="f-links"><a>Contact</a><a>Mentions légales</a><a>Politique de confidentialité</a><a>Hébergement et Sécurité</a></div>
+    <p class="copyright">© 2026 GetLostRevenue. Tous droits réservés. Hébergé en France. Conforme RGPD.</p>
+  </footer>
+</section>
+
+<!-- =========================== VARIANT B =========================== -->
+<section class="variant-panel" data-variant="B">
+  <section class="testimonial">
+    <div class="B-testimonial">
+      <div class="B-avatar">LM</div>
+      <div>
+        <blockquote>« GetLostRevenue a transformé notre approche des rendez-vous manqués. L'audit nous a permis de récupérer plus de 15 k€ en seulement quelques mois. »</blockquote>
+        <cite>Dr. Laurent M. — Chirurgien-dentiste</cite>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2 class="section-title">FAQ</h2>
+    <div class="B-faq">
+      <details><summary>La sécurité de mes données est-elle garantie ?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Vos données sont traitées de manière totalement anonyme et sécurisée conformément au RGPD.</p></details>
+      <details><summary>Quel format de fichier dois-je utiliser ?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Nous acceptons uniquement les fichiers au format CSV standard exportés de votre logiciel.</p></details>
+      <details><summary>Combien de temps prend l'analyse ?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>En moyenne, l'IA génère votre rapport complet en moins de 3 minutes.</p></details>
+      <details><summary>Est-ce vraiment gratuit ?<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Oui, l'audit complet est gratuit. Vous recevez votre rapport PDF sans engagement.</p></details>
+    </div>
+  </section>
+
+  <section class="cta-final">
+    <div class="B-cta-wrap">
+      <div>
+        <h2>Ne laissez plus filer vos revenus.</h2>
+        <p>Commencez votre audit gratuit dès maintenant, reçu en moins de 3 minutes.</p>
+      </div>
+      <button class="cta-white">Lancer mon audit</button>
+    </div>
+  </section>
+  <footer>
+    <div class="f-logo"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><span>GetLostRevenue</span></div>
+    <div class="f-links"><a>Contact</a><a>Mentions légales</a><a>Politique de confidentialité</a><a>Hébergement et Sécurité</a></div>
+    <p class="copyright">© 2026 GetLostRevenue. Tous droits réservés. Hébergé en France. Conforme RGPD.</p>
+  </footer>
+</section>
+
+<!-- =========================== VARIANT C =========================== -->
+<section class="variant-panel" data-variant="C">
+  <section class="testimonial">
+    <div class="C-testimonial">
+      <p class="C-pull-quote">L'audit nous a permis de récupérer plus de 15 k€ en seulement quelques mois. Un changement radical de visibilité sur nos no-shows.</p>
+      <div class="C-attribution">
+        <div class="C-avatar-small">LM</div>
+        <div>
+          <span class="who">Dr. Laurent M.</span>
+          <span class="role">Chirurgien-dentiste · Cabinet libéral</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2 class="section-title">Questions fréquentes</h2>
+    <div class="C-faq">
+      <details><summary>La sécurité de mes données est-elle garantie ?<span class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><p>Traitement totalement anonyme, stockage chiffré, conforme RGPD. Aucune donnée patient n'est conservée au-delà de l'analyse.</p></details>
+      <details><summary>Quel format de fichier dois-je utiliser ?<span class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><p>CSV standard exporté depuis Doctolib, Maiia, Weda, ou tout autre logiciel de gestion.</p></details>
+      <details><summary>Combien de temps prend l'analyse ?<span class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><p>Moins de 3 minutes en moyenne. Vous recevez le rapport PDF par email dès que l'IA termine.</p></details>
+      <details><summary>Est-ce vraiment gratuit ?<span class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><p>Oui. Audit complet et rapport PDF sans engagement. La prise de rendez-vous d'accompagnement est optionnelle.</p></details>
+    </div>
+  </section>
+
+  <section class="cta-final">
+    <div class="C-cta-final">
+      <div class="C-stats-strip">
+        <div class="item"><span class="v">+200</span><span class="l">Cabinets</span></div>
+        <div class="item"><span class="v">22k€</span><span class="l">Perte moyenne</span></div>
+        <div class="item"><span class="v">3min</span><span class="l">Analyse</span></div>
+      </div>
+      <h2>Ne laissez plus filer vos revenus.</h2>
+      <p>Commencez votre audit gratuit dès maintenant.</p>
+      <button class="cta-white" style="margin-top:2rem;">Lancer mon audit maintenant</button>
+    </div>
+  </section>
+  <footer>
+    <div class="f-logo"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg><span>GetLostRevenue</span></div>
+    <div class="f-links"><a>Contact</a><a>Mentions légales</a><a>Politique de confidentialité</a><a>Hébergement et Sécurité</a></div>
+    <p class="copyright">© 2026 GetLostRevenue. Tous droits réservés. Hébergé en France. Conforme RGPD.</p>
+  </footer>
+</section>
+
+<div class="sketch-toolbar" role="status">
+  <b>Sketch 004</b><span>landing-testimonial-faq-cta</span><span>•</span><span>Clinique-claire v2</span><span>•</span><span id="current-variant">Variant A</span>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.variant-tab');
+  const panels = document.querySelectorAll('.variant-panel');
+  const label = document.getElementById('current-variant');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const v = tab.dataset.variant;
+      tabs.forEach(t => { t.classList.toggle('active', t === tab); t.setAttribute('aria-selected', t === tab); });
+      panels.forEach(p => p.classList.toggle('active', p.dataset.variant === v));
+      label.textContent = 'Variant ' + v;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  });
+</script>
+
+</body>
+</html>
+</content>
+</invoke>
