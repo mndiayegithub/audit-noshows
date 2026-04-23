@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 001 — landing-hero-nav (clinique-claire)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  /* ---------- Variant tab bar ---------- */
+  .variant-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: white; border-bottom: 1px solid var(--border-default);
+    display: flex; justify-content: center; gap: .25rem;
+    padding: .5rem; box-shadow: var(--shadow-sm);
+  }
+  .variant-tab {
+    background: transparent; border: 1px solid transparent;
+    color: var(--text-600); font-weight: 600; font-size: .8125rem;
+    padding: .375rem .75rem; border-radius: var(--radius-full);
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+  .variant-tab:hover { background: #F3F4F6; }
+  .variant-tab.active {
+    background: var(--primary-dark); color: white;
+  }
+  .variant-tab .star { color: #FBBF24; margin-left: .25rem; display: none; }
+  .variant-tab.winner .star { display: inline; }
+
+  .variant-panel { display: none; padding-top: 3.5rem; }
+  .variant-panel.active { display: block; }
+
+  /* ---------- Shared: Header nav ---------- */
+  .v-header {
+    position: sticky; top: 3.5rem; z-index: 40;
+    background: white; border-bottom: 1px solid var(--border-default);
+  }
+  .v-nav {
+    max-width: 1280px; margin: 0 auto; padding: 0 1rem;
+    height: 64px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .v-logo {
+    display: flex; align-items: center; gap: .25rem;
+    font-weight: 700; font-size: 1.25rem; color: var(--primary-dark);
+  }
+  .v-logo svg { width: 32px; height: 32px; }
+  .v-nav-links { display: flex; align-items: center; gap: 1.5rem; }
+  .v-nav-links a {
+    font-size: .875rem; font-weight: 500; color: var(--text-900);
+    text-decoration: none;
+  }
+  .v-nav-links a:hover { color: #047857; }
+  .v-nav-cta {
+    background: var(--primary-dark); color: white;
+    padding: .5rem 1rem; border-radius: var(--radius-md);
+    font-size: .875rem; font-weight: 600; border: none; cursor: pointer;
+  }
+  @media (max-width: 900px) {
+    .v-nav-links > a, .v-nav-cta { display: none; }
+    .burger { display: flex !important; }
+  }
+  .burger { display: none; padding: .5rem; color: var(--text-600); background: none; border: none; cursor: pointer; }
+
+  /* ---------- Hero base ---------- */
+  .badge-pill {
+    display: inline-flex; align-items: center;
+    padding: .25rem .75rem;
+    border-radius: var(--radius-full);
+    background: #F3F4F6;
+    border: 1px solid var(--border-default);
+    font-size: .75rem; font-weight: 600; color: var(--text-600);
+    margin-bottom: 1.5rem;
+  }
+  .badge-pill::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: #3B82F6; margin-right: .5rem;
+  }
+
+  /* ---------- Dashboard mockup shared ---------- */
+  .mockup {
+    background: white;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-2xl);
+    padding: 1rem;
+    overflow: hidden;
+  }
+  .mockup-titlebar {
+    display: flex; gap: .25rem; align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-default);
+    padding-bottom: .5rem;
+  }
+  .mockup-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .mockup-dot--red { background: #F87171; }
+  .mockup-dot--yellow { background: #FBBF24; }
+  .mockup-dot--green { background: #34D399; }
+  .mockup-urlbar {
+    margin-left: 1rem; height: 16px;
+    background: var(--border-soft); border-radius: var(--radius-full);
+    width: 192px;
+  }
+  .mockup h3 {
+    text-align: left; font-weight: 700; font-size: 1.125rem;
+    margin: 0 0 1rem;
+  }
+  .kpi-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: .5rem;
+    margin-bottom: 1rem;
+  }
+  .mockup-chart {
+    height: 96px; width: 100%;
+    background: var(--bg-section-alt);
+    border-radius: var(--radius-md);
+    padding: .5rem;
+  }
+  .mockup-chart svg { width: 100%; height: 100%; }
+
+  /* ---------- Variant A: Centered stacked ---------- */
+  .hero-A {
+    padding: 3rem 1rem 4rem;
+    text-align: center;
+  }
+  .hero-A h1 {
+    font-size: clamp(1.875rem, 4vw, 3rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--text-900);
+    max-width: 48rem; margin: 0 auto 1rem;
+  }
+  .hero-A p {
+    color: var(--text-600);
+    font-size: clamp(.875rem, 1.5vw, 1.125rem);
+    max-width: 42rem; margin: 0 auto 2rem;
+  }
+  .hero-A .ctas {
+    display: flex; gap: 1rem; justify-content: center;
+    max-width: 42rem; margin: 0 auto 3rem;
+    flex-wrap: wrap;
+  }
+  .hero-A .mockup { max-width: 36rem; margin: 0 auto; }
+
+  /* ---------- Variant B: 2-col split (text left / mockup right) ---------- */
+  .hero-B {
+    padding: 3rem 1rem 4rem;
+    max-width: 1200px; margin: 0 auto;
+    display: grid; gap: 3rem;
+    align-items: center;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 900px) {
+    .hero-B { grid-template-columns: 1fr 1fr; gap: 4rem; }
+  }
+  .hero-B .col-text h1 {
+    font-size: clamp(1.875rem, 3.5vw, 3rem);
+    font-weight: 800; line-height: 1.1;
+    color: var(--text-900);
+    margin: 0 0 1rem;
+  }
+  .hero-B .col-text p {
+    color: var(--text-600);
+    font-size: 1.0625rem;
+    margin: 0 0 2rem;
+    max-width: 32rem;
+  }
+  .hero-B .ctas {
+    display: flex; gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .hero-B .mockup { max-width: 100%; }
+
+  /* ---------- Variant C: Compact hero + inline KPI strip ---------- */
+  .hero-C {
+    padding: 3rem 1rem 1.5rem;
+    text-align: center;
+  }
+  .hero-C h1 {
+    font-size: clamp(1.875rem, 4vw, 3rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--text-900);
+    max-width: 48rem; margin: 0 auto 1rem;
+  }
+  .hero-C p {
+    color: var(--text-600);
+    font-size: clamp(.875rem, 1.5vw, 1.125rem);
+    max-width: 42rem; margin: 0 auto 2rem;
+  }
+  .hero-C .ctas {
+    display: flex; gap: 1rem; justify-content: center;
+    max-width: 42rem; margin: 0 auto 2rem;
+    flex-wrap: wrap;
+  }
+  .hero-C .caption {
+    font-size: .75rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .05em;
+    color: var(--text-500);
+    margin-bottom: 1rem;
+  }
+  .hero-C .strip {
+    max-width: 56rem; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: .75rem;
+    padding: 0 1rem;
+  }
+  .hero-C .strip .kpi-card {
+    padding: 1rem;
+  }
+  .hero-C .strip .kpi-value {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 700px) {
+    .hero-C .strip { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ---------- Sketch toolbar ---------- */
+  .sketch-toolbar {
+    position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+    background: white; border: 1px solid var(--border-default);
+    border-radius: var(--radius-full); padding: .5rem .75rem;
+    box-shadow: var(--shadow-lg); z-index: 100;
+    font-size: 11px; color: var(--text-600);
+    display: flex; gap: .75rem; align-items: center;
+  }
+  .sketch-toolbar b { color: var(--text-900); }
+
+  button:focus-visible, a:focus-visible {
+    outline: 2px solid var(--accent-green);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Variant tab bar -->
+<nav class="variant-bar" role="tablist" aria-label="Variantes">
+  <button class="variant-tab active" data-variant="A" role="tab" aria-selected="true">
+    Variant A — Centered stacked<span class="star">★</span>
+  </button>
+  <button class="variant-tab" data-variant="B" role="tab" aria-selected="false">
+    Variant B — Split 2-col<span class="star">★</span>
+  </button>
+  <button class="variant-tab winner" data-variant="C" role="tab" aria-selected="false">
+    Variant C — Compact + KPI strip<span class="star">★</span>
+  </button>
+</nav>
+
+<!-- =========================== VARIANT A =========================== -->
+<section class="variant-panel active" data-variant="A">
+  <header class="v-header">
+    <nav class="v-nav">
+      <div class="v-logo">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span>GetLostRevenue</span>
+      </div>
+      <button class="burger" aria-label="Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </button>
+      <div class="v-nav-links">
+        <a href="#audit">Audit</a>
+        <a href="#how">Comment ça marche</a>
+        <a href="#pricing">Tarifs</a>
+        <a href="#ressources">Ressources</a>
+        <button class="v-nav-cta">Lancer mon audit gratuit</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="hero-A">
+    <div class="badge-pill">Audit financier IA — Version 2.0</div>
+    <h1>Combien votre cabinet perd-il vraiment chaque année en rendez-vous manqués&nbsp;?</h1>
+    <p>Analysez vos données et découvrez votre potentiel de récupération en téléchargeant votre fichier CSV. Analyse complète en 3 minutes par notre IA.</p>
+    <div class="ctas">
+      <button class="btn-primary">Lancer mon audit gratuit</button>
+      <button class="btn-secondary">Voir un exemple de rapport</button>
+    </div>
+
+    <div class="mockup" aria-label="Aperçu du rapport d'audit">
+      <div class="mockup-titlebar">
+        <span class="mockup-dot mockup-dot--red"></span>
+        <span class="mockup-dot mockup-dot--yellow"></span>
+        <span class="mockup-dot mockup-dot--green"></span>
+        <div class="mockup-urlbar"></div>
+      </div>
+      <h3>Synthèse</h3>
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-card--volume"><span class="kpi-label">RDV analysés</span><div class="kpi-value">4 520</div></div>
+        <div class="kpi-card kpi-card--signal"><span class="kpi-label">No-shows</span><div class="kpi-value">542</div></div>
+        <div class="kpi-card kpi-card--taux"><span class="kpi-label">Taux</span><div class="kpi-value">12 %</div></div>
+        <div class="kpi-card kpi-card--argent"><span class="kpi-label">CA perdu</span><div class="kpi-value">22 400 €</div></div>
+      </div>
+      <div class="mockup-chart">
+        <svg preserveAspectRatio="none" viewBox="0 0 100 40">
+          <defs><linearGradient id="gA" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.25"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0,40 Q25,10 50,30 T100,20 L100,40 L0,40 Z" fill="url(#gA)"></path>
+          <path d="M0,40 Q25,10 50,30 T100,20" fill="none" stroke="#10B981" stroke-width="2"></path>
+        </svg>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- =========================== VARIANT B =========================== -->
+<section class="variant-panel" data-variant="B">
+  <header class="v-header">
+    <nav class="v-nav">
+      <div class="v-logo">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span>GetLostRevenue</span>
+      </div>
+      <button class="burger" aria-label="Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </button>
+      <div class="v-nav-links">
+        <a href="#audit">Audit</a>
+        <a href="#how">Comment ça marche</a>
+        <a href="#pricing">Tarifs</a>
+        <a href="#ressources">Ressources</a>
+        <button class="v-nav-cta">Lancer mon audit gratuit</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="hero-B">
+    <div class="col-text">
+      <div class="badge-pill">Audit financier IA — Version 2.0</div>
+      <h1>Combien votre cabinet perd-il vraiment chaque année en rendez-vous manqués&nbsp;?</h1>
+      <p>Analysez vos données et découvrez votre potentiel de récupération en téléchargeant votre fichier CSV. Analyse complète en 3 minutes par notre IA.</p>
+      <div class="ctas">
+        <button class="btn-primary">Lancer mon audit gratuit</button>
+        <button class="btn-secondary">Voir un exemple de rapport</button>
+      </div>
+    </div>
+
+    <div class="col-mockup">
+      <div class="mockup" aria-label="Aperçu du rapport d'audit">
+        <div class="mockup-titlebar">
+          <span class="mockup-dot mockup-dot--red"></span>
+          <span class="mockup-dot mockup-dot--yellow"></span>
+          <span class="mockup-dot mockup-dot--green"></span>
+          <div class="mockup-urlbar"></div>
+        </div>
+        <h3>Synthèse</h3>
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-card--volume"><span class="kpi-label">RDV analysés</span><div class="kpi-value">4 520</div></div>
+          <div class="kpi-card kpi-card--signal"><span class="kpi-label">No-shows</span><div class="kpi-value">542</div></div>
+          <div class="kpi-card kpi-card--taux"><span class="kpi-label">Taux</span><div class="kpi-value">12 %</div></div>
+          <div class="kpi-card kpi-card--argent"><span class="kpi-label">CA perdu</span><div class="kpi-value">22 400 €</div></div>
+        </div>
+        <div class="mockup-chart">
+          <svg preserveAspectRatio="none" viewBox="0 0 100 40">
+            <defs><linearGradient id="gB" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.25"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0,40 Q25,10 50,30 T100,20 L100,40 L0,40 Z" fill="url(#gB)"></path>
+            <path d="M0,40 Q25,10 50,30 T100,20" fill="none" stroke="#10B981" stroke-width="2"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- =========================== VARIANT C =========================== -->
+<section class="variant-panel" data-variant="C">
+  <header class="v-header">
+    <nav class="v-nav">
+      <div class="v-logo">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span>GetLostRevenue</span>
+      </div>
+      <button class="burger" aria-label="Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </button>
+      <div class="v-nav-links">
+        <a href="#audit">Audit</a>
+        <a href="#how">Comment ça marche</a>
+        <a href="#pricing">Tarifs</a>
+        <a href="#ressources">Ressources</a>
+        <button class="v-nav-cta">Lancer mon audit gratuit</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="hero-C">
+    <div class="badge-pill">Audit financier IA — Version 2.0</div>
+    <h1>Combien votre cabinet perd-il vraiment chaque année en rendez-vous manqués&nbsp;?</h1>
+    <p>Analysez vos données et découvrez votre potentiel de récupération en téléchargeant votre fichier CSV. Analyse complète en 3 minutes par notre IA.</p>
+    <div class="ctas">
+      <button class="btn-primary">Lancer mon audit gratuit</button>
+      <button class="btn-secondary">Voir un exemple de rapport</button>
+    </div>
+    <div class="caption">Exemple de résultats</div>
+    <div class="strip">
+      <div class="kpi-card kpi-card--volume"><span class="kpi-label">RDV analysés</span><div class="kpi-value">4 520</div></div>
+      <div class="kpi-card kpi-card--signal"><span class="kpi-label">No-shows</span><div class="kpi-value">542</div></div>
+      <div class="kpi-card kpi-card--taux"><span class="kpi-label">Taux</span><div class="kpi-value">12 %</div></div>
+      <div class="kpi-card kpi-card--argent"><span class="kpi-label">CA perdu</span><div class="kpi-value">22 400 €</div></div>
+    </div>
+  </main>
+</section>
+
+<div class="sketch-toolbar" role="status">
+  <b>Sketch 001</b>
+  <span>landing-hero-nav</span>
+  <span>•</span>
+  <span>Clinique-claire v2</span>
+  <span>•</span>
+  <span id="current-variant">Variant A</span>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.variant-tab');
+  const panels = document.querySelectorAll('.variant-panel');
+  const label = document.getElementById('current-variant');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const v = tab.dataset.variant;
+      tabs.forEach(t => {
+        t.classList.toggle('active', t === tab);
+        t.setAttribute('aria-selected', t === tab);
+      });
+      panels.forEach(p => p.classList.toggle('active', p.dataset.variant === v));
+      label.textContent = 'Variant ' + v;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  });
+</script>
+
+</body>
+</html>
+</content>
+</invoke>
