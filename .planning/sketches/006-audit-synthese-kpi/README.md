@@ -2,8 +2,7 @@
 sketch: 006
 name: audit-synthese-kpi
 question: "Comment présenter la zone Synthèse (4 KPI pastels grand format) dans le dashboard direction B ?"
-winner: B
-fallback: C
+winner: A
 tags: [audit, dashboard, kpi, synthese, phase-02]
 ---
 
@@ -39,6 +38,6 @@ open .planning/sketches/006-audit-synthese-kpi/index.html
 
 ## Decision
 
-**Winner : B — Hero Argent + 3 KPI compact** (validé 2026-04-23).
+**Winner (révisé 2026-04-23) : A — Grid 4 colonnes pure (4 KPI pastels égales en rangée).**
 
-**Fallback : C — 2×2 + panneau contextuel** conservé en option de repli. À ré-arbitrer au moment du Plan si B paraît trop frontal.
+_Note : choix initial était B (hero Argent + 3 compact), révisé vers A pour préserver une lecture cockpit instantanée où les 4 chiffres clés sont traités à égalité. Le hero violet reste réservé à la zone Manque à gagner (sketch 007 A)._
