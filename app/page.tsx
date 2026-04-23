@@ -3,7 +3,6 @@
 
 import LandingNav from "@/components/landing/LandingNav";
 import LandingHero from "@/components/landing/LandingHero";
-import MiniDashboard from "@/components/landing/MiniDashboard";
 import StatsBar from "@/components/landing/StatsBar";
 import TargetGrid from "@/components/landing/TargetGrid";
 import HowItWorksTimeline from "@/components/landing/HowItWorksTimeline";
@@ -33,11 +32,6 @@ export default function LandingPage() {
         {/* 3. How It Works + Value + Score */}
         <ScrollFadeUp>
           <HowItWorksTimeline />
-        </ScrollFadeUp>
-        <ScrollFadeUp>
-          <section aria-label="Aperçu du rapport" className="mx-auto max-w-6xl px-6 py-12 md:py-16">
-            <MiniDashboard />
-          </section>
         </ScrollFadeUp>
         <ScrollFadeUp>
           <ValueProps />
