@@ -85,21 +85,22 @@ export default function ScoreHero({ stats }: { stats: AuditStats }) {
           </span>
           <h3 className="mt-3 font-serif text-[28px] md:text-[32px] leading-tight tracking-tight text-white">
             {badge.tone === "good"
-              ? `Cabinet sur de bons rails, ${100 - score} points à verrouiller.`
+              ? `Il reste ${100 - score} points à aller chercher.`
               : badge.tone === "warn"
               ? `Score correct, ${100 - score} points à aller chercher.`
               : `Score critique — priorité absolue sur le plan d'action.`}
           </h3>
           <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-[#d1fae5]">
-            Score calculé à partir de votre taux de no-show (
+            Votre score (taux de no-show{" "}
             <span className="font-medium text-white">
               {tauxNoshow.toLocaleString("fr-FR", {
                 maximumFractionDigits: 1,
               })}
               &nbsp;%
             </span>
-            ). Plus le score est haut, plus votre cabinet est résilient aux
-            no-shows.
+            ) est au-dessus de la moyenne du secteur mais en dessous des
+            cabinets les mieux gérés (85+). Les 3 leviers ci-dessous peuvent
+            faire basculer votre score en zone « excellente » sous 60&nbsp;jours.
           </p>
         </div>
       </div>
