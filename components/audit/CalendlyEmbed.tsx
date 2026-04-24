@@ -10,22 +10,26 @@ export default function CalendlyEmbed() {
   const url = process.env.NEXT_PUBLIC_CALENDLY_URL;
 
   return (
-    <div className="rounded-3xl border border-[#064E3B]/30 bg-white p-6">
-      <div className="flex items-center justify-between gap-4 mb-4">
+    <div className="rounded-3xl border border-[#064E3B]/30 bg-white p-6 md:p-8">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wide text-[#064E3B]">
-            Prendre rendez-vous
+          <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#064E3B]">
+            Prochaine étape
           </div>
-          <h3 className="mt-1 font-serif text-2xl text-ink">
-            30 minutes pour activer votre plan.
+          <h3 className="mt-2 font-serif text-[26px] md:text-[28px] leading-tight tracking-tight text-ink">
+            Passons en revue votre plan ensemble — 30&nbsp;minutes.
           </h3>
+          <p className="mt-2 max-w-xl text-[14px] text-gray-600">
+            Un diagnostic personnalisé et la feuille de route sur-mesure pour
+            activer ces 3 leviers dans votre cabinet. Sans engagement.
+          </p>
         </div>
         {url && (
           <a
             href={url}
             target="_blank"
             rel="noreferrer"
-            className="shrink-0 rounded-lg border border-gray-300 px-3 py-1.5 text-[13px] text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#064E3B]"
+            className="shrink-0 inline-flex items-center justify-center rounded-xl bg-[#064E3B] px-5 py-2.5 text-[13px] font-semibold text-white hover:bg-[#053f31] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#064E3B]"
           >
             Voir plus de créneaux
           </a>
