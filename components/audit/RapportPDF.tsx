@@ -928,6 +928,52 @@ export default function RapportPDF({
       ? parJour.reduce((a, b) => (b.noShows > a.noShows ? b : a), parJour[0])
       : null;
 
+  // Par heure — normalisation depuis stats.par_heure (Phase 3, miroir ChartParHeure)
+  const SLOTS = ["8–10h", "10–12h", "14–16h", "16–18h", "18–20h"] as const;
+  const matchSlot = (raw: string): string | null => {
+    const s = raw.replace(/\s/g, "").toLowerCase();
+    for (const slot of SLOTS) {
+      const key = slot.replace(/\s/g, "").toLowerCase();
+      if (s.includes(key.replace("–", "-")) || s.includes(key.replace("–", "")) || s === key) return slot;
+    }
+    const m = s.match(/(\d{1,2})/);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      if (n >= 8 && n < 10) return "8–10h";
+      if (n >= 10 && n < 12) return "10–12h";
+      if (n >= 14 && n < 16) return "14–16h";
+      if (n >= 16 && n < 18) return "16–18h";
+      if (n >= 18 && n < 20) return "18–20h";
+    }
+    return null;
+  };
+  const parHeureRaw = stats.par_heure ?? [];
+  const bySlot = new Map<string, number>(SLOTS.map((s) => [s, 0]));
+  for (const item of parHeureRaw) {
+    const key = matchSlot(item.tranche ?? item.slot ?? item.heure ?? "");
+    const v = Number(item.count ?? item.no_shows ?? item.noShows ?? item.value ?? 0);
+    if (key && Number.isFinite(v)) bySlot.set(key, (bySlot.get(key) ?? 0) + v);
+  }
+  const heureValues = SLOTS.map((s) => bySlot.get(s) ?? 0);
+  const maxHeure = Math.max(0, ...heureValues);
+  const totalHeure = heureValues.reduce((a, b) => a + b, 0);
+  const picHeureIdx = heureValues.indexOf(Math.max(...heureValues));
+  const picHeurePct = totalHeure > 0 ? Math.round((heureValues[picHeureIdx] / totalHeure) * 100) : 0;
+
+  // Par mois — stats_par_mois (Phase 3)
+  const parMois = stats.stats_par_mois ?? [];
+  const maxMois = parMois.reduce((m, d) => Math.max(m, d.no_shows), 0);
+  const picMois =
+    parMois.length > 0
+      ? parMois.reduce((a, b) => (b.no_shows > a.no_shows ? b : a), parMois[0])
+      : null;
+  const fmtMois = (m: string): string => {
+    const [y, mm] = m.split("-");
+    const names = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+    const idx = parseInt(mm, 10) - 1;
+    return idx >= 0 && idx < 12 ? `${names[idx]} ${y?.slice(2) ?? ""}` : m;
+  };
+
   // Plan d'action — miroir PlanTimeline
   const planItems: Array<{
     num: "1" | "2" | "3";
@@ -1160,10 +1206,85 @@ export default function RapportPDF({
           <Text style={S.chartSub}>
             Répartition sur la journée (matin / après-midi / soir).
           </Text>
-          <Text style={S.chartEmpty}>
-            Données horaires non disponibles pour cet audit.
-          </Text>
+
+          {parHeureRaw.length > 0 && maxHeure > 0 ? (
+            <>
+              <View style={S.chartArea}>
+                {SLOTS.map((slot, i) => {
+                  const v = heureValues[i];
+                  const ratio = maxHeure > 0 ? v / maxHeure : 0;
+                  const height = Math.max(4, Math.round(ratio * 110));
+                  const isPic = i === picHeureIdx && v > 0;
+                  return (
+                    <View key={slot} style={S.chartCol}>
+                      <Text style={S.chartBarValue}>{v}</Text>
+                      <View
+                        style={[
+                          S.chartBar,
+                          { height, backgroundColor: isPic ? C.tauxFg : C.tauxBg },
+                        ]}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+              <View style={S.chartLabels}>
+                {SLOTS.map((slot) => (
+                  <Text key={slot} style={S.chartLabelCol}>{slot}</Text>
+                ))}
+              </View>
+              {heureValues[picHeureIdx] > 0 && (
+                <Text style={S.chartInsight}>
+                  Créneau critique {SLOTS[picHeureIdx]} — {picHeurePct}{NBSP}% des no-shows.
+                </Text>
+              )}
+            </>
+          ) : (
+            <Text style={S.chartEmpty}>
+              Données horaires non disponibles pour cet audit.
+            </Text>
+          )}
         </View>
+
+        {/* Évolution mensuelle (Phase 3 — stats_par_mois) */}
+        {parMois.length > 0 && maxMois > 0 && (
+          <View style={S.chartCard}>
+            <Text style={S.chartTitle}>Évolution mois par mois</Text>
+            <Text style={S.chartSub}>
+              Nombre de no-shows détectés sur chaque mois de la période.
+            </Text>
+            <View style={S.chartArea}>
+              {parMois.map((m, i) => {
+                const ratio = maxMois > 0 ? m.no_shows / maxMois : 0;
+                const height = Math.max(4, Math.round(ratio * 110));
+                const isPic = picMois ? m.mois === picMois.mois : false;
+                return (
+                  <View key={i} style={S.chartCol}>
+                    <Text style={S.chartBarValue}>{m.no_shows}</Text>
+                    <View
+                      style={[
+                        S.chartBar,
+                        { height, backgroundColor: isPic ? C.argentFg : C.argentBg },
+                      ]}
+                    />
+                  </View>
+                );
+              })}
+            </View>
+            <View style={S.chartLabels}>
+              {parMois.map((m, i) => (
+                <Text key={i} style={S.chartLabelCol}>{fmtMois(m.mois)}</Text>
+              ))}
+            </View>
+            {picMois && (
+              <Text style={S.chartInsight}>
+                Pic en {fmtMois(picMois.mois)} — {picMois.no_shows} no-shows (
+                {picMois.taux.toLocaleString("fr-FR", { maximumFractionDigits: 1 })}
+                {NBSP}%)
+              </Text>
+            )}
+          </View>
+        )}
 
         <Footer cabinet={stats.nom_cabinet} />
       </Page>

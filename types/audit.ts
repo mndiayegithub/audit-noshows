@@ -49,6 +49,15 @@ export interface AuditStats {
     no_shows: number;
     taux: number;       // % 0-100, arrondi 1 décimale
   }>;
+  par_heure?: Array<{
+    tranche?: string;
+    slot?: string;
+    heure?: string;
+    count?: number;
+    no_shows?: number;
+    noShows?: number;
+    value?: number;
+  }>;
 }
 
 export interface AuditResponse {
