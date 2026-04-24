@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 
 interface AuditSectionProps {
   id: string;
-  eyebrow: string;
+  /** Optional — if omitted, no eyebrow is rendered (iteration 5 cleanup). */
+  eyebrow?: string;
   /** Tailwind text-* class, e.g. "text-kpiVolume-fg" */
   eyebrowColor?: string;
   title: string;
@@ -31,11 +32,13 @@ export default function AuditSection({
       data-audit-section
       className="scroll-mt-6 py-10 md:py-16 w-full"
     >
-      <div
-        className={`mb-2 text-xs font-medium uppercase tracking-wide ${eyebrowColor}`}
-      >
-        {eyebrow}
-      </div>
+      {eyebrow && (
+        <div
+          className={`mb-2 text-xs font-medium uppercase tracking-wide ${eyebrowColor}`}
+        >
+          {eyebrow}
+        </div>
+      )}
       <h2 className="mb-2 font-serif font-bold text-2xl md:text-3xl text-slate-900">
         {typeof index === "number" && (
           <span className="mr-2 tabular-nums">{index}.</span>

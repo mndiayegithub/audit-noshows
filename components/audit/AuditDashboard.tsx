@@ -33,8 +33,6 @@ export default function AuditDashboard({
       <main className="md:ml-[240px] w-full max-w-none px-6 lg:px-10 pb-20">
         <AuditSection
           id="synthese"
-          eyebrow="Synthèse"
-          eyebrowColor="text-kpiVolume-fg"
           title="Synthèse"
           index={1}
         >
@@ -42,9 +40,7 @@ export default function AuditDashboard({
         </AuditSection>
         <AuditSection
           id="manque-a-gagner"
-          eyebrow="Manque à gagner"
-          eyebrowColor="text-kpiArgent-fg"
-          title="Manque à gagner"
+          title="Manque à gagner annuel"
           index={2}
           lede="CA perdu sur la période analysée, extrapolé sur 12 mois — valeur annualisée renvoyée par l'analyse."
         >
@@ -52,8 +48,6 @@ export default function AuditDashboard({
         </AuditSection>
         <AuditSection
           id="ou-et-quand"
-          eyebrow="Où & Quand"
-          eyebrowColor="text-kpiSignal-fg"
           title="Où & quand vos no-shows apparaissent"
           index={3}
         >
@@ -64,8 +58,6 @@ export default function AuditDashboard({
         </AuditSection>
         <AuditSection
           id="score"
-          eyebrow="Score cabinet"
-          eyebrowColor="text-[#064E3B]"
           title="Score cabinet"
           index={4}
         >
@@ -73,8 +65,6 @@ export default function AuditDashboard({
         </AuditSection>
         <AuditSection
           id="plan-et-cta"
-          eyebrow="Feuille de route"
-          eyebrowColor="text-[#064E3B]"
           title="Plan d'action"
           index={5}
         >
