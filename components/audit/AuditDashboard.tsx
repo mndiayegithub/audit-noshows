@@ -1,5 +1,6 @@
 "use client";
 import type { AuditStats, GoogleData } from "@/types/audit";
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import AuditSidebar from "./AuditSidebar";
@@ -43,6 +44,12 @@ export default function AuditDashboard({
             Rapport<span className="mx-2 text-slate-300">·</span>
             <span className="font-serif font-bold text-[15px] text-slate-900">Synthèse</span>
           </div>
+          <Link
+            href="/"
+            className="absolute left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 text-[13px] font-medium text-slate-500 hover:text-primaryDark transition-colors"
+          >
+            <span aria-hidden>←</span> Accueil
+          </Link>
           {onDownloadPDF && (
             <button
               type="button"
