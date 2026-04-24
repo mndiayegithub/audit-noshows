@@ -7,9 +7,9 @@ export default function MiniDashboard() {
     <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
       {/* Fake browser bar */}
       <div className="flex items-center gap-2 pb-4 border-b border-gray-100">
-        <span className="h-2.5 w-2.5 rounded-full bg-gray-200" />
-        <span className="h-2.5 w-2.5 rounded-full bg-gray-200" />
-        <span className="h-2.5 w-2.5 rounded-full bg-gray-200" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" aria-hidden />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" aria-hidden />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" aria-hidden />
         <span className="ml-3 text-xs text-slate-500">Tableau de bord</span>
       </div>
 
