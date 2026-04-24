@@ -10,8 +10,8 @@ import {
   StyleSheet,
   Font,
 } from "@react-pdf/renderer";
-import type { AuditResponse } from "@/types/audit";
-import { computeScore, scoreBadge } from "@/lib/score";
+import type { AuditResponse, GoogleData } from "@/types/audit";
+import { computeBlendedScore, computeScore, scoreBadge } from "@/lib/score";
 
 // ─── Font registration (module load) ─────────────────────────────────────────
 // Inter + Fraunces : fichiers locaux servis par Next.js depuis /public/fonts/*.ttf.
@@ -533,6 +533,75 @@ const S = StyleSheet.create({
     lineHeight: 1.55,
   },
 
+  // ── Google synthèse (Phase 4 — bloc PDF aligné sur DiagnosticGoogle) ──
+  googleCard: {
+    padding: 18,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: C.signalBg,
+    backgroundColor: "#F0FBF4",
+    marginBottom: 18,
+  },
+  googleHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  googleEyebrow: {
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: 8,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    color: C.signalFg,
+    marginBottom: 4,
+  },
+  googleTitle: {
+    fontFamily: "Fraunces",
+    fontWeight: 500,
+    fontSize: 14,
+    color: C.ink,
+    marginBottom: 8,
+  },
+  googleRow: {
+    flexDirection: "row",
+    marginTop: 6,
+  },
+  googleStat: {
+    flex: 1,
+    paddingRight: 10,
+  },
+  googleStatLabel: {
+    fontFamily: "Inter",
+    fontWeight: 500,
+    fontSize: 8,
+    color: C.muted,
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+    marginBottom: 3,
+  },
+  googleStatValue: {
+    fontFamily: "Fraunces",
+    fontWeight: 500,
+    fontSize: 18,
+    color: C.ink,
+  },
+  googleStatSub: {
+    fontFamily: "Inter",
+    fontWeight: 400,
+    fontSize: 8,
+    color: C.muted,
+    marginTop: 2,
+  },
+  googleNarrative: {
+    fontFamily: "Inter",
+    fontWeight: 400,
+    fontSize: 9,
+    color: C.muted,
+    lineHeight: 1.5,
+    marginTop: 10,
+  },
+
   planRow: {
     flexDirection: "row",
     marginBottom: 14,
@@ -794,15 +863,24 @@ function SectionHead({
 }
 
 // ─── Main component ──────────────────────────────────────────────────────────
-export default function RapportPDF({ resultats }: { resultats: AuditResponse }) {
+export default function RapportPDF({
+  resultats,
+  google = null,
+}: {
+  resultats: AuditResponse;
+  google?: GoogleData | null;
+}) {
   const { stats, rapport_texte } = resultats;
   const debut = formatDate(stats.periode.debut);
   const fin = formatDate(stats.periode.fin);
   const dateGen = formatDate(new Date().toISOString());
   const blocks = rapport_texte ? parseMarkdown(rapport_texte) : [];
 
-  // Score via lib/score.ts — même formule que ScoreHero (pas de duplication)
-  const score = computeScore(stats.global.taux);
+  // Score via lib/score.ts — blended si Google analysé, sinon taux pur (même formule que ScoreHero)
+  const hasGoogle = !!(google && typeof google.rating === "number" && Number.isFinite(google.rating));
+  const baseScore = computeScore(stats.global.taux);
+  const score = hasGoogle ? computeBlendedScore(stats.global.taux, google) : baseScore;
+  const googleDelta = hasGoogle ? score - baseScore : 0;
   const badge = scoreBadge(score);
 
   // Money build — miroir MoneyBuildCard
@@ -1116,11 +1194,59 @@ export default function RapportPDF({ resultats }: { resultats: AuditResponse }) 
               {stats.global.taux.toLocaleString("fr-FR", {
                 maximumFractionDigits: 1,
               })}
-              {NBSP}%. Les 3 leviers ci-dessous peuvent faire basculer votre
-              score en zone «{NBSP}excellente{NBSP}» sous 60{NBSP}jours.
+              {NBSP}%. {hasGoogle
+                ? `Score global (no-shows + réputation Google${
+                    googleDelta !== 0
+                      ? ` — impact Google : ${googleDelta > 0 ? "+" : ""}${googleDelta}${NBSP}pts`
+                      : ""
+                  }).`
+                : "Score no-shows (hors Google)."}{" "}
+              Les 3 leviers ci-dessous peuvent faire basculer votre score en
+              zone «{NBSP}excellente{NBSP}» sous 60{NBSP}jours.
             </Text>
           </View>
         </View>
+
+        {/* Synthèse Google (Phase 4 — visible uniquement si l'utilisateur a lancé l'analyse) */}
+        {hasGoogle && google && (
+          <View style={S.googleCard}>
+            <Text style={S.googleEyebrow}>Réputation Google</Text>
+            <Text style={S.googleTitle}>{google.name}</Text>
+            <View style={S.googleRow}>
+              <View style={S.googleStat}>
+                <Text style={S.googleStatLabel}>Note Google</Text>
+                <Text style={S.googleStatValue}>
+                  {google.rating?.toLocaleString("fr-FR", { maximumFractionDigits: 1 })} / 5
+                </Text>
+                <Text style={S.googleStatSub}>moyenne des avis</Text>
+              </View>
+              <View style={S.googleStat}>
+                <Text style={S.googleStatLabel}>Nombre d&apos;avis</Text>
+                <Text style={S.googleStatValue}>
+                  {google.user_ratings_total.toLocaleString("fr-FR")}
+                </Text>
+                <Text style={S.googleStatSub}>
+                  écart vs benchmark national&nbsp;87&nbsp;:&nbsp;
+                  {google.user_ratings_total >= 87 ? "+" : ""}
+                  {google.user_ratings_total - 87}
+                </Text>
+              </View>
+              <View style={S.googleStat}>
+                <Text style={S.googleStatLabel}>Impact sur le score</Text>
+                <Text style={S.googleStatValue}>
+                  {googleDelta > 0 ? "+" : ""}
+                  {googleDelta}{NBSP}pts
+                </Text>
+                <Text style={S.googleStatSub}>blending no-shows + Google</Text>
+              </View>
+            </View>
+            <Text style={S.googleNarrative}>
+              {google.user_ratings_total < 50
+                ? `Volume d'avis faible (${google.user_ratings_total}) — la confiance dans la note est partielle. Un cabinet avec 50 avis de plus convertit en moyenne 3–5 nouveaux patients/mois supplémentaires.`
+                : `Volume d'avis robuste — votre note Google pèse pleinement dans le score global. Maintenir la collecte d'avis post-RDV consolide cet effet.`}
+            </Text>
+          </View>
+        )}
 
         {/* Plan d'action */}
         <View style={{ marginTop: 6 }}>

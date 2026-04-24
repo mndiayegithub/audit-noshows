@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import type { AuditStats, GoogleData } from "@/types/audit";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -17,6 +16,8 @@ import CalendlyEmbed from "./CalendlyEmbed";
 interface AuditDashboardProps {
   stats: AuditStats;
   rapport: string;
+  google?: GoogleData | null;
+  onGoogleChange?: (data: GoogleData | null) => void;
   onDownloadPDF?: () => void;
   isGeneratingPDF?: boolean;
 }
@@ -28,10 +29,11 @@ interface AuditDashboardProps {
 export default function AuditDashboard({
   stats,
   rapport,
+  google = null,
+  onGoogleChange,
   onDownloadPDF,
   isGeneratingPDF,
 }: AuditDashboardProps) {
-  const [google, setGoogle] = useState<GoogleData | null>(null);
   return (
     <div className="min-h-screen">
       <AuditSidebar stats={stats} />
@@ -89,7 +91,7 @@ export default function AuditDashboard({
             <ScoreHero stats={stats} google={google} />
             <DiagnosticGoogle
               nomCabinet={stats.nom_cabinet ?? ""}
-              onSuccess={(data) => setGoogle(data)}
+              onSuccess={(data) => onGoogleChange?.(data)}
             />
           </div>
         </AuditSection>
