@@ -25,6 +25,43 @@ function normalizeDayKey(raw: string): string | null {
 
 export default function ChartParJour({ stats }: { stats: AuditStats }) {
   const raw = stats.par_jour ?? stats.stats_par_jour ?? [];
+
+  // Empty state — same visual treatment as ChartParHeure to keep the
+  // side-by-side grid aligned. Height matches populated chart
+  // (card padding 20 + title ~56 + h-48 chart 192 + insight 36 ≈ matches).
+  if (!raw || raw.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-5 text-center">
+        <h3 className="font-serif text-lg text-ink">No-shows par jour</h3>
+        <p className="mt-1 text-[13px] text-gray-500">
+          Répartition sur la période analysée
+        </p>
+        <div className="mt-6 flex h-48 flex-col items-center justify-center gap-2">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            className="text-gray-400"
+            aria-hidden
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 8v4M12 16h.01" strokeLinecap="round" />
+          </svg>
+          <p className="text-[13px] text-gray-500">
+            Données journalières non disponibles
+          </p>
+          <p className="mt-1 max-w-[220px] text-[12px] text-gray-400">
+            Nécessite l&apos;extension n8n phase 3 (workflow WF12{" "}
+            <code className="text-[11px]">stats_par_jour[]</code>).
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const byDay = new Map<string, number>(DAY_ORDER.map((d) => [d, 0]));
   for (const item of raw as Array<{
     jour?: string;
