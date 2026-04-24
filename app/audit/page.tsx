@@ -119,11 +119,16 @@ export default function AuditPage() {
       <nav className="bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-lg">
-                <Activity className="w-5 h-5" aria-hidden="true" />
-              </div>
-              <span className="font-heading font-bold text-xl tracking-tight text-slate-900">PerfIAmatic</span>
+            <Link href="/" className="flex items-center gap-2">
+              <span
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-primaryDark text-white"
+                aria-hidden
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
+                  <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" />
+                </svg>
+              </span>
+              <span className="font-semibold tracking-tight text-slate-900">GetLostRevenue</span>
             </Link>
             <div className="hidden md:flex items-center gap-8">
               <Link href="/#comment-ca-marche" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors duration-200">Comment ça marche</Link>

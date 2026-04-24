@@ -18,7 +18,21 @@ export async function POST(request: Request) {
       throw new Error(`n8n a répondu avec le statut : ${response.status}`);
     }
 
-    const raw = await response.json();
+    const bodyText = await response.text();
+    if (!bodyText || !bodyText.trim()) {
+      throw new Error(
+        "n8n a renvoyé une réponse vide. Vérifiez que le workflow 'audit-flash' est actif et qu'il se termine par un nœud 'Respond to Webhook' renvoyant du JSON."
+      );
+    }
+
+    let raw: unknown;
+    try {
+      raw = JSON.parse(bodyText);
+    } catch {
+      throw new Error(
+        `n8n a renvoyé une réponse non-JSON (${bodyText.length} car.). Début : ${bodyText.slice(0, 200)}`
+      );
+    }
 
     // n8n peut renvoyer plusieurs formats selon le mode d'exécution :
     // 1) Production (Respond to Webhook + JSON.stringify) :
