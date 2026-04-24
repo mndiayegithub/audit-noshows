@@ -32,7 +32,7 @@ export default function AuditDashboard({
   return (
     <div className="min-h-screen">
       <AuditSidebar stats={stats} />
-      <main className="md:ml-[240px] w-full max-w-none px-0 pb-20">
+      <main className="md:ml-[240px] max-w-none px-0 pb-20">
         <div className="sticky top-0 z-10 flex items-center justify-between gap-4 px-8 py-3.5 border-b border-gray-200 bg-gray-50/90 backdrop-blur">
           <div className="text-[13px] text-slate-500">
             Rapport<span className="mx-2 text-slate-300">·</span>
