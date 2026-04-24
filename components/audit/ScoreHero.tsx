@@ -2,79 +2,79 @@ import type { AuditStats } from "@/types/audit";
 import { computeScore, scoreBadge } from "@/lib/score";
 
 /**
- * Section 4 — Score cabinet.
+ * Section 4 — Score cabinet (sketch 009 variante A).
  *
- * Primary-dark hero (bg-[#064E3B]) with a 220px SVG ring (white progress
- * on rgba(255,255,255,0.14) track) + conditional badge.
+ * White card (bg-white + border-gray-200 + rounded-3xl), 2 cols desktop :
+ * ring 220px à gauche + badge/titre/narratif à droite. Ring émeraude
+ * (#059669) sur track #e5e7eb — la card N'EST PAS primary-dark.
  *
- * The numeric score and badge label both come from `lib/score.ts` — no
- * formula is duplicated here.
+ * Le score numérique et le label proviennent de `lib/score.ts` — aucune
+ * formule dupliquée ici.
  */
 export default function ScoreHero({ stats }: { stats: AuditStats }) {
   const tauxNoshow = stats.global.taux;
   const score = computeScore(tauxNoshow);
   const badge = scoreBadge(score);
   const CIRC = 540.4; // 2π × 86
-  const dash = (score / 100) * CIRC;
+  const dashOffset = CIRC * (1 - score / 100);
 
   const tonePill =
     badge.tone === "good"
-      ? "bg-emerald-500/20 text-[#a7f3d0]"
+      ? "bg-kpiSignal text-kpiSignal-fg"
       : badge.tone === "warn"
-      ? "bg-amber-500/20 text-[#fde68a]"
-      : "bg-rose-500/20 text-[#fecaca]";
+      ? "bg-kpiTaux text-kpiTaux-fg"
+      : "bg-rose-100 text-rose-700";
+
+  const title =
+    badge.tone === "good"
+      ? `Il reste ${100 - score} points à aller chercher.`
+      : badge.tone === "warn"
+      ? `Score correct, ${100 - score} points à aller chercher.`
+      : `Score critique — priorité absolue sur le plan d'action.`;
 
   return (
-    <div
-      className="relative overflow-hidden rounded-[28px] bg-[#064E3B] p-8 md:p-10 text-white"
-      style={{
-        backgroundImage:
-          "radial-gradient(circle at 100% 100%, rgba(16,185,129,0.18), transparent 60%)",
-      }}
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-[260px,1fr] gap-8 items-center">
+    <div className="rounded-3xl border border-gray-200 bg-white p-7">
+      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-7 items-center">
         <div className="relative mx-auto h-[220px] w-[220px]">
           <svg
-            width="220"
-            height="220"
-            viewBox="0 0 220 220"
+            viewBox="0 0 200 200"
             role="img"
             aria-label={`Score ${score} sur 100`}
-            className="h-full w-full"
+            className="h-full w-full -rotate-90"
           >
             <circle
-              cx="110"
-              cy="110"
+              cx="100"
+              cy="100"
               r="86"
               fill="none"
-              stroke="rgba(255,255,255,0.14)"
+              stroke="#e5e7eb"
               strokeWidth="14"
             />
             <circle
-              cx="110"
-              cy="110"
+              cx="100"
+              cy="100"
               r="86"
               fill="none"
-              stroke="#ffffff"
+              stroke="#059669"
               strokeWidth="14"
               strokeLinecap="round"
-              strokeDasharray={`${dash} ${CIRC}`}
-              transform="rotate(-90 110 110)"
+              strokeDasharray={CIRC}
+              strokeDashoffset={dashOffset}
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="font-serif text-[64px] font-medium leading-none tracking-tight text-white">
+            <div
+              className="font-serif text-[56px] font-medium leading-none text-slate-900"
+              style={{ letterSpacing: "-0.03em" }}
+            >
               {score}
-              <span className="font-sans text-base font-normal text-[#a7f3d0]">
-                /100
-              </span>
             </div>
-            <div className="mt-1 text-[13px] text-[#a7f3d0]">sur 100</div>
+            <div className="mt-1 text-sm text-gray-500">sur 100</div>
           </div>
         </div>
         <div>
           <span
-            className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${tonePill}`}
+            className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[12px] font-semibold uppercase tracking-wider ${tonePill}`}
             data-score-tone={badge.tone}
           >
             <span
@@ -83,16 +83,12 @@ export default function ScoreHero({ stats }: { stats: AuditStats }) {
             />
             {badge.label}
           </span>
-          <h3 className="mt-3 font-serif text-[28px] md:text-[32px] leading-tight tracking-tight text-white">
-            {badge.tone === "good"
-              ? `Il reste ${100 - score} points à aller chercher.`
-              : badge.tone === "warn"
-              ? `Score correct, ${100 - score} points à aller chercher.`
-              : `Score critique — priorité absolue sur le plan d'action.`}
+          <h3 className="mt-3 font-serif text-[24px] font-medium leading-tight tracking-tight text-slate-900">
+            {title}
           </h3>
-          <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-[#d1fae5]">
+          <p className="mt-2 max-w-[520px] text-[14px] leading-relaxed text-gray-600">
             Votre score (taux de no-show{" "}
-            <span className="font-medium text-white">
+            <span className="font-medium text-slate-900">
               {tauxNoshow.toLocaleString("fr-FR", {
                 maximumFractionDigits: 1,
               })}
