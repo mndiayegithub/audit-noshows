@@ -138,7 +138,13 @@ export default function AuditPage() {
         </div>
       </nav>
 
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12 flex flex-col justify-center">
+      <main
+        className={
+          etat === "resultats"
+            ? "flex-1 w-full"
+            : "flex-1 max-w-4xl mx-auto w-full px-4 py-12 flex flex-col justify-center"
+        }
+      >
 
         {/* ─── FORMULAIRE ─── */}
         {etat === "formulaire" && (
