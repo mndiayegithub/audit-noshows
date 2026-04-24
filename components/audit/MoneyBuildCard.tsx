@@ -20,24 +20,25 @@ export default function MoneyBuildCard({ stats }: { stats: AuditStats }) {
       className="relative overflow-hidden rounded-[28px] bg-[#6B21A8] p-10 md:p-12 text-white"
       style={{
         backgroundImage:
-          "radial-gradient(circle at 0% 0%, rgba(236,205,248,0.25), transparent 55%)",
+          "radial-gradient(circle at 20% 0%, rgba(236,205,248,0.28), transparent 55%)",
       }}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.3fr,1fr] gap-10 md:gap-12 items-center">
         <div>
-          <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-white/80">
+          <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#e9d5ff]">
             CA perdu / an — extrapolé
           </div>
-          <div className="font-serif text-[72px] md:text-[96px] leading-none">
+          {/* font-weight 500 matches sketch 007A Fraunces styling */}
+          <div className="font-serif font-medium text-[64px] md:text-[96px] leading-[0.95] tracking-tight">
             {fmtEur(stats.global.ca_perdu_an)}
           </div>
-          <p className="mt-4 max-w-md text-[15px] text-white/85">
+          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-[#f3e8ff]">
             Soit l&apos;équivalent de plusieurs semaines de CA qui
             s&apos;évaporent chaque année, faute de process anti no-show.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
+        <div className="rounded-[20px] border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
           <ul className="space-y-5 text-[14px]">
             <li className="flex items-center justify-between">
               <span className="text-white/80">
