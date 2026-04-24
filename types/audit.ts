@@ -43,6 +43,12 @@ export interface AuditStats {
     taux: number;
     ca_perdu: number;
   }>;
+  stats_par_mois?: Array<{
+    mois: string;       // "YYYY-MM"
+    total_rdv: number;
+    no_shows: number;
+    taux: number;       // % 0-100, arrondi 1 décimale
+  }>;
 }
 
 export interface AuditResponse {
