@@ -1,6 +1,34 @@
+import { logServerError } from "@/lib/safe-log";
+import { checkRateLimit } from "@/lib/rate-limit";
+
 export const maxDuration = 15;
 
+const ALLOWED_ORIGIN_PARTS = [
+  "localhost",
+  "127.0.0.1",
+  "vercel.app",
+  "perfiamatic.fr",
+];
+
+function isOriginAllowed(request: Request): boolean {
+  const origin = request.headers.get("origin") || request.headers.get("referer") || "";
+  if (!origin) return false;
+  return ALLOWED_ORIGIN_PARTS.some((d) => origin.includes(d));
+}
+
 export async function GET(request: Request) {
+  if (!isOriginAllowed(request)) {
+    return Response.json({ error: "Origine non autorisée" }, { status: 403 });
+  }
+
+  const rl = checkRateLimit(request, { max: 30, windowMs: 600_000, key: "google-places" });
+  if (!rl.allowed) {
+    return Response.json(
+      { error: "Trop de requêtes, réessayez dans quelques minutes" },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSec ?? 60) } }
+    );
+  }
+
   const { searchParams } = new URL(request.url);
   const input = searchParams.get("input");
 
@@ -44,11 +72,9 @@ export async function GET(request: Request) {
       user_ratings_total: place.user_ratings_total ?? 0,
       formatted_address: place.formatted_address ?? null,
     });
-  } catch (error: any) {
-    console.error("Erreur Google Places API:", error);
-    return Response.json(
-      { error: error.message || "Erreur lors de la recherche Google" },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    logServerError("api/google-places", error);
+    const message = error instanceof Error ? error.message : "Erreur lors de la recherche Google";
+    return Response.json({ error: message }, { status: 500 });
   }
 }

@@ -254,7 +254,14 @@ export default function AuditPage() {
                 </button>
                 <div className="text-center mt-4 text-xs text-slate-500 flex items-center justify-center gap-2">
                   <ShieldCheck className="w-4 h-4" aria-hidden="true" />
-                  Chiffrement 256-bit · Conforme RGPD · Aucun nom patient stocké
+                  Chiffrement 256-bit ·{" "}
+                  <Link
+                    href="/politique-confidentialite"
+                    className="underline decoration-dotted underline-offset-2 hover:text-slate-700"
+                  >
+                    Conforme RGPD
+                  </Link>{" "}
+                  · Aucun nom patient stocké
                 </div>
               </div>
             </div>

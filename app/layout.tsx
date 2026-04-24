@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { Agentation } from "agentation";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -31,8 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${inter.variable} ${fraunces.variable}`}>
-      <body className="antialiased min-h-screen bg-gray-50 text-slate-900 font-sans">
-        {children}
+      <body className="antialiased min-h-screen bg-gray-50 text-slate-900 font-sans flex flex-col">
+        <div className="flex-1">{children}</div>
+        <Footer />
         <Toaster
           position="top-center"
           toastOptions={{ duration: 4000 }}
