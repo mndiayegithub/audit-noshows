@@ -29,22 +29,33 @@ export default function AuditSidebar({ stats }: { stats: AuditStats }) {
             GetLostRevenue
           </span>
         </div>
+        {/* Cabinet info — sketch 005 variant C :
+             - nom en Fraunces semi-bold
+             - lignes méta : libellé (k) regular gris / valeur (v) bold slate-900 */}
         <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-          <p className="font-serif text-base text-slate-900">
+          <p className="font-serif text-base font-semibold text-slate-900">
             {stats.nom_cabinet ?? "Cabinet"}
           </p>
-          <p className="mt-1 text-xs text-gray-500">
-            Généré le {new Date().toLocaleDateString("fr-FR")}
-          </p>
+          <div className="mt-2 flex items-center justify-between text-xs">
+            <span className="text-gray-500">Généré le</span>
+            <span className="font-semibold text-slate-900">
+              {new Date().toLocaleDateString("fr-FR")}
+            </span>
+          </div>
           {periodeLabel && (
-            <p className="text-xs text-gray-500">Période : {periodeLabel}</p>
+            <div className="mt-1 flex items-center justify-between text-xs">
+              <span className="text-gray-500">Période</span>
+              <span className="font-semibold text-slate-900">
+                {periodeLabel}
+              </span>
+            </div>
           )}
-          <p className="mt-2 text-xs text-gray-700">
-            <span className="font-semibold">
+          <div className="mt-1 flex items-center justify-between text-xs">
+            <span className="text-gray-500">RDV analysés</span>
+            <span className="font-semibold text-slate-900">
               {stats.global.total_rdv.toLocaleString("fr-FR")}
-            </span>{" "}
-            RDV analysés
-          </p>
+            </span>
+          </div>
         </div>
         <nav aria-label="Sections du rapport" className="flex-1">
           <ul className="space-y-1">
