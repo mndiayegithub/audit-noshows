@@ -121,3 +121,12 @@ Si problème : rouvrir le workflow, **supprimer le nœud `Aggregate Par Mois`**,
 ---
 
 *Phase 3 closed: 2026-04-24 — pending user action #1 (import nœud n8n).*
+
+## Cleanup workflow (bonus — 2026-04-24 ~17:45)
+
+Sur demande user, normalisation du flow email qui était incohérent (Gmail en parallèle de Respond → race condition, `email_sent` jamais à jour).
+
+**Avant :** `Email fourni?` TRUE → [Envoyer Email Rapport, Respond to Webhook] en parallèle
+**Après :** `Email fourni?` TRUE → `Envoyer Email Rapport` → `Marquer Email Envoyé` (Code) → `Respond to Webhook` (séquentiel, `email_sent: true` réel)
+
+Branche FALSE testée OK (`status: 200`, `email_sent: false` attendu). Branche TRUE non déclenchée en test pour éviter le spam, mais wiring validé par inspection de structure.
