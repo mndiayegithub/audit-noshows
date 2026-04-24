@@ -1,6 +1,35 @@
 # Phase 3 — SUMMARY (Plan 03-01)
 
-**Status :** ✅ Code livré / 🟡 **action utilisateur requise** (import manuel n8n)
+**Status :** ✅ **DÉPLOYÉ EN PROD** — workflow WF12 mis à jour via n8n-mcp + test réussi end-to-end
+
+## Déploiement live (2026-04-24 ~17:30)
+
+L'utilisateur a autorisé la modification directe du workflow. Le nœud a été poussé via `mcp__n8n-mcp__n8n_update_partial_workflow` et testé avec un CSV 30 lignes / 4 mois calendaires (nov 2025, déc 2025, fév 2026 — jan 2026 absent pour tester le zero-fill).
+
+**Résultat test (webhook POST `/audit-flash`) :**
+```json
+"stats_par_mois": [
+  { "mois": "2025-11", "total_rdv": 10, "no_shows": 2, "taux": 20 },
+  { "mois": "2025-12", "total_rdv": 10, "no_shows": 1, "taux": 10 },
+  { "mois": "2026-01", "total_rdv": 0,  "no_shows": 0, "taux": 0  },
+  { "mois": "2026-02", "total_rdv": 10, "no_shows": 3, "taux": 30 }
+]
+```
+- ✅ Trié ascendant, gap `2026-01` zero-filled, shape strict (4 clés)
+- ✅ `ca_perdu_an: 3600` **identique avant/après** (invariant préservé)
+- ✅ `stats_par_mois` bien propagé jusqu'à la réponse finale du webhook
+
+## Modifications appliquées sur WF12 (live)
+
+1. **Ajout** nœud Code `Aggregate Par Mois` entre `Calculer Statistiques` et `AI Agent` (position `[592, 0]`)
+2. **Rewire** : `Calculer Statistiques → Aggregate Par Mois → AI Agent`
+3. **Patch** `Formater Réponse` : la ligne `const statsNode = $('Calculer Statistiques').item.json` est devenue `$('Aggregate Par Mois').item.json` — sans ce patch, le champ était calculé puis écrasé par le reach-back vers l'amont
+4. **Cleanup pré-existant** (exigé par n8n pour pouvoir sauver) :
+   - Supprimé `HTTP Request` (désactivé, disconnected)
+   - Supprimé `Marquer Email Envoyé` (orphelin, aucune incoming connection)
+   - Fix operator `Email fourni?` : `notEmpty` unary → ajout `singleValue: true`
+
+Workflow re-activé (`active: true`, 11 nœuds au total).
 **Date close-out :** 2026-04-24
 **Spec :** `03-SPEC.md` (5 requirements, ambiguity 0.08)
 **Plan :** `03-01-PLAN.md` (3 tasks séquentielles)
