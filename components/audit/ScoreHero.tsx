@@ -1,5 +1,5 @@
-import type { AuditStats } from "@/types/audit";
-import { computeScore, scoreBadge } from "@/lib/score";
+import type { AuditStats, GoogleData } from "@/types/audit";
+import { computeBlendedScore, computeScore, scoreBadge } from "@/lib/score";
 
 /**
  * Section 4 — Score cabinet (sketch 009 variante A).
@@ -11,9 +11,16 @@ import { computeScore, scoreBadge } from "@/lib/score";
  * Le score numérique et le label proviennent de `lib/score.ts` — aucune
  * formule dupliquée ici.
  */
-export default function ScoreHero({ stats }: { stats: AuditStats }) {
+export default function ScoreHero({
+  stats,
+  google,
+}: {
+  stats: AuditStats;
+  google?: GoogleData | null;
+}) {
   const tauxNoshow = stats.global.taux;
-  const score = computeScore(tauxNoshow);
+  const hasGoogle = !!(google && typeof google.rating === "number" && Number.isFinite(google.rating));
+  const score = hasGoogle ? computeBlendedScore(tauxNoshow, google) : computeScore(tauxNoshow);
   const badge = scoreBadge(score);
   const CIRC = 540.4; // 2π × 86
   const dashOffset = CIRC * (1 - score / 100);
@@ -97,6 +104,11 @@ export default function ScoreHero({ stats }: { stats: AuditStats }) {
             ) est au-dessus de la moyenne du secteur mais en dessous des
             cabinets les mieux gérés (85+). Les 3 leviers ci-dessous peuvent
             faire basculer votre score en zone « excellente » sous 60&nbsp;jours.
+          </p>
+          <p className="mt-3 text-[12px] font-medium uppercase tracking-wider text-gray-400">
+            {hasGoogle
+              ? "Score global (no-shows + réputation Google)"
+              : "Score no-shows (hors Google)"}
           </p>
         </div>
       </div>

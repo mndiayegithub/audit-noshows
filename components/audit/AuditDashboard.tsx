@@ -1,5 +1,6 @@
 "use client";
-import type { AuditStats } from "@/types/audit";
+import { useState } from "react";
+import type { AuditStats, GoogleData } from "@/types/audit";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import AuditSidebar from "./AuditSidebar";
@@ -9,6 +10,7 @@ import MoneyBuildCard from "./MoneyBuildCard";
 import ChartParJour from "./ChartParJour";
 import ChartParHeure from "./ChartParHeure";
 import ScoreHero from "./ScoreHero";
+import DiagnosticGoogle from "./DiagnosticGoogle";
 import PlanTimeline from "./PlanTimeline";
 import CalendlyEmbed from "./CalendlyEmbed";
 
@@ -29,6 +31,7 @@ export default function AuditDashboard({
   onDownloadPDF,
   isGeneratingPDF,
 }: AuditDashboardProps) {
+  const [google, setGoogle] = useState<GoogleData | null>(null);
   return (
     <div className="min-h-screen">
       <AuditSidebar stats={stats} />
@@ -82,7 +85,13 @@ export default function AuditDashboard({
           index={4}
           lede="Position vs. moyenne sectorielle."
         >
-          <ScoreHero stats={stats} />
+          <div className="space-y-5">
+            <ScoreHero stats={stats} google={google} />
+            <DiagnosticGoogle
+              nomCabinet={stats.nom_cabinet ?? ""}
+              onSuccess={(data) => setGoogle(data)}
+            />
+          </div>
         </AuditSection>
         <AuditSection
           id="plan-et-cta"

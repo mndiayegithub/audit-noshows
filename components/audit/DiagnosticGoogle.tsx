@@ -93,18 +93,18 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
   return (
     <motion.div
       {...motionProps}
-      className="bg-white rounded-3xl border border-slate-100 border-t-4 border-t-primary shadow-soft p-8"
+      className="bg-white rounded-3xl border border-gray-200 p-7"
     >
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-          <Search className="w-4 h-4 text-primary" aria-hidden="true" />
+        <div className="w-8 h-8 rounded-lg bg-primaryDark/10 flex items-center justify-center">
+          <Search className="w-4 h-4 text-primaryDark" aria-hidden="true" />
         </div>
-        <h2 className="text-2xl font-serif font-extrabold text-slate-900">
-          Diagnostic Google — Visibilité du cabinet
-        </h2>
+        <h3 className="font-serif text-lg font-semibold text-slate-900">
+          Enrichir avec la réputation Google
+        </h3>
       </div>
-      <p className="text-slate-500 font-medium mb-8 ml-11">
-        Découvrez combien de nouveaux patients vous échappent chaque mois faute de visibilité.
+      <p className="text-[14px] text-gray-600 mb-6 ml-11">
+        Ajoutez votre note et volume d&apos;avis Google pour obtenir un score global.
       </p>
 
       <AnimatePresence mode="wait">
@@ -123,12 +123,12 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 placeholder="Ex : Cabinet dentaire Dr. Martin Paris"
-                className="flex-1 px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary/30 focus:border-primary/60 transition-all duration-200 outline-none"
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primaryDarkDark/30 focus:border-primaryDark/60 transition-all duration-200 outline-none"
                 aria-label="Nom du cabinet à rechercher"
               />
               <button
                 onClick={handleSearch}
-                className="btn-glow inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary-light focus:ring-2 focus:ring-primary/30 focus:outline-none transition-all duration-200 shadow-lg shrink-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primaryDark text-white rounded-xl font-semibold hover:bg-primaryDark/90 focus:ring-2 focus:ring-primaryDarkDark/30 focus:outline-none transition-colors duration-200 shrink-0 cursor-pointer"
               >
                 Lancer l&apos;analyse
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -142,7 +142,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
                   Cabinet non trouvé — essayez un nom plus précis (ex : ajoutez la ville) ou{" "}
                   <button
                     onClick={() => setEtat("idle")}
-                    className="text-primary underline font-bold hover:no-underline focus:outline-none focus:ring-1 focus:ring-primary rounded cursor-pointer"
+                    className="text-primaryDark underline font-bold hover:no-underline focus:outline-none focus:ring-1 focus:ring-primaryDark rounded cursor-pointer"
                   >
                     passez cette étape
                   </button>
@@ -158,7 +158,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
                   Analyse temporairement indisponible{errorMsg ? ` — ${errorMsg}` : ""}.{" "}
                   <button
                     onClick={() => setEtat("idle")}
-                    className="text-primary underline font-bold hover:no-underline focus:outline-none focus:ring-1 focus:ring-primary rounded cursor-pointer inline-flex items-center gap-1"
+                    className="text-primaryDark underline font-bold hover:no-underline focus:outline-none focus:ring-1 focus:ring-primaryDark rounded cursor-pointer inline-flex items-center gap-1"
                   >
                     <RefreshCw className="w-3 h-3" aria-hidden="true" />
                     Réessayer
@@ -180,7 +180,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
             aria-live="polite"
             aria-label="Analyse en cours"
           >
-            <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+            <div className="w-10 h-10 border-4 border-primaryDark/20 border-t-primaryDark rounded-full animate-spin" />
             <p className="text-slate-500 font-medium">Analyse en cours...</p>
           </motion.div>
         )}
@@ -249,7 +249,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
             </div>
 
             {/* Impact statique */}
-            <div className="bg-primary/[0.07] border border-primary/20 rounded-2xl p-5">
+            <div className="bg-kpiSignal/40 border border-kpiSignal rounded-2xl p-5">
               <p className="text-slate-600 font-medium text-sm leading-relaxed">
                 Un cabinet avec 50 avis de plus convertit en moyenne{" "}
                 <strong className="text-slate-900">3–5 nouveaux patients/mois supplémentaires</strong>.

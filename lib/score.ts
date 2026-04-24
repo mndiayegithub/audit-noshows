@@ -23,3 +23,17 @@ export function scoreBadge(score: number): { label: string; tone: ScoreTone } {
   if (score >= 50) return { label: "À améliorer", tone: "warn" };
   return { label: "Critique", tone: "bad" };
 }
+
+export function computeBlendedScore(
+  tauxNoshow: number,
+  google?: { rating: number | null; user_ratings_total: number } | null
+): number {
+  const base = computeScore(tauxNoshow);
+  if (!google || typeof google.rating !== "number" || !Number.isFinite(google.rating)) {
+    return base;
+  }
+  const reviews = Number.isFinite(google.user_ratings_total) ? google.user_ratings_total : 0;
+  const confidence = Math.min(1, Math.max(0, reviews / 50));
+  const delta = Math.round((google.rating - 4.0) * 5 * confidence);
+  return Math.max(0, Math.min(100, base + delta));
+}
