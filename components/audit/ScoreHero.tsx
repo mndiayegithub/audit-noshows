@@ -32,14 +32,15 @@ export default function ScoreHero({ stats }: { stats: AuditStats }) {
           "radial-gradient(circle at 100% 100%, rgba(16,185,129,0.18), transparent 60%)",
       }}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-[220px,1fr] gap-8 items-center">
-        <div className="flex items-center justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-[260px,1fr] gap-8 items-center">
+        <div className="relative mx-auto h-[220px] w-[220px]">
           <svg
             width="220"
             height="220"
             viewBox="0 0 220 220"
             role="img"
             aria-label={`Score ${score} sur 100`}
+            className="h-full w-full"
           >
             <circle
               cx="110"
@@ -60,27 +61,16 @@ export default function ScoreHero({ stats }: { stats: AuditStats }) {
               strokeDasharray={`${dash} ${CIRC}`}
               transform="rotate(-90 110 110)"
             />
-            <text
-              x="110"
-              y="108"
-              textAnchor="middle"
-              dominantBaseline="middle"
-              className="font-serif"
-              fontSize="64"
-              fill="#ffffff"
-            >
-              {score}
-            </text>
-            <text
-              x="110"
-              y="142"
-              textAnchor="middle"
-              fontSize="13"
-              fill="#a7f3d0"
-            >
-              sur 100
-            </text>
           </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="font-serif text-[64px] font-medium leading-none tracking-tight text-white">
+              {score}
+              <span className="font-sans text-base font-normal text-[#a7f3d0]">
+                /100
+              </span>
+            </div>
+            <div className="mt-1 text-[13px] text-[#a7f3d0]">sur 100</div>
+          </div>
         </div>
         <div>
           <span
