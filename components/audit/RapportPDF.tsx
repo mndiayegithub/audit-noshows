@@ -24,17 +24,12 @@ Font.register({
   fonts: [
     { src: "/fonts/Inter-Regular.ttf", fontWeight: 400 },
     { src: "/fonts/Inter-Medium.ttf", fontWeight: 500 },
-    // Pas de SemiBold local — on réutilise Medium pour le weight 600
-    // (approximation volontaire, pas de téléchargement CDN requis).
-    { src: "/fonts/Inter-Medium.ttf", fontWeight: 600 },
+    { src: "/fonts/Inter-SemiBold.ttf", fontWeight: 600 },
     { src: "/fonts/Inter-Bold.ttf", fontWeight: 700 },
-    // Italics : pas de fichiers .ttf italic local — on remappe sur les
-    // weights normaux pour éviter "Could not resolve font" lors du render.
-    // Le rendu ne sera pas penché mais ne plantera plus.
-    { src: "/fonts/Inter-Regular.ttf", fontWeight: 400, fontStyle: "italic" },
-    { src: "/fonts/Inter-Medium.ttf", fontWeight: 500, fontStyle: "italic" },
-    { src: "/fonts/Inter-Medium.ttf", fontWeight: 600, fontStyle: "italic" },
-    { src: "/fonts/Inter-Bold.ttf", fontWeight: 700, fontStyle: "italic" },
+    { src: "/fonts/Inter-Italic.ttf", fontWeight: 400, fontStyle: "italic" },
+    { src: "/fonts/Inter-MediumItalic.ttf", fontWeight: 500, fontStyle: "italic" },
+    { src: "/fonts/Inter-SemiBoldItalic.ttf", fontWeight: 600, fontStyle: "italic" },
+    { src: "/fonts/Inter-BoldItalic.ttf", fontWeight: 700, fontStyle: "italic" },
   ],
 });
 
