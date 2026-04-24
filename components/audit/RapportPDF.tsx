@@ -695,20 +695,63 @@ function formatDate(s: string): string {
 const fmtEur = (n: number) =>
   `${Math.round(n).toLocaleString("fr-FR")}${NBSP}€`;
 
+type MdSeg = { text: string; bold?: boolean; italic?: boolean };
 type MdBlock =
-  | { type: "h1" | "h2" | "h3" | "p" | "li"; text: string };
+  | { type: "h1" | "h2" | "h3" | "p" | "li"; segs: MdSeg[] };
+
+// Split inline text into segments, honoring **bold**, __bold__, *italic*, _italic_
+// Also strips residual `#` markers and inline code backticks.
+function parseInline(raw: string): MdSeg[] {
+  const out: MdSeg[] = [];
+  // Strip inline code backticks (keep content)
+  let s = raw.replace(/`([^`]+)`/g, "$1");
+  // Remove residual leading/trailing hashes some models emit
+  s = s.replace(/(^|\s)#{1,6}(?=\s|$)/g, "$1").trim();
+
+  // Tokenize on ** and * markers. Regex splits keeping delimiters.
+  const regex = /(\*\*[^*]+\*\*|\*[^*\n]+\*|__[^_]+__|_[^_\n]+_)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = regex.exec(s)) !== null) {
+    if (m.index > last) {
+      const plain = s.slice(last, m.index);
+      if (plain) out.push({ text: plain });
+    }
+    const tok = m[0];
+    if (tok.startsWith("**") || tok.startsWith("__")) {
+      out.push({ text: tok.slice(2, -2), bold: true });
+    } else {
+      out.push({ text: tok.slice(1, -1), italic: true });
+    }
+    last = m.index + tok.length;
+  }
+  if (last < s.length) {
+    const plain = s.slice(last);
+    if (plain) out.push({ text: plain });
+  }
+  return out.length ? out : [{ text: s }];
+}
 
 function parseMarkdown(md: string): MdBlock[] {
   const blocks: MdBlock[] = [];
-  for (const line of md.split(/\r?\n/)) {
-    const t = line.trim();
+  for (const rawLine of md.split(/\r?\n/)) {
+    const t = rawLine.trim();
     if (!t) continue;
-    if (t.startsWith("### ")) blocks.push({ type: "h3", text: t.slice(4).trim() });
-    else if (t.startsWith("## ")) blocks.push({ type: "h2", text: t.slice(3).trim() });
-    else if (t.startsWith("# ")) blocks.push({ type: "h1", text: t.slice(2).trim() });
-    else if (t.startsWith("- ") || t.startsWith("* ")) blocks.push({ type: "li", text: t.slice(2).trim() });
-    else if (/^\d+\.\s/.test(t)) blocks.push({ type: "li", text: t.replace(/^\d+\.\s/, "").trim() });
-    else blocks.push({ type: "p", text: t });
+    // Horizontal rules — skip
+    if (/^(-{3,}|_{3,}|\*{3,})$/.test(t)) continue;
+
+    let type: MdBlock["type"] = "p";
+    let content = t;
+    if (t.startsWith("### ")) { type = "h3"; content = t.slice(4).trim(); }
+    else if (t.startsWith("## ")) { type = "h2"; content = t.slice(3).trim(); }
+    else if (t.startsWith("# ")) { type = "h1"; content = t.slice(2).trim(); }
+    else if (t.startsWith("- ") || t.startsWith("* ")) { type = "li"; content = t.slice(2).trim(); }
+    else if (/^\d+\.\s/.test(t)) { type = "li"; content = t.replace(/^\d+\.\s/, "").trim(); }
+
+    // Strip trailing colons on headings that models sometimes leave
+    if (type !== "p" && type !== "li") content = content.replace(/:$/, "");
+
+    blocks.push({ type, segs: parseInline(content) });
   }
   return blocks;
 }
@@ -1136,24 +1179,38 @@ export default function RapportPDF({ resultats }: { resultats: AuditResponse }) 
           />
 
           {blocks.map((block, i) => {
+            const renderSegs = () =>
+              block.segs.map((seg, j) => (
+                <Text
+                  key={j}
+                  style={{
+                    fontWeight: seg.bold ? 600 : undefined,
+                    fontStyle: seg.italic ? "italic" : undefined,
+                    color: seg.bold ? C.ink : undefined,
+                  }}
+                >
+                  {seg.text}
+                </Text>
+              ));
+
             if (block.type === "h1") {
-              return <Text key={i} style={S.rapportH1}>{block.text}</Text>;
+              return <Text key={i} style={S.rapportH1}>{renderSegs()}</Text>;
             }
             if (block.type === "h2") {
-              return <Text key={i} style={S.rapportH2}>{block.text}</Text>;
+              return <Text key={i} style={S.rapportH2}>{renderSegs()}</Text>;
             }
             if (block.type === "h3") {
-              return <Text key={i} style={S.rapportH3}>{block.text}</Text>;
+              return <Text key={i} style={S.rapportH3}>{renderSegs()}</Text>;
             }
             if (block.type === "li") {
               return (
                 <View key={i} style={S.rapportLiRow}>
                   <Text style={S.rapportBullet}>•</Text>
-                  <Text style={S.rapportLiText}>{block.text}</Text>
+                  <Text style={S.rapportLiText}>{renderSegs()}</Text>
                 </View>
               );
             }
-            return <Text key={i} style={S.rapportP}>{block.text}</Text>;
+            return <Text key={i} style={S.rapportP}>{renderSegs()}</Text>;
           })}
 
           <Footer cabinet={stats.nom_cabinet} />
