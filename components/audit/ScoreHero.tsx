@@ -84,15 +84,23 @@ export default function ScoreHero({ stats }: { stats: AuditStats }) {
         </div>
         <div>
           <span
-            className={`inline-flex items-center rounded-full px-3 py-1 text-[12px] font-medium ${tonePill}`}
+            className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${tonePill}`}
             data-score-tone={badge.tone}
           >
+            <span
+              aria-hidden
+              className="inline-block h-1.5 w-1.5 rounded-full bg-current"
+            />
             {badge.label}
           </span>
-          <h3 className="mt-3 font-serif text-2xl md:text-[26px] text-white">
-            Score cabinet
+          <h3 className="mt-3 font-serif text-[28px] md:text-[32px] leading-tight tracking-tight text-white">
+            {badge.tone === "good"
+              ? `Cabinet sur de bons rails, ${100 - score} points à verrouiller.`
+              : badge.tone === "warn"
+              ? `Score correct, ${100 - score} points à aller chercher.`
+              : `Score critique — priorité absolue sur le plan d'action.`}
           </h3>
-          <p className="mt-2 max-w-lg text-[15px] text-[#d1fae5]">
+          <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-[#d1fae5]">
             Score calculé à partir de votre taux de no-show (
             <span className="font-medium text-white">
               {tauxNoshow.toLocaleString("fr-FR", {
