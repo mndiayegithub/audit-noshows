@@ -14,12 +14,10 @@ import type { AuditResponse } from "@/types/audit";
 import { computeScore, scoreBadge } from "@/lib/score";
 
 // ─── Font registration (module load) ─────────────────────────────────────────
-// Inter : fichiers locaux servis par Next.js depuis /public/fonts/*.ttf
-// Fraunces : fichiers chargés depuis Google Fonts CDN (pas présent en local).
-// @react-pdf/renderer accepte les URLs HTTP(S) et les chemins relatifs
-// servis par le serveur Next en dev et en prod. Ce composant n'étant rendu
-// que côté browser (via import dynamique dans app/audit/page.tsx), les URLs
-// relatives `/fonts/…` résolvent correctement.
+// Inter + Fraunces : fichiers locaux servis par Next.js depuis /public/fonts/*.ttf.
+// Le CDN Google Fonts renvoie des sous-ensembles unicode (ou du HTML 404 sur
+// les URLs v31 obsolètes), ce qui faisait planter @react-pdf avec
+// "Unknown font format". On sert tout en local depuis /public/fonts.
 
 Font.register({
   family: "Inter",
@@ -43,35 +41,14 @@ Font.register({
 Font.register({
   family: "Fraunces",
   fonts: [
-    {
-      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBvNIYxA.ttf",
-      fontWeight: 400,
-    },
-    {
-      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBxNIYxA.ttf",
-      fontWeight: 500,
-    },
-    {
-      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBitIYxA.ttf",
-      fontWeight: 600,
-    },
-    // Italics : remap sur les weights normaux pour éviter l'erreur
-    // "Could not resolve font". Pas de fichier italic Fraunces chargé.
-    {
-      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBvNIYxA.ttf",
-      fontWeight: 400,
-      fontStyle: "italic",
-    },
-    {
-      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBxNIYxA.ttf",
-      fontWeight: 500,
-      fontStyle: "italic",
-    },
-    {
-      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBitIYxA.ttf",
-      fontWeight: 600,
-      fontStyle: "italic",
-    },
+    { src: "/fonts/Fraunces-Regular.ttf", fontWeight: 400 },
+    { src: "/fonts/Fraunces-SemiBold.ttf", fontWeight: 500 },
+    { src: "/fonts/Fraunces-SemiBold.ttf", fontWeight: 600 },
+    { src: "/fonts/Fraunces-Bold.ttf", fontWeight: 700 },
+    { src: "/fonts/Fraunces-Italic.ttf", fontWeight: 400, fontStyle: "italic" },
+    { src: "/fonts/Fraunces-SemiBoldItalic.ttf", fontWeight: 500, fontStyle: "italic" },
+    { src: "/fonts/Fraunces-SemiBoldItalic.ttf", fontWeight: 600, fontStyle: "italic" },
+    { src: "/fonts/Fraunces-BoldItalic.ttf", fontWeight: 700, fontStyle: "italic" },
   ],
 });
 
