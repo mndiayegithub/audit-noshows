@@ -1,5 +1,7 @@
 "use client";
 import type { AuditStats } from "@/types/audit";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import AuditSidebar from "./AuditSidebar";
 import AuditSection from "./AuditSection";
 import SyntheseKPIs from "./SyntheseKPIs";
@@ -30,7 +32,23 @@ export default function AuditDashboard({
   return (
     <div className="min-h-screen">
       <AuditSidebar stats={stats} />
-      <main className="md:ml-[240px] w-full max-w-none px-6 lg:px-10 pb-20">
+      <main className="md:ml-[240px] w-full max-w-none px-4 md:px-5 lg:px-6 pb-20">
+        <div className="flex items-center justify-between gap-4 py-6 mb-2 border-b border-gray-200">
+          <div className="text-sm text-slate-500">
+            Rapport <span className="mx-1 text-slate-300">·</span>
+            <span className="font-semibold text-slate-900">Synthèse</span>
+          </div>
+          {onDownloadPDF && (
+            <button
+              type="button"
+              onClick={onDownloadPDF}
+              disabled={isGeneratingPDF}
+              className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-slate-700 transition hover:border-slate-300 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-wait"
+            >
+              {isGeneratingPDF ? "Génération…" : "Télécharger PDF"}
+            </button>
+          )}
+        </div>
         <AuditSection
           id="synthese"
           title="Synthèse"
@@ -71,24 +89,35 @@ export default function AuditDashboard({
           <div className="space-y-6">
             <PlanTimeline />
             <CalendlyEmbed onDownloadPDF={onDownloadPDF} />
-            {onDownloadPDF && (
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={onDownloadPDF}
-                  disabled={isGeneratingPDF}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#064E3B] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#053f31] disabled:opacity-60 disabled:cursor-wait"
-                >
-                  {isGeneratingPDF ? "Génération du PDF…" : "Télécharger le rapport PDF"}
-                </button>
-              </div>
-            )}
             {rapport && (
-              <details className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
-                <summary className="cursor-pointer font-medium">
+              <details className="rounded-xl border border-gray-200 bg-white p-5 text-sm text-slate-700">
+                <summary className="cursor-pointer font-semibold text-slate-900">
                   Rapport détaillé
                 </summary>
-                <div className="mt-3 whitespace-pre-wrap">{rapport}</div>
+                <div className="mt-4 space-y-3 text-slate-700 leading-relaxed">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      h1: ({ children }) => (
+                        <h3 className="font-serif text-lg font-semibold text-slate-900 mt-5 mb-2">{children}</h3>
+                      ),
+                      h2: ({ children }) => (
+                        <h4 className="font-serif text-base font-semibold text-slate-900 mt-4 mb-1.5">{children}</h4>
+                      ),
+                      h3: ({ children }) => (
+                        <h5 className="text-sm font-semibold text-slate-900 mt-3 mb-1">{children}</h5>
+                      ),
+                      p: ({ children }) => <p className="text-slate-700">{children}</p>,
+                      ul: ({ children }) => <ul className="list-disc pl-5 space-y-1">{children}</ul>,
+                      ol: ({ children }) => <ol className="list-decimal pl-5 space-y-1">{children}</ol>,
+                      li: ({ children }) => <li className="text-slate-700 marker:text-slate-400">{children}</li>,
+                      strong: ({ children }) => <strong className="font-semibold text-slate-900">{children}</strong>,
+                      em: ({ children }) => <em className="italic">{children}</em>,
+                    }}
+                  >
+                    {rapport}
+                  </ReactMarkdown>
+                </div>
               </details>
             )}
           </div>
