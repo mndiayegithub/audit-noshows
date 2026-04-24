@@ -1,6 +1,7 @@
 import { validateAuditPayload } from "@/lib/audit-validation";
 import { logServerError } from "@/lib/safe-log";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { normalizeN8nResponse } from "@/lib/n8n-normalize";
 
 export const maxDuration = 60;
 
@@ -70,34 +71,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // n8n peut renvoyer plusieurs formats selon le mode d'exécution :
-    // 1) Production (Respond to Webhook + JSON.stringify) :
-    //    { output: { success, stats, rapport_texte }, email }
-    // 2) Test webhook (n8n retourne un tableau) :
-    //    [{ output: { success, stats, rapport_texte }, email }]
-    // 3) Direct (ancienne version) :
-    //    { success, stats, rapport_texte }
-    let data: unknown = raw;
-
-    if (Array.isArray(raw)) {
-      const first = raw[0];
-      if (first?.output && typeof first.output === "object" && "success" in first.output) {
-        data = first.output;
-      } else {
-        data = first;
-      }
-    } else if (
-      raw &&
-      typeof raw === "object" &&
-      "output" in raw &&
-      (raw as { output?: unknown }).output &&
-      typeof (raw as { output: unknown }).output === "object" &&
-      "success" in ((raw as { output: Record<string, unknown> }).output)
-    ) {
-      data = (raw as { output: unknown }).output;
-    }
-
-    return Response.json(data);
+    return Response.json(normalizeN8nResponse(raw));
   } catch (error: unknown) {
     logServerError("api/audit", error);
     const message = error instanceof Error ? error.message : "Erreur serveur";

@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npm run test
+        env:
+          CI: "true"
+  # Note: Playwright E2E (npm run test:e2e) is intentionally deferred to Phase 7
+  # — needs browser install caching to keep CI fast.

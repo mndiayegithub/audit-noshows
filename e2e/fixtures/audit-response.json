@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "stats": {
+    "nom_cabinet": "Cabinet Test",
+    "periode": { "debut": "2025-11-01", "fin": "2026-02-01", "nb_mois": 3 },
+    "global": {
+      "total_rdv": 300,
+      "no_shows": 26,
+      "honores": 274,
+      "taux": 8.7,
+      "ca_moyen": 80,
+      "ca_perdu_mois": 693,
+      "ca_perdu_an": 12500
+    },
+    "par_jour": [
+      { "jour": "Lundi", "no_shows": 4 },
+      { "jour": "Mardi", "no_shows": 5 },
+      { "jour": "Mercredi", "no_shows": 3 },
+      { "jour": "Jeudi", "no_shows": 6 },
+      { "jour": "Vendredi", "no_shows": 4 },
+      { "jour": "Samedi", "no_shows": 4 }
+    ],
+    "par_heure": [
+      { "tranche": "8-10h", "no_shows": 5 },
+      { "tranche": "10-12h", "no_shows": 7 },
+      { "tranche": "14-16h", "no_shows": 6 },
+      { "tranche": "16-18h", "no_shows": 5 },
+      { "tranche": "18-20h", "no_shows": 3 }
+    ]
+  },
+  "rapport_texte": "# Rapport\n\nAudit test."
+}
