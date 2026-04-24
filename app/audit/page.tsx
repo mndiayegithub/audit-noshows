@@ -121,6 +121,12 @@ export default function AuditPage() {
         <Link href="/#comment-ca-marche" className="text-sm font-medium text-slate-600 hover:text-primaryDark transition-colors duration-200">Comment ça marche</Link>
         <Link href="/#impact" className="text-sm font-medium text-slate-600 hover:text-primaryDark transition-colors duration-200">Impact</Link>
       </nav>
+      <Link
+        href="/"
+        className="absolute top-0 left-1/2 -translate-x-1/2 z-10 hidden md:inline-flex items-center h-20 text-sm font-medium text-slate-600 hover:text-primaryDark transition-colors duration-200"
+      >
+        Accueil
+      </Link>
 
       <main
         className={
