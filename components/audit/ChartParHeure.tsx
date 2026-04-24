@@ -74,7 +74,7 @@ export default function ChartParHeure({ stats }: { stats: AuditStats }) {
       <h3 className="font-serif text-lg text-ink">Par tranche horaire</h3>
       <p className="mt-1 text-[13px] text-gray-500">Répartition horaire des no-shows</p>
       <div
-        className="mt-6 flex h-48 items-end gap-3"
+        className="mt-6 flex gap-3"
         role="img"
         aria-label="Histogramme des no-shows par tranche horaire"
       >
@@ -85,11 +85,13 @@ export default function ChartParHeure({ stats }: { stats: AuditStats }) {
           return (
             <div key={s} className="flex flex-1 flex-col items-center gap-1">
               <div className="font-serif text-[14px] text-ink">{v}</div>
-              <div
-                className={`w-full rounded-t-md ${isPic ? "bg-[#EA580C]" : "bg-[#FCEACC]"}`}
-                style={{ height: `${h}%` }}
-                aria-label={`${s} : ${v} no-shows`}
-              />
+              <div className="flex h-40 w-full items-end">
+                <div
+                  className={`w-full rounded-t-md ${isPic ? "bg-[#EA580C]" : "bg-[#FCEACC]"}`}
+                  style={{ height: `${h}%` }}
+                  aria-label={`${s} : ${v} no-shows`}
+                />
+              </div>
               <div className="text-[12px] text-gray-600">{s}</div>
             </div>
           );
