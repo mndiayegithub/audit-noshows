@@ -53,6 +53,7 @@ export default function AuditDashboard({
           id="synthese"
           title="Synthèse"
           index={1}
+          lede="Les 4 chiffres clés de votre activité sur la période analysée."
         >
           <SyntheseKPIs stats={stats} />
         </AuditSection>
@@ -68,6 +69,7 @@ export default function AuditDashboard({
           id="ou-et-quand"
           title="Où & quand vos no-shows apparaissent"
           index={3}
+          lede="Répartition par jour de la semaine."
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <ChartParJour stats={stats} />
@@ -78,6 +80,7 @@ export default function AuditDashboard({
           id="score"
           title="Score cabinet"
           index={4}
+          lede="Position vs. moyenne sectorielle."
         >
           <ScoreHero stats={stats} />
         </AuditSection>
@@ -85,6 +88,7 @@ export default function AuditDashboard({
           id="plan-et-cta"
           title="Plan d'action"
           index={5}
+          lede="Trois actions concrètes validées par nos +200 cabinets audités."
         >
           <div className="space-y-6">
             <PlanTimeline />
