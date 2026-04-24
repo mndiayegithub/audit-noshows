@@ -30,6 +30,13 @@ Font.register({
     // (approximation volontaire, pas de téléchargement CDN requis).
     { src: "/fonts/Inter-Medium.ttf", fontWeight: 600 },
     { src: "/fonts/Inter-Bold.ttf", fontWeight: 700 },
+    // Italics : pas de fichiers .ttf italic local — on remappe sur les
+    // weights normaux pour éviter "Could not resolve font" lors du render.
+    // Le rendu ne sera pas penché mais ne plantera plus.
+    { src: "/fonts/Inter-Regular.ttf", fontWeight: 400, fontStyle: "italic" },
+    { src: "/fonts/Inter-Medium.ttf", fontWeight: 500, fontStyle: "italic" },
+    { src: "/fonts/Inter-Medium.ttf", fontWeight: 600, fontStyle: "italic" },
+    { src: "/fonts/Inter-Bold.ttf", fontWeight: 700, fontStyle: "italic" },
   ],
 });
 
@@ -47,6 +54,23 @@ Font.register({
     {
       src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBitIYxA.ttf",
       fontWeight: 600,
+    },
+    // Italics : remap sur les weights normaux pour éviter l'erreur
+    // "Could not resolve font". Pas de fichier italic Fraunces chargé.
+    {
+      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBvNIYxA.ttf",
+      fontWeight: 400,
+      fontStyle: "italic",
+    },
+    {
+      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBxNIYxA.ttf",
+      fontWeight: 500,
+      fontStyle: "italic",
+    },
+    {
+      src: "https://fonts.gstatic.com/s/fraunces/v31/6NUh8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-jpxlxdY7Wp7rcBitIYxA.ttf",
+      fontWeight: 600,
+      fontStyle: "italic",
     },
   ],
 });
