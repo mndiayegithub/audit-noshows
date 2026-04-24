@@ -86,7 +86,8 @@ Plans:
 
 ### Phase 3 · Extension n8n WF12 (`stats_par_mois[]`)
 
-**Status:** 📝 à spec
+**Status:** ✅ code livré — 🟡 import manuel n8n pending (voir `phase-03-n8n-stats-par-mois/03-SUMMARY.md`)
+- [x] 03-01-PLAN.md — JS Code node + types + SUMMARY (commits e6faca2, da75f6d, 76c7837)
 **Goal:** Étendre le workflow n8n WF12 pour grouper le CSV Doctolib par
 mois et exposer `stats_par_mois: { mois: string; taux: number;
 no_shows: number }[]` dans le payload retourné. Débloque le step 04

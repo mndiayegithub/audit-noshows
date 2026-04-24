@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Audit rapide des no-shows pour cabinets dentaires — diagnostic + rapport IA en 60 s.
-**Current focus:** Phase 02 — refonte-audit-v2 (dashboard clinique-claire)
+**Current focus:** Phase 03 — extension n8n WF12 stats_par_mois (✅ code livré, import manuel pending)
 
 ## Current Position
 
-Phase: 02 of 08 (refonte-audit-v2) — ✅ exécutée (UAT humain en attente)
-Plan: 07/07 complete (Plan 02-07 UAT auto-approuvé par --auto, 7 points persistés en 02-HUMAN-UAT.md)
-Status: Phase complete — awaiting human UAT via /gsd-verify-work 2
-Last activity: 2026-04-24 — Plan 02-07 auto-approved, phase 02 closed
+Phase: 03 of 08 (n8n stats_par_mois) — ✅ code livré, 🟡 user-action n8n pending
+Plan: 01/01 complete (Plan 03-01 — JS node + types + SUMMARY)
+Status: Phase complete côté repo — import manuel WF12 décrit dans 03-SUMMARY.md
+Last activity: 2026-04-24 — Plan 03-01 exécuté en autonomie, 3 commits atomiques
 
-Progress: [██████████] 100% (phase 02 livrée, UAT humain pending)
+Progress: [██████████] 100% (3/8 phases livrées repo-side)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: ~10 min
-- Total execution time: ~68 min
+- Total plans completed: 8
+- Average duration: ~9 min
+- Total execution time: ~75 min
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [██████████] 100% (phase 02 livrée, UAT humain pe
 |-------|-------|-------|----------|
 | 01 | 1/5 | ~25 min | ~25 min |
 | 02 | 6/7 | ~43 min | ~7 min   |
+| 03 | 1/1 | ~7 min  | ~7 min   |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (~10 min), 02-03 (~8 min), 02-04 (~8 min), 02-05 (~7 min), 02-06 (~4 min)
-- Trend: ↘️ plan cleanup court (1 task exécutée sur 2 — override utilisateur)
+- Last 5 plans: 02-03 (~8 min), 02-04 (~8 min), 02-05 (~7 min), 02-06 (~4 min), 03-01 (~7 min)
+- Trend: ↘️ plans courts et focalisés ; Phase 3 = livraison backend pure
 
 ## Accumulated Context
 
