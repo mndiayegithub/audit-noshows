@@ -65,7 +65,7 @@ export default function ScoreHero({ stats }: { stats: AuditStats }) {
               y="108"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="font-fraunces"
+              className="font-serif"
               fontSize="64"
               fill="#ffffff"
             >
@@ -89,7 +89,7 @@ export default function ScoreHero({ stats }: { stats: AuditStats }) {
           >
             {badge.label}
           </span>
-          <h3 className="mt-3 font-fraunces text-2xl md:text-[26px] text-white">
+          <h3 className="mt-3 font-serif text-2xl md:text-[26px] text-white">
             Score cabinet
           </h3>
           <p className="mt-2 max-w-lg text-[15px] text-[#d1fae5]">

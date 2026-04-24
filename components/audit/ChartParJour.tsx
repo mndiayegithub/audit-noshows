@@ -47,7 +47,7 @@ export default function ChartParJour({ stats }: { stats: AuditStats }) {
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5">
-      <h3 className="font-fraunces text-lg text-ink">No-shows par jour</h3>
+      <h3 className="font-serif text-lg text-ink">No-shows par jour</h3>
       <p className="mt-1 text-[13px] text-gray-500">Répartition sur la période analysée</p>
       <div
         className="mt-6 flex h-48 items-end gap-3"
@@ -60,7 +60,7 @@ export default function ChartParJour({ stats }: { stats: AuditStats }) {
           const isPic = i === picIdx && v > 0;
           return (
             <div key={d} className="flex flex-1 flex-col items-center gap-1">
-              <div className="font-fraunces text-[14px] text-ink">{v}</div>
+              <div className="font-serif text-[14px] text-ink">{v}</div>
               <div
                 className={`w-full rounded-t-md ${isPic ? "bg-[#059669]" : "bg-[#DCF4E6]"}`}
                 style={{ height: `${h}%` }}

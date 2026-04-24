@@ -45,7 +45,7 @@ export default function ChartParHeure({ stats }: { stats: AuditStats }) {
   if (!raw || raw.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-5 text-center">
-        <h3 className="font-fraunces text-lg text-ink">Par tranche horaire</h3>
+        <h3 className="font-serif text-lg text-ink">Par tranche horaire</h3>
         <p className="mt-6 text-[13px] text-gray-500">Données horaires non disponibles</p>
         <p className="mt-1 text-[12px] text-gray-400">
           Nécessite l&apos;extension n8n Phase 3
@@ -71,7 +71,7 @@ export default function ChartParHeure({ stats }: { stats: AuditStats }) {
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5">
-      <h3 className="font-fraunces text-lg text-ink">Par tranche horaire</h3>
+      <h3 className="font-serif text-lg text-ink">Par tranche horaire</h3>
       <p className="mt-1 text-[13px] text-gray-500">Répartition horaire des no-shows</p>
       <div
         className="mt-6 flex h-48 items-end gap-3"
@@ -84,7 +84,7 @@ export default function ChartParHeure({ stats }: { stats: AuditStats }) {
           const isPic = i === picIdx && v > 0;
           return (
             <div key={s} className="flex flex-1 flex-col items-center gap-1">
-              <div className="font-fraunces text-[14px] text-ink">{v}</div>
+              <div className="font-serif text-[14px] text-ink">{v}</div>
               <div
                 className={`w-full rounded-t-md ${isPic ? "bg-[#EA580C]" : "bg-[#FCEACC]"}`}
                 style={{ height: `${h}%` }}

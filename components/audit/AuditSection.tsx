@@ -33,7 +33,7 @@ export default function AuditSection({
       >
         {eyebrow}
       </div>
-      <h2 className="mb-2 font-fraunces text-2xl md:text-3xl text-slate-900">
+      <h2 className="mb-2 font-serif text-2xl md:text-3xl text-slate-900">
         {title}
       </h2>
       {lede && (

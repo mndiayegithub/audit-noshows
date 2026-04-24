@@ -99,7 +99,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
           <Search className="w-4 h-4 text-primary" aria-hidden="true" />
         </div>
-        <h2 className="text-2xl font-heading font-extrabold text-slate-900">
+        <h2 className="text-2xl font-serif font-extrabold text-slate-900">
           Diagnostic Google — Visibilité du cabinet
         </h2>
       </div>
@@ -196,7 +196,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
             {/* Note + étoiles */}
             <div className="flex flex-col items-center gap-2 py-4">
               <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Note Google</p>
-              <p className="text-7xl font-heading font-extrabold text-slate-900 tabular-nums">
+              <p className="text-7xl font-serif font-extrabold text-slate-900 tabular-nums">
                 {result.rating.toFixed(1)}
                 <span className="text-3xl text-slate-400 font-normal"> / 5</span>
               </p>
@@ -214,7 +214,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
                     Nombre d&apos;avis
                   </p>
-                  <p className={`text-4xl font-heading font-extrabold tabular-nums ${avisConfig.text}`}>
+                  <p className={`text-4xl font-serif font-extrabold tabular-nums ${avisConfig.text}`}>
                     {result.user_ratings_total.toLocaleString("fr-FR")}
                     <span className="text-lg font-normal text-slate-400 ml-2">avis</span>
                   </p>
@@ -231,7 +231,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
                   Benchmark national
                 </p>
-                <p className="text-2xl font-heading font-bold text-slate-900 tabular-nums">
+                <p className="text-2xl font-serif font-bold text-slate-900 tabular-nums">
                   {BENCHMARK_AVIS} avis
                 </p>
                 <p className="text-sm text-slate-400 mt-1">Moyenne cabinets dentaires France</p>
@@ -240,7 +240,7 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
                   Votre écart
                 </p>
-                <p className={`text-2xl font-heading font-bold tabular-nums ${result.user_ratings_total >= BENCHMARK_AVIS ? "text-success" : "text-danger"}`}>
+                <p className={`text-2xl font-serif font-bold tabular-nums ${result.user_ratings_total >= BENCHMARK_AVIS ? "text-success" : "text-danger"}`}>
                   {result.user_ratings_total >= BENCHMARK_AVIS ? "+" : ""}
                   {result.user_ratings_total - BENCHMARK_AVIS} avis
                 </p>

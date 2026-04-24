@@ -60,15 +60,18 @@ export default function SyntheseKPIs({ stats }: { stats: AuditStats }) {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {kpis.map((k) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {kpis.map((k, i) => (
         <div key={k.chip} className={`rounded-2xl p-5 ${k.bg}`}>
+          <div className="mb-2 text-sm font-semibold text-slate-900">
+            {i + 1}.
+          </div>
           <div
             className={`mb-3 inline-block rounded-full bg-white/60 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${k.fg}`}
           >
             {k.chip}
           </div>
-          <div className={`font-fraunces text-[40px] leading-none ${k.fg}`}>
+          <div className={`font-serif text-[40px] leading-none ${k.fg}`}>
             <CountUpNumber
               target={k.target}
               decimals={k.decimals}

@@ -16,7 +16,7 @@ export default function CalendlyEmbed() {
           <div className="text-[11px] font-semibold uppercase tracking-wide text-[#064E3B]">
             Prendre rendez-vous
           </div>
-          <h3 className="mt-1 font-fraunces text-2xl text-ink">
+          <h3 className="mt-1 font-serif text-2xl text-ink">
             30 minutes pour activer votre plan.
           </h3>
         </div>
@@ -56,7 +56,7 @@ export default function CalendlyEmbed() {
             <rect x="3" y="4" width="18" height="18" rx="2" />
             <path d="M16 2v4M8 2v4M3 10h18" />
           </svg>
-          <p className="mt-3 font-fraunces text-lg">
+          <p className="mt-3 font-serif text-lg">
             Configuration Calendly en cours
           </p>
           <p className="mt-1 text-[13px] text-white/80">

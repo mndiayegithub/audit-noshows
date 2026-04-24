@@ -47,7 +47,7 @@ export default function CTACalendly({ caPerduAn, caPerduGoogle, email }: Props) 
         </div>
 
         {/* Titre */}
-        <h2 className="text-2xl md:text-3xl font-heading font-extrabold text-white mb-3 tracking-tight">
+        <h2 className="text-2xl md:text-3xl font-serif font-extrabold text-white mb-3 tracking-tight">
           Découvrez comment récupérer ces{" "}
           <span className="text-gradient-indigo">{impactTotal.toLocaleString("fr-FR")} €</span>
           {" "}en 90 jours.

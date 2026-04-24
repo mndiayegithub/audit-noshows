@@ -46,7 +46,7 @@ export default function PlanTimeline() {
                 className="absolute -left-6 top-1 inline-block h-3 w-3 rounded-full ring-4 ring-white"
                 style={{ backgroundColor: item.dotColor }}
               />
-              <p className="font-fraunces text-[16px] text-ink">{item.title}</p>
+              <p className="font-serif text-[16px] text-ink">{item.title}</p>
               <p className="mt-0.5 text-[12px] uppercase tracking-wide text-gray-500">
                 {item.meta}
               </p>
@@ -54,7 +54,7 @@ export default function PlanTimeline() {
           ))}
         </ol>
         <div className="text-[15px] text-gray-700 space-y-3">
-          <h4 className="font-fraunces text-xl text-ink">
+          <h4 className="font-serif text-xl text-ink">
             Un plan en 3 étapes, pensé pour l&apos;exécution.
           </h4>
           <p>
