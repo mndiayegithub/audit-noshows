@@ -113,7 +113,7 @@ export default function AuditPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-slate-800 font-sans overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-gray-50 text-slate-800 font-sans overflow-x-hidden">
 
       {/* ─── Nav ─── */}
       <nav className="bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50">
@@ -143,16 +143,16 @@ export default function AuditPage() {
         {/* ─── FORMULAIRE ─── */}
         {etat === "formulaire" && (
           <div className="max-w-xl mx-auto w-full">
-            <div className="bg-white rounded-3xl p-8 md:p-12 border border-slate-100 shadow-soft">
+            <div className="bg-white rounded-2xl p-8 md:p-12 border border-gray-200 shadow-sm">
               <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 mb-4">
                   <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-                  Analyse Gratuite &amp; Sécurisée
+                  Analyse gratuite &amp; sécurisée
                 </div>
-                <h1 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-3 tracking-tight">
+                <h1 className="font-serif text-4xl md:text-5xl leading-[1.1] text-slate-900 mb-3 tracking-tight">
                   Lancez votre audit gratuit.
                 </h1>
-                <p className="text-slate-500 font-medium">
+                <p className="text-slate-600 text-base md:text-lg">
                   Uploadez votre export Doctolib et recevez votre rapport personnalisé en 60 secondes.
                 </p>
               </div>
@@ -160,17 +160,17 @@ export default function AuditPage() {
               {/* Micro-steps */}
               <div className="grid grid-cols-3 gap-4 mb-8">
                 {[
-                  { icon: UploadCloud, step: "1", label: "Uploadez", sub: "votre CSV Doctolib", color: "text-primary bg-primary/10" },
-                  { icon: Sparkles,    step: "2", label: "Analysez",  sub: "en 30–60 secondes", color: "text-accent bg-accent/10" },
-                  { icon: FileText,    step: "3", label: "Rapport",   sub: "PDF téléchargeable", color: "text-success bg-success/10" },
+                  { icon: UploadCloud, step: "1", label: "Uploadez", sub: "votre CSV Doctolib", color: "text-kpiVolume-fg bg-kpiVolume" },
+                  { icon: Sparkles,    step: "2", label: "Analysez",  sub: "en 30–60 secondes", color: "text-kpiSignal-fg bg-kpiSignal" },
+                  { icon: FileText,    step: "3", label: "Rapport",   sub: "PDF téléchargeable", color: "text-kpiTaux-fg bg-kpiTaux" },
                 ].map((s, i) => (
                   <div key={i} className="flex flex-col items-center text-center">
                     <div className={`w-10 h-10 rounded-xl ${s.color} flex items-center justify-center mb-2 relative`}>
                       <s.icon className="w-5 h-5" aria-hidden="true" />
-                      <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-[9px] font-bold flex items-center justify-center">{s.step}</span>
+                      <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-white border border-gray-200 text-slate-600 text-[9px] font-bold flex items-center justify-center">{s.step}</span>
                     </div>
-                    <p className="text-xs font-bold text-slate-700">{s.label}</p>
-                    <p className="text-[10px] text-slate-400">{s.sub}</p>
+                    <p className="text-xs font-semibold text-slate-700">{s.label}</p>
+                    <p className="text-[10px] text-slate-500">{s.sub}</p>
                   </div>
                 ))}
               </div>
@@ -180,19 +180,19 @@ export default function AuditPage() {
                 {...getRootProps()}
                 className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 mb-8 flex flex-col items-center justify-center group ${
                   isDragActive
-                    ? "border-primary bg-primary/10"
-                    : "border-slate-200 bg-slate-50/50 hover:bg-primary/[0.06] hover:border-primary/60"
+                    ? "border-primaryDark bg-emerald-50"
+                    : "border-gray-200 bg-gray-50 hover:bg-emerald-50/40 hover:border-primaryDark/60"
                 }`}
                 aria-label="Zone de dépôt de fichier CSV"
               >
                 <input {...getInputProps()} />
-                <div className="w-16 h-16 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-200">
-                  <UploadCloud className={`w-7 h-7 ${isDragActive ? "text-primary" : "text-slate-400"}`} aria-hidden="true" />
+                <div className="w-16 h-16 bg-white rounded-2xl border border-gray-200 shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-200">
+                  <UploadCloud className={`w-7 h-7 ${isDragActive ? "text-primaryDark" : "text-slate-400"}`} aria-hidden="true" />
                 </div>
-                <p className={`font-heading font-semibold text-lg mb-1.5 ${isDragActive ? "text-primary" : "text-slate-900"}`}>
+                <p className={`font-serif text-xl mb-1.5 ${isDragActive ? "text-primaryDark" : "text-slate-900"}`}>
                   {file ? file.name : "Déposez votre CSV ici"}
                 </p>
-                <p className="text-sm text-slate-500 font-medium">
+                <p className="text-sm text-slate-600">
                   {file ? "Cliquez pour modifier" : "Cliquez ou glissez votre export Doctolib"}
                 </p>
               </div>
@@ -200,8 +200,8 @@ export default function AuditPage() {
               {/* Formulaire */}
               <div className="space-y-5 text-left">
                 <div>
-                  <label htmlFor="nom_cabinet" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    Nom du cabinet <span className="text-danger">*</span>
+                  <label htmlFor="nom_cabinet" className="block text-sm font-medium text-slate-700 mb-1.5">
+                    Nom du cabinet <span className="text-red-600">*</span>
                   </label>
                   <input
                     id="nom_cabinet"
@@ -209,12 +209,12 @@ export default function AuditPage() {
                     value={nomCabinet}
                     onChange={(e) => setNomCabinet(e.target.value)}
                     placeholder="Ex : Cabinet Dr. Martin"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary/30 focus:border-primary/60 transition-all outline-none"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primaryDark/30 focus:border-primaryDark/60 transition-all outline-none"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="ca_moyen" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                  <label htmlFor="ca_moyen" className="block text-sm font-medium text-slate-700 mb-1.5">
                     CA moyen par RDV (€)
                   </label>
                   <input
@@ -223,11 +223,11 @@ export default function AuditPage() {
                     value={caMoyen}
                     onChange={(e) => setCaMoyen(Number(e.target.value) || 150)}
                     min={1}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 focus:ring-2 focus:ring-primary/30 focus:border-primary/60 transition-all outline-none"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-slate-900 focus:ring-2 focus:ring-primaryDark/30 focus:border-primaryDark/60 transition-all outline-none"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
                     Email (optionnel, pour recevoir le rapport)
                   </label>
                   <input
@@ -236,17 +236,17 @@ export default function AuditPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="cabinet@exemple.fr"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary/30 focus:border-primary/60 transition-all outline-none"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primaryDark/30 focus:border-primaryDark/60 transition-all outline-none"
                   />
                 </div>
                 <button
                   onClick={handleSubmit}
-                  className="btn-glow w-full bg-primary hover:bg-primary-light text-white py-4 rounded-full font-bold text-lg transition-all mt-2 flex items-center justify-center gap-2 group shadow-lg"
+                  className="w-full bg-primaryDark hover:bg-[#053b2d] text-white py-3 rounded-full font-semibold text-sm transition-shadow hover:shadow-cta mt-2 flex items-center justify-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primaryDark focus-visible:ring-offset-2"
                 >
-                  <TrendingUp className="w-5 h-5 group-hover:scale-110 transition-transform" aria-hidden="true" />
-                  Générer l&apos;Audit Flash
+                  <TrendingUp className="w-4 h-4 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                  Générer l&apos;audit flash
                 </button>
-                <div className="text-center mt-4 text-xs text-slate-400 font-medium flex items-center justify-center gap-2">
+                <div className="text-center mt-4 text-xs text-slate-500 flex items-center justify-center gap-2">
                   <ShieldCheck className="w-4 h-4" aria-hidden="true" />
                   Chiffrement 256-bit · Conforme RGPD · Aucun nom patient stocké
                 </div>
@@ -258,14 +258,14 @@ export default function AuditPage() {
         {/* ─── LOADING ─── */}
         {etat === "loading" && (
           <div className="max-w-lg mx-auto w-full text-center" aria-live="polite" aria-label="Analyse en cours">
-            <h2 className="text-3xl font-heading font-extrabold text-slate-900 mb-2 tracking-tight">
-              Analyse en cours...
+            <h2 className="font-serif text-3xl md:text-4xl leading-[1.1] text-slate-900 mb-2 tracking-tight">
+              Analyse en cours…
             </h2>
-            <p className="text-slate-500 mb-8 font-medium">Temps estimé : 30–60 secondes</p>
-            <div className="bg-white rounded-3xl border border-slate-100 shadow-soft p-8 text-left">
-              <div className="h-2 bg-slate-100 rounded-full overflow-hidden mb-8">
+            <p className="text-slate-600 mb-8">Temps estimé : 30–60 secondes</p>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-left">
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-8">
                 <div
-                  className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-500 ease-out relative"
+                  className="h-full bg-primaryDark transition-all duration-500 ease-out relative"
                   style={{ width: `${(etapeActuelle / 4) * 100}%` }}
                 >
                   <div className="absolute inset-0 bg-white/20 animate-pulse rounded-full" />
@@ -273,11 +273,11 @@ export default function AuditPage() {
               </div>
               <ul className="space-y-4">
                 {ETAPES_LOADING.map((etape) => (
-                  <li key={etape.id} className={`flex items-center gap-3 font-medium ${etapeActuelle >= etape.id ? "text-slate-900" : "text-slate-300"}`}>
+                  <li key={etape.id} className={`flex items-center gap-3 ${etapeActuelle >= etape.id ? "text-slate-900" : "text-slate-300"}`}>
                     {etapeActuelle >= etape.id ? (
-                      <span className="w-6 h-6 rounded-full bg-success/20 border border-success/40 text-success flex items-center justify-center text-xs font-bold">✓</span>
+                      <span className="w-6 h-6 rounded-full bg-kpiSignal text-kpiSignal-fg flex items-center justify-center text-xs font-bold">✓</span>
                     ) : (
-                      <span className="w-6 h-6 rounded-full border-2 border-slate-200" />
+                      <span className="w-6 h-6 rounded-full border-2 border-gray-200" />
                     )}
                     {etape.texte}
                   </li>
@@ -300,18 +300,18 @@ export default function AuditPage() {
         {/* ─── ERREUR ─── */}
         {etat === "erreur" && (
           <div className="max-w-xl mx-auto w-full">
-            <div className="bg-danger/10 border border-danger/20 rounded-3xl p-8 text-center">
-              <div className="w-16 h-16 bg-danger/20 border border-danger/30 text-danger rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold" aria-hidden="true">!</div>
-              <h1 className="text-2xl font-heading font-extrabold text-danger mb-2">Une erreur est survenue</h1>
-              <p className="text-slate-600 mb-8 font-medium">{erreur}</p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+              <div className="w-12 h-12 bg-red-50 border border-red-200 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-semibold" aria-hidden="true">!</div>
+              <h1 className="font-serif text-2xl md:text-3xl text-slate-900 mb-2 tracking-tight">Une erreur est survenue</h1>
+              <p className="text-slate-600 mb-8">{erreur}</p>
+              <div className="flex flex-col sm:flex-row justify-center gap-3">
                 <button
                   onClick={reessayer}
-                  className="bg-danger text-white hover:bg-red-600 px-8 py-3 rounded-full font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 transform"
+                  className="bg-primaryDark hover:bg-[#053b2d] text-white px-6 py-3 rounded-full text-sm font-semibold transition-shadow hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primaryDark focus-visible:ring-offset-2"
                 >
                   Réessayer
                 </button>
-                <Link href="/" className="px-8 py-3 border border-slate-300 text-slate-600 rounded-full font-bold hover:bg-slate-50 hover:text-slate-900 transition-all">
+                <Link href="/" className="px-6 py-3 border border-gray-200 bg-white text-slate-700 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors">
                   Retour à l&apos;accueil
                 </Link>
               </div>
