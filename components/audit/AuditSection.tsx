@@ -30,7 +30,7 @@ export default function AuditSection({
     <section
       id={id}
       data-audit-section
-      className="scroll-mt-6 py-10 px-8 w-full max-w-[960px] mx-auto"
+      className="scroll-mt-6 py-10 px-8 md:px-[130px] w-full"
     >
       {eyebrow && (
         <div
