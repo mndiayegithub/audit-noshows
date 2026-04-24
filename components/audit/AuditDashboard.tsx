@@ -30,7 +30,7 @@ export default function AuditDashboard({
   return (
     <div className="min-h-screen">
       <AuditSidebar stats={stats} />
-      <main className="md:ml-[240px] px-4 md:px-10 pb-20">
+      <main className="md:ml-[240px] w-full max-w-none px-6 lg:px-10 pb-20">
         <AuditSection
           id="synthese"
           eyebrow="Synthèse"
@@ -73,8 +73,8 @@ export default function AuditDashboard({
         </AuditSection>
         <AuditSection
           id="plan-et-cta"
-          eyebrow="Plan d'action"
-          eyebrowColor="text-kpiTaux-fg"
+          eyebrow="Feuille de route"
+          eyebrowColor="text-[#064E3B]"
           title="Plan d'action"
           index={5}
         >

@@ -29,7 +29,7 @@ export default function AuditSection({
     <section
       id={id}
       data-audit-section
-      className="scroll-mt-6 py-10 md:py-16"
+      className="scroll-mt-6 py-10 md:py-16 w-full"
     >
       <div
         className={`mb-2 text-xs font-medium uppercase tracking-wide ${eyebrowColor}`}
