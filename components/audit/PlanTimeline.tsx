@@ -1,48 +1,51 @@
 /**
- * Section 5 — Plan d'action (timeline verticale tricolore + narratif).
+ * Section 5 — Plan d'action (sketch 009 variante A — grille 3 cards).
  *
- * Exactement 3 items dont les puces reprennent les couleurs sémantiques
- * des KPI foreground :
- *   - Volume  → #2563EB (bleu)
- *   - Signal  → #059669 (émeraude)
- *   - Taux    → #EA580C (orange)
+ * 3 cards blanches `rounded-[20px]` avec pastille carrée 36×36 rounded-lg
+ * colorée selon la sémantique KPI :
+ *   - Card 1 (Volume) → bg #DFF3FF / fg #2563EB
+ *   - Card 2 (Signal) → bg #DCF4E6 / fg #059669
+ *   - Card 3 (Taux)   → bg #FCEACC / fg #EA580C
+ *
+ * Chaque card se termine par un tag "Gain estimé · X k€ / an" en uppercase
+ * muted (pas de couleur sémantique sur le tag, conformément au sketch).
  */
-interface TimelineItem {
-  dotColor: string; // hex — ring/number color
-  dotBg: string; // hex — pill background
+interface PlanItem {
+  num: 1 | 2 | 3;
+  numBg: string;
+  numFg: string;
   title: string;
-  meta: string;
   description: string;
   gain: string;
 }
 
-const ITEMS: TimelineItem[] = [
+const ITEMS: PlanItem[] = [
   {
-    dotColor: "#2563EB",
-    dotBg: "#DFF3FF",
+    num: 1,
+    numBg: "#DFF3FF",
+    numFg: "#2563EB",
     title: "Rappels SMS automatiques J-2",
-    meta: "Mois 1 · Volume",
     description:
       "Réduit les no-shows de 35 % en moyenne sur les créneaux du matin. Paramétrable depuis votre logiciel de prise de RDV.",
-    gain: "Gain estimé · +18 k€/an",
+    gain: "Gain estimé · 18 k€ / an",
   },
   {
-    dotColor: "#059669",
-    dotBg: "#DCF4E6",
+    num: 2,
+    numBg: "#DCF4E6",
+    numFg: "#059669",
     title: "Caution symbolique sur créneaux sensibles",
-    meta: "Mois 1–2 · Signal",
     description:
       "10 € de caution remboursable pour les RDV du jeudi 16h–18h et du samedi. Dissuade les no-shows opportunistes.",
-    gain: "Gain estimé · +12 k€/an",
+    gain: "Gain estimé · 12 k€ / an",
   },
   {
-    dotColor: "#EA580C",
-    dotBg: "#FCEACC",
+    num: 3,
+    numBg: "#FCEACC",
+    numFg: "#EA580C",
     title: "Liste d'attente en temps réel",
-    meta: "Mois 2 · Taux",
     description:
       "Un créneau se libère → SMS groupé aux patients en attente. Remplissage en moyenne 6 min après l'annulation.",
-    gain: "Gain estimé · +9 k€/an",
+    gain: "Gain estimé · 9 k€ / an",
   },
 ];
 
@@ -52,32 +55,32 @@ export default function PlanTimeline() {
       className="grid grid-cols-1 md:grid-cols-3 gap-4"
       aria-label="Plan d'action en 3 étapes"
     >
-      {ITEMS.map((item, i) => (
+      {ITEMS.map((item) => (
         <li
-          key={i}
-          className="relative overflow-hidden rounded-3xl border border-gray-200 bg-white p-6"
+          key={item.num}
+          className="relative overflow-hidden rounded-[20px] border border-gray-200 bg-white p-[22px]"
         >
           <span
             aria-hidden
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl font-serif text-[18px] font-semibold"
-            style={{ backgroundColor: item.dotBg, color: item.dotColor }}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg font-serif text-[18px] font-medium"
+            style={{ backgroundColor: item.numBg, color: item.numFg }}
           >
-            {i + 1}
+            {item.num}
           </span>
-          <h4 className="mt-4 font-serif text-[17px] leading-snug text-ink">
+          <h4 className="mt-[14px] font-serif text-[17px] font-medium leading-snug tracking-tight text-slate-900">
             {item.title}
           </h4>
-          <p className="mt-2 text-[13px] leading-relaxed text-gray-600">
+          <p
+            className="mt-2 text-[13px] text-gray-600"
+            style={{ lineHeight: 1.55 }}
+          >
             {item.description}
           </p>
           <p
-            className="mt-4 text-[11px] font-semibold uppercase tracking-wide"
-            style={{ color: item.dotColor }}
+            className="mt-[14px] text-[11px] font-semibold uppercase text-gray-500"
+            style={{ letterSpacing: "0.06em" }}
           >
             {item.gain}
-          </p>
-          <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-gray-400">
-            {item.meta}
           </p>
         </li>
       ))}
