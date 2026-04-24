@@ -70,7 +70,7 @@ export default function AuditDashboard({
         >
           <div className="space-y-6">
             <PlanTimeline />
-            <CalendlyEmbed />
+            <CalendlyEmbed onDownloadPDF={onDownloadPDF} />
             {onDownloadPDF && (
               <div className="flex justify-center">
                 <button
