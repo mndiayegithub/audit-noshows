@@ -36,6 +36,7 @@ export default function AuditDashboard({
           eyebrow="Synthèse"
           eyebrowColor="text-kpiVolume-fg"
           title="Synthèse"
+          index={1}
         >
           <SyntheseKPIs stats={stats} />
         </AuditSection>
@@ -44,6 +45,7 @@ export default function AuditDashboard({
           eyebrow="Manque à gagner"
           eyebrowColor="text-kpiArgent-fg"
           title="Manque à gagner"
+          index={2}
           lede="CA perdu sur la période analysée, extrapolé sur 12 mois — valeur annualisée renvoyée par l'analyse."
         >
           <MoneyBuildCard stats={stats} />
@@ -52,7 +54,8 @@ export default function AuditDashboard({
           id="ou-et-quand"
           eyebrow="Où & Quand"
           eyebrowColor="text-kpiSignal-fg"
-          title="Où & Quand"
+          title="Où & quand vos no-shows apparaissent"
+          index={3}
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <ChartParJour stats={stats} />
@@ -64,6 +67,7 @@ export default function AuditDashboard({
           eyebrow="Score cabinet"
           eyebrowColor="text-[#064E3B]"
           title="Score cabinet"
+          index={4}
         >
           <ScoreHero stats={stats} />
         </AuditSection>
@@ -72,6 +76,7 @@ export default function AuditDashboard({
           eyebrow="Plan d'action"
           eyebrowColor="text-kpiTaux-fg"
           title="Plan d'action"
+          index={5}
         >
           <div className="space-y-6">
             <PlanTimeline />

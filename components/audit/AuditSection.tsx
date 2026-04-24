@@ -6,6 +6,8 @@ interface AuditSectionProps {
   /** Tailwind text-* class, e.g. "text-kpiVolume-fg" */
   eyebrowColor?: string;
   title: string;
+  /** Section order number (1–5) prefixed to the h2 — format "N." as in sketch 005 C. */
+  index?: number;
   lede?: string;
   children: ReactNode;
 }
@@ -19,6 +21,7 @@ export default function AuditSection({
   eyebrow,
   eyebrowColor = "text-gray-500",
   title,
+  index,
   lede,
   children,
 }: AuditSectionProps) {
@@ -33,7 +36,10 @@ export default function AuditSection({
       >
         {eyebrow}
       </div>
-      <h2 className="mb-2 font-serif text-2xl md:text-3xl text-slate-900">
+      <h2 className="mb-2 font-serif font-bold text-2xl md:text-3xl text-slate-900">
+        {typeof index === "number" && (
+          <span className="mr-2 tabular-nums">{index}.</span>
+        )}
         {title}
       </h2>
       {lede && (
