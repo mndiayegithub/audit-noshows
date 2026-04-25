@@ -22,7 +22,8 @@ export default function LandingFooter() {
               <span className="font-semibold text-slate-900">GetLostRevenue</span>
             </div>
             <p className="mt-3 max-w-xs text-sm text-slate-600">
-              L&apos;audit no-shows des cabinets dentaires. Chiffré, rapide, gratuit.
+              L&apos;audit analyse de performances des cabinets médicaux.
+              Chiffré, rapide, gratuit.
             </p>
           </div>
 
