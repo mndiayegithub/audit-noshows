@@ -7,7 +7,7 @@
  * (`bg-[#064E3B]`) placé après les 3 cards de plan d'action, avec 2 boutons :
  *   - Primaire blanc « Prendre rendez-vous » (ouvre Calendly si
  *     `NEXT_PUBLIC_CALENDLY_URL` défini, sinon aucun href)
- *   - Ghost `border-white/30` « Ou m'envoyer le PDF » (délègue à la prop
+ *   - Ghost `border-white/30` « Télécharger le PDF » (délègue à la prop
  *     `onDownloadPDF` si fournie par le parent `AuditDashboard`)
  *
  * Le nom du composant reste `CalendlyEmbed` pour éviter un rename qui

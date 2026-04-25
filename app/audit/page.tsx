@@ -143,7 +143,7 @@ export default function AuditPage() {
                   Lancez votre audit gratuit.
                 </h1>
                 <p className="text-slate-600 text-base md:text-lg">
-                  Uploadez votre export Doctolib et recevez votre rapport personnalisé en 60 secondes.
+                  Uploadez votre export de données Doctolib (format CSV) et recevez votre rapport personnalisé en 60 secondes.
                 </p>
               </div>
 
