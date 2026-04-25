@@ -50,8 +50,7 @@ export default function FAQCards() {
             Les questions qu&apos;on nous pose le plus souvent.
           </h2>
           <p className="mt-3 text-sm text-slate-500">
-            Diagnostic gratuit en 60 secondes — vos données patient ne sortent
-            jamais de l&apos;analyse.
+            Diagnostic gratuit en 60 secondes, vos données patient sont toujours sécurisées et ne sortent jamais de l&apos;analyse.
           </p>
 
           <div className="mt-6">
