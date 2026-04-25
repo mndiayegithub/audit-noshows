@@ -44,7 +44,7 @@ export default function FAQCards() {
 
         <div className="flex-1 min-w-0">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primaryDark">
-            FAQ
+            Questions Fréquentes
           </p>
           <h2 className="mt-2 font-serif text-3xl font-medium text-slate-900 lg:text-4xl">
             Les questions qu&apos;on nous pose le plus souvent.
