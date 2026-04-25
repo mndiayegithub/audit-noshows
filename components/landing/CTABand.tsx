@@ -13,7 +13,7 @@ export default function CTABand() {
               Chiffrez ce que vos no-shows coûtent à votre cabinet.
             </h2>
             <p className="mt-3 max-w-xl text-emerald-100">
-              Audit gratuit, 60 secondes, aucune inscription. Export Doctolib suffisant.
+              Audit gratuit, 60 secondes, aucune inscription. Export CSV Doctolib suffisant.
             </p>
           </div>
           <Link

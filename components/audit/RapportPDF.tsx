@@ -1101,7 +1101,7 @@ export default function RapportPDF({
           <SectionHead
             num="2"
             title="Manque à gagner annuel"
-            lede="CA perdu sur la période analysée, extrapolé sur 12 mois — valeur annualisée renvoyée par l'analyse."
+            lede="CA perdu sur la période analysée, extrapolé sur 12 mois, valeur annualisée renvoyée par l'analyse."
           />
         </View>
         <View style={S.moneyCard}>
@@ -1187,7 +1187,7 @@ export default function RapportPDF({
               </View>
               {pic && (
                 <Text style={S.chartInsight}>
-                  Pic le {pic.jour} — {pic.noShows} no-shows (
+                  Pic le {pic.jour} : {pic.noShows} no-shows (
                   {pic.taux.toLocaleString("fr-FR", { maximumFractionDigits: 1 })}
                   {NBSP}%)
                 </Text>
@@ -1398,7 +1398,7 @@ export default function RapportPDF({
         <View style={S.ctaBand}>
           <Text style={S.ctaEyebrow}>Prochaine étape</Text>
           <Text style={S.ctaTitle}>
-            Passons en revue votre plan ensemble — 30{NBSP}minutes.
+            Passons en revue votre plan ensemble en 30{NBSP}minutes.
           </Text>
           <Text style={S.ctaBody}>
             Un diagnostic personnalisé et la feuille de route sur-mesure pour

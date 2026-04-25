@@ -20,7 +20,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "GetLostRevenue — Audit No-Shows pour Cabinets Dentaires",
+  title: "GetLostRevenue — Simulateur d'audit performance pour cabinets médicales",
   description:
     "Combien les no-shows coûtent-ils vraiment à votre cabinet ? Audit chiffré en 60 secondes à partir de votre export Doctolib.",
 };

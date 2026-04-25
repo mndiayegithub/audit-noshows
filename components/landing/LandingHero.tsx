@@ -42,8 +42,8 @@ export default function LandingHero() {
             variants={fadeUp}
             className="mt-5 max-w-xl text-base text-slate-600 md:text-lg"
           >
-            Chargez votre export Doctolib. Recevez un rapport chiffré sur votre
-            taux de no-shows, le CA perdu et les créneaux à risque — sans inscription.
+            Chargez votre export de données de rendez-vous et recevez un rapport chiffré sur votre
+            taux de no-shows, le CA perdu et les créneaux à risque sans inscription.
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">

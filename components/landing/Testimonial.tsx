@@ -18,7 +18,7 @@ export default function Testimonial() {
             Ils ont chiffré leur manque à gagner
           </h2>
           <p className="text-base text-slate-600">
-            +200 cabinets dentaires en France ont déjà passé l&apos;audit. Voici
+            +200 cabinets dentaires en France ont déjà passé l&apos;audit, voici
             ce qu&apos;ils en disent.
           </p>
         </div>
@@ -37,7 +37,7 @@ export default function Testimonial() {
                 <p className="font-serif text-xl text-slate-900 md:text-2xl">
                   «&nbsp;On savait que les no-shows nous coûtaient. On ne savait
                   pas combien. L&apos;audit nous a chiffré 15&nbsp;k€ de perte
-                  annuelle — on a pu enfin prioriser les bons leviers.&nbsp;»
+                  annuelle, on a pu enfin prioriser les bons leviers.&nbsp;»
                 </p>
                 <div className="grid grid-cols-[auto_1fr] items-center gap-3">
                   <Avatar className="size-12">

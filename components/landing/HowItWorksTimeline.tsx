@@ -5,7 +5,7 @@ const STEPS: { n: string; title: string; body: string; bg: string; fg: string }[
   {
     n: "1",
     title: "Chargez votre export Doctolib",
-    body: "Glissez votre CSV — nous supportons tous les exports standard.",
+    body: "Glissez vos données sous format CSV, nous supportons tous les exports standard.",
     bg: "bg-kpiVolume",
     fg: "text-kpiVolume-fg",
   },
@@ -19,7 +19,7 @@ const STEPS: { n: string; title: string; body: string; bg: string; fg: string }[
   {
     n: "3",
     title: "Recevez votre rapport",
-    body: "Taux, CA perdu annualisé, graphiques et plan d'action — prêt en 60 secondes.",
+    body: "Taux, CA perdu annualisé, graphiques et plan d'action prêt en 60 secondes.",
     bg: "bg-kpiTaux",
     fg: "text-kpiTaux-fg",
   },

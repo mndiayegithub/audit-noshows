@@ -26,7 +26,7 @@ export default function CalendlyEmbed({ onDownloadPDF }: CalendlyEmbedProps) {
         Prochaine étape
       </div>
       <h3 className="mt-2 font-serif text-[26px] font-medium leading-tight tracking-tight text-white md:text-[32px]">
-        Passons en revue votre plan ensemble — 30&nbsp;minutes.
+        Passons en revue votre plan ensemble en 30&nbsp;minutes.
       </h3>
       <p className="mt-3 max-w-[560px] text-[14px] leading-relaxed text-white/80">
         Un diagnostic personnalisé et la feuille de route sur-mesure pour

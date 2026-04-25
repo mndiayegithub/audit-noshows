@@ -73,7 +73,7 @@ export default function AuditDashboard({
           id="manque-a-gagner"
           title="Manque à gagner annuel"
           index={2}
-          lede="CA perdu sur la période analysée, extrapolé sur 12 mois — valeur annualisée renvoyée par l'analyse."
+          lede="CA perdu sur la période analysée, extrapolé sur 12 mois, valeur annualisée renvoyée par l'analyse."
         >
           <MoneyBuildCard stats={stats} />
         </AuditSection>
