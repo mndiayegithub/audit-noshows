@@ -761,8 +761,13 @@ function formatDate(s: string): string {
   return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
 }
 
-const fmtEur = (n: number) =>
-  `${Math.round(n).toLocaleString("fr-FR")}${NBSP}€`;
+// Helvetica (police par défaut de @react-pdf) n'a pas le glyphe U+202F (narrow nbsp)
+// que toLocaleString("fr-FR") insère comme séparateur de milliers, ni U+00A0.
+// On les remplace par un espace classique pour éviter les caractères fantômes (ex: "2/553").
+const fmtFR = (n: number, opts?: Intl.NumberFormatOptions) =>
+  n.toLocaleString("fr-FR", opts).replace(/[  ]/g, " ");
+
+const fmtEur = (n: number) => `${fmtFR(Math.round(n))}${NBSP}€`;
 
 type MdSeg = { text: string; bold?: boolean; italic?: boolean };
 type MdBlock =
@@ -1065,14 +1070,14 @@ export default function RapportPDF({
           <View style={[S.kpiCard, { backgroundColor: C.volumeBg }]}>
             <Text style={[S.kpiChip, { color: C.volumeFg }]}>Volume</Text>
             <Text style={S.kpiValue}>
-              {(stats.global.total_rdv ?? 0).toLocaleString("fr-FR")}
+              {fmtFR(stats.global.total_rdv ?? 0)}
             </Text>
             <Text style={S.kpiSub}>RDV analysés</Text>
           </View>
           <View style={[S.kpiCardLast, { backgroundColor: C.signalBg }]}>
             <Text style={[S.kpiChip, { color: C.signalFg }]}>Signal</Text>
             <Text style={S.kpiValue}>
-              {(stats.global.no_shows ?? 0).toLocaleString("fr-FR")}
+              {fmtFR(stats.global.no_shows ?? 0)}
             </Text>
             <Text style={S.kpiSub}>No-shows détectés</Text>
           </View>
@@ -1083,7 +1088,7 @@ export default function RapportPDF({
           <View style={[S.kpiCard, { backgroundColor: C.tauxBg }]}>
             <Text style={[S.kpiChip, { color: C.tauxFg }]}>Taux</Text>
             <Text style={S.kpiValue}>
-              {stats.global.taux.toLocaleString("fr-FR", { maximumFractionDigits: 1 })}
+              {fmtFR(stats.global.taux, { maximumFractionDigits: 1 })}
               {NBSP}%
             </Text>
             <Text style={S.kpiSub}>Taux de no-show</Text>
@@ -1117,7 +1122,7 @@ export default function RapportPDF({
               <Text style={S.moneyLabel}>
                 No-shows détectés ({nbMois}{NBSP}mois)
               </Text>
-              <Text style={S.moneyVal}>{noShows.toLocaleString("fr-FR")}</Text>
+              <Text style={S.moneyVal}>{fmtFR(noShows)}</Text>
             </View>
             <View style={S.moneyLine}>
               <Text style={S.moneyLabel}>CA moyen par RDV</Text>
@@ -1188,7 +1193,7 @@ export default function RapportPDF({
               {pic && (
                 <Text style={S.chartInsight}>
                   Pic le {pic.jour} : {pic.noShows} no-shows (
-                  {pic.taux.toLocaleString("fr-FR", { maximumFractionDigits: 1 })}
+                  {fmtFR(pic.taux, { maximumFractionDigits: 1 })}
                   {NBSP}%)
                 </Text>
               )}
@@ -1279,7 +1284,7 @@ export default function RapportPDF({
             {picMois && (
               <Text style={S.chartInsight}>
                 Pic en {fmtMois(picMois.mois)} — {picMois.no_shows} no-shows (
-                {picMois.taux.toLocaleString("fr-FR", { maximumFractionDigits: 1 })}
+                {fmtFR(picMois.taux, { maximumFractionDigits: 1 })}
                 {NBSP}%)
               </Text>
             )}
@@ -1312,9 +1317,7 @@ export default function RapportPDF({
             <Text style={S.scoreTitle}>{scoreTitle}</Text>
             <Text style={S.scoreNarrative}>
               Votre taux de no-show est de{" "}
-              {stats.global.taux.toLocaleString("fr-FR", {
-                maximumFractionDigits: 1,
-              })}
+              {fmtFR(stats.global.taux, { maximumFractionDigits: 1 })}
               {NBSP}%. {hasGoogle
                 ? `Score global (no-shows + réputation Google${
                     googleDelta !== 0
@@ -1337,14 +1340,14 @@ export default function RapportPDF({
               <View style={S.googleStat}>
                 <Text style={S.googleStatLabel}>Note Google</Text>
                 <Text style={S.googleStatValue}>
-                  {google.rating?.toLocaleString("fr-FR", { maximumFractionDigits: 1 })} / 5
+                  {google.rating !== undefined ? fmtFR(google.rating, { maximumFractionDigits: 1 }) : ""} / 5
                 </Text>
                 <Text style={S.googleStatSub}>moyenne des avis</Text>
               </View>
               <View style={S.googleStat}>
                 <Text style={S.googleStatLabel}>Nombre d&apos;avis</Text>
                 <Text style={S.googleStatValue}>
-                  {google.user_ratings_total.toLocaleString("fr-FR")}
+                  {fmtFR(google.user_ratings_total)}
                 </Text>
                 <Text style={S.googleStatSub}>
                   écart vs benchmark national&nbsp;87&nbsp;:&nbsp;
