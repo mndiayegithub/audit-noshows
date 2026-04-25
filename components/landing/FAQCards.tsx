@@ -1,7 +1,11 @@
 // components/landing/FAQCards.tsx
-// RSC — native <details>, no React state, no JS, a11y built-in.
+// FAQ avec image + accordéon contrôlé. DA clinique-claire (primaryDark, Fraunces).
+"use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const FAQ: { q: string; a: string }[] = [
   {
@@ -23,29 +27,71 @@ const FAQ: { q: string; a: string }[] = [
 ];
 
 export default function FAQCards() {
-  return (
-    <section id="faq" className="mx-auto max-w-4xl px-6 py-20">
-      <p className="text-sm font-medium text-accentGreen">FAQ</p>
-      <h2 className="mt-2 font-serif text-3xl text-slate-900 md:text-4xl">
-        Les questions qu&apos;on nous pose le plus souvent.
-      </h2>
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-      <div className="mt-10 space-y-3">
-        {FAQ.map(({ q, a }) => (
-          <details
-            key={q}
-            className="group rounded-xl border border-gray-200 bg-white transition-colors open:border-emerald-100 open:bg-emerald-50"
-          >
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left text-slate-900 [&::-webkit-details-marker]:hidden">
-              <span className="font-medium">{q}</span>
-              <ChevronDown
-                aria-hidden
-                className="h-5 w-5 flex-none text-slate-500 transition-transform duration-200 group-open:rotate-180"
-              />
-            </summary>
-            <div className="px-5 pb-5 text-sm text-slate-700">{a}</div>
-          </details>
-        ))}
+  return (
+    <section id="faq" className="py-16 md:py-24 bg-gray-50">
+      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-start justify-center gap-10 md:gap-12 px-6">
+        <div className="relative w-full max-w-sm aspect-square shrink-0 rounded-3xl overflow-hidden border border-gray-200">
+          <Image
+            src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=900&auto=format&fit=crop"
+            alt="Praticien dentaire en consultation"
+            fill
+            sizes="(min-width: 768px) 24rem, 100vw"
+            className="object-cover"
+          />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primaryDark">
+            FAQ
+          </p>
+          <h2 className="mt-2 font-serif text-3xl font-medium text-slate-900 lg:text-4xl">
+            Les questions qu&apos;on nous pose le plus souvent.
+          </h2>
+          <p className="mt-3 text-sm text-slate-500">
+            Diagnostic gratuit en 60 secondes — vos données patient ne sortent
+            jamais de l&apos;analyse.
+          </p>
+
+          <div className="mt-6">
+            {FAQ.map((faq, index) => {
+              const isOpen = openIndex === index;
+              return (
+                <button
+                  key={faq.q}
+                  type="button"
+                  aria-expanded={isOpen}
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  className="w-full text-left border-b border-slate-200 py-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primaryDark/30 rounded-sm"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <h3 className="text-base font-medium text-slate-900">
+                      {faq.q}
+                    </h3>
+                    <ChevronDown
+                      aria-hidden
+                      className={cn(
+                        "h-5 w-5 flex-none text-slate-500 transition-transform duration-500 ease-in-out",
+                        isOpen && "rotate-180 text-primaryDark",
+                      )}
+                    />
+                  </div>
+                  <p
+                    className={cn(
+                      "text-sm text-slate-500 transition-all duration-500 ease-in-out max-w-md overflow-hidden",
+                      isOpen
+                        ? "opacity-100 max-h-[300px] translate-y-0 pt-3"
+                        : "opacity-0 max-h-0 -translate-y-2",
+                    )}
+                  >
+                    {faq.a}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
