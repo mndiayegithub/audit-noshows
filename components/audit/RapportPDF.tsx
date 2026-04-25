@@ -1235,7 +1235,7 @@ export default function RapportPDF({
               </View>
               {heureValues[picHeureIdx] > 0 && (
                 <Text style={S.chartInsight}>
-                  Créneau critique {SLOTS[picHeureIdx]} — {picHeurePct}{NBSP}% des no-shows.
+                  Créneau critique {SLOTS[picHeureIdx]} : {picHeurePct}{NBSP}% des no-shows.
                 </Text>
               )}
             </>
