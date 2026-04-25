@@ -1066,7 +1066,7 @@ export default function RapportPDF({
         <SectionHead num="1" title="Synthèse" />
 
         {/* KPI row 1 : Volume / Signal */}
-        <View style={S.kpiRow}>
+        <View style={S.kpiRow} wrap={false}>
           <View style={[S.kpiCard, { backgroundColor: C.volumeBg }]}>
             <Text style={[S.kpiChip, { color: C.volumeFg }]}>Volume</Text>
             <Text style={S.kpiValue}>
@@ -1084,7 +1084,7 @@ export default function RapportPDF({
         </View>
 
         {/* KPI row 2 : Taux / Argent */}
-        <View style={S.kpiRow}>
+        <View style={S.kpiRow} wrap={false}>
           <View style={[S.kpiCard, { backgroundColor: C.tauxBg }]}>
             <Text style={[S.kpiChip, { color: C.tauxFg }]}>Taux</Text>
             <Text style={S.kpiValue}>
@@ -1109,7 +1109,7 @@ export default function RapportPDF({
             lede="CA perdu sur la période analysée, extrapolé sur 12 mois, valeur annualisée renvoyée par l'analyse."
           />
         </View>
-        <View style={S.moneyCard}>
+        <View style={S.moneyCard} wrap={false}>
           <Text style={S.moneyEyebrow}>CA perdu / an — extrapolé</Text>
           {/* VERBATIM — pas de * 12 */}
           <Text style={S.moneyHero}>{fmtEur(stats.global.ca_perdu_an)}</Text>
@@ -1157,7 +1157,7 @@ export default function RapportPDF({
         />
 
         {/* Chart par jour */}
-        <View style={S.chartCard}>
+        <View style={S.chartCard} wrap={false}>
           <Text style={S.chartTitle}>No-shows par jour de semaine</Text>
           <Text style={S.chartSub}>Barres proportionnelles au nombre de no-shows.</Text>
 
@@ -1206,7 +1206,7 @@ export default function RapportPDF({
         </View>
 
         {/* Horaires */}
-        <View style={S.chartCard}>
+        <View style={S.chartCard} wrap={false}>
           <Text style={S.chartTitle}>No-shows par tranche horaire</Text>
           <Text style={S.chartSub}>
             Répartition sur la journée (matin / après-midi / soir).
@@ -1253,7 +1253,7 @@ export default function RapportPDF({
 
         {/* Évolution mensuelle (Phase 3 — stats_par_mois) */}
         {parMois.length > 0 && maxMois > 0 && (
-          <View style={S.chartCard}>
+          <View style={S.chartCard} wrap={false}>
             <Text style={S.chartTitle}>Évolution mois par mois</Text>
             <Text style={S.chartSub}>
               Nombre de no-shows détectés sur chaque mois de la période.
@@ -1300,7 +1300,7 @@ export default function RapportPDF({
       <Page size="A4" style={S.page}>
         <SectionHead num="4" title="Score cabinet" />
 
-        <View style={S.scoreCard}>
+        <View style={S.scoreCard} wrap={false}>
           <View style={S.scoreRingWrap}>
             <Text style={S.scoreValue}>{score}</Text>
             <Text style={S.scoreSlash}>sur 100</Text>
@@ -1333,7 +1333,7 @@ export default function RapportPDF({
 
         {/* Synthèse Google (Phase 4 — visible uniquement si l'utilisateur a lancé l'analyse) */}
         {hasGoogle && google && (
-          <View style={S.googleCard}>
+          <View style={S.googleCard} wrap={false}>
             <Text style={S.googleEyebrow}>Réputation Google</Text>
             <Text style={S.googleTitle}>{google.name}</Text>
             <View style={S.googleRow}>
@@ -1372,15 +1372,17 @@ export default function RapportPDF({
           </View>
         )}
 
-        {/* Plan d'action */}
-        <View style={{ marginTop: 6 }}>
+        {/* Plan d'action — force une nouvelle page si Google présent pour éviter
+            que le bloc plan + CTA ne soit coincé sous la synthèse Google */}
+        <View style={{ marginTop: 6 }} break={hasGoogle}>
           <SectionHead num="5" title="Plan d'action" />
         </View>
-        <View style={S.planRow}>
+        <View style={S.planRow} wrap={false}>
           {planItems.map((p, i) => (
             <View
               key={p.num}
               style={i === planItems.length - 1 ? S.planCardLast : S.planCard}
+              wrap={false}
             >
               <Text
                 style={[
@@ -1398,7 +1400,7 @@ export default function RapportPDF({
         </View>
 
         {/* CTA band */}
-        <View style={S.ctaBand}>
+        <View style={S.ctaBand} wrap={false}>
           <Text style={S.ctaEyebrow}>Prochaine étape</Text>
           <Text style={S.ctaTitle}>
             Passons en revue votre plan ensemble en 30{NBSP}minutes.
@@ -1443,24 +1445,42 @@ export default function RapportPDF({
                 </Text>
               ));
 
+            // wrap={false} + minPresenceAhead évite les titres orphelins
+            // en bas de page et garde chaque puce/paragraphe d'un seul tenant.
             if (block.type === "h1") {
-              return <Text key={i} style={S.rapportH1}>{renderSegs()}</Text>;
+              return (
+                <View key={i} wrap={false} minPresenceAhead={60}>
+                  <Text style={S.rapportH1}>{renderSegs()}</Text>
+                </View>
+              );
             }
             if (block.type === "h2") {
-              return <Text key={i} style={S.rapportH2}>{renderSegs()}</Text>;
+              return (
+                <View key={i} wrap={false} minPresenceAhead={50}>
+                  <Text style={S.rapportH2}>{renderSegs()}</Text>
+                </View>
+              );
             }
             if (block.type === "h3") {
-              return <Text key={i} style={S.rapportH3}>{renderSegs()}</Text>;
+              return (
+                <View key={i} wrap={false} minPresenceAhead={40}>
+                  <Text style={S.rapportH3}>{renderSegs()}</Text>
+                </View>
+              );
             }
             if (block.type === "li") {
               return (
-                <View key={i} style={S.rapportLiRow}>
+                <View key={i} style={S.rapportLiRow} wrap={false}>
                   <Text style={S.rapportBullet}>•</Text>
                   <Text style={S.rapportLiText}>{renderSegs()}</Text>
                 </View>
               );
             }
-            return <Text key={i} style={S.rapportP}>{renderSegs()}</Text>;
+            return (
+              <View key={i} wrap={false}>
+                <Text style={S.rapportP}>{renderSegs()}</Text>
+              </View>
+            );
           })}
 
           <Footer cabinet={stats.nom_cabinet} />
