@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-gray-200 bg-white py-8 mt-10 md:pl-[240px]">
       <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
-        <div>© {year} PerfIAmatic · Audit d'analyse de performance pour cabinets médicales</div>
+        <div>© {year} PerfIAmatic · Audit d&apos;analyse de performance pour cabinets médicales</div>
         <nav className="flex items-center gap-5">
           <Link
             href="/politique-confidentialite"
