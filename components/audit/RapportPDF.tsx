@@ -1424,11 +1424,7 @@ export default function RapportPDF({
       ════════════════════════════════════════ */}
       {blocks.length > 0 && (
         <Page size="A4" style={S.page}>
-          <SectionHead
-            num="6"
-            title="Analyse IA détaillée"
-            lede="Rapport généré par l'analyse IA — diagnostic et recommandations."
-          />
+          <SectionHead num="6" title="Analyse IA détaillée" />
 
           {blocks.map((block, i) => {
             const renderSegs = () =>
