@@ -55,7 +55,7 @@ export default function CalendlyEmbed({ onDownloadPDF }: CalendlyEmbedProps) {
           onClick={onDownloadPDF}
           className="inline-flex items-center justify-center rounded-xl border border-white/30 bg-transparent px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
         >
-          Ou m&apos;envoyer le PDF
+          Télécharger le PDF
         </button>
       </div>
     </div>
