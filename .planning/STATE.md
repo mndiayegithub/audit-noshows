@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Audit rapide des no-shows pour cabinets dentaires — diagnostic + rapport IA en 60 s.
-**Current focus:** Phase 03 — extension n8n WF12 stats_par_mois (✅ code livré, import manuel pending)
+**Current focus:** Phase 06 — Infra tests Vitest + Playwright (scope à définir avec utilisateur)
 
 ## Current Position
 
-Phase: 03 of 08 (n8n stats_par_mois) — ✅ code livré, 🟡 user-action n8n pending
-Plan: 01/01 complete (Plan 03-01 — JS node + types + SUMMARY)
-Status: Phase complete côté repo — import manuel WF12 décrit dans 03-SUMMARY.md
-Last activity: 2026-04-24 — Plan 03-01 exécuté en autonomie, 3 commits atomiques
+Phase: 05 of 08 — ✅ Validée UAT par utilisateur 2026-04-26
+Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité)
+Next: Phase 06 — scope à définir avec utilisateur
+Last activity: 2026-04-26 — Phases 4 & 5 validées UAT ; fixes additionnels livrés en cours de validation (Footer copy/padding, RapportPDF U+202F + pagination wrap={false}, n8n system prompt durci, sanitizeRapportTexte garde-fou)
 
-Progress: [██████████] 100% (3/8 phases livrées repo-side)
+Progress: [██████░░░░] 62% (5/8 phases livrées et validées)
 
 ## Performance Metrics
 
@@ -83,6 +83,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-24 01:34
-Stopped at: Plan 02-06 complete (scope narrowed) — 3 composants legacy v1 supprimés (Gauge/Graphique/ScoreGlobal), app/audit/page.tsx nettoyé (192 lignes retirées, bouton PDF transmis via props à AuditDashboard), bouton "Télécharger le rapport PDF" primary-dark câblé dans AuditDashboard Section 5. RapportPDF.tsx CONSERVÉ INCHANGÉ (palette dark/gold v1) par override utilisateur explicite — Task 2 du plan skipped, REQ-2 reporté. Build green (/audit = 27.4 kB, First Load JS 153 kB). Ready for Plan 02-07 (UAT checkpoint).
+Last session: 2026-04-26 01:30
+Stopped at: Phases 4 & 5 validées UAT par utilisateur. Fixes additionnels livrés post-validation : Footer décalé md:pl-[240px] + nouveau copyright, RapportPDF helper fmtFR() pour bug "2/553" (U+202F), sanitizeRapportTexte() garde-fou JSON brut, n8n AI Agent system prompt durci (workflow Hc3aGjSuNjd4KVuu live), pagination PDF wrap={false} + minPresenceAhead + break conditionnel avant Plan d'action si Google présent. Build green. Phase 06 à scoper avec utilisateur.
 Resume file: None

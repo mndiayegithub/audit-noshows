@@ -10,7 +10,7 @@ RGPD renforcé), sécuriser le delivery (tests, deploy, monitoring).
 
 ### Phase 1 · Refonte Landing page (clinique-claire v2)
 
-**Status:** 📝 À spec (pivot DA 2026-04-23 — v1 dark-premium archivé)
+**Status:** ✅ Validée (2026-04-26) — landing v2 clinique-claire livrée et en prod, UAT validé
 **Goal:** Remplacer `app/page.tsx` par une landing en direction **clinique-claire**
 (rapport d'expertise comptable moderne — `bg-gray-50`, Inter + Fraunces, primary
 vert sapin `#064E3B`, 4 KPI pastels sémantiques figés Volume/Signal/Taux/Argent).
@@ -79,14 +79,14 @@ Plans:
 - [x] 02-06-PLAN.md — Cleanup (delete v1 Gauge/Graphique/Score) + wire PDF button (RapportPDF refonte **skipped** par override utilisateur — voir backlog "PDF refonte clinique")
 - [x] 02-07-PLAN.md — UAT checkpoint auto-approuvé par `--auto` (7 points humains persistés dans `02-HUMAN-UAT.md`, à tester via `/gsd-verify-work 2`)
 
-**Status:** ✅ Phase 2 exécutée (2026-04-24) — refonte-audit-v2 livrée, UAT humain en attente
+**Status:** ✅ Validée (2026-04-26) — refonte-audit-v2 livrée et en prod, UAT validé
 **Next:** `/gsd-verify-work 2` pour valider l'UAT manuel, puis phase 3
 
 ---
 
 ### Phase 3 · Extension n8n WF12 (`stats_par_mois[]`)
 
-**Status:** ✅ code livré — 🟡 import manuel n8n pending (voir `phase-03-n8n-stats-par-mois/03-SUMMARY.md`)
+**Status:** ✅ Validée (2026-04-26) — code livré + import n8n WF12 actif en prod, UAT validé
 - [x] 03-01-PLAN.md — JS Code node + types + SUMMARY (commits e6faca2, da75f6d, 76c7837)
 **Goal:** Étendre le workflow n8n WF12 pour grouper le CSV Doctolib par
 mois et exposer `stats_par_mois: { mois: string; taux: number;
@@ -105,7 +105,7 @@ avancent en coordination. Si non livré avant la mise en prod de phase
 
 ### Phase 4 · Intégration Google Places API
 
-**Status:** 📝 à spec
+**Status:** ✅ Validée (2026-04-26) — code livré commit `7ccace0`, score blendé wired, UAT validé
 **Goal:** Ajouter le bloc "Diagnostic Google" mentionné dans PRD_V2.
 Intégration Google Places API (clé côté serveur), champ nom de
 cabinet → fetch note Google + nombre d'avis + benchmark secteur, mise
@@ -124,7 +124,7 @@ stepped reveal)
 
 ### Phase 5 · RGPD & Sécurité
 
-**Status:** 📝 à spec
+**Status:** ✅ Validée (2026-04-26) — Wave 1 (server hardening) + Wave 2 (pages légales, footer, security headers) livrées commit `d5af5a2`, UAT validé
 **Goal:** Durcir la conformité RGPD et la sécurité du pipeline
 (données de santé Art. 9).
 

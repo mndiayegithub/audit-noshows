@@ -98,3 +98,10 @@ Clé `AIzaSy…` passée en clair dans la session chat. Rotation + restriction C
 ---
 
 *Phase 5 closed: 2026-04-24 — code shipped, build/lint OK, user action = compléter SIREN + signer DPA Hostinger + test manuel.*
+
+## Validation UAT (2026-04-26)
+
+✅ **Phase 5 validée par utilisateur.** Tests manuels OK (pages légales, footer, codes 400/403/429).
+
+Fixes additionnels post-validation :
+- `Footer.tsx` — `md:pl-[240px]` pour compenser la sidebar fixe sur `/audit` + nouveau copyright "Audit d'analyse de performance pour cabinets médicales" (commits `b9313c3`, `f7608a2` apostrophe escape pour build Vercel).

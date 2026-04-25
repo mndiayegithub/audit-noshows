@@ -86,3 +86,10 @@ git log --all -S"AIzaSy" --oneline    # doit retourner vide
 ---
 
 *Phase 4 closed: 2026-04-24 — code shipped, build/lint OK, user action = test manuel + rotation clé API.*
+
+## Validation UAT (2026-04-26)
+
+✅ **Phase 4 validée par utilisateur.** Tests manuels OK.
+
+Fix additionnel post-validation :
+- `RapportPDF.tsx` — pagination propre quand la synthèse Google est présente (commit `9f138cc`) : `wrap={false}` sur Score / Google card / Plan cards / CTA, `break` conditionnel avant "Plan d'action" si `hasGoogle`, `minPresenceAhead` sur les titres markdown.
