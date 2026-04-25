@@ -155,11 +155,60 @@ invariants métier avant deploy prod.
 
 ---
 
-### Phase 7 · Déploiement production v2
+### Phase 7 · Robustesse upload CSV (autonomie client)
+
+**Status:** 📝 à spec — **prioritaire avant deploy prod**
+**Goal:** Rendre le pipeline d'upload CSV résilient pour un client en
+**autonomie totale**. Aujourd'hui, sur un export Doctolib bien formé ça
+marche, mais en autonomie le taux d'échec silencieux est élevé (encodage
+Latin-1, dates ISO/US, statuts inconnus type "DNA"/"Reporté", lignes
+métadata avant header, séparateur `;` français, multi-praticiens
+quotés). L'utilisateur reçoit aujourd'hui un 500 générique ou
+"Pas assez de données valides (5 RDV sur 1200)" sans savoir pourquoi.
+
+**Scope prévisionnel :**
+- **Frontend — preview & dry-run** : avant POST, parser le CSV
+  côté client, afficher les colonnes détectées, échantillon 3 lignes
+  parsées, % reconnaissance, statuts inconnus, dates non parsées →
+  bouton "Continuer" / "Corriger mon CSV"
+- **Erreurs structurées en 400** : n8n + `/api/audit` renvoient
+  `{ error_code, missing_columns, unknown_statuses[], sample_bad_rows[] }`
+  au lieu d'un throw générique ; UI `/audit` les affiche en clair
+  avec hints actionnables ("renommez la colonne 'État du RDV' en
+  'statut'", "format date attendu : JJ/MM/AAAA")
+- **Étape LLM "auto-repair" statuts** dans n8n : mini-appel
+  GPT-4o-mini pour mapper les statuts inconnus vers Honoré/No-show
+  (cache pour éviter recoût), seuil de confiance, fallback explicite
+  si LLM hésite
+- **Détection encodage** côté serveur : heuristique BOM/Latin-1/UTF-16,
+  conversion vers UTF-8 avant forward n8n
+- **Corpus de fixtures CSV réels** anonymisés (collectés depuis les
+  fails actuels + variantes Doctolib/Excel/Google Sheets) — alimente
+  la suite de tests Phase 6 et sert de regression-set
+- **Telemetry sur les fails** (RGPD-safe) : log anonymisé de
+  `error_code` + nb lignes pour mesurer les patterns d'échec en prod
+
+**Acceptance global :**
+- 0 erreur 500 silencieuse côté client en autonomie sur le top 10
+  variantes CSV observées
+- Tout 400 vient avec un message en français clair + action concrète
+- Preview frontend détecte ≥95% des CSV malformés avant POST n8n
+- Corpus ≥20 fixtures CSV (10 valides, 10 malformés variés) intégré
+  aux tests Phase 6
+
+**Depends on:** Phase 5 (validation `/api/audit` durcie déjà en place,
+on étend le contrat d'erreur).
+
+**Précède:** Phase 8 (deploy prod) — sans cette phase, on ne peut pas
+livrer un audit en autonomie sans support manuel.
+
+---
+
+### Phase 8 · Déploiement production v2
 
 **Status:** 📝 à spec
 **Goal:** Mise en production de la v2 complète (landing + audit
-refondus + Google + RGPD + tests verts).
+refondus + Google + RGPD + robustesse upload + tests verts).
 
 **Scope prévisionnel :**
 - Smoke test sur preview Vercel
@@ -171,7 +220,7 @@ refondus + Google + RGPD + tests verts).
 
 ---
 
-### Phase 8 · Monitoring & Analytics
+### Phase 9 · Monitoring & Analytics
 
 **Status:** 📝 à spec
 **Goal:** Instrumenter le funnel v2 pour mesurer la conversion réelle
@@ -205,7 +254,8 @@ et détecter les régressions.
 | DEP-2.5 | phase 3 (n8n `stats_par_mois[]`) débloque step 04 phase 2 | Non bloquant (fallback 5 steps) |
 | DEP-4.phase2 | phase 4 (Google) dépend du stepped reveal phase 2 | Oui |
 | DEP-6.features | phase 6 (tests) après feature freeze phases 1-4 | Oui |
-| DEP-7.all | phase 7 (deploy) après phases 1-6 vertes | Oui |
+| DEP-7.before-deploy | phase 7 (robustesse upload) précède phase 8 (deploy) — bloque l'autonomie client | Oui |
+| DEP-8.all | phase 8 (deploy) après phases 1-7 vertes | Oui |
 
 ---
 
@@ -215,7 +265,7 @@ et détecter les régressions.
 Phase 1 (Landing)  ──┐
                      ├──→  Phase 4 (Google)  ──┐
 Phase 2 (Audit)   ──┤                          │
-                     │                          ├──→  Phase 6 (Tests) ──→ Phase 7 (Deploy) ──→ Phase 8 (Monitoring)
+                     │                          ├──→  Phase 6 (Tests) ──→ Phase 7 (Robustesse upload) ──→ Phase 8 (Deploy) ──→ Phase 9 (Monitoring)
 Phase 3 (n8n)     ──┘                          │
                                                 │
 Phase 5 (RGPD)    ────────────────────────────┘
@@ -223,4 +273,5 @@ Phase 5 (RGPD)    ────────────────────�
 
 Phases 1-3 peuvent avancer en parallèle ; phase 4 attend phase 2 ;
 phase 5 peut avancer en parallèle ; phase 6 après feature freeze ;
-phases 7-8 séquentiels en fin.
+phase 7 bloque le deploy autonome (résilience upload client) ;
+phases 8-9 séquentiels en fin.

@@ -9,12 +9,13 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 
 ## Current Position
 
-Phase: 05 of 08 — ✅ Validée UAT par utilisateur 2026-04-26
+Phase: 05 of 09 — ✅ Validée UAT par utilisateur 2026-04-26
 Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité)
-Next: Phase 06 — scope à définir avec utilisateur
-Last activity: 2026-04-26 — Phases 4 & 5 validées UAT ; fixes additionnels livrés en cours de validation (Footer copy/padding, RapportPDF U+202F + pagination wrap={false}, n8n system prompt durci, sanitizeRapportTexte garde-fou)
+Next: Phase 06 (tests Vitest + Playwright) puis Phase 07 (Robustesse upload CSV — nouveau, prioritaire avant deploy prod)
+Roadmap mise à jour 2026-04-26 : insertion Phase 07 "Robustesse upload" entre l'ancienne Phase 06 (tests) et l'ancienne Phase 07 (deploy → 08), Phase 08 monitoring → 09. Total 9 phases.
+Last activity: 2026-04-26 — Phases 4 & 5 validées UAT ; fixes additionnels livrés (Footer copy/padding, RapportPDF U+202F + pagination wrap={false}, n8n system prompt durci, sanitizeRapportTexte garde-fou) ; ROADMAP étendue avec nouvelle Phase 07.
 
-Progress: [██████░░░░] 62% (5/8 phases livrées et validées)
+Progress: [█████░░░░░] 56% (5/9 phases livrées et validées)
 
 ## Performance Metrics
 
