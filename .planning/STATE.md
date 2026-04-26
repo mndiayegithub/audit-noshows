@@ -85,6 +85,14 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-26 01:30
-Stopped at: Phase 7 (Robustesse upload CSV) livrée structurellement. 8 plans exécutés en 4 vagues, commit final `0102185`. gsd-verifier rapport `human_needed` : 6/6 REQs PASS structurel, 4 vérifs humaines à dérouler avant deploy (e2e/vitest/smoke réel/smoke dégradé). Tous les artifacts : `lib/audit-thresholds.ts`, `lib/audit-validation.ts` 3-branch, `lib/parseCSVForPreview.ts`, `lib/n8n-normalize.ts:mapN8nErrorToCode + sanitizeRapportTexte`, `lib/mapErrorToCard.ts`, `types/audit-errors.ts`, `hooks/useCSVPreview.ts`, `components/audit/{CSVPreview,DegradedConfirmDialog,CSVErrorCard}.tsx`, `app/audit/page.tsx` full wiring, `app/api/audit/route.ts` error_code+degraded passthrough, `scripts/gen-csv-fixtures.ts`, 12 fixtures CSV + 3 mocks JSON, 3 specs Playwright e2e. PHASE-SUMMARY.md écrit. Build green & lint OK. À faire pour valider : `npm run test:e2e && npm test`, puis upload manuel Doctolib + smoke mode dégradé.
+Last session: 2026-04-26 04:45 GMT+2 (avant /compact + dodo)
+Stopped at: Phase 7 livrée + UAT validée côté Next.js (vitest 78/78 ✅, e2e 3/3 ✅ via filechooser pattern + bumped timeouts, build ✅). 5 bugs trouvés en UAT et corrigés : (a) parseCSVForPreview ne skippait pas la ligne `Export du …` Doctolib → `stripLeadingMetadata()` ; (b) STATUTS_RECONNUS regex étendue (Non honoré, Excusé, Manqué, présent, OK, HONORE/ABSENT) ; (c) audit-validation.ts avait LE MÊME bug → `findHeaderLineIndex()` ajouté ; (d) Playwright `setInputFiles` direct ne déclenchait pas onDrop de react-dropzone → flux filechooser ; (e) playwright.config timeout test 120s + nav 60s pour cold-start Next.js sur WSL. Commits: `46acadd` (parseCSVForPreview + e2e) + `434b84e` (audit-validation server). 10 CSVs de test ajoutés dans `01_Leads_CSV/test_*.csv` (5 propres + 5 altérés).
+
+🚨 **BLOQUANT Phase 8** découvert en smoke prod : workflow n8n `Hc3aGjSuNjd4KVuu` (Audit Flash No-Shows live) renvoie 502 sur Doctolib clean car son nœud "Parse & Validate CSV" a 4 gaps non-alignés avec Phase 7 :
+1. Ne skippe pas la ligne métadonnée Doctolib
+2. Ne reconnaît pas les statuts FR étendus
+3. Ne renvoie pas les 5 error_code typés Phase 7
+4. Ne passthrough pas les champs degraded/reco_rate/ignored_count/sample_ignored
+
+À reprendre demain matin (2026-04-27) AVANT Phase 8 deploy. Reco : option C+B (workaround route.ts pour débloquer Doctolib + nouveau plan 07-09 pour aligner n8n). Outils : MCP n8n (`mcp__n8n-mcp__n8n_get_workflow` / `n8n_update_partial_workflow`). Voir aussi memory `project_phase7_n8n_followup`.
 Resume file: None
