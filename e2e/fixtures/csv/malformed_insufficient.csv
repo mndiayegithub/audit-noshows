@@ -1,0 +1,20 @@
+# source: doctolib
+# expected: reject:INSUFFICIENT_DATA
+# nb_mois: 1 ; taux_no_show: 0.12 ; encoding: utf-8 ; separator: ,
+Export du 12/03/2026
+Date,Heure,Praticien,Patient,Statut
+06/03/2026,11:00,Dr_Martin,Patient_834,Non honoré
+13/03/2026,11:00,Dr_Petit,Patient_973,Honoré
+04/03/2026,16:30,Dr_Dupont,Patient_739,Honoré
+10/03/2026,08:30,Dr_Petit,Patient_434,Honoré
+06/03/2026,08:30,Dr_Dupont,Patient_275,Honoré
+05/03/2026,17:30,Dr_Martin,Patient_217,Honoré
+06/03/2026,14:30,Dr_Bernard,Patient_45,Honoré
+27/03/2026,11:30,Dr_Bernard,Patient_345,Honoré
+27/03/2026,16:00,Dr_Dupont,Patient_83,Honoré
+26/03/2026,18:00,Dr_Martin,Patient_549,Honoré
+02/03/2026,10:30,Dr_Martin,Patient_820,Honoré
+25/03/2026,16:30,Dr_Bernard,Patient_368,Honoré
+30/03/2026,09:30,Dr_Martin,Patient_275,Honoré
+26/03/2026,09:30,Dr_Petit,Patient_976,Honoré
+18/03/2026,17:30,Dr_Dupont,Patient_844,Honoré

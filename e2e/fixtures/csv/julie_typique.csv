@@ -1,0 +1,484 @@
+# source: julie
+# expected: ok
+# nb_mois: 6 ; taux_no_show: 0.13 ; encoding: utf-8 ; separator: ;
+Date du rendez-vous;Heure;Praticien;Statut
+22/03/2026;09:00;Dr_Bernard;Honoré
+25/11/2025;16:30;Dr_Dupont;Honoré
+13/11/2025;14:00;Dr_Petit;Honoré
+08/03/2026;15:30;Dr_Martin;Honoré
+17/11/2025;17:00;Dr_Martin;Honoré
+07/02/2026;15:30;Dr_Petit;Honoré
+20/01/2026;17:00;Dr_Petit;Non honoré
+21/12/2025;08:30;Dr_Martin;Non honoré
+24/01/2026;11:00;Dr_Martin;Honoré
+04/03/2026;18:30;Dr_Dupont;Honoré
+27/10/2025;09:00;Dr_Martin;Honoré
+02/12/2025;15:00;Dr_Martin;Non honoré
+17/02/2026;14:00;Dr_Petit;Honoré
+27/01/2026;11:30;Dr_Dupont;Honoré
+27/12/2025;17:30;Dr_Bernard;Honoré
+16/11/2025;11:00;Dr_Bernard;Honoré
+03/02/2026;15:00;Dr_Dupont;Honoré
+20/02/2026;15:30;Dr_Dupont;Honoré
+24/12/2025;17:30;Dr_Bernard;Honoré
+14/10/2025;08:00;Dr_Dupont;Honoré
+23/11/2025;09:30;Dr_Martin;Honoré
+30/01/2026;15:30;Dr_Dupont;Non honoré
+08/11/2025;15:00;Dr_Petit;Honoré
+02/10/2025;16:30;Dr_Petit;Honoré
+12/02/2026;14:00;Dr_Petit;Honoré
+05/02/2026;16:30;Dr_Dupont;Non honoré
+05/01/2026;18:00;Dr_Martin;Honoré
+13/02/2026;14:00;Dr_Dupont;Honoré
+24/03/2026;18:00;Dr_Dupont;Honoré
+27/03/2026;14:30;Dr_Petit;Honoré
+07/12/2025;17:30;Dr_Martin;Honoré
+01/02/2026;15:00;Dr_Dupont;Honoré
+05/02/2026;15:00;Dr_Martin;Honoré
+08/02/2026;09:30;Dr_Dupont;Honoré
+19/10/2025;16:00;Dr_Dupont;Honoré
+06/10/2025;17:30;Dr_Bernard;Honoré
+02/02/2026;11:00;Dr_Bernard;Non honoré
+26/11/2025;17:00;Dr_Bernard;Honoré
+29/12/2025;14:00;Dr_Bernard;Non honoré
+12/01/2026;15:30;Dr_Bernard;Honoré
+20/11/2025;11:00;Dr_Dupont;Honoré
+14/12/2025;18:00;Dr_Martin;Honoré
+14/03/2026;08:00;Dr_Martin;Honoré
+21/02/2026;10:30;Dr_Martin;Honoré
+20/01/2026;14:00;Dr_Bernard;Non honoré
+12/01/2026;09:30;Dr_Bernard;Honoré
+17/03/2026;18:00;Dr_Dupont;Honoré
+03/01/2026;08:00;Dr_Petit;Honoré
+08/11/2025;08:30;Dr_Bernard;Non honoré
+31/12/2025;14:30;Dr_Bernard;Honoré
+20/10/2025;08:30;Dr_Bernard;Non honoré
+18/11/2025;14:30;Dr_Bernard;Honoré
+10/03/2026;18:00;Dr_Petit;Honoré
+21/03/2026;16:00;Dr_Petit;Honoré
+27/11/2025;14:00;Dr_Dupont;Honoré
+06/12/2025;14:30;Dr_Petit;Honoré
+08/12/2025;16:30;Dr_Dupont;Honoré
+04/02/2026;16:00;Dr_Petit;Honoré
+23/11/2025;17:30;Dr_Petit;Honoré
+23/03/2026;09:00;Dr_Dupont;Honoré
+21/03/2026;10:30;Dr_Martin;Honoré
+25/12/2025;17:00;Dr_Bernard;Non honoré
+03/03/2026;16:30;Dr_Petit;Honoré
+24/01/2026;17:00;Dr_Dupont;Honoré
+16/02/2026;18:00;Dr_Petit;Honoré
+16/11/2025;14:00;Dr_Dupont;Honoré
+03/11/2025;15:30;Dr_Dupont;Honoré
+02/03/2026;15:30;Dr_Bernard;Honoré
+28/01/2026;11:30;Dr_Dupont;Honoré
+02/03/2026;16:30;Dr_Martin;Non honoré
+20/03/2026;16:30;Dr_Bernard;Honoré
+06/03/2026;16:00;Dr_Martin;Honoré
+22/02/2026;14:00;Dr_Martin;Non honoré
+30/01/2026;18:30;Dr_Bernard;Honoré
+23/10/2025;15:00;Dr_Petit;Honoré
+21/10/2025;17:00;Dr_Petit;Honoré
+27/10/2025;09:00;Dr_Petit;Honoré
+11/10/2025;08:00;Dr_Martin;Honoré
+16/03/2026;08:30;Dr_Petit;Honoré
+02/01/2026;16:00;Dr_Dupont;Non honoré
+14/11/2025;16:00;Dr_Martin;Honoré
+15/02/2026;10:00;Dr_Martin;Honoré
+18/02/2026;17:00;Dr_Martin;Honoré
+27/01/2026;15:30;Dr_Martin;Honoré
+27/02/2026;15:00;Dr_Petit;Honoré
+12/11/2025;14:00;Dr_Petit;Honoré
+03/12/2025;08:00;Dr_Petit;Honoré
+23/03/2026;10:30;Dr_Bernard;Honoré
+03/10/2025;09:00;Dr_Dupont;Honoré
+31/12/2025;08:30;Dr_Martin;Honoré
+17/03/2026;18:00;Dr_Petit;Honoré
+23/02/2026;16:30;Dr_Martin;Honoré
+04/01/2026;15:00;Dr_Bernard;Honoré
+17/12/2025;17:00;Dr_Dupont;Honoré
+03/02/2026;09:00;Dr_Dupont;Honoré
+25/12/2025;16:00;Dr_Dupont;Honoré
+23/03/2026;08:30;Dr_Dupont;Non honoré
+04/12/2025;16:00;Dr_Dupont;Honoré
+17/02/2026;14:30;Dr_Bernard;Honoré
+29/01/2026;14:30;Dr_Martin;Honoré
+04/11/2025;16:00;Dr_Martin;Honoré
+10/11/2025;16:00;Dr_Petit;Honoré
+10/12/2025;14:00;Dr_Petit;Non honoré
+22/03/2026;14:00;Dr_Martin;Honoré
+02/03/2026;08:00;Dr_Petit;Non honoré
+23/01/2026;15:30;Dr_Martin;Honoré
+26/12/2025;11:00;Dr_Martin;Honoré
+03/02/2026;17:00;Dr_Bernard;Honoré
+10/11/2025;11:30;Dr_Dupont;Honoré
+04/01/2026;08:00;Dr_Bernard;Honoré
+20/10/2025;15:00;Dr_Bernard;Honoré
+17/11/2025;09:00;Dr_Martin;Honoré
+26/12/2025;10:00;Dr_Bernard;Honoré
+18/11/2025;14:30;Dr_Dupont;Honoré
+08/10/2025;08:00;Dr_Martin;Honoré
+20/10/2025;08:30;Dr_Petit;Honoré
+27/02/2026;09:30;Dr_Dupont;Honoré
+21/11/2025;17:00;Dr_Petit;Honoré
+20/10/2025;10:00;Dr_Petit;Honoré
+17/02/2026;15:00;Dr_Martin;Honoré
+25/12/2025;14:00;Dr_Petit;Honoré
+31/10/2025;16:00;Dr_Petit;Non honoré
+20/01/2026;11:30;Dr_Dupont;Honoré
+07/12/2025;16:30;Dr_Petit;Honoré
+26/10/2025;17:30;Dr_Petit;Honoré
+08/01/2026;18:30;Dr_Dupont;Non honoré
+09/01/2026;15:30;Dr_Dupont;Honoré
+20/03/2026;11:00;Dr_Martin;Non honoré
+06/01/2026;17:30;Dr_Martin;Honoré
+12/12/2025;15:30;Dr_Martin;Honoré
+06/03/2026;15:00;Dr_Bernard;Honoré
+06/12/2025;15:00;Dr_Martin;Honoré
+10/11/2025;15:00;Dr_Martin;Honoré
+26/11/2025;10:30;Dr_Martin;Honoré
+19/02/2026;17:30;Dr_Dupont;Honoré
+20/02/2026;09:30;Dr_Dupont;Non honoré
+03/01/2026;09:30;Dr_Bernard;Honoré
+09/11/2025;17:30;Dr_Petit;Honoré
+06/12/2025;09:30;Dr_Martin;Honoré
+16/01/2026;11:30;Dr_Dupont;Honoré
+08/12/2025;10:00;Dr_Petit;Honoré
+06/01/2026;15:30;Dr_Dupont;Honoré
+05/12/2025;10:00;Dr_Martin;Honoré
+01/12/2025;08:30;Dr_Martin;Honoré
+03/02/2026;16:30;Dr_Martin;Honoré
+26/02/2026;11:30;Dr_Bernard;Honoré
+14/11/2025;17:30;Dr_Martin;Honoré
+05/03/2026;15:00;Dr_Dupont;Honoré
+25/02/2026;11:30;Dr_Martin;Honoré
+01/10/2025;16:30;Dr_Petit;Honoré
+05/10/2025;18:30;Dr_Martin;Honoré
+16/03/2026;11:00;Dr_Bernard;Honoré
+30/01/2026;14:00;Dr_Dupont;Non honoré
+03/03/2026;16:00;Dr_Dupont;Honoré
+11/02/2026;09:00;Dr_Dupont;Honoré
+25/10/2025;11:00;Dr_Dupont;Honoré
+13/12/2025;18:00;Dr_Martin;Honoré
+04/02/2026;17:30;Dr_Petit;Honoré
+25/02/2026;08:30;Dr_Petit;Honoré
+20/03/2026;17:00;Dr_Dupont;Honoré
+01/01/2026;11:00;Dr_Bernard;Honoré
+25/03/2026;09:30;Dr_Bernard;Honoré
+13/01/2026;10:00;Dr_Martin;Honoré
+08/10/2025;14:30;Dr_Bernard;Honoré
+24/02/2026;15:00;Dr_Martin;Honoré
+25/11/2025;11:00;Dr_Petit;Honoré
+20/12/2025;14:00;Dr_Petit;Honoré
+01/12/2025;11:00;Dr_Bernard;Honoré
+12/12/2025;08:30;Dr_Bernard;Honoré
+26/02/2026;11:30;Dr_Dupont;Non honoré
+20/03/2026;08:30;Dr_Dupont;Honoré
+10/01/2026;10:30;Dr_Petit;Honoré
+18/02/2026;09:30;Dr_Petit;Honoré
+27/11/2025;09:00;Dr_Dupont;Honoré
+18/01/2026;09:00;Dr_Bernard;Honoré
+07/01/2026;18:00;Dr_Dupont;Honoré
+20/12/2025;11:00;Dr_Bernard;Honoré
+02/02/2026;18:30;Dr_Martin;Honoré
+08/10/2025;11:30;Dr_Dupont;Honoré
+17/01/2026;17:30;Dr_Martin;Non honoré
+13/10/2025;14:30;Dr_Martin;Honoré
+14/12/2025;15:00;Dr_Bernard;Non honoré
+10/02/2026;08:30;Dr_Petit;Honoré
+22/10/2025;11:00;Dr_Bernard;Honoré
+20/12/2025;08:30;Dr_Bernard;Honoré
+10/10/2025;11:30;Dr_Petit;Honoré
+16/03/2026;15:30;Dr_Martin;Honoré
+22/12/2025;15:00;Dr_Bernard;Non honoré
+11/02/2026;08:30;Dr_Bernard;Honoré
+16/02/2026;15:00;Dr_Bernard;Honoré
+21/03/2026;09:00;Dr_Dupont;Honoré
+01/03/2026;10:30;Dr_Dupont;Honoré
+23/03/2026;11:30;Dr_Dupont;Honoré
+23/12/2025;10:30;Dr_Dupont;Honoré
+07/12/2025;11:00;Dr_Martin;Honoré
+15/11/2025;16:00;Dr_Petit;Honoré
+12/01/2026;16:30;Dr_Martin;Non honoré
+17/12/2025;16:30;Dr_Bernard;Honoré
+30/01/2026;15:00;Dr_Bernard;Honoré
+15/12/2025;11:00;Dr_Bernard;Honoré
+13/11/2025;08:30;Dr_Martin;Non honoré
+21/12/2025;15:00;Dr_Dupont;Non honoré
+25/10/2025;16:00;Dr_Petit;Honoré
+07/10/2025;17:30;Dr_Bernard;Non honoré
+18/12/2025;11:00;Dr_Martin;Honoré
+07/12/2025;14:30;Dr_Martin;Honoré
+03/12/2025;16:30;Dr_Petit;Honoré
+21/12/2025;14:00;Dr_Dupont;Honoré
+17/10/2025;18:30;Dr_Martin;Honoré
+29/12/2025;09:00;Dr_Petit;Non honoré
+15/01/2026;14:00;Dr_Dupont;Honoré
+12/11/2025;18:30;Dr_Bernard;Honoré
+21/11/2025;10:00;Dr_Bernard;Honoré
+28/03/2026;08:30;Dr_Dupont;Honoré
+22/12/2025;09:00;Dr_Bernard;Honoré
+24/12/2025;10:30;Dr_Dupont;Honoré
+05/11/2025;17:00;Dr_Dupont;Honoré
+29/03/2026;14:30;Dr_Dupont;Honoré
+04/03/2026;18:30;Dr_Bernard;Honoré
+24/11/2025;11:30;Dr_Martin;Non honoré
+14/12/2025;15:30;Dr_Petit;Honoré
+10/02/2026;14:00;Dr_Petit;Honoré
+31/01/2026;14:30;Dr_Bernard;Honoré
+10/10/2025;11:00;Dr_Petit;Honoré
+09/02/2026;10:30;Dr_Dupont;Honoré
+29/10/2025;17:30;Dr_Petit;Honoré
+31/12/2025;14:00;Dr_Dupont;Honoré
+09/03/2026;10:00;Dr_Bernard;Honoré
+26/11/2025;18:00;Dr_Dupont;Honoré
+25/02/2026;09:30;Dr_Martin;Honoré
+25/03/2026;16:30;Dr_Petit;Honoré
+22/10/2025;08:00;Dr_Petit;Honoré
+25/02/2026;08:00;Dr_Petit;Honoré
+02/02/2026;15:00;Dr_Petit;Honoré
+11/10/2025;11:00;Dr_Bernard;Honoré
+02/02/2026;08:30;Dr_Petit;Honoré
+28/03/2026;15:30;Dr_Bernard;Honoré
+26/11/2025;16:30;Dr_Martin;Honoré
+24/02/2026;11:30;Dr_Dupont;Honoré
+08/03/2026;10:00;Dr_Bernard;Honoré
+03/03/2026;18:30;Dr_Petit;Honoré
+27/10/2025;10:30;Dr_Bernard;Honoré
+17/10/2025;14:00;Dr_Bernard;Honoré
+12/12/2025;15:00;Dr_Bernard;Honoré
+14/02/2026;09:30;Dr_Dupont;Honoré
+17/10/2025;15:00;Dr_Dupont;Honoré
+29/01/2026;16:30;Dr_Petit;Honoré
+02/11/2025;15:30;Dr_Petit;Honoré
+27/10/2025;09:30;Dr_Bernard;Honoré
+31/12/2025;08:30;Dr_Dupont;Honoré
+22/10/2025;14:30;Dr_Dupont;Honoré
+29/12/2025;10:00;Dr_Dupont;Honoré
+11/01/2026;16:30;Dr_Bernard;Honoré
+07/02/2026;16:00;Dr_Petit;Honoré
+06/12/2025;10:30;Dr_Petit;Honoré
+09/10/2025;11:30;Dr_Petit;Honoré
+04/02/2026;10:30;Dr_Dupont;Honoré
+25/01/2026;18:00;Dr_Martin;Honoré
+01/11/2025;11:30;Dr_Martin;Honoré
+13/03/2026;17:30;Dr_Martin;Honoré
+05/02/2026;09:30;Dr_Martin;Honoré
+18/12/2025;08:30;Dr_Bernard;Honoré
+08/01/2026;17:30;Dr_Petit;Honoré
+06/01/2026;17:30;Dr_Dupont;Honoré
+22/10/2025;15:30;Dr_Bernard;Honoré
+07/10/2025;08:00;Dr_Petit;Non honoré
+05/10/2025;15:00;Dr_Bernard;Non honoré
+02/03/2026;18:00;Dr_Bernard;Honoré
+09/02/2026;16:30;Dr_Dupont;Honoré
+28/12/2025;10:00;Dr_Dupont;Non honoré
+17/01/2026;08:30;Dr_Bernard;Honoré
+28/12/2025;18:00;Dr_Petit;Honoré
+19/01/2026;16:00;Dr_Bernard;Honoré
+01/10/2025;15:30;Dr_Petit;Honoré
+05/11/2025;18:30;Dr_Bernard;Honoré
+22/10/2025;18:30;Dr_Martin;Non honoré
+23/03/2026;17:30;Dr_Bernard;Non honoré
+10/10/2025;17:30;Dr_Bernard;Honoré
+03/01/2026;10:30;Dr_Bernard;Honoré
+18/12/2025;18:00;Dr_Petit;Honoré
+01/02/2026;15:00;Dr_Dupont;Honoré
+09/12/2025;18:30;Dr_Martin;Honoré
+09/02/2026;17:00;Dr_Martin;Honoré
+18/01/2026;08:00;Dr_Martin;Honoré
+05/01/2026;14:00;Dr_Bernard;Honoré
+02/12/2025;18:00;Dr_Petit;Honoré
+06/11/2025;09:30;Dr_Dupont;Non honoré
+30/12/2025;16:00;Dr_Bernard;Honoré
+09/01/2026;14:00;Dr_Bernard;Honoré
+29/10/2025;16:00;Dr_Dupont;Honoré
+01/11/2025;15:30;Dr_Petit;Honoré
+29/10/2025;15:30;Dr_Dupont;Honoré
+18/11/2025;08:30;Dr_Martin;Honoré
+29/01/2026;18:00;Dr_Martin;Honoré
+26/11/2025;16:00;Dr_Dupont;Honoré
+27/11/2025;09:00;Dr_Bernard;Honoré
+02/03/2026;10:00;Dr_Petit;Honoré
+27/03/2026;10:30;Dr_Bernard;Honoré
+28/02/2026;09:00;Dr_Bernard;Honoré
+21/12/2025;08:30;Dr_Martin;Honoré
+05/10/2025;09:00;Dr_Martin;Honoré
+27/03/2026;15:30;Dr_Martin;Honoré
+27/11/2025;14:00;Dr_Bernard;Honoré
+06/10/2025;18:00;Dr_Petit;Honoré
+10/11/2025;15:00;Dr_Dupont;Honoré
+26/01/2026;18:00;Dr_Bernard;Non honoré
+27/03/2026;08:30;Dr_Dupont;Honoré
+03/12/2025;11:00;Dr_Petit;Honoré
+25/12/2025;08:00;Dr_Dupont;Honoré
+03/02/2026;09:30;Dr_Martin;Honoré
+11/02/2026;08:30;Dr_Petit;Honoré
+03/03/2026;09:00;Dr_Martin;Non honoré
+24/10/2025;11:00;Dr_Petit;Honoré
+18/02/2026;18:30;Dr_Dupont;Honoré
+28/01/2026;15:00;Dr_Dupont;Non honoré
+26/11/2025;14:30;Dr_Dupont;Honoré
+26/12/2025;15:30;Dr_Dupont;Honoré
+06/01/2026;08:30;Dr_Bernard;Honoré
+15/01/2026;09:00;Dr_Martin;Honoré
+18/10/2025;09:30;Dr_Bernard;Honoré
+12/01/2026;14:00;Dr_Dupont;Non honoré
+28/10/2025;16:30;Dr_Dupont;Honoré
+11/12/2025;18:30;Dr_Martin;Non honoré
+08/01/2026;08:30;Dr_Petit;Honoré
+22/01/2026;10:30;Dr_Dupont;Honoré
+28/12/2025;17:30;Dr_Martin;Honoré
+26/12/2025;16:30;Dr_Petit;Honoré
+12/02/2026;11:00;Dr_Bernard;Honoré
+08/12/2025;09:00;Dr_Dupont;Honoré
+10/01/2026;17:30;Dr_Petit;Honoré
+08/02/2026;17:30;Dr_Martin;Non honoré
+08/01/2026;16:00;Dr_Martin;Honoré
+20/01/2026;10:00;Dr_Petit;Non honoré
+31/10/2025;09:00;Dr_Martin;Honoré
+28/11/2025;09:30;Dr_Dupont;Honoré
+08/11/2025;15:00;Dr_Martin;Honoré
+19/10/2025;09:00;Dr_Petit;Non honoré
+16/02/2026;16:00;Dr_Petit;Honoré
+26/12/2025;14:30;Dr_Bernard;Non honoré
+06/11/2025;14:30;Dr_Petit;Honoré
+04/02/2026;10:00;Dr_Martin;Honoré
+16/11/2025;18:30;Dr_Petit;Honoré
+12/01/2026;11:30;Dr_Petit;Non honoré
+03/03/2026;18:30;Dr_Petit;Honoré
+04/11/2025;09:30;Dr_Martin;Honoré
+02/12/2025;15:30;Dr_Dupont;Honoré
+25/10/2025;17:00;Dr_Petit;Non honoré
+29/12/2025;09:30;Dr_Bernard;Honoré
+28/03/2026;08:00;Dr_Petit;Honoré
+09/11/2025;08:00;Dr_Petit;Honoré
+16/01/2026;08:00;Dr_Petit;Honoré
+05/10/2025;10:00;Dr_Petit;Honoré
+12/10/2025;18:00;Dr_Martin;Honoré
+10/10/2025;16:30;Dr_Petit;Honoré
+09/11/2025;18:30;Dr_Bernard;Non honoré
+04/02/2026;11:30;Dr_Martin;Honoré
+22/11/2025;17:00;Dr_Bernard;Honoré
+22/02/2026;18:00;Dr_Bernard;Honoré
+05/11/2025;16:30;Dr_Martin;Honoré
+14/10/2025;15:30;Dr_Dupont;Honoré
+16/10/2025;17:00;Dr_Bernard;Honoré
+19/10/2025;15:00;Dr_Martin;Non honoré
+29/10/2025;14:30;Dr_Dupont;Honoré
+11/03/2026;16:00;Dr_Bernard;Honoré
+12/10/2025;18:00;Dr_Petit;Honoré
+13/11/2025;14:30;Dr_Martin;Honoré
+22/03/2026;18:00;Dr_Dupont;Honoré
+13/12/2025;14:30;Dr_Martin;Honoré
+01/10/2025;14:00;Dr_Bernard;Non honoré
+28/11/2025;11:00;Dr_Bernard;Honoré
+02/02/2026;18:00;Dr_Petit;Honoré
+25/12/2025;08:30;Dr_Martin;Honoré
+10/12/2025;14:00;Dr_Martin;Honoré
+19/10/2025;18:30;Dr_Bernard;Honoré
+05/02/2026;18:00;Dr_Martin;Non honoré
+01/01/2026;08:00;Dr_Dupont;Non honoré
+22/03/2026;09:00;Dr_Dupont;Honoré
+31/01/2026;09:00;Dr_Petit;Honoré
+23/02/2026;17:30;Dr_Martin;Honoré
+06/01/2026;08:30;Dr_Bernard;Honoré
+20/01/2026;09:30;Dr_Martin;Honoré
+22/12/2025;18:30;Dr_Dupont;Honoré
+21/12/2025;17:00;Dr_Dupont;Non honoré
+12/03/2026;14:30;Dr_Bernard;Honoré
+09/03/2026;10:00;Dr_Martin;Non honoré
+30/01/2026;11:00;Dr_Dupont;Honoré
+10/11/2025;08:00;Dr_Petit;Honoré
+13/03/2026;14:00;Dr_Dupont;Honoré
+19/02/2026;08:30;Dr_Martin;Honoré
+26/11/2025;15:00;Dr_Petit;Honoré
+30/10/2025;16:30;Dr_Dupont;Honoré
+14/01/2026;18:00;Dr_Martin;Honoré
+03/01/2026;10:00;Dr_Dupont;Honoré
+24/03/2026;10:30;Dr_Bernard;Honoré
+18/12/2025;16:30;Dr_Petit;Honoré
+18/10/2025;14:00;Dr_Martin;Honoré
+15/10/2025;09:00;Dr_Martin;Honoré
+18/11/2025;17:30;Dr_Bernard;Honoré
+17/11/2025;15:00;Dr_Petit;Honoré
+21/10/2025;18:30;Dr_Petit;Honoré
+05/01/2026;11:30;Dr_Petit;Honoré
+06/12/2025;09:00;Dr_Martin;Honoré
+28/11/2025;16:30;Dr_Dupont;Non honoré
+19/12/2025;08:00;Dr_Bernard;Honoré
+24/12/2025;11:00;Dr_Bernard;Honoré
+27/02/2026;17:00;Dr_Martin;Honoré
+21/10/2025;11:00;Dr_Martin;Honoré
+12/01/2026;17:30;Dr_Bernard;Honoré
+25/02/2026;15:00;Dr_Martin;Honoré
+20/10/2025;15:00;Dr_Martin;Honoré
+19/11/2025;09:30;Dr_Petit;Honoré
+25/10/2025;15:00;Dr_Petit;Non honoré
+28/11/2025;10:30;Dr_Martin;Honoré
+15/02/2026;11:30;Dr_Bernard;Honoré
+23/03/2026;08:00;Dr_Dupont;Honoré
+22/12/2025;16:30;Dr_Bernard;Honoré
+16/01/2026;08:00;Dr_Petit;Honoré
+26/01/2026;15:00;Dr_Bernard;Honoré
+26/10/2025;11:30;Dr_Bernard;Honoré
+16/02/2026;09:30;Dr_Dupont;Honoré
+30/12/2025;15:30;Dr_Bernard;Honoré
+10/03/2026;11:00;Dr_Dupont;Honoré
+04/03/2026;08:00;Dr_Martin;Honoré
+31/10/2025;18:30;Dr_Martin;Honoré
+18/12/2025;18:00;Dr_Martin;Honoré
+06/11/2025;17:30;Dr_Martin;Honoré
+18/11/2025;18:30;Dr_Martin;Honoré
+09/01/2026;16:30;Dr_Dupont;Honoré
+10/02/2026;17:00;Dr_Martin;Honoré
+20/03/2026;11:30;Dr_Petit;Honoré
+27/03/2026;11:00;Dr_Dupont;Non honoré
+27/02/2026;14:30;Dr_Petit;Honoré
+02/10/2025;08:00;Dr_Martin;Honoré
+19/03/2026;08:30;Dr_Martin;Honoré
+15/02/2026;09:30;Dr_Bernard;Honoré
+26/10/2025;09:00;Dr_Martin;Non honoré
+26/03/2026;14:00;Dr_Bernard;Honoré
+07/11/2025;11:30;Dr_Dupont;Non honoré
+25/02/2026;14:00;Dr_Petit;Honoré
+09/03/2026;16:00;Dr_Petit;Honoré
+11/12/2025;17:00;Dr_Dupont;Honoré
+05/02/2026;11:30;Dr_Petit;Honoré
+23/12/2025;17:30;Dr_Dupont;Honoré
+04/02/2026;17:30;Dr_Petit;Honoré
+14/01/2026;18:00;Dr_Martin;Honoré
+19/02/2026;11:00;Dr_Petit;Honoré
+13/01/2026;08:30;Dr_Petit;Honoré
+26/03/2026;16:30;Dr_Dupont;Honoré
+01/01/2026;17:30;Dr_Petit;Honoré
+11/12/2025;16:00;Dr_Dupont;Non honoré
+24/10/2025;09:00;Dr_Petit;Honoré
+16/02/2026;18:30;Dr_Martin;Honoré
+14/11/2025;18:30;Dr_Martin;Honoré
+12/02/2026;08:30;Dr_Bernard;Honoré
+16/02/2026;15:30;Dr_Martin;Honoré
+09/02/2026;09:00;Dr_Bernard;Honoré
+15/11/2025;17:30;Dr_Bernard;Honoré
+12/02/2026;09:00;Dr_Bernard;Honoré
+23/01/2026;17:00;Dr_Martin;Honoré
+02/10/2025;18:00;Dr_Dupont;Non honoré
+06/10/2025;15:00;Dr_Petit;Honoré
+25/12/2025;10:00;Dr_Bernard;Honoré
+06/02/2026;10:30;Dr_Petit;Honoré
+21/12/2025;09:30;Dr_Petit;Honoré
+18/01/2026;09:30;Dr_Dupont;Non honoré
+02/03/2026;08:00;Dr_Petit;Non honoré
+11/10/2025;10:00;Dr_Petit;Honoré
+28/02/2026;16:00;Dr_Dupont;Honoré
+07/03/2026;15:30;Dr_Petit;Honoré
+31/01/2026;10:30;Dr_Martin;Honoré
+31/12/2025;17:30;Dr_Dupont;Non honoré
+23/03/2026;18:30;Dr_Dupont;Non honoré
+20/10/2025;17:00;Dr_Petit;Honoré
+08/12/2025;09:30;Dr_Martin;Honoré
+18/10/2025;15:00;Dr_Martin;Honoré
+29/11/2025;18:30;Dr_Dupont;Honoré
+28/01/2026;14:00;Dr_Dupont;Honoré
+05/03/2026;08:30;Dr_Petit;Honoré
+18/11/2025;14:30;Dr_Dupont;Honoré
+25/11/2025;16:00;Dr_Petit;Non honoré

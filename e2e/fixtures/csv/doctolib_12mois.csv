@@ -1,0 +1,965 @@
+# source: doctolib
+# expected: ok
+# nb_mois: 12 ; taux_no_show: 0.1 ; encoding: utf-8 ; separator: ,
+Export du 12/03/2026
+Date,Heure,Praticien,Patient,Statut
+26/07/2025,17:00,Dr_Dupont,Patient_228,Honoré
+14/06/2025,17:30,Dr_Dupont,Patient_499,Honoré
+05/09/2025,14:00,Dr_Dupont,Patient_581,Honoré
+06/10/2025,15:00,Dr_Petit,Patient_87,Honoré
+07/09/2025,18:00,Dr_Dupont,Patient_918,Honoré
+23/08/2025,14:30,Dr_Martin,Patient_543,Honoré
+01/05/2025,11:30,Dr_Bernard,Patient_720,Honoré
+24/06/2025,09:30,Dr_Dupont,Patient_449,Honoré
+16/05/2025,10:30,Dr_Dupont,Patient_617,Honoré
+23/09/2025,09:00,Dr_Martin,Patient_357,Honoré
+22/12/2025,08:00,Dr_Dupont,Patient_923,Honoré
+15/01/2026,16:30,Dr_Martin,Patient_969,Honoré
+02/06/2025,11:00,Dr_Bernard,Patient_288,Honoré
+27/06/2025,17:30,Dr_Petit,Patient_222,Honoré
+11/08/2025,18:30,Dr_Petit,Patient_755,Honoré
+24/07/2025,14:30,Dr_Bernard,Patient_616,Non honoré
+06/01/2026,09:30,Dr_Martin,Patient_813,Honoré
+25/06/2025,08:00,Dr_Martin,Patient_726,Honoré
+18/12/2025,17:00,Dr_Martin,Patient_81,Honoré
+27/09/2025,18:30,Dr_Dupont,Patient_628,Honoré
+16/08/2025,10:00,Dr_Petit,Patient_457,Honoré
+20/03/2026,16:30,Dr_Dupont,Patient_886,Honoré
+22/03/2026,17:30,Dr_Martin,Patient_401,Honoré
+17/02/2026,08:30,Dr_Petit,Patient_687,Non honoré
+11/07/2025,18:30,Dr_Petit,Patient_453,Honoré
+01/05/2025,16:00,Dr_Dupont,Patient_721,Honoré
+13/01/2026,15:00,Dr_Petit,Patient_781,Honoré
+13/06/2025,16:30,Dr_Petit,Patient_761,Honoré
+07/09/2025,18:30,Dr_Dupont,Patient_179,Honoré
+22/04/2025,10:00,Dr_Dupont,Patient_12,Honoré
+23/04/2025,16:00,Dr_Dupont,Patient_527,Honoré
+18/07/2025,09:30,Dr_Petit,Patient_824,Honoré
+21/01/2026,08:00,Dr_Petit,Patient_859,Honoré
+10/01/2026,09:00,Dr_Bernard,Patient_492,Honoré
+02/06/2025,11:00,Dr_Bernard,Patient_226,Honoré
+08/03/2026,18:30,Dr_Martin,Patient_356,Honoré
+24/10/2025,18:00,Dr_Petit,Patient_401,Honoré
+19/02/2026,09:00,Dr_Bernard,Patient_915,Honoré
+14/03/2026,16:30,Dr_Bernard,Patient_642,Honoré
+12/12/2025,11:30,Dr_Dupont,Patient_697,Honoré
+28/09/2025,11:30,Dr_Martin,Patient_234,Honoré
+21/01/2026,10:30,Dr_Dupont,Patient_565,Honoré
+14/04/2025,16:30,Dr_Dupont,Patient_961,Honoré
+05/08/2025,14:00,Dr_Martin,Patient_539,Honoré
+24/08/2025,18:30,Dr_Bernard,Patient_531,Honoré
+09/05/2025,11:30,Dr_Dupont,Patient_595,Honoré
+23/08/2025,17:30,Dr_Martin,Patient_379,Honoré
+23/06/2025,11:30,Dr_Petit,Patient_41,Honoré
+17/04/2025,17:00,Dr_Dupont,Patient_436,Honoré
+05/08/2025,10:30,Dr_Martin,Patient_501,Honoré
+04/08/2025,15:00,Dr_Petit,Patient_638,Honoré
+26/03/2026,11:00,Dr_Bernard,Patient_144,Non honoré
+24/04/2025,09:30,Dr_Petit,Patient_862,Honoré
+18/07/2025,16:30,Dr_Dupont,Patient_489,Honoré
+11/04/2025,08:00,Dr_Dupont,Patient_867,Honoré
+08/01/2026,08:30,Dr_Bernard,Patient_43,Honoré
+16/07/2025,10:00,Dr_Dupont,Patient_201,Non honoré
+27/08/2025,08:00,Dr_Dupont,Patient_926,Honoré
+15/12/2025,16:00,Dr_Dupont,Patient_299,Honoré
+04/11/2025,17:00,Dr_Bernard,Patient_324,Honoré
+25/11/2025,15:00,Dr_Petit,Patient_433,Honoré
+29/07/2025,08:30,Dr_Dupont,Patient_949,Honoré
+01/07/2025,14:00,Dr_Dupont,Patient_517,Honoré
+07/03/2026,08:30,Dr_Bernard,Patient_939,Honoré
+20/03/2026,14:30,Dr_Bernard,Patient_16,Honoré
+05/12/2025,09:30,Dr_Martin,Patient_111,Honoré
+03/03/2026,14:30,Dr_Martin,Patient_235,Honoré
+27/06/2025,18:00,Dr_Martin,Patient_813,Honoré
+31/07/2025,09:30,Dr_Martin,Patient_75,Honoré
+02/10/2025,18:00,Dr_Dupont,Patient_751,Honoré
+09/07/2025,14:30,Dr_Bernard,Patient_887,Non honoré
+18/03/2026,15:00,Dr_Petit,Patient_02,Honoré
+09/04/2025,17:00,Dr_Petit,Patient_719,Non honoré
+29/08/2025,17:00,Dr_Bernard,Patient_368,Honoré
+19/06/2025,08:30,Dr_Bernard,Patient_346,Honoré
+22/03/2026,08:30,Dr_Petit,Patient_987,Honoré
+24/02/2026,16:30,Dr_Dupont,Patient_433,Honoré
+25/10/2025,11:00,Dr_Dupont,Patient_80,Honoré
+04/01/2026,08:30,Dr_Bernard,Patient_286,Non honoré
+14/06/2025,09:00,Dr_Petit,Patient_96,Honoré
+18/06/2025,16:00,Dr_Martin,Patient_236,Honoré
+15/05/2025,18:30,Dr_Bernard,Patient_66,Honoré
+31/05/2025,09:00,Dr_Bernard,Patient_690,Honoré
+09/08/2025,10:00,Dr_Martin,Patient_583,Non honoré
+14/07/2025,10:30,Dr_Bernard,Patient_513,Honoré
+02/03/2026,16:30,Dr_Bernard,Patient_868,Honoré
+02/12/2025,10:00,Dr_Petit,Patient_897,Honoré
+04/02/2026,18:30,Dr_Martin,Patient_260,Honoré
+07/02/2026,17:00,Dr_Petit,Patient_670,Honoré
+25/05/2025,18:30,Dr_Bernard,Patient_971,Honoré
+12/07/2025,16:30,Dr_Martin,Patient_900,Honoré
+23/11/2025,16:00,Dr_Dupont,Patient_670,Honoré
+01/12/2025,09:30,Dr_Dupont,Patient_950,Honoré
+31/01/2026,18:30,Dr_Bernard,Patient_992,Honoré
+07/11/2025,14:00,Dr_Petit,Patient_932,Honoré
+12/07/2025,08:00,Dr_Martin,Patient_162,Honoré
+27/04/2025,10:00,Dr_Petit,Patient_122,Honoré
+16/03/2026,17:00,Dr_Bernard,Patient_164,Honoré
+08/10/2025,10:30,Dr_Bernard,Patient_571,Non honoré
+13/03/2026,09:30,Dr_Petit,Patient_432,Honoré
+18/11/2025,14:00,Dr_Dupont,Patient_241,Honoré
+05/12/2025,18:30,Dr_Martin,Patient_602,Non honoré
+01/06/2025,15:00,Dr_Martin,Patient_711,Honoré
+03/09/2025,10:30,Dr_Dupont,Patient_459,Honoré
+23/01/2026,18:00,Dr_Petit,Patient_164,Honoré
+18/02/2026,09:30,Dr_Dupont,Patient_27,Honoré
+20/04/2025,18:30,Dr_Dupont,Patient_155,Honoré
+09/06/2025,17:00,Dr_Martin,Patient_378,Honoré
+26/11/2025,15:00,Dr_Martin,Patient_71,Honoré
+02/08/2025,14:00,Dr_Martin,Patient_450,Honoré
+01/03/2026,15:30,Dr_Dupont,Patient_328,Honoré
+16/03/2026,17:00,Dr_Dupont,Patient_763,Honoré
+19/06/2025,08:30,Dr_Dupont,Patient_198,Honoré
+07/04/2025,14:30,Dr_Dupont,Patient_817,Honoré
+26/01/2026,14:00,Dr_Bernard,Patient_134,Honoré
+22/11/2025,14:00,Dr_Petit,Patient_102,Honoré
+29/04/2025,16:00,Dr_Martin,Patient_596,Honoré
+19/06/2025,10:30,Dr_Petit,Patient_921,Honoré
+30/09/2025,15:00,Dr_Bernard,Patient_229,Honoré
+04/02/2026,10:00,Dr_Petit,Patient_836,Non honoré
+12/03/2026,15:00,Dr_Martin,Patient_942,Honoré
+30/07/2025,08:00,Dr_Martin,Patient_95,Honoré
+31/12/2025,11:00,Dr_Dupont,Patient_407,Honoré
+12/02/2026,18:00,Dr_Bernard,Patient_499,Honoré
+13/04/2025,09:30,Dr_Dupont,Patient_725,Honoré
+08/05/2025,09:30,Dr_Bernard,Patient_514,Non honoré
+07/12/2025,14:00,Dr_Martin,Patient_496,Non honoré
+22/04/2025,11:00,Dr_Bernard,Patient_687,Honoré
+09/09/2025,16:00,Dr_Martin,Patient_692,Honoré
+05/07/2025,09:00,Dr_Bernard,Patient_227,Honoré
+29/11/2025,15:30,Dr_Bernard,Patient_64,Honoré
+24/01/2026,16:30,Dr_Martin,Patient_112,Honoré
+30/09/2025,16:30,Dr_Martin,Patient_612,Honoré
+25/01/2026,18:30,Dr_Petit,Patient_209,Honoré
+09/07/2025,11:00,Dr_Martin,Patient_153,Honoré
+23/05/2025,15:00,Dr_Dupont,Patient_292,Honoré
+31/01/2026,10:30,Dr_Petit,Patient_956,Honoré
+15/08/2025,17:30,Dr_Dupont,Patient_111,Honoré
+17/08/2025,15:00,Dr_Petit,Patient_291,Honoré
+25/03/2026,18:30,Dr_Bernard,Patient_572,Honoré
+10/03/2026,10:00,Dr_Martin,Patient_902,Non honoré
+02/11/2025,16:00,Dr_Dupont,Patient_797,Honoré
+11/01/2026,11:00,Dr_Martin,Patient_141,Honoré
+12/08/2025,18:30,Dr_Petit,Patient_792,Honoré
+30/05/2025,10:30,Dr_Petit,Patient_70,Honoré
+19/04/2025,09:00,Dr_Petit,Patient_465,Honoré
+15/05/2025,18:00,Dr_Petit,Patient_539,Honoré
+27/09/2025,08:00,Dr_Martin,Patient_802,Honoré
+08/10/2025,15:00,Dr_Dupont,Patient_641,Honoré
+10/01/2026,10:30,Dr_Petit,Patient_387,Honoré
+12/04/2025,09:30,Dr_Petit,Patient_437,Honoré
+07/08/2025,14:00,Dr_Petit,Patient_544,Honoré
+19/05/2025,18:30,Dr_Martin,Patient_676,Non honoré
+26/08/2025,17:00,Dr_Martin,Patient_516,Honoré
+15/01/2026,17:00,Dr_Martin,Patient_620,Honoré
+08/07/2025,14:30,Dr_Petit,Patient_340,Honoré
+12/03/2026,14:00,Dr_Dupont,Patient_953,Honoré
+25/06/2025,09:00,Dr_Martin,Patient_781,Honoré
+10/09/2025,08:30,Dr_Martin,Patient_734,Honoré
+06/11/2025,08:00,Dr_Dupont,Patient_269,Honoré
+20/04/2025,11:30,Dr_Martin,Patient_675,Non honoré
+14/08/2025,11:30,Dr_Bernard,Patient_693,Honoré
+10/05/2025,11:30,Dr_Petit,Patient_944,Non honoré
+30/06/2025,16:30,Dr_Martin,Patient_500,Non honoré
+22/04/2025,17:30,Dr_Martin,Patient_815,Honoré
+07/03/2026,11:30,Dr_Petit,Patient_184,Honoré
+27/01/2026,11:30,Dr_Bernard,Patient_969,Honoré
+09/04/2025,11:00,Dr_Martin,Patient_174,Non honoré
+27/06/2025,14:30,Dr_Petit,Patient_78,Honoré
+10/03/2026,16:30,Dr_Bernard,Patient_64,Honoré
+02/02/2026,11:00,Dr_Martin,Patient_349,Non honoré
+13/10/2025,15:30,Dr_Martin,Patient_600,Honoré
+15/01/2026,11:00,Dr_Bernard,Patient_59,Honoré
+01/04/2025,15:30,Dr_Martin,Patient_217,Honoré
+02/04/2025,16:00,Dr_Bernard,Patient_587,Non honoré
+08/05/2025,17:30,Dr_Petit,Patient_399,Honoré
+31/12/2025,10:00,Dr_Dupont,Patient_874,Non honoré
+06/02/2026,09:30,Dr_Petit,Patient_774,Honoré
+09/08/2025,14:00,Dr_Dupont,Patient_563,Honoré
+31/10/2025,17:30,Dr_Bernard,Patient_796,Honoré
+03/05/2025,15:00,Dr_Bernard,Patient_114,Honoré
+25/05/2025,14:30,Dr_Dupont,Patient_988,Honoré
+24/09/2025,14:00,Dr_Martin,Patient_891,Honoré
+06/10/2025,10:30,Dr_Dupont,Patient_560,Honoré
+28/05/2025,16:00,Dr_Petit,Patient_450,Honoré
+01/07/2025,16:30,Dr_Bernard,Patient_866,Honoré
+11/03/2026,14:30,Dr_Bernard,Patient_249,Honoré
+09/05/2025,09:30,Dr_Martin,Patient_318,Honoré
+29/09/2025,15:30,Dr_Dupont,Patient_685,Honoré
+07/12/2025,14:00,Dr_Dupont,Patient_272,Honoré
+30/01/2026,14:00,Dr_Petit,Patient_31,Honoré
+24/12/2025,09:00,Dr_Dupont,Patient_77,Honoré
+12/12/2025,15:30,Dr_Dupont,Patient_880,Honoré
+08/01/2026,17:30,Dr_Martin,Patient_184,Honoré
+16/11/2025,17:00,Dr_Dupont,Patient_837,Honoré
+11/08/2025,10:00,Dr_Petit,Patient_593,Honoré
+24/06/2025,14:30,Dr_Bernard,Patient_601,Honoré
+04/10/2025,14:00,Dr_Martin,Patient_21,Honoré
+25/05/2025,11:30,Dr_Bernard,Patient_356,Honoré
+20/09/2025,14:30,Dr_Martin,Patient_980,Honoré
+01/05/2025,18:00,Dr_Martin,Patient_527,Non honoré
+16/10/2025,15:00,Dr_Dupont,Patient_11,Honoré
+24/03/2026,15:30,Dr_Martin,Patient_14,Honoré
+13/01/2026,08:30,Dr_Petit,Patient_867,Honoré
+09/03/2026,18:30,Dr_Bernard,Patient_449,Honoré
+02/08/2025,16:00,Dr_Petit,Patient_448,Honoré
+06/12/2025,11:00,Dr_Martin,Patient_572,Honoré
+08/12/2025,09:00,Dr_Petit,Patient_174,Honoré
+31/12/2025,11:00,Dr_Dupont,Patient_461,Honoré
+27/05/2025,09:30,Dr_Martin,Patient_603,Honoré
+01/07/2025,10:00,Dr_Martin,Patient_456,Honoré
+22/04/2025,18:30,Dr_Martin,Patient_511,Honoré
+01/06/2025,08:00,Dr_Petit,Patient_32,Honoré
+08/09/2025,09:30,Dr_Bernard,Patient_98,Honoré
+20/05/2025,15:00,Dr_Dupont,Patient_330,Honoré
+27/05/2025,14:00,Dr_Martin,Patient_887,Honoré
+16/02/2026,17:30,Dr_Martin,Patient_613,Honoré
+08/08/2025,09:30,Dr_Petit,Patient_383,Honoré
+23/07/2025,17:30,Dr_Petit,Patient_993,Honoré
+20/11/2025,16:00,Dr_Dupont,Patient_259,Honoré
+08/06/2025,10:30,Dr_Petit,Patient_567,Honoré
+11/02/2026,14:30,Dr_Bernard,Patient_792,Honoré
+11/09/2025,15:30,Dr_Bernard,Patient_440,Honoré
+16/11/2025,10:30,Dr_Bernard,Patient_352,Honoré
+22/02/2026,09:00,Dr_Bernard,Patient_472,Honoré
+26/06/2025,08:30,Dr_Martin,Patient_258,Honoré
+12/11/2025,14:30,Dr_Dupont,Patient_45,Honoré
+21/01/2026,14:00,Dr_Dupont,Patient_539,Honoré
+16/12/2025,17:30,Dr_Dupont,Patient_56,Honoré
+20/04/2025,15:00,Dr_Dupont,Patient_448,Honoré
+20/03/2026,18:00,Dr_Petit,Patient_928,Honoré
+07/04/2025,11:00,Dr_Dupont,Patient_371,Non honoré
+21/07/2025,11:30,Dr_Bernard,Patient_138,Honoré
+21/06/2025,18:30,Dr_Dupont,Patient_85,Honoré
+14/04/2025,18:00,Dr_Dupont,Patient_690,Honoré
+04/08/2025,18:00,Dr_Petit,Patient_884,Honoré
+29/12/2025,10:00,Dr_Dupont,Patient_205,Honoré
+23/07/2025,16:30,Dr_Bernard,Patient_670,Honoré
+05/03/2026,14:30,Dr_Dupont,Patient_558,Honoré
+15/09/2025,16:00,Dr_Petit,Patient_536,Honoré
+12/03/2026,15:30,Dr_Bernard,Patient_111,Honoré
+14/08/2025,09:30,Dr_Bernard,Patient_235,Honoré
+21/01/2026,09:00,Dr_Dupont,Patient_505,Honoré
+05/03/2026,14:30,Dr_Petit,Patient_83,Honoré
+07/07/2025,08:00,Dr_Martin,Patient_956,Honoré
+31/12/2025,15:00,Dr_Martin,Patient_142,Honoré
+12/03/2026,09:30,Dr_Martin,Patient_489,Honoré
+13/01/2026,18:30,Dr_Martin,Patient_466,Honoré
+30/07/2025,11:00,Dr_Dupont,Patient_146,Honoré
+15/12/2025,09:00,Dr_Martin,Patient_687,Honoré
+01/08/2025,16:00,Dr_Bernard,Patient_375,Honoré
+30/08/2025,18:30,Dr_Bernard,Patient_649,Honoré
+31/01/2026,16:30,Dr_Dupont,Patient_07,Honoré
+27/12/2025,17:30,Dr_Bernard,Patient_805,Honoré
+27/02/2026,18:00,Dr_Petit,Patient_03,Honoré
+08/09/2025,11:00,Dr_Martin,Patient_243,Honoré
+05/09/2025,16:30,Dr_Dupont,Patient_172,Non honoré
+24/05/2025,08:30,Dr_Martin,Patient_789,Non honoré
+03/10/2025,10:30,Dr_Petit,Patient_358,Honoré
+09/11/2025,08:00,Dr_Bernard,Patient_687,Non honoré
+01/11/2025,16:30,Dr_Dupont,Patient_201,Honoré
+25/05/2025,15:00,Dr_Martin,Patient_92,Honoré
+27/07/2025,16:00,Dr_Martin,Patient_938,Honoré
+25/03/2026,10:30,Dr_Dupont,Patient_459,Honoré
+07/11/2025,11:00,Dr_Dupont,Patient_171,Honoré
+22/10/2025,17:00,Dr_Martin,Patient_219,Honoré
+07/12/2025,09:00,Dr_Bernard,Patient_683,Honoré
+04/03/2026,11:30,Dr_Dupont,Patient_849,Honoré
+22/04/2025,18:30,Dr_Dupont,Patient_265,Honoré
+21/12/2025,14:00,Dr_Dupont,Patient_330,Honoré
+04/09/2025,16:30,Dr_Petit,Patient_323,Honoré
+12/08/2025,10:00,Dr_Dupont,Patient_936,Honoré
+03/05/2025,10:00,Dr_Bernard,Patient_138,Honoré
+02/05/2025,18:30,Dr_Dupont,Patient_506,Honoré
+11/11/2025,08:30,Dr_Martin,Patient_478,Honoré
+04/12/2025,16:00,Dr_Dupont,Patient_253,Honoré
+24/07/2025,18:00,Dr_Petit,Patient_150,Honoré
+02/12/2025,17:00,Dr_Petit,Patient_845,Honoré
+02/07/2025,15:30,Dr_Petit,Patient_433,Honoré
+08/08/2025,08:00,Dr_Dupont,Patient_905,Honoré
+10/04/2025,16:00,Dr_Dupont,Patient_965,Honoré
+25/05/2025,17:00,Dr_Bernard,Patient_343,Honoré
+22/12/2025,17:00,Dr_Dupont,Patient_613,Honoré
+13/01/2026,11:00,Dr_Dupont,Patient_151,Honoré
+29/12/2025,11:30,Dr_Martin,Patient_640,Honoré
+24/05/2025,15:00,Dr_Martin,Patient_858,Non honoré
+22/01/2026,17:30,Dr_Martin,Patient_523,Honoré
+13/01/2026,14:30,Dr_Bernard,Patient_239,Honoré
+18/10/2025,08:30,Dr_Bernard,Patient_194,Non honoré
+03/03/2026,08:00,Dr_Dupont,Patient_172,Honoré
+11/06/2025,11:30,Dr_Martin,Patient_957,Honoré
+29/04/2025,16:30,Dr_Petit,Patient_488,Honoré
+31/08/2025,11:00,Dr_Martin,Patient_480,Non honoré
+28/09/2025,15:00,Dr_Petit,Patient_68,Honoré
+06/06/2025,18:30,Dr_Dupont,Patient_644,Honoré
+26/12/2025,16:00,Dr_Petit,Patient_233,Honoré
+18/01/2026,17:00,Dr_Martin,Patient_599,Honoré
+16/02/2026,18:00,Dr_Martin,Patient_58,Honoré
+27/07/2025,10:00,Dr_Petit,Patient_702,Honoré
+20/10/2025,18:00,Dr_Petit,Patient_516,Honoré
+04/05/2025,11:00,Dr_Petit,Patient_390,Honoré
+25/08/2025,09:00,Dr_Bernard,Patient_377,Non honoré
+08/03/2026,11:00,Dr_Petit,Patient_770,Honoré
+22/04/2025,17:00,Dr_Bernard,Patient_666,Honoré
+30/06/2025,11:30,Dr_Dupont,Patient_757,Honoré
+29/04/2025,11:00,Dr_Bernard,Patient_878,Non honoré
+20/10/2025,15:30,Dr_Dupont,Patient_815,Honoré
+27/02/2026,15:30,Dr_Bernard,Patient_131,Honoré
+31/01/2026,11:00,Dr_Martin,Patient_354,Honoré
+30/07/2025,16:00,Dr_Bernard,Patient_68,Honoré
+18/05/2025,08:00,Dr_Martin,Patient_22,Honoré
+10/12/2025,10:30,Dr_Dupont,Patient_699,Honoré
+29/12/2025,14:30,Dr_Martin,Patient_220,Honoré
+28/08/2025,16:00,Dr_Dupont,Patient_110,Honoré
+10/11/2025,10:00,Dr_Bernard,Patient_04,Honoré
+08/03/2026,15:00,Dr_Martin,Patient_658,Honoré
+03/03/2026,17:30,Dr_Bernard,Patient_736,Honoré
+03/01/2026,09:30,Dr_Bernard,Patient_348,Honoré
+23/01/2026,10:30,Dr_Petit,Patient_493,Honoré
+28/06/2025,14:00,Dr_Bernard,Patient_522,Honoré
+15/12/2025,18:00,Dr_Martin,Patient_668,Honoré
+23/09/2025,16:00,Dr_Martin,Patient_870,Honoré
+28/01/2026,18:30,Dr_Petit,Patient_542,Honoré
+16/10/2025,15:00,Dr_Dupont,Patient_250,Honoré
+22/11/2025,15:30,Dr_Dupont,Patient_862,Honoré
+28/01/2026,16:30,Dr_Dupont,Patient_747,Honoré
+01/03/2026,11:00,Dr_Petit,Patient_589,Honoré
+13/07/2025,09:30,Dr_Martin,Patient_180,Honoré
+06/10/2025,09:00,Dr_Bernard,Patient_153,Honoré
+11/05/2025,17:00,Dr_Dupont,Patient_159,Honoré
+29/04/2025,16:00,Dr_Dupont,Patient_600,Honoré
+15/12/2025,16:00,Dr_Dupont,Patient_130,Honoré
+04/10/2025,09:00,Dr_Dupont,Patient_524,Honoré
+12/01/2026,15:30,Dr_Dupont,Patient_436,Honoré
+17/02/2026,14:30,Dr_Petit,Patient_548,Honoré
+27/12/2025,09:00,Dr_Martin,Patient_882,Honoré
+25/08/2025,17:00,Dr_Dupont,Patient_609,Honoré
+06/02/2026,17:00,Dr_Dupont,Patient_206,Honoré
+11/07/2025,10:00,Dr_Petit,Patient_169,Non honoré
+21/05/2025,15:30,Dr_Martin,Patient_352,Honoré
+27/08/2025,17:30,Dr_Petit,Patient_342,Honoré
+03/10/2025,15:30,Dr_Dupont,Patient_882,Honoré
+22/05/2025,09:00,Dr_Bernard,Patient_432,Honoré
+02/06/2025,18:30,Dr_Petit,Patient_360,Honoré
+25/04/2025,11:30,Dr_Bernard,Patient_482,Honoré
+03/12/2025,09:00,Dr_Bernard,Patient_986,Honoré
+27/07/2025,16:30,Dr_Bernard,Patient_463,Honoré
+15/09/2025,18:30,Dr_Dupont,Patient_875,Honoré
+03/07/2025,18:30,Dr_Bernard,Patient_277,Non honoré
+01/02/2026,14:30,Dr_Petit,Patient_520,Non honoré
+17/10/2025,14:00,Dr_Petit,Patient_903,Honoré
+18/05/2025,14:30,Dr_Petit,Patient_764,Honoré
+21/04/2025,10:00,Dr_Petit,Patient_950,Honoré
+22/02/2026,11:00,Dr_Martin,Patient_719,Honoré
+04/07/2025,08:30,Dr_Martin,Patient_08,Honoré
+03/12/2025,08:30,Dr_Dupont,Patient_482,Honoré
+19/12/2025,08:00,Dr_Dupont,Patient_91,Honoré
+14/08/2025,17:00,Dr_Martin,Patient_690,Honoré
+08/10/2025,11:00,Dr_Dupont,Patient_793,Non honoré
+01/03/2026,08:00,Dr_Martin,Patient_530,Honoré
+07/10/2025,14:00,Dr_Martin,Patient_991,Non honoré
+08/09/2025,09:00,Dr_Martin,Patient_988,Honoré
+07/01/2026,18:00,Dr_Dupont,Patient_229,Honoré
+07/10/2025,08:00,Dr_Martin,Patient_762,Honoré
+05/06/2025,15:00,Dr_Martin,Patient_728,Honoré
+10/11/2025,17:30,Dr_Bernard,Patient_117,Honoré
+15/02/2026,08:30,Dr_Petit,Patient_856,Honoré
+31/12/2025,09:00,Dr_Dupont,Patient_888,Honoré
+25/01/2026,11:30,Dr_Bernard,Patient_206,Honoré
+13/01/2026,15:30,Dr_Bernard,Patient_92,Honoré
+15/12/2025,10:00,Dr_Dupont,Patient_305,Honoré
+12/06/2025,11:00,Dr_Dupont,Patient_130,Honoré
+20/05/2025,08:00,Dr_Dupont,Patient_648,Honoré
+11/07/2025,16:00,Dr_Petit,Patient_530,Honoré
+07/02/2026,08:30,Dr_Petit,Patient_628,Honoré
+20/10/2025,15:30,Dr_Petit,Patient_707,Honoré
+27/09/2025,17:00,Dr_Martin,Patient_753,Honoré
+06/08/2025,14:30,Dr_Bernard,Patient_179,Honoré
+06/10/2025,18:00,Dr_Petit,Patient_142,Honoré
+30/06/2025,08:30,Dr_Martin,Patient_665,Honoré
+16/06/2025,08:00,Dr_Dupont,Patient_246,Honoré
+07/12/2025,14:00,Dr_Dupont,Patient_228,Honoré
+23/08/2025,09:30,Dr_Martin,Patient_642,Non honoré
+30/07/2025,11:30,Dr_Petit,Patient_219,Honoré
+28/08/2025,08:00,Dr_Martin,Patient_464,Honoré
+19/09/2025,11:00,Dr_Bernard,Patient_293,Honoré
+05/04/2025,10:30,Dr_Dupont,Patient_645,Honoré
+08/01/2026,14:00,Dr_Martin,Patient_541,Honoré
+03/09/2025,18:00,Dr_Bernard,Patient_622,Honoré
+19/06/2025,17:30,Dr_Martin,Patient_813,Honoré
+24/02/2026,11:30,Dr_Bernard,Patient_243,Honoré
+16/09/2025,17:00,Dr_Martin,Patient_776,Honoré
+21/12/2025,10:00,Dr_Dupont,Patient_838,Honoré
+22/06/2025,08:30,Dr_Bernard,Patient_70,Honoré
+19/10/2025,14:00,Dr_Martin,Patient_546,Honoré
+03/05/2025,15:00,Dr_Martin,Patient_447,Honoré
+05/10/2025,17:30,Dr_Petit,Patient_632,Non honoré
+09/08/2025,16:30,Dr_Martin,Patient_253,Non honoré
+26/10/2025,08:00,Dr_Petit,Patient_961,Honoré
+15/12/2025,11:30,Dr_Petit,Patient_813,Honoré
+29/06/2025,18:30,Dr_Martin,Patient_565,Honoré
+25/10/2025,11:30,Dr_Petit,Patient_191,Honoré
+02/04/2025,10:30,Dr_Martin,Patient_220,Honoré
+12/02/2026,18:00,Dr_Bernard,Patient_453,Honoré
+16/07/2025,09:00,Dr_Petit,Patient_351,Honoré
+14/02/2026,10:00,Dr_Dupont,Patient_284,Honoré
+31/07/2025,14:00,Dr_Petit,Patient_836,Honoré
+12/01/2026,17:00,Dr_Martin,Patient_663,Honoré
+27/05/2025,15:30,Dr_Petit,Patient_806,Non honoré
+03/10/2025,11:00,Dr_Petit,Patient_522,Honoré
+20/11/2025,17:00,Dr_Dupont,Patient_885,Honoré
+10/03/2026,15:00,Dr_Dupont,Patient_207,Non honoré
+12/06/2025,10:30,Dr_Dupont,Patient_97,Honoré
+22/03/2026,16:00,Dr_Martin,Patient_988,Honoré
+31/08/2025,08:30,Dr_Bernard,Patient_501,Honoré
+06/11/2025,10:00,Dr_Bernard,Patient_141,Honoré
+06/03/2026,09:30,Dr_Martin,Patient_322,Honoré
+31/12/2025,17:30,Dr_Dupont,Patient_221,Non honoré
+26/07/2025,18:30,Dr_Petit,Patient_389,Honoré
+12/04/2025,15:30,Dr_Dupont,Patient_321,Non honoré
+15/04/2025,17:00,Dr_Petit,Patient_962,Honoré
+27/10/2025,14:00,Dr_Dupont,Patient_124,Honoré
+21/06/2025,10:30,Dr_Petit,Patient_32,Honoré
+11/06/2025,15:30,Dr_Petit,Patient_204,Honoré
+28/12/2025,10:00,Dr_Bernard,Patient_202,Honoré
+01/08/2025,11:00,Dr_Dupont,Patient_910,Honoré
+29/05/2025,08:00,Dr_Dupont,Patient_766,Honoré
+26/02/2026,11:30,Dr_Martin,Patient_382,Honoré
+26/05/2025,15:30,Dr_Martin,Patient_486,Honoré
+21/05/2025,16:30,Dr_Martin,Patient_153,Honoré
+02/02/2026,11:00,Dr_Petit,Patient_801,Honoré
+20/07/2025,10:30,Dr_Martin,Patient_519,Honoré
+08/03/2026,18:30,Dr_Martin,Patient_142,Honoré
+07/11/2025,18:00,Dr_Bernard,Patient_100,Honoré
+04/06/2025,18:30,Dr_Bernard,Patient_94,Honoré
+12/10/2025,18:00,Dr_Bernard,Patient_870,Honoré
+22/10/2025,10:30,Dr_Bernard,Patient_176,Honoré
+25/08/2025,10:30,Dr_Dupont,Patient_661,Honoré
+03/05/2025,17:30,Dr_Bernard,Patient_57,Honoré
+06/12/2025,17:00,Dr_Bernard,Patient_817,Honoré
+23/09/2025,17:30,Dr_Dupont,Patient_205,Honoré
+08/08/2025,10:00,Dr_Martin,Patient_806,Honoré
+26/02/2026,18:00,Dr_Martin,Patient_411,Honoré
+11/08/2025,10:30,Dr_Petit,Patient_211,Honoré
+10/11/2025,17:30,Dr_Bernard,Patient_627,Honoré
+11/11/2025,10:30,Dr_Martin,Patient_871,Honoré
+05/01/2026,18:30,Dr_Martin,Patient_104,Honoré
+25/06/2025,18:00,Dr_Martin,Patient_137,Honoré
+29/07/2025,11:30,Dr_Petit,Patient_833,Non honoré
+28/11/2025,16:00,Dr_Bernard,Patient_301,Honoré
+04/05/2025,18:30,Dr_Martin,Patient_809,Honoré
+26/12/2025,15:00,Dr_Dupont,Patient_743,Honoré
+08/11/2025,09:00,Dr_Martin,Patient_362,Honoré
+05/12/2025,17:30,Dr_Petit,Patient_201,Honoré
+17/04/2025,14:30,Dr_Bernard,Patient_358,Non honoré
+31/08/2025,08:30,Dr_Dupont,Patient_331,Honoré
+02/09/2025,16:30,Dr_Bernard,Patient_428,Honoré
+08/10/2025,15:00,Dr_Dupont,Patient_48,Honoré
+28/11/2025,10:00,Dr_Petit,Patient_137,Honoré
+12/11/2025,16:30,Dr_Dupont,Patient_335,Honoré
+04/04/2025,09:30,Dr_Bernard,Patient_751,Non honoré
+07/04/2025,16:00,Dr_Martin,Patient_473,Honoré
+09/10/2025,10:00,Dr_Martin,Patient_846,Non honoré
+26/01/2026,10:30,Dr_Dupont,Patient_878,Honoré
+12/10/2025,10:00,Dr_Dupont,Patient_757,Honoré
+26/03/2026,18:30,Dr_Petit,Patient_336,Non honoré
+25/07/2025,16:00,Dr_Dupont,Patient_654,Non honoré
+25/05/2025,10:00,Dr_Dupont,Patient_696,Honoré
+22/06/2025,08:30,Dr_Dupont,Patient_595,Non honoré
+12/08/2025,10:00,Dr_Petit,Patient_810,Honoré
+09/03/2026,08:30,Dr_Petit,Patient_847,Honoré
+17/10/2025,14:00,Dr_Martin,Patient_488,Honoré
+21/06/2025,09:30,Dr_Bernard,Patient_715,Honoré
+21/04/2025,14:30,Dr_Bernard,Patient_39,Honoré
+07/03/2026,16:00,Dr_Dupont,Patient_12,Non honoré
+16/03/2026,09:00,Dr_Dupont,Patient_02,Honoré
+20/06/2025,18:30,Dr_Petit,Patient_831,Honoré
+24/08/2025,17:30,Dr_Martin,Patient_574,Honoré
+08/09/2025,08:00,Dr_Dupont,Patient_350,Honoré
+26/08/2025,09:00,Dr_Martin,Patient_225,Honoré
+27/08/2025,11:30,Dr_Martin,Patient_446,Honoré
+23/09/2025,15:00,Dr_Bernard,Patient_95,Non honoré
+28/02/2026,09:00,Dr_Martin,Patient_90,Honoré
+30/10/2025,11:00,Dr_Dupont,Patient_376,Honoré
+23/12/2025,10:30,Dr_Martin,Patient_430,Honoré
+07/01/2026,18:00,Dr_Petit,Patient_150,Honoré
+25/08/2025,10:30,Dr_Martin,Patient_650,Honoré
+24/08/2025,10:00,Dr_Bernard,Patient_522,Honoré
+25/12/2025,09:30,Dr_Bernard,Patient_934,Honoré
+31/10/2025,18:30,Dr_Martin,Patient_72,Honoré
+11/10/2025,14:30,Dr_Martin,Patient_729,Honoré
+09/06/2025,17:30,Dr_Bernard,Patient_431,Honoré
+10/11/2025,10:00,Dr_Dupont,Patient_685,Honoré
+11/11/2025,08:00,Dr_Dupont,Patient_967,Honoré
+15/03/2026,16:30,Dr_Bernard,Patient_280,Non honoré
+25/07/2025,08:00,Dr_Dupont,Patient_18,Honoré
+25/07/2025,09:30,Dr_Bernard,Patient_961,Honoré
+16/12/2025,09:00,Dr_Martin,Patient_589,Honoré
+19/12/2025,10:00,Dr_Dupont,Patient_305,Honoré
+11/03/2026,09:00,Dr_Dupont,Patient_380,Honoré
+12/05/2025,15:30,Dr_Petit,Patient_459,Honoré
+31/05/2025,10:30,Dr_Bernard,Patient_218,Honoré
+29/09/2025,14:00,Dr_Dupont,Patient_390,Honoré
+10/08/2025,17:30,Dr_Dupont,Patient_23,Honoré
+23/07/2025,18:30,Dr_Bernard,Patient_896,Honoré
+16/11/2025,10:30,Dr_Petit,Patient_373,Honoré
+27/01/2026,17:30,Dr_Martin,Patient_348,Honoré
+04/07/2025,18:30,Dr_Dupont,Patient_46,Honoré
+10/11/2025,11:00,Dr_Bernard,Patient_327,Honoré
+23/03/2026,11:00,Dr_Petit,Patient_286,Honoré
+23/06/2025,08:00,Dr_Dupont,Patient_575,Honoré
+16/06/2025,16:30,Dr_Bernard,Patient_345,Honoré
+23/09/2025,18:30,Dr_Bernard,Patient_782,Honoré
+21/09/2025,15:30,Dr_Martin,Patient_655,Honoré
+15/08/2025,18:00,Dr_Bernard,Patient_641,Honoré
+31/05/2025,17:00,Dr_Martin,Patient_46,Honoré
+22/06/2025,15:30,Dr_Dupont,Patient_06,Honoré
+27/06/2025,11:30,Dr_Dupont,Patient_214,Honoré
+08/03/2026,14:30,Dr_Dupont,Patient_243,Honoré
+13/11/2025,14:30,Dr_Bernard,Patient_720,Honoré
+27/07/2025,09:00,Dr_Bernard,Patient_421,Honoré
+02/07/2025,16:00,Dr_Bernard,Patient_706,Honoré
+27/04/2025,11:00,Dr_Bernard,Patient_809,Honoré
+22/03/2026,17:30,Dr_Dupont,Patient_446,Honoré
+26/01/2026,17:00,Dr_Bernard,Patient_599,Honoré
+19/07/2025,16:30,Dr_Bernard,Patient_211,Honoré
+23/06/2025,11:30,Dr_Bernard,Patient_763,Honoré
+04/11/2025,11:30,Dr_Martin,Patient_535,Honoré
+25/05/2025,10:00,Dr_Martin,Patient_671,Honoré
+02/05/2025,14:00,Dr_Martin,Patient_897,Honoré
+10/06/2025,11:00,Dr_Petit,Patient_85,Honoré
+16/12/2025,08:30,Dr_Petit,Patient_176,Honoré
+04/03/2026,18:30,Dr_Petit,Patient_718,Honoré
+06/11/2025,16:00,Dr_Martin,Patient_714,Honoré
+01/01/2026,09:30,Dr_Bernard,Patient_09,Honoré
+10/11/2025,09:00,Dr_Petit,Patient_724,Honoré
+15/03/2026,14:30,Dr_Dupont,Patient_565,Honoré
+30/04/2025,15:00,Dr_Martin,Patient_802,Non honoré
+10/07/2025,08:30,Dr_Martin,Patient_479,Honoré
+24/02/2026,11:00,Dr_Bernard,Patient_635,Honoré
+20/10/2025,14:30,Dr_Martin,Patient_377,Non honoré
+08/04/2025,11:00,Dr_Petit,Patient_655,Honoré
+16/02/2026,14:00,Dr_Martin,Patient_154,Honoré
+12/03/2026,18:00,Dr_Petit,Patient_806,Honoré
+16/03/2026,09:00,Dr_Martin,Patient_465,Non honoré
+13/06/2025,08:30,Dr_Martin,Patient_250,Honoré
+18/10/2025,14:00,Dr_Bernard,Patient_129,Honoré
+24/04/2025,11:30,Dr_Petit,Patient_864,Honoré
+21/06/2025,16:30,Dr_Petit,Patient_307,Honoré
+19/05/2025,09:00,Dr_Dupont,Patient_50,Honoré
+12/04/2025,18:00,Dr_Martin,Patient_499,Honoré
+22/09/2025,10:00,Dr_Martin,Patient_656,Honoré
+15/03/2026,08:00,Dr_Martin,Patient_678,Honoré
+15/06/2025,09:00,Dr_Dupont,Patient_851,Honoré
+05/10/2025,08:30,Dr_Dupont,Patient_256,Honoré
+01/09/2025,17:30,Dr_Bernard,Patient_95,Honoré
+03/04/2025,16:00,Dr_Petit,Patient_872,Honoré
+19/01/2026,11:30,Dr_Dupont,Patient_229,Honoré
+27/02/2026,08:30,Dr_Dupont,Patient_970,Honoré
+16/04/2025,14:30,Dr_Dupont,Patient_943,Honoré
+21/10/2025,10:00,Dr_Bernard,Patient_25,Honoré
+14/12/2025,17:30,Dr_Martin,Patient_666,Honoré
+14/02/2026,08:30,Dr_Martin,Patient_754,Honoré
+16/04/2025,09:00,Dr_Martin,Patient_969,Honoré
+04/03/2026,14:00,Dr_Petit,Patient_06,Honoré
+21/07/2025,14:00,Dr_Bernard,Patient_303,Honoré
+19/05/2025,08:30,Dr_Bernard,Patient_486,Honoré
+15/08/2025,15:00,Dr_Martin,Patient_241,Honoré
+08/02/2026,14:00,Dr_Dupont,Patient_352,Honoré
+20/01/2026,10:30,Dr_Petit,Patient_958,Honoré
+26/11/2025,17:30,Dr_Martin,Patient_261,Honoré
+02/03/2026,08:30,Dr_Petit,Patient_116,Honoré
+27/10/2025,16:30,Dr_Petit,Patient_769,Honoré
+30/12/2025,10:00,Dr_Bernard,Patient_757,Honoré
+04/08/2025,16:00,Dr_Dupont,Patient_423,Honoré
+14/06/2025,18:00,Dr_Bernard,Patient_75,Honoré
+19/10/2025,08:00,Dr_Petit,Patient_565,Honoré
+01/02/2026,11:30,Dr_Petit,Patient_306,Honoré
+02/11/2025,16:00,Dr_Martin,Patient_560,Non honoré
+27/07/2025,08:30,Dr_Petit,Patient_829,Honoré
+23/11/2025,08:00,Dr_Dupont,Patient_215,Honoré
+18/12/2025,11:30,Dr_Petit,Patient_705,Honoré
+11/07/2025,15:00,Dr_Martin,Patient_196,Honoré
+13/11/2025,15:00,Dr_Martin,Patient_977,Honoré
+18/06/2025,17:30,Dr_Dupont,Patient_911,Honoré
+17/04/2025,15:30,Dr_Dupont,Patient_154,Honoré
+26/04/2025,09:30,Dr_Bernard,Patient_19,Honoré
+02/12/2025,18:00,Dr_Petit,Patient_138,Honoré
+10/04/2025,08:00,Dr_Bernard,Patient_352,Honoré
+14/06/2025,18:00,Dr_Martin,Patient_889,Honoré
+02/03/2026,15:30,Dr_Martin,Patient_815,Honoré
+30/06/2025,15:30,Dr_Dupont,Patient_208,Honoré
+22/11/2025,08:00,Dr_Petit,Patient_600,Honoré
+03/05/2025,18:30,Dr_Martin,Patient_793,Honoré
+21/02/2026,18:30,Dr_Martin,Patient_778,Honoré
+01/06/2025,14:00,Dr_Petit,Patient_263,Honoré
+21/07/2025,15:30,Dr_Dupont,Patient_439,Honoré
+05/09/2025,11:30,Dr_Dupont,Patient_424,Honoré
+13/04/2025,09:30,Dr_Bernard,Patient_474,Honoré
+01/11/2025,14:00,Dr_Petit,Patient_502,Honoré
+30/04/2025,10:00,Dr_Bernard,Patient_411,Honoré
+09/09/2025,16:30,Dr_Dupont,Patient_140,Honoré
+14/03/2026,15:30,Dr_Petit,Patient_882,Honoré
+03/09/2025,14:00,Dr_Bernard,Patient_102,Honoré
+21/10/2025,18:00,Dr_Petit,Patient_974,Honoré
+11/09/2025,10:00,Dr_Dupont,Patient_550,Honoré
+23/07/2025,10:30,Dr_Dupont,Patient_963,Honoré
+19/12/2025,10:00,Dr_Petit,Patient_773,Honoré
+22/02/2026,18:30,Dr_Dupont,Patient_741,Honoré
+15/07/2025,18:30,Dr_Bernard,Patient_916,Honoré
+07/08/2025,09:30,Dr_Dupont,Patient_100,Honoré
+29/10/2025,15:00,Dr_Bernard,Patient_283,Honoré
+15/10/2025,16:00,Dr_Martin,Patient_875,Honoré
+05/05/2025,09:30,Dr_Dupont,Patient_837,Honoré
+05/05/2025,09:00,Dr_Dupont,Patient_770,Honoré
+04/07/2025,08:00,Dr_Petit,Patient_454,Honoré
+04/09/2025,14:30,Dr_Bernard,Patient_294,Honoré
+30/06/2025,16:30,Dr_Dupont,Patient_637,Honoré
+07/09/2025,08:00,Dr_Bernard,Patient_749,Non honoré
+16/10/2025,16:00,Dr_Dupont,Patient_943,Honoré
+09/03/2026,17:30,Dr_Bernard,Patient_256,Honoré
+29/06/2025,18:30,Dr_Petit,Patient_597,Honoré
+18/01/2026,10:00,Dr_Dupont,Patient_686,Honoré
+21/06/2025,08:30,Dr_Petit,Patient_833,Honoré
+04/02/2026,16:00,Dr_Martin,Patient_944,Honoré
+28/04/2025,11:30,Dr_Petit,Patient_979,Honoré
+20/02/2026,15:30,Dr_Petit,Patient_135,Honoré
+23/07/2025,17:00,Dr_Bernard,Patient_388,Non honoré
+22/03/2026,15:30,Dr_Petit,Patient_503,Honoré
+12/01/2026,15:00,Dr_Dupont,Patient_702,Honoré
+19/10/2025,09:00,Dr_Dupont,Patient_915,Honoré
+24/05/2025,18:00,Dr_Dupont,Patient_108,Honoré
+24/01/2026,10:30,Dr_Martin,Patient_153,Honoré
+16/09/2025,14:00,Dr_Petit,Patient_159,Honoré
+29/08/2025,10:00,Dr_Bernard,Patient_769,Honoré
+29/04/2025,15:30,Dr_Petit,Patient_120,Honoré
+12/05/2025,17:30,Dr_Martin,Patient_125,Honoré
+04/12/2025,16:00,Dr_Petit,Patient_556,Honoré
+27/07/2025,18:30,Dr_Dupont,Patient_438,Honoré
+21/12/2025,18:00,Dr_Martin,Patient_648,Honoré
+16/09/2025,17:30,Dr_Bernard,Patient_911,Honoré
+02/12/2025,10:00,Dr_Bernard,Patient_953,Honoré
+15/01/2026,15:00,Dr_Dupont,Patient_336,Non honoré
+07/05/2025,09:30,Dr_Martin,Patient_414,Honoré
+27/06/2025,18:30,Dr_Petit,Patient_438,Honoré
+30/05/2025,18:30,Dr_Martin,Patient_728,Honoré
+02/02/2026,10:30,Dr_Dupont,Patient_231,Honoré
+01/02/2026,11:00,Dr_Martin,Patient_656,Non honoré
+12/02/2026,09:00,Dr_Dupont,Patient_327,Honoré
+02/05/2025,15:30,Dr_Dupont,Patient_951,Honoré
+24/10/2025,09:00,Dr_Petit,Patient_56,Honoré
+06/05/2025,10:30,Dr_Petit,Patient_309,Honoré
+29/12/2025,15:00,Dr_Bernard,Patient_948,Honoré
+29/11/2025,14:00,Dr_Bernard,Patient_777,Honoré
+18/06/2025,15:30,Dr_Bernard,Patient_721,Honoré
+24/12/2025,17:00,Dr_Dupont,Patient_758,Honoré
+27/04/2025,18:00,Dr_Bernard,Patient_793,Honoré
+27/07/2025,09:00,Dr_Dupont,Patient_488,Honoré
+11/08/2025,09:00,Dr_Bernard,Patient_529,Honoré
+08/05/2025,14:00,Dr_Dupont,Patient_401,Non honoré
+04/09/2025,11:00,Dr_Petit,Patient_24,Honoré
+05/10/2025,15:30,Dr_Petit,Patient_105,Honoré
+04/03/2026,08:30,Dr_Martin,Patient_390,Honoré
+23/06/2025,14:30,Dr_Martin,Patient_889,Honoré
+29/11/2025,17:30,Dr_Martin,Patient_272,Honoré
+09/08/2025,16:00,Dr_Petit,Patient_674,Honoré
+19/10/2025,08:00,Dr_Bernard,Patient_691,Honoré
+18/11/2025,09:00,Dr_Dupont,Patient_449,Honoré
+17/12/2025,14:30,Dr_Bernard,Patient_558,Non honoré
+21/12/2025,11:00,Dr_Petit,Patient_403,Honoré
+13/05/2025,08:30,Dr_Petit,Patient_484,Honoré
+23/03/2026,16:00,Dr_Martin,Patient_195,Honoré
+15/06/2025,17:00,Dr_Dupont,Patient_359,Honoré
+17/08/2025,15:00,Dr_Martin,Patient_356,Honoré
+20/11/2025,14:30,Dr_Martin,Patient_397,Honoré
+26/05/2025,18:30,Dr_Bernard,Patient_815,Honoré
+31/08/2025,08:30,Dr_Martin,Patient_917,Honoré
+26/04/2025,09:00,Dr_Bernard,Patient_940,Honoré
+30/11/2025,14:30,Dr_Petit,Patient_400,Honoré
+15/09/2025,18:30,Dr_Petit,Patient_232,Non honoré
+06/03/2026,18:00,Dr_Petit,Patient_38,Honoré
+31/05/2025,18:30,Dr_Bernard,Patient_855,Honoré
+17/01/2026,10:00,Dr_Dupont,Patient_288,Honoré
+29/10/2025,18:00,Dr_Dupont,Patient_209,Honoré
+20/08/2025,10:00,Dr_Bernard,Patient_01,Non honoré
+20/09/2025,16:30,Dr_Martin,Patient_726,Non honoré
+01/08/2025,14:00,Dr_Petit,Patient_956,Honoré
+20/08/2025,09:00,Dr_Martin,Patient_447,Honoré
+07/05/2025,17:30,Dr_Martin,Patient_998,Honoré
+14/06/2025,09:00,Dr_Bernard,Patient_472,Honoré
+25/08/2025,18:30,Dr_Petit,Patient_230,Honoré
+18/08/2025,11:30,Dr_Martin,Patient_391,Honoré
+28/12/2025,08:00,Dr_Dupont,Patient_59,Non honoré
+12/07/2025,10:00,Dr_Petit,Patient_272,Honoré
+28/10/2025,14:30,Dr_Bernard,Patient_861,Honoré
+02/09/2025,17:30,Dr_Petit,Patient_581,Honoré
+07/02/2026,17:30,Dr_Bernard,Patient_58,Honoré
+28/08/2025,16:30,Dr_Petit,Patient_728,Honoré
+20/07/2025,10:00,Dr_Petit,Patient_418,Honoré
+07/12/2025,08:30,Dr_Dupont,Patient_625,Honoré
+27/01/2026,14:30,Dr_Martin,Patient_744,Honoré
+08/12/2025,11:30,Dr_Petit,Patient_220,Non honoré
+28/01/2026,11:30,Dr_Martin,Patient_907,Honoré
+11/04/2025,08:30,Dr_Dupont,Patient_258,Honoré
+31/05/2025,11:30,Dr_Bernard,Patient_669,Honoré
+05/09/2025,08:30,Dr_Petit,Patient_451,Honoré
+23/11/2025,15:30,Dr_Martin,Patient_460,Honoré
+19/12/2025,15:00,Dr_Bernard,Patient_835,Honoré
+18/03/2026,18:30,Dr_Bernard,Patient_340,Honoré
+09/09/2025,14:00,Dr_Bernard,Patient_576,Honoré
+01/06/2025,11:00,Dr_Dupont,Patient_382,Honoré
+07/07/2025,11:00,Dr_Petit,Patient_455,Honoré
+03/12/2025,08:00,Dr_Bernard,Patient_909,Honoré
+08/12/2025,18:30,Dr_Martin,Patient_140,Non honoré
+07/06/2025,11:00,Dr_Dupont,Patient_876,Honoré
+24/09/2025,14:30,Dr_Martin,Patient_806,Non honoré
+28/12/2025,17:30,Dr_Bernard,Patient_505,Honoré
+08/12/2025,16:00,Dr_Martin,Patient_362,Non honoré
+15/01/2026,10:30,Dr_Bernard,Patient_69,Honoré
+21/08/2025,18:00,Dr_Petit,Patient_684,Honoré
+03/12/2025,11:00,Dr_Petit,Patient_966,Honoré
+05/01/2026,18:00,Dr_Bernard,Patient_949,Honoré
+23/03/2026,15:00,Dr_Petit,Patient_303,Honoré
+24/12/2025,17:00,Dr_Dupont,Patient_198,Honoré
+08/08/2025,11:30,Dr_Petit,Patient_925,Honoré
+21/12/2025,08:30,Dr_Petit,Patient_765,Non honoré
+01/04/2025,09:00,Dr_Dupont,Patient_730,Honoré
+19/04/2025,16:00,Dr_Dupont,Patient_21,Honoré
+09/04/2025,16:30,Dr_Dupont,Patient_84,Honoré
+22/02/2026,14:30,Dr_Dupont,Patient_654,Honoré
+16/02/2026,15:30,Dr_Bernard,Patient_946,Honoré
+26/04/2025,17:00,Dr_Bernard,Patient_780,Honoré
+24/01/2026,14:00,Dr_Dupont,Patient_167,Honoré
+02/01/2026,14:00,Dr_Petit,Patient_46,Honoré
+08/12/2025,17:00,Dr_Bernard,Patient_445,Honoré
+31/01/2026,15:00,Dr_Martin,Patient_920,Honoré
+21/02/2026,10:30,Dr_Martin,Patient_392,Honoré
+19/09/2025,09:00,Dr_Martin,Patient_514,Non honoré
+11/08/2025,18:00,Dr_Petit,Patient_409,Honoré
+16/10/2025,08:00,Dr_Bernard,Patient_249,Honoré
+10/01/2026,17:30,Dr_Bernard,Patient_506,Honoré
+19/10/2025,08:00,Dr_Dupont,Patient_528,Honoré
+28/05/2025,18:30,Dr_Bernard,Patient_879,Honoré
+13/09/2025,11:00,Dr_Martin,Patient_304,Honoré
+21/09/2025,08:30,Dr_Bernard,Patient_646,Honoré
+30/11/2025,11:30,Dr_Bernard,Patient_378,Honoré
+28/02/2026,09:00,Dr_Martin,Patient_947,Honoré
+13/06/2025,17:00,Dr_Petit,Patient_228,Non honoré
+25/10/2025,15:00,Dr_Petit,Patient_340,Honoré
+15/10/2025,08:00,Dr_Martin,Patient_55,Honoré
+05/08/2025,15:00,Dr_Dupont,Patient_340,Honoré
+24/01/2026,16:30,Dr_Martin,Patient_347,Non honoré
+09/10/2025,08:30,Dr_Martin,Patient_478,Honoré
+09/02/2026,17:30,Dr_Petit,Patient_627,Honoré
+16/02/2026,09:30,Dr_Bernard,Patient_370,Honoré
+01/12/2025,18:30,Dr_Petit,Patient_45,Honoré
+06/03/2026,17:00,Dr_Dupont,Patient_486,Honoré
+18/07/2025,09:30,Dr_Martin,Patient_444,Honoré
+11/02/2026,08:00,Dr_Martin,Patient_125,Honoré
+25/10/2025,08:30,Dr_Petit,Patient_438,Honoré
+20/03/2026,09:00,Dr_Petit,Patient_399,Honoré
+19/09/2025,14:30,Dr_Petit,Patient_806,Honoré
+14/03/2026,08:30,Dr_Dupont,Patient_952,Honoré
+21/09/2025,18:30,Dr_Petit,Patient_849,Honoré
+17/10/2025,09:00,Dr_Dupont,Patient_393,Honoré
+18/08/2025,15:30,Dr_Martin,Patient_929,Honoré
+09/07/2025,08:00,Dr_Petit,Patient_02,Honoré
+25/06/2025,17:00,Dr_Bernard,Patient_691,Honoré
+04/02/2026,18:00,Dr_Petit,Patient_451,Honoré
+14/01/2026,10:00,Dr_Martin,Patient_191,Honoré
+04/12/2025,15:30,Dr_Petit,Patient_206,Honoré
+17/06/2025,11:30,Dr_Bernard,Patient_576,Honoré
+08/10/2025,15:30,Dr_Martin,Patient_566,Honoré
+10/01/2026,10:00,Dr_Petit,Patient_361,Honoré
+27/02/2026,14:00,Dr_Petit,Patient_859,Honoré
+11/12/2025,17:30,Dr_Petit,Patient_169,Honoré
+24/10/2025,10:30,Dr_Martin,Patient_452,Honoré
+24/06/2025,17:30,Dr_Martin,Patient_649,Honoré
+08/05/2025,11:00,Dr_Dupont,Patient_709,Honoré
+28/11/2025,15:00,Dr_Martin,Patient_453,Honoré
+21/01/2026,09:30,Dr_Martin,Patient_644,Honoré
+31/08/2025,18:00,Dr_Bernard,Patient_62,Honoré
+14/10/2025,10:00,Dr_Petit,Patient_837,Honoré
+28/01/2026,17:00,Dr_Martin,Patient_674,Honoré
+08/09/2025,14:30,Dr_Petit,Patient_427,Honoré
+06/02/2026,15:00,Dr_Petit,Patient_844,Honoré
+10/01/2026,10:00,Dr_Martin,Patient_918,Honoré
+30/12/2025,17:30,Dr_Bernard,Patient_603,Honoré
+17/05/2025,14:00,Dr_Bernard,Patient_155,Honoré
+13/06/2025,11:00,Dr_Dupont,Patient_714,Honoré
+10/04/2025,15:30,Dr_Dupont,Patient_75,Non honoré
+28/10/2025,09:00,Dr_Bernard,Patient_137,Honoré
+11/08/2025,08:30,Dr_Bernard,Patient_499,Honoré
+26/04/2025,09:30,Dr_Martin,Patient_719,Honoré
+09/05/2025,09:00,Dr_Dupont,Patient_688,Honoré
+21/06/2025,14:30,Dr_Martin,Patient_571,Honoré
+04/12/2025,09:30,Dr_Dupont,Patient_387,Honoré
+12/06/2025,16:00,Dr_Bernard,Patient_232,Honoré
+26/03/2026,18:30,Dr_Martin,Patient_671,Honoré
+31/08/2025,08:30,Dr_Martin,Patient_459,Honoré
+20/11/2025,15:00,Dr_Bernard,Patient_427,Honoré
+25/10/2025,18:30,Dr_Bernard,Patient_712,Honoré
+20/07/2025,15:30,Dr_Petit,Patient_915,Honoré
+16/03/2026,10:00,Dr_Petit,Patient_367,Honoré
+08/03/2026,17:00,Dr_Petit,Patient_01,Honoré
+20/08/2025,18:00,Dr_Petit,Patient_103,Honoré
+06/06/2025,14:30,Dr_Petit,Patient_05,Honoré
+27/02/2026,10:30,Dr_Bernard,Patient_454,Honoré
+01/07/2025,15:00,Dr_Bernard,Patient_145,Honoré
+10/06/2025,17:30,Dr_Martin,Patient_930,Honoré
+12/08/2025,16:30,Dr_Dupont,Patient_630,Honoré
+07/08/2025,17:00,Dr_Martin,Patient_208,Honoré
+29/05/2025,14:30,Dr_Petit,Patient_171,Honoré
+28/05/2025,16:00,Dr_Dupont,Patient_93,Honoré
+08/01/2026,15:00,Dr_Martin,Patient_523,Honoré
+01/02/2026,18:30,Dr_Martin,Patient_434,Honoré
+19/03/2026,18:00,Dr_Petit,Patient_961,Honoré
+16/06/2025,14:30,Dr_Martin,Patient_921,Honoré
+09/07/2025,18:30,Dr_Bernard,Patient_45,Honoré
+24/08/2025,09:00,Dr_Dupont,Patient_768,Honoré
+10/12/2025,10:00,Dr_Bernard,Patient_119,Honoré
+09/03/2026,08:00,Dr_Bernard,Patient_687,Honoré
+27/08/2025,09:30,Dr_Bernard,Patient_19,Honoré
+27/05/2025,08:00,Dr_Bernard,Patient_956,Non honoré
+04/07/2025,15:30,Dr_Martin,Patient_255,Honoré
+20/11/2025,14:30,Dr_Bernard,Patient_518,Honoré
+16/12/2025,09:00,Dr_Petit,Patient_272,Non honoré
+10/02/2026,17:30,Dr_Petit,Patient_320,Honoré
+05/04/2025,16:00,Dr_Martin,Patient_943,Honoré
+12/09/2025,17:30,Dr_Petit,Patient_302,Honoré
+25/04/2025,14:30,Dr_Petit,Patient_675,Non honoré
+15/01/2026,16:30,Dr_Martin,Patient_522,Honoré
+15/09/2025,14:30,Dr_Bernard,Patient_760,Honoré
+04/06/2025,18:30,Dr_Bernard,Patient_203,Honoré
+30/01/2026,11:00,Dr_Bernard,Patient_139,Honoré
+14/01/2026,15:00,Dr_Martin,Patient_974,Honoré
+24/11/2025,18:30,Dr_Martin,Patient_478,Honoré
+08/07/2025,09:30,Dr_Dupont,Patient_808,Honoré
+26/08/2025,14:00,Dr_Bernard,Patient_983,Honoré
+26/04/2025,18:30,Dr_Petit,Patient_813,Honoré
+23/06/2025,17:30,Dr_Martin,Patient_341,Honoré
+04/01/2026,11:30,Dr_Bernard,Patient_453,Honoré
+10/01/2026,17:30,Dr_Bernard,Patient_875,Honoré
+29/07/2025,14:00,Dr_Dupont,Patient_777,Honoré
+09/04/2025,14:00,Dr_Petit,Patient_480,Honoré
+21/09/2025,18:00,Dr_Bernard,Patient_287,Non honoré
+16/07/2025,17:30,Dr_Martin,Patient_450,Honoré
+01/11/2025,18:00,Dr_Bernard,Patient_827,Non honoré
+03/12/2025,14:00,Dr_Petit,Patient_300,Honoré
+06/01/2026,15:30,Dr_Martin,Patient_41,Honoré
+07/12/2025,11:30,Dr_Bernard,Patient_985,Honoré
+19/09/2025,10:00,Dr_Bernard,Patient_598,Honoré
+27/04/2025,17:00,Dr_Dupont,Patient_444,Honoré
+17/05/2025,18:00,Dr_Petit,Patient_49,Honoré
+05/04/2025,18:30,Dr_Martin,Patient_526,Honoré
+22/09/2025,17:30,Dr_Petit,Patient_417,Honoré
+21/11/2025,15:30,Dr_Bernard,Patient_312,Honoré
+06/02/2026,10:00,Dr_Martin,Patient_662,Honoré
+08/08/2025,17:30,Dr_Dupont,Patient_336,Honoré
+18/02/2026,11:00,Dr_Bernard,Patient_177,Honoré
+18/05/2025,08:30,Dr_Petit,Patient_57,Non honoré
+19/10/2025,15:00,Dr_Bernard,Patient_361,Honoré
+19/07/2025,17:30,Dr_Bernard,Patient_467,Honoré
+12/07/2025,08:00,Dr_Martin,Patient_847,Honoré
+25/01/2026,14:00,Dr_Dupont,Patient_847,Honoré
+12/10/2025,11:00,Dr_Martin,Patient_926,Honoré
+02/06/2025,09:00,Dr_Petit,Patient_559,Honoré
+01/07/2025,17:00,Dr_Dupont,Patient_164,Honoré
+21/05/2025,17:30,Dr_Dupont,Patient_956,Honoré
+04/03/2026,16:00,Dr_Martin,Patient_566,Non honoré
+09/07/2025,17:00,Dr_Petit,Patient_974,Honoré
+25/03/2026,15:30,Dr_Martin,Patient_722,Honoré
+05/04/2025,17:30,Dr_Petit,Patient_942,Honoré
+31/08/2025,16:30,Dr_Bernard,Patient_348,Honoré
+27/05/2025,10:30,Dr_Dupont,Patient_375,Honoré
+15/03/2026,16:00,Dr_Dupont,Patient_611,Honoré
+21/04/2025,15:00,Dr_Martin,Patient_619,Honoré
+26/10/2025,08:00,Dr_Martin,Patient_479,Honoré
+21/09/2025,16:30,Dr_Martin,Patient_768,Non honoré
+10/11/2025,17:00,Dr_Dupont,Patient_884,Honoré
+11/08/2025,18:30,Dr_Petit,Patient_858,Honoré
+26/11/2025,08:30,Dr_Petit,Patient_355,Honoré
+08/12/2025,08:00,Dr_Martin,Patient_773,Honoré
+04/07/2025,14:30,Dr_Petit,Patient_108,Non honoré
+22/04/2025,10:30,Dr_Martin,Patient_416,Honoré
+11/05/2025,16:00,Dr_Petit,Patient_503,Honoré
+04/10/2025,17:30,Dr_Dupont,Patient_376,Honoré
+17/05/2025,08:30,Dr_Martin,Patient_660,Honoré
+01/12/2025,11:00,Dr_Martin,Patient_299,Honoré
+05/02/2026,15:00,Dr_Dupont,Patient_739,Honoré
+30/09/2025,09:00,Dr_Bernard,Patient_915,Honoré
+09/12/2025,11:00,Dr_Petit,Patient_02,Honoré
+28/11/2025,09:00,Dr_Martin,Patient_123,Honoré
+25/02/2026,14:00,Dr_Martin,Patient_249,Honoré
+16/02/2026,16:30,Dr_Bernard,Patient_740,Honoré
+16/08/2025,09:00,Dr_Dupont,Patient_67,Honoré
+12/01/2026,15:30,Dr_Martin,Patient_772,Honoré
+12/04/2025,17:30,Dr_Martin,Patient_562,Honoré
+20/04/2025,16:30,Dr_Martin,Patient_777,Honoré
+29/06/2025,16:00,Dr_Petit,Patient_741,Honoré
+30/09/2025,16:00,Dr_Petit,Patient_528,Honoré
+11/03/2026,16:30,Dr_Petit,Patient_731,Honoré
+24/05/2025,10:00,Dr_Martin,Patient_814,Honoré
+01/08/2025,17:30,Dr_Dupont,Patient_508,Honoré
+15/12/2025,10:30,Dr_Dupont,Patient_495,Honoré
+27/01/2026,10:00,Dr_Martin,Patient_31,Honoré
+10/10/2025,16:30,Dr_Dupont,Patient_822,Honoré
+24/09/2025,11:30,Dr_Martin,Patient_405,Honoré
+22/02/2026,16:30,Dr_Bernard,Patient_762,Honoré
+17/03/2026,15:00,Dr_Dupont,Patient_107,Honoré
+26/01/2026,16:00,Dr_Dupont,Patient_134,Non honoré
+31/10/2025,14:30,Dr_Bernard,Patient_185,Honoré
+10/09/2025,09:00,Dr_Bernard,Patient_270,Honoré
+03/12/2025,15:30,Dr_Martin,Patient_126,Honoré
+09/06/2025,11:30,Dr_Bernard,Patient_948,Honoré
+10/04/2025,14:30,Dr_Petit,Patient_919,Honoré
+13/03/2026,16:30,Dr_Petit,Patient_323,Honoré
+13/04/2025,17:00,Dr_Dupont,Patient_634,Honoré
+30/01/2026,16:00,Dr_Petit,Patient_615,Honoré
+15/10/2025,09:30,Dr_Martin,Patient_938,Honoré
+22/04/2025,18:30,Dr_Bernard,Patient_611,Honoré
+16/02/2026,15:00,Dr_Dupont,Patient_255,Honoré
+21/04/2025,16:00,Dr_Bernard,Patient_574,Honoré
+23/11/2025,17:00,Dr_Petit,Patient_424,Honoré
+20/11/2025,08:00,Dr_Martin,Patient_644,Non honoré
+03/05/2025,16:00,Dr_Martin,Patient_504,Non honoré
+05/06/2025,11:30,Dr_Dupont,Patient_842,Honoré
+14/11/2025,14:00,Dr_Dupont,Patient_576,Honoré
+15/12/2025,09:30,Dr_Martin,Patient_572,Honoré
+19/03/2026,11:00,Dr_Martin,Patient_838,Honoré
+08/06/2025,11:00,Dr_Petit,Patient_432,Honoré
+19/10/2025,17:00,Dr_Dupont,Patient_368,Honoré
+07/12/2025,16:00,Dr_Bernard,Patient_201,Honoré
+25/10/2025,08:30,Dr_Petit,Patient_174,Honoré
+03/12/2025,10:30,Dr_Petit,Patient_746,Honoré
+16/09/2025,18:00,Dr_Petit,Patient_615,Honoré
+17/07/2025,08:30,Dr_Martin,Patient_165,Honoré
+14/12/2025,15:30,Dr_Martin,Patient_106,Honoré
+12/05/2025,08:30,Dr_Bernard,Patient_697,Honoré
+15/08/2025,10:00,Dr_Petit,Patient_459,Honoré
+30/11/2025,16:00,Dr_Petit,Patient_746,Non honoré
+03/04/2025,10:00,Dr_Dupont,Patient_665,Honoré
+29/05/2025,18:00,Dr_Petit,Patient_480,Honoré
+01/03/2026,18:00,Dr_Martin,Patient_00,Honoré
+06/11/2025,17:30,Dr_Martin,Patient_320,Honoré
+20/08/2025,09:00,Dr_Martin,Patient_641,Honoré
+12/05/2025,16:30,Dr_Dupont,Patient_371,Honoré
+04/02/2026,15:00,Dr_Bernard,Patient_635,Non honoré
+28/04/2025,11:30,Dr_Dupont,Patient_177,Non honoré
+12/10/2025,15:30,Dr_Dupont,Patient_93,Honoré
+30/12/2025,17:00,Dr_Martin,Patient_809,Honoré
+29/05/2025,18:30,Dr_Bernard,Patient_596,Honoré
+26/10/2025,11:30,Dr_Martin,Patient_245,Honoré
+28/01/2026,17:30,Dr_Dupont,Patient_931,Honoré
+16/03/2026,09:30,Dr_Dupont,Patient_686,Honoré
+15/10/2025,10:30,Dr_Petit,Patient_910,Honoré
+04/09/2025,11:30,Dr_Petit,Patient_430,Honoré
+26/10/2025,10:00,Dr_Bernard,Patient_18,Non honoré
+04/01/2026,11:30,Dr_Dupont,Patient_688,Honoré
+28/02/2026,16:30,Dr_Martin,Patient_800,Honoré
