@@ -13,6 +13,7 @@ import {
   type CSVPreviewResult,
 } from "@/lib/parseCSVForPreview";
 import { readCSVAsText } from "@/lib/readCSVAsText";
+import { trackCsvPreviewLoaded } from "@/lib/analytics";
 
 export type CSVPreviewStatus = "idle" | "loading" | "ready" | "error";
 
@@ -35,6 +36,19 @@ export function useCSVPreview(file: File | null): {
         const r = parseCSVForPreview(text);
         setResult(r);
         setStatus(r.ok ? "ready" : "error");
+        // Phase 9 — csv_preview_loaded (R2 event 4). Fail-soft : skip si NaN.
+        if (r.ok) {
+          const nbRdv = r.preview.nbRdvValides;
+          const recoRate = r.preview.recoRate;
+          if (
+            typeof nbRdv === "number" &&
+            Number.isFinite(nbRdv) &&
+            typeof recoRate === "number" &&
+            Number.isFinite(recoRate)
+          ) {
+            trackCsvPreviewLoaded(nbRdv, recoRate);
+          }
+        }
       })
       .catch(() => {
         setResult({

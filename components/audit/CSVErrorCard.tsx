@@ -1,8 +1,18 @@
 "use client";
 
+import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
 import { mapErrorToCard } from "@/lib/mapErrorToCard";
 import type { AuditErrorCode } from "@/types/audit-errors";
+import { trackCsvRejected } from "@/lib/analytics";
+
+const KNOWN_ERROR_CODES = new Set<AuditErrorCode>([
+  "MISSING_COLUMNS",
+  "INVALID_DATE_FORMAT",
+  "EMPTY_AFTER_PARSING",
+  "ENCODING_ERROR",
+  "INSUFFICIENT_DATA",
+]);
 
 export interface CSVErrorCardProps {
   error: {
@@ -20,6 +30,17 @@ export interface CSVErrorCardProps {
  */
 export default function CSVErrorCard({ error, onRetry }: CSVErrorCardProps) {
   const { title, hint } = mapErrorToCard(error.error_code, error.details);
+
+  // Phase 9 — csv_rejected (R2 event 5). Émis au mount ; ne fire qu'une seule
+  // fois par error_code distinct (deps `error.error_code`). Si le code n'est
+  // pas dans l'union AuditErrorCode (cas serveur ajoute un nouveau code), on
+  // skip pour respecter la signature stricte du helper.
+  useEffect(() => {
+    const code = error.error_code;
+    if (typeof code === "string" && KNOWN_ERROR_CODES.has(code as AuditErrorCode)) {
+      trackCsvRejected(code as AuditErrorCode);
+    }
+  }, [error.error_code]);
   return (
     <section
       role="alert"
