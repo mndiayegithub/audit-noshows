@@ -46,6 +46,30 @@ function detectSeparator(headerLine: string): "," | ";" {
   return (headerLine.match(/;/g)?.length ?? 0) > (headerLine.match(/,/g)?.length ?? 0) ? ";" : ",";
 }
 
+const HEADER_DATE = /^(date|jour|date_rdv|date du rendez-vous)$/;
+const HEADER_STATUT = /^(statut|status|état|etat)$/;
+
+/**
+ * Scanne les 20 premières lignes pour trouver le header CSV. Une ligne candidate
+ * doit contenir un séparateur ET au moins un signal date OU statut. La ligne avec
+ * les deux signaux gagne (header complet) ; à défaut, on retombe sur la première
+ * ligne candidate (header partiel — laisse le caller détecter la colonne manquante).
+ */
+function findHeaderLineIndex(lines: string[]): number {
+  let firstCandidate = -1;
+  for (let i = 0; i < Math.min(lines.length, 20); i++) {
+    const line = lines[i];
+    if (!/[,;\t]/.test(line)) continue;
+    const sep = detectSeparator(line);
+    const cells = line.split(sep).map((c) => c.trim().toLowerCase());
+    const hasDate = cells.some((c) => HEADER_DATE.test(c));
+    const hasStatut = cells.some((c) => HEADER_STATUT.test(c));
+    if (hasDate && hasStatut) return i;
+    if ((hasDate || hasStatut) && firstCandidate === -1) firstCandidate = i;
+  }
+  return firstCandidate;
+}
+
 export function validateAuditPayload(formData: FormData): ValidationResult {
   const csvRaw = formData.get("csv");
   const nomRaw = formData.get("nom_cabinet");
@@ -74,11 +98,26 @@ export function validateAuditPayload(formData: FormData): ValidationResult {
       error: "CSV vide ou invalide",
     };
   }
-  const headerLine = lines[0];
+  // Skip leading metadata lines (Doctolib "Export du …", commentaires `#`,
+  // titres cabinet) jusqu'à trouver la ligne header avec date+statut.
+  const headerIdx = findHeaderLineIndex(lines);
+  if (headerIdx === -1) {
+    return {
+      ok: false,
+      error_code: "MISSING_COLUMNS",
+      error: "Colonnes manquantes : date et/ou statut introuvables",
+      details: { missing: ["date", "statut"] },
+    };
+  }
+  const headerLine = lines[headerIdx];
   const sep = detectSeparator(headerLine);
   const headers = headerLine.split(sep).map((h) => h.trim().toLowerCase());
-  const hasDate = headers.some((h) => h === "date");
-  const hasStatut = headers.some((h) => h === "statut" || h === "status");
+  const hasDate = headers.some((h) =>
+    /^(date|jour|date_rdv|date du rendez-vous)$/.test(h),
+  );
+  const hasStatut = headers.some((h) =>
+    /^(statut|status|état|etat)$/.test(h),
+  );
   if (!hasDate || !hasStatut) {
     const missing: string[] = [];
     if (!hasDate) missing.push("date");
