@@ -66,7 +66,15 @@ export interface AuditResponse {
   rapport_texte: string;
   pdf_url: string | null;
   email_sent: boolean;
+  // Phase 7 — REQ #3 (mode dégradé)
+  degraded?: boolean;
+  reco_rate?: number;          // 0..1
+  ignored_count?: number;
+  sample_ignored?: Array<{ ligne?: number; raison?: string; valeur?: string }>;
+  // Phase 7 — REQ #2 (cas erreur)
   error?: string;
+  error_code?: import("./audit-errors").AuditErrorCode;
+  details?: Record<string, unknown>;
 }
 
 export interface GoogleData {

@@ -1,7 +1,12 @@
+import type { AuditErrorCode } from "@/types/audit-errors";
+
 /**
  * Normalizes the n8n /webhook/audit-flash response into the canonical
  * `{ success, stats, rapport_texte, ... }` shape regardless of the n8n
  * execution mode (production wrapper, test array, or direct).
+ *
+ * Phase 7 (REQ #3): conserve les champs `degraded`, `reco_rate`, `ignored_count`,
+ * `sample_ignored` en passthrough (jamais inventés — n8n est source de vérité).
  *
  * Pure, no I/O — extracted from app/api/audit/route.ts in Phase 06 for
  * unit testability.
@@ -34,7 +39,90 @@ export function normalizeN8nResponse(raw: unknown): unknown {
     unwrapped = (raw as { output: unknown }).output;
   }
 
+  // Phase 7 (REQ #3) — passthrough des champs dégradé si fournis par n8n.
+  // On les copie depuis l'objet déjà unwrappé (le wrapper output les contient déjà après unwrap).
+  if (unwrapped && typeof unwrapped === "object" && !Array.isArray(unwrapped)) {
+    const src = unwrapped as Record<string, unknown>;
+    const out: Record<string, unknown> = { ...src };
+    const passthroughKeys = [
+      "degraded",
+      "reco_rate",
+      "ignored_count",
+      "sample_ignored",
+    ] as const;
+    for (const key of passthroughKeys) {
+      if (key in src && src[key] !== undefined) {
+        out[key] = src[key];
+      }
+    }
+    unwrapped = out;
+  }
+
   return sanitizeRapportTexte(unwrapped);
+}
+
+/**
+ * Mappe un message d'erreur technique n8n vers un AuditErrorCode typé (REQ #2).
+ *
+ * Pure, idempotente, sans I/O. Ne stocke jamais le message — classification only.
+ * Aucune PII dans les regex (la fn lit le message en lecture seule, ne le réémet pas).
+ *
+ * Ordre = priorité (premier match gagne). Insensible à la casse.
+ * Fallback: "EMPTY_AFTER_PARSING" pour les messages non classifiés
+ * (plus prudent que d'inventer un code spécifique).
+ */
+export function mapN8nErrorToCode(rawError: string): AuditErrorCode {
+  const msg = (rawError || "").toLowerCase();
+
+  // ENCODING: spécifique avant date/colonne car peut contenir "format"
+  if (
+    msg.includes("encoding") ||
+    msg.includes("encodage") ||
+    msg.includes("latin") ||
+    msg.includes("utf-8 invalid") ||
+    msg.includes("utf8 invalid")
+  ) {
+    return "ENCODING_ERROR";
+  }
+
+  // INSUFFICIENT_DATA: spécifique avant "vide" / "colonne"
+  if (
+    msg.includes("trop peu") ||
+    msg.includes("moins de 20") ||
+    msg.includes("pas assez") ||
+    msg.includes("< 20")
+  ) {
+    return "INSUFFICIENT_DATA";
+  }
+
+  // INVALID_DATE_FORMAT: nécessite "date" + signal de mauvais format
+  if (
+    msg.includes("date") &&
+    (msg.includes("invalide") || msg.includes("format") || msg.includes("parsable"))
+  ) {
+    return "INVALID_DATE_FORMAT";
+  }
+
+  // MISSING_COLUMNS
+  if (
+    msg.includes("colonne") ||
+    msg.includes("header") ||
+    msg.includes("manquant")
+  ) {
+    return "MISSING_COLUMNS";
+  }
+
+  // EMPTY_AFTER_PARSING (incluant fallback)
+  if (
+    msg.includes("vide") ||
+    msg.includes("aucune ligne") ||
+    msg.includes("no row") ||
+    msg.includes("0 rdv")
+  ) {
+    return "EMPTY_AFTER_PARSING";
+  }
+
+  return "EMPTY_AFTER_PARSING";
 }
 
 const FALLBACK_RAPPORT =
