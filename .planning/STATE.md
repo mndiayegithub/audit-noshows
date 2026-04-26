@@ -5,11 +5,11 @@
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Audit rapide des no-shows pour cabinets dentaires — diagnostic + rapport IA en 60 s.
-**Current focus:** Phase 07 livrée structurellement — UAT utilisateur en attente (e2e + vitest + smoke prod) avant Phase 08 deploy.
+**Current focus:** Phase 07 + 7-bis n8n alignment ✅ livrées et validées en smoke prod — Phase 08 deploy Vercel débloquée.
 
 ## Current Position
 
-Phase: 07 of 09 — ✅ Livrée structurellement 2026-04-26 (UAT utilisateur en attente)
+Phase: 07 of 09 — ✅ Livrée + Phase 7-bis n8n alignée (smoke prod 4/4 cas validés 2026-04-26 12h20)
 Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité)
 Phase 06 (tests Vitest + Playwright) absorbée dans Phase 07 (config existait, étendue par Phase 7).
 Phase 07 (Robustesse upload CSV) — 8 plans, 4 vagues, 6 REQs livrées. Verifier: 6/6 REQs PASS structurel. Voir `.planning/phases/phase-07-robustesse-upload-csv/PHASE-SUMMARY.md`.
@@ -85,14 +85,23 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-26 04:45 GMT+2 (avant /compact + dodo)
-Stopped at: Phase 7 livrée + UAT validée côté Next.js (vitest 78/78 ✅, e2e 3/3 ✅ via filechooser pattern + bumped timeouts, build ✅). 5 bugs trouvés en UAT et corrigés : (a) parseCSVForPreview ne skippait pas la ligne `Export du …` Doctolib → `stripLeadingMetadata()` ; (b) STATUTS_RECONNUS regex étendue (Non honoré, Excusé, Manqué, présent, OK, HONORE/ABSENT) ; (c) audit-validation.ts avait LE MÊME bug → `findHeaderLineIndex()` ajouté ; (d) Playwright `setInputFiles` direct ne déclenchait pas onDrop de react-dropzone → flux filechooser ; (e) playwright.config timeout test 120s + nav 60s pour cold-start Next.js sur WSL. Commits: `46acadd` (parseCSVForPreview + e2e) + `434b84e` (audit-validation server). 10 CSVs de test ajoutés dans `01_Leads_CSV/test_*.csv` (5 propres + 5 altérés).
+Last session: 2026-04-26 12:25 GMT+2
+Stopped at: ✅ **Phase 7-bis n8n alignment LIVRÉE** (option propre choisie — refactor graphe avec IF + 2 Respond Webhook).
 
-🚨 **BLOQUANT Phase 8** découvert en smoke prod : workflow n8n `Hc3aGjSuNjd4KVuu` (Audit Flash No-Shows live) renvoie 502 sur Doctolib clean car son nœud "Parse & Validate CSV" a 4 gaps non-alignés avec Phase 7 :
-1. Ne skippe pas la ligne métadonnée Doctolib
-2. Ne reconnaît pas les statuts FR étendus
-3. Ne renvoie pas les 5 error_code typés Phase 7
-4. Ne passthrough pas les champs degraded/reco_rate/ignored_count/sample_ignored
+Workflow `Hc3aGjSuNjd4KVuu` mis à jour via MCP `n8n_update_full_workflow` :
+- Parse & Validate CSV : strip Doctolib metadata, regex statuts FR/EN étendue, retourne `{success, ...}` (jamais throw), expose `nb_rdv_valides`/`reco_rate`/`ignored_count`/`sample_ignored`, self-handle INSUFFICIENT_DATA + INVALID_DATE_FORMAT
+- Nouveau IF "Validation Success?" + nouveau Respond Webhook "Respond Error" (HTTP 400 + JSON typé)
+- Formater Réponse passthrough des 4 champs
 
-À reprendre demain matin (2026-04-27) AVANT Phase 8 deploy. Reco : option C+B (workaround route.ts pour débloquer Doctolib + nouveau plan 07-09 pour aligner n8n). Outils : MCP n8n (`mcp__n8n-mcp__n8n_get_workflow` / `n8n_update_partial_workflow`). Voir aussi memory `project_phase7_n8n_followup`.
+**Smoke test prod 4/4 cas validés** (curl + UI utilisateur) :
+1. test_01 Doctolib clean → 200, 480 RDV, audit complet ✅
+2. test_09 metadata header (3 lignes) → 200, 480 RDV (gap 1 OK) ✅
+3. CSV sans colonne statut → 400 `MISSING_COLUMNS` typé ✅
+4. CSV 15 RDV (< MIN_RDV_VALIDES) → 400 `INSUFFICIENT_DATA` avec `reco_rate`/`nb_rdv_valides` ✅
+
+Workaround `stripLeadingMetadata` côté `route.ts` (commit `ae78614`) **retiré** car redondant — n8n gère maintenant.
+
+Snapshots préservés : `04_Scripts_Workflows/audit-flash-Hc3aGjSuNjd4KVuu-snapshot-2026-04-26.json` (pre) + `-postrefactor.json` (post).
+
+**Phase 8 deploy Vercel = DÉBLOQUÉE.** Si problème n8n en prod (≥3 incidents en 2 semaines), fallback option simple documenté dans memory `feedback_n8n_workflow_error_strategy`.
 Resume file: None
