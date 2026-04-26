@@ -9,9 +9,19 @@ import {
   FileText,
 } from "lucide-react";
 import AuditDashboard from "@/components/audit/AuditDashboard";
+import CSVPreview, { type CSVPreviewSnapshot } from "@/components/audit/CSVPreview";
+import DegradedConfirmDialog from "@/components/audit/DegradedConfirmDialog";
+import CSVErrorCard from "@/components/audit/CSVErrorCard";
 import type { AuditResponse, GoogleData } from "@/types/audit";
+import type { AuditErrorCode } from "@/types/audit-errors";
 
-type Etat = "formulaire" | "loading" | "resultats" | "erreur";
+type Etat = "formulaire" | "preview" | "loading" | "resultats" | "erreur";
+
+type StructuredError = {
+  error_code: AuditErrorCode | string;
+  error: string;
+  details?: Record<string, unknown>;
+} | null;
 
 const ETAPES_LOADING = [
   { id: 1, texte: "Lecture du fichier CSV...", delai: 0 },
@@ -32,8 +42,26 @@ export default function AuditPage() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [google, setGoogle] = useState<GoogleData | null>(null);
 
+  // Phase 7 — états additionnels
+  const [structuredError, setStructuredError] = useState<StructuredError>(null);
+  const [degradedDialogOpen, setDegradedDialogOpen] = useState(false);
+  const [previewSnapshot, setPreviewSnapshot] = useState<CSVPreviewSnapshot | null>(null);
+
+  const handleResetUpload = useCallback(() => {
+    setFile(null);
+    setStructuredError(null);
+    setPreviewSnapshot(null);
+    setDegradedDialogOpen(false);
+    setEtat("formulaire");
+  }, []);
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) setFile(acceptedFiles[0]);
+    if (acceptedFiles.length > 0) {
+      setFile(acceptedFiles[0]);
+      setStructuredError(null);
+      setPreviewSnapshot(null);
+      setEtat("preview");
+    }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -49,11 +77,12 @@ export default function AuditPage() {
     },
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (degradedConfirmed: boolean) => {
     if (!file || !nomCabinet.trim()) {
       toast.error("Veuillez sélectionner un fichier CSV et indiquer le nom du cabinet");
       return;
     }
+    console.info("[audit] submit", { degradedConfirmed });
     setEtat("loading");
     setEtapeActuelle(0);
     ETAPES_LOADING.forEach(({ id, delai }) => {
@@ -67,11 +96,35 @@ export default function AuditPage() {
       formData.append("nom_cabinet", nomCabinet.trim());
       formData.append("ca_moyen", String(caMoyen));
       if (email.trim()) formData.append("email", email.trim());
+      if (degradedConfirmed) formData.append("degraded_confirmed", "true");
       try {
         const response = await fetch("/api/audit", { method: "POST", body: formData });
         const data: AuditResponse = await response.json();
-        if (!response.ok) throw new Error(data.error || "Erreur serveur");
-        if (!data.success) throw new Error(data.error || "Erreur lors de l'analyse");
+        if (!response.ok) {
+          // Erreur structurée API → CSVErrorCard
+          if (data && data.error_code) {
+            setStructuredError({
+              error_code: data.error_code,
+              error: data.error || "Erreur lors du traitement du fichier",
+              details: data.details,
+            });
+            setEtat("erreur");
+            return;
+          }
+          throw new Error(data.error || "Erreur serveur");
+        }
+        if (!data.success) {
+          if (data.error_code) {
+            setStructuredError({
+              error_code: data.error_code,
+              error: data.error || "Erreur lors du traitement du fichier",
+              details: data.details,
+            });
+            setEtat("erreur");
+            return;
+          }
+          throw new Error(data.error || "Erreur lors de l'analyse");
+        }
         setResultats(data);
         setEtat("resultats");
       } catch (err) {
@@ -84,7 +137,14 @@ export default function AuditPage() {
     reader.readAsText(file, "utf-8");
   };
 
-  const reessayer = () => { setEtat("formulaire"); setErreur(""); setFile(null); setEtapeActuelle(0); };
+  const reessayer = () => {
+    setErreur("");
+    setStructuredError(null);
+    setFile(null);
+    setPreviewSnapshot(null);
+    setEtapeActuelle(0);
+    setEtat("formulaire");
+  };
 
   const handleDownloadPDF = async () => {
     if (!resultats) return;
@@ -165,27 +225,33 @@ export default function AuditPage() {
                 ))}
               </div>
 
-              {/* Dropzone */}
-              <div
-                {...getRootProps()}
-                className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 mb-8 flex flex-col items-center justify-center group ${
-                  isDragActive
-                    ? "border-primaryDark bg-emerald-50"
-                    : "border-gray-200 bg-gray-50 hover:bg-emerald-50/40 hover:border-primaryDark/60"
-                }`}
-                aria-label="Zone de dépôt de fichier CSV"
-              >
-                <input {...getInputProps()} />
-                <div className="w-16 h-16 bg-white rounded-2xl border border-gray-200 shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-200">
-                  <UploadCloud className={`w-7 h-7 ${isDragActive ? "text-primaryDark" : "text-slate-400"}`} aria-hidden="true" />
+              {/* Carte d'erreur structurée OU dropzone */}
+              {structuredError ? (
+                <div className="mb-8">
+                  <CSVErrorCard error={structuredError} onRetry={handleResetUpload} />
                 </div>
-                <p className={`font-serif text-xl mb-1.5 ${isDragActive ? "text-primaryDark" : "text-slate-900"}`}>
-                  {file ? file.name : "Déposez votre CSV ici"}
-                </p>
-                <p className="text-sm text-slate-600">
-                  {file ? "Cliquez pour modifier" : "Cliquez ou glissez votre export Doctolib"}
-                </p>
-              </div>
+              ) : (
+                <div
+                  {...getRootProps()}
+                  className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 mb-8 flex flex-col items-center justify-center group ${
+                    isDragActive
+                      ? "border-primaryDark bg-emerald-50"
+                      : "border-gray-200 bg-gray-50 hover:bg-emerald-50/40 hover:border-primaryDark/60"
+                  }`}
+                  aria-label="Zone de dépôt de fichier CSV"
+                >
+                  <input {...getInputProps()} />
+                  <div className="w-16 h-16 bg-white rounded-2xl border border-gray-200 shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-200">
+                    <UploadCloud className={`w-7 h-7 ${isDragActive ? "text-primaryDark" : "text-slate-400"}`} aria-hidden="true" />
+                  </div>
+                  <p className={`font-serif text-xl mb-1.5 ${isDragActive ? "text-primaryDark" : "text-slate-900"}`}>
+                    {file ? file.name : "Déposez votre CSV ici"}
+                  </p>
+                  <p className="text-sm text-slate-600">
+                    {file ? "Cliquez pour modifier" : "Cliquez ou glissez votre export Doctolib"}
+                  </p>
+                </div>
+              )}
 
               {/* Formulaire */}
               <div className="space-y-5 text-left">
@@ -230,7 +296,13 @@ export default function AuditPage() {
                   />
                 </div>
                 <button
-                  onClick={handleSubmit}
+                  onClick={() => {
+                    if (!file) {
+                      toast.error("Veuillez sélectionner un fichier CSV");
+                      return;
+                    }
+                    setEtat("preview");
+                  }}
                   className="w-full bg-primaryDark hover:bg-[#053b2d] text-white py-3 rounded-full font-semibold text-sm transition-shadow hover:shadow-cta mt-2 flex items-center justify-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primaryDark focus-visible:ring-offset-2"
                 >
                   <TrendingUp className="w-4 h-4 group-hover:scale-110 transition-transform" aria-hidden="true" />
@@ -248,6 +320,37 @@ export default function AuditPage() {
                   · Aucun nom patient stocké
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── PREVIEW (D-02) ─── */}
+        {etat === "preview" && file && !structuredError && (
+          <div className="max-w-xl mx-auto w-full">
+            <CSVPreview
+              file={file}
+              onContinue={(degraded) => {
+                if (!nomCabinet.trim()) {
+                  toast.error("Veuillez indiquer le nom du cabinet");
+                  setEtat("formulaire");
+                  return;
+                }
+                if (degraded) {
+                  setDegradedDialogOpen(true);
+                } else {
+                  handleSubmit(false);
+                }
+              }}
+              onCancel={handleResetUpload}
+              onError={(err) => {
+                setStructuredError(err);
+                setEtat("erreur");
+              }}
+              onReady={(snapshot) => setPreviewSnapshot(snapshot)}
+            />
+            <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-500">
+              <Activity className="w-3.5 h-3.5" aria-hidden="true" />
+              Cabinet : <span className="font-medium text-slate-700">{nomCabinet || "—"}</span>
             </div>
           </div>
         )}
@@ -286,38 +389,66 @@ export default function AuditPage() {
 
         {/* ─── RÉSULTATS ─── */}
         {etat === "resultats" && resultats && (
-          <AuditDashboard
-            stats={resultats.stats}
-            rapport={resultats.rapport_texte ?? ""}
-            google={google}
-            onGoogleChange={setGoogle}
-            onDownloadPDF={handleDownloadPDF}
-            isGeneratingPDF={isGeneratingPDF}
-          />
+          <>
+            {resultats.degraded && (
+              <div className="max-w-5xl mx-auto w-full px-4 pt-6">
+                <div className="mb-6 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800">
+                  <strong className="font-semibold">Audit partiel</strong> : {resultats.ignored_count ?? 0} ligne(s)
+                  ignorée(s) sur le fichier importé ({Math.round((resultats.reco_rate ?? 0) * 100)} % reconnues).
+                </div>
+              </div>
+            )}
+            <AuditDashboard
+              stats={resultats.stats}
+              rapport={resultats.rapport_texte ?? ""}
+              google={google}
+              onGoogleChange={setGoogle}
+              onDownloadPDF={handleDownloadPDF}
+              isGeneratingPDF={isGeneratingPDF}
+            />
+          </>
         )}
 
         {/* ─── ERREUR ─── */}
         {etat === "erreur" && (
           <div className="max-w-xl mx-auto w-full">
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
-              <div className="w-12 h-12 bg-red-50 border border-red-200 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-semibold" aria-hidden="true">!</div>
-              <h1 className="font-serif text-2xl md:text-3xl text-slate-900 mb-2 tracking-tight">Une erreur est survenue</h1>
-              <p className="text-slate-600 mb-8">{erreur}</p>
-              <div className="flex flex-col sm:flex-row justify-center gap-3">
-                <button
-                  onClick={reessayer}
-                  className="bg-primaryDark hover:bg-[#053b2d] text-white px-6 py-3 rounded-full text-sm font-semibold transition-shadow hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primaryDark focus-visible:ring-offset-2"
-                >
-                  Réessayer
-                </button>
-                <Link href="/" className="px-6 py-3 border border-gray-200 bg-white text-slate-700 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors">
-                  Retour à l&apos;accueil
-                </Link>
+            {structuredError ? (
+              <CSVErrorCard error={structuredError} onRetry={handleResetUpload} />
+            ) : (
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+                <div className="w-12 h-12 bg-red-50 border border-red-200 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-semibold" aria-hidden="true">!</div>
+                <h1 className="font-serif text-2xl md:text-3xl text-slate-900 mb-2 tracking-tight">Une erreur est survenue</h1>
+                <p className="text-slate-600 mb-8">{erreur}</p>
+                <div className="flex flex-col sm:flex-row justify-center gap-3">
+                  <button
+                    onClick={reessayer}
+                    className="bg-primaryDark hover:bg-[#053b2d] text-white px-6 py-3 rounded-full text-sm font-semibold transition-shadow hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primaryDark focus-visible:ring-offset-2"
+                  >
+                    Réessayer
+                  </button>
+                  <Link href="/" className="px-6 py-3 border border-gray-200 bg-white text-slate-700 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors">
+                    Retour à l&apos;accueil
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </main>
+
+      {/* DegradedConfirmDialog (toujours monté, contrôlé) */}
+      <DegradedConfirmDialog
+        open={degradedDialogOpen}
+        onOpenChange={setDegradedDialogOpen}
+        recoRate={previewSnapshot?.recoRate ?? 0}
+        ignoredCount={previewSnapshot?.ignoredCount ?? 0}
+        totalRows={previewSnapshot?.totalRows ?? 0}
+        onConfirm={() => {
+          setDegradedDialogOpen(false);
+          handleSubmit(true);
+        }}
+        onCancel={handleResetUpload}
+      />
     </div>
   );
 }

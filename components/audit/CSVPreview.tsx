@@ -18,6 +18,14 @@
 import { useEffect, useRef } from "react";
 import { useCSVPreview } from "@/hooks/useCSVPreview";
 
+export interface CSVPreviewSnapshot {
+  recoRate: number;
+  ignoredCount: number;
+  totalRows: number;
+  degraded: boolean;
+  willReject: boolean;
+}
+
 export interface CSVPreviewProps {
   file: File;
   /** Parent décide de POST direct OU d&apos;ouvrir le DegradedConfirmDialog. */
@@ -30,6 +38,8 @@ export interface CSVPreviewProps {
     error: string;
     details?: Record<string, unknown>;
   }) => void;
+  /** Plan 07-05 — remonte les métriques calculées dès que le preview est prêt. */
+  onReady?: (snapshot: CSVPreviewSnapshot) => void;
 }
 
 const RECOGNIZED_HEADERS = /^(date|jour|date_rdv|date du rendez-vous|statut|status|état|etat)$/i;
@@ -39,6 +49,7 @@ export function CSVPreview({
   onContinue,
   onCancel,
   onError,
+  onReady,
 }: CSVPreviewProps) {
   const { status, result } = useCSVPreview(file);
 
@@ -53,6 +64,25 @@ export function CSVPreview({
       errorReported.current = false;
     }
   }, [status, result, onError]);
+
+  // Plan 07-05 — remonter le snapshot une seule fois lorsqu'il devient ready.
+  const readyReported = useRef(false);
+  useEffect(() => {
+    if (status === "ready" && result && result.ok && !readyReported.current) {
+      readyReported.current = true;
+      const { recoRate, totalRows, nbRdvValides, degraded, willReject } = result.preview;
+      onReady?.({
+        recoRate,
+        totalRows,
+        ignoredCount: Math.max(0, totalRows - nbRdvValides),
+        degraded,
+        willReject,
+      });
+    }
+    if (status !== "ready") {
+      readyReported.current = false;
+    }
+  }, [status, result, onReady]);
 
   if (status === "idle" || status === "loading") {
     return (
