@@ -219,17 +219,27 @@ livrer un audit en autonomie sans support manuel.
 
 ### Phase 9 · Monitoring & Analytics
 
-**Status:** 📝 à spec
-**Goal:** Instrumenter le funnel v2 pour mesurer la conversion réelle
-et détecter les régressions.
+**Status:** 🛠️ planifiée — exécution en attente
+**Goal:** Instrumenter le funnel commercial v2 (`audit.perfiamatic.fr`) avec 11 events client-side via Vercel Web Analytics (cookieless RGPD-friendly), pour passer du pilotage par feedback à un pilotage par métriques objectives observables dans le dashboard Vercel.
 
-**Scope prévisionnel :**
-- Events clés : `landing_view`, `audit_upload`, `step_0N_reached`,
-  `cta_calendly_click`, `google_diagnostic_triggered`
-- Stack analytics (Vercel Analytics, Plausible, ou équivalent
-  RGPD-friendly — pas Google Analytics côté EU)
-- Dashboard conversion simple (funnel landing → RDV Calendly)
-- Alertes sur erreurs `/api/audit` (Sentry ou logs Vercel)
+**Scope verrouillé (cf 09-SPEC.md, 6 requirements R1-R6) :**
+- Installation `@vercel/analytics` + `<Analytics />` dans `app/layout.tsx`
+- 11 events typés via `lib/analytics.ts` (helpers fail-soft, PII statiquement bloquée)
+- Wiring sur landing, audit page, hooks/preview, CSVErrorCard, CTACalendly, DiagnosticGoogle, AuditDashboard
+- Vitest sur les 11 helpers (~15-20 tests)
+- Bundle delta route `/` ≤ +5 KB gzipped (mesure manuelle baseline/after)
+- Smoke prod manuel sur `audit.perfiamatic.fr` (events ne firent pas en dev)
+
+**Hors scope (reportés) :** Sentry server-side → Phase 9-bis · Dashboard funnel custom + tracking n8n → Phase 10 · A/B testing, heatmaps → backlog v2.1
+
+**Plans:** 5 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Install @vercel/analytics + baseline bundle + monter <Analytics /> dans RootLayout
+- [ ] 09-02-PLAN.md — lib/analytics.ts (11 helpers typés fail-soft) + Vitest 15-20 tests
+- [ ] 09-03-PLAN.md — Wiring 11 call-sites (landing + audit page + hooks + components) + grep guards
+- [ ] 09-04-PLAN.md — Mesure bundle after + delta vs baseline (AC-4)
+- [ ] 09-05-PLAN.md — SUMMARY phase D-10 + checklist smoke prod (AC-1, AC-2, AC-6)
 
 ---
 
