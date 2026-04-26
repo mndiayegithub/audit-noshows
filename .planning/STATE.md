@@ -4,14 +4,14 @@ milestone: v2.0
 milestone_name: — Finalisation
 status: unknown
 stopped_at: ✅ **Phase 7-bis CLOSE — n8n alignment + 3 fixes post-UAT, 10/10 smoke prod validés**.
-last_updated: "2026-04-26T14:30:00.000Z"
-last_activity: 2026-04-26 -- Plan 09-02 complete (typed analytics helpers + vitest GREEN)
+last_updated: "2026-04-26T16:30:00.000Z"
+last_activity: "2026-04-26 -- Plan 09-01 complete: @vercel/analytics@2.0.1 installed + <Analytics /> mounted in RootLayout, bundle baseline / = 160 kB captured pre-install for AC-4 delta. Wave 1 (09-01 + 09-02) DONE — disjoint files merged cleanly."
 progress:
   total_phases: 9
   completed_phases: 4
   total_plans: 31
-  completed_plans: 24
-  percent: 77
+  completed_plans: 25
+  percent: 81
 ---
 
 # Project State
@@ -88,6 +88,9 @@ Recent decisions affecting current work:
 - Plan 09-02: `lib/analytics.ts` = single import barrier pour `@vercel/analytics` (D-03) — 11 helpers typés + `safeTrack` try/catch silencieux (D-04 fail-soft) + `CalendlyCtaLocation` literal union exporté
 - Plan 09-02: PII safety by construction — signatures TS bloquent statiquement free-form `email`/`nom_cabinet`/CSV content (R3 / AC-3)
 - Plan 09-02: TDD red→green honoré (`b78e58b` test → `caf218d` impl) ; vitest GREEN 19/19 en 7.35s
+- Plan 09-01: `@vercel/analytics@2.0.1` résolu (npm latest = 2.x ; deviation Rule 3 vs plan-spec 1.x) ; subpath `/react` inchangé per RESEARCH Q1
+- Plan 09-01: Bundle baseline / = 160 kB / /audit = 242 kB capturé pre-install dans `09-01-bundle-baseline.txt` (R5 baseline pour AC-4 delta Plan 09-04)
+- Plan 09-01: `<Analytics />` monté en sibling de Toaster + Agentation (D-01) ; pas de prop `mode`/`debug` (defaults Vercel auto)
 
 ### Pending Todos
 
