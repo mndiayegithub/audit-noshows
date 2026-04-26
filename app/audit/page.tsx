@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, createElement } from "react";
+import { useState, useEffect, useCallback, createElement } from "react";
 import { useDropzone } from "react-dropzone";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -15,6 +15,13 @@ import CSVErrorCard from "@/components/audit/CSVErrorCard";
 import { readCSVAsText } from "@/lib/readCSVAsText";
 import type { AuditResponse, GoogleData } from "@/types/audit";
 import type { AuditErrorCode } from "@/types/audit-errors";
+import {
+  trackAuditView,
+  trackAuditSubmitted,
+  trackAuditSuccess,
+  trackAuditFailed,
+  trackPdfDownloaded,
+} from "@/lib/analytics";
 
 type Etat = "formulaire" | "preview" | "loading" | "resultats" | "erreur";
 
@@ -47,6 +54,11 @@ export default function AuditPage() {
   const [structuredError, setStructuredError] = useState<StructuredError>(null);
   const [degradedDialogOpen, setDegradedDialogOpen] = useState(false);
   const [previewSnapshot, setPreviewSnapshot] = useState<CSVPreviewSnapshot | null>(null);
+
+  // Phase 9 — audit_view (R2 event 3)
+  useEffect(() => {
+    trackAuditView();
+  }, []);
 
   const handleResetUpload = useCallback(() => {
     setFile(null);
@@ -84,6 +96,8 @@ export default function AuditPage() {
       return;
     }
     console.info("[audit] submit", { degradedConfirmed });
+    // Phase 9 — audit_submitted (R2 event 6)
+    trackAuditSubmitted(degradedConfirmed);
     setEtat("loading");
     setEtapeActuelle(0);
     ETAPES_LOADING.forEach(({ id, delai }) => {
@@ -101,6 +115,8 @@ export default function AuditPage() {
       const data: AuditResponse = await response.json();
       if (!response.ok) {
         if (data && data.error_code) {
+          // Phase 9 — audit_failed (R2 event 8)
+          trackAuditFailed(String(data.error_code));
           setStructuredError({
             error_code: data.error_code,
             error: data.error || "Erreur lors du traitement du fichier",
@@ -109,10 +125,12 @@ export default function AuditPage() {
           setEtat("erreur");
           return;
         }
+        trackAuditFailed(String(response.status));
         throw new Error(data.error || "Erreur serveur");
       }
       if (!data.success) {
         if (data.error_code) {
+          trackAuditFailed(String(data.error_code));
           setStructuredError({
             error_code: data.error_code,
             error: data.error || "Erreur lors du traitement du fichier",
@@ -121,12 +139,23 @@ export default function AuditPage() {
           setEtat("erreur");
           return;
         }
+        trackAuditFailed("UNKNOWN_FAILURE");
         throw new Error(data.error || "Erreur lors de l'analyse");
+      }
+      // Phase 9 — audit_success (R2 event 7).
+      // score = 100 - taux * 3.2 (formula utilisée dans rendu ScoreHero, voir CLAUDE.md).
+      // taux est en % (0-100) dans data.stats.global.taux ; data.stats.benchmark.votre_taux idem.
+      {
+        const tauxNoshow = data.stats?.global?.taux ?? 0;
+        const score = Math.max(0, Math.min(100, Math.round(100 - tauxNoshow * 3.2)));
+        trackAuditSuccess(score, tauxNoshow);
       }
       setResultats(data);
       setEtat("resultats");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Une erreur est survenue";
+      // Phase 9 — capture client-side exception (timeout, JSON parse, network)
+      trackAuditFailed("CLIENT_EXCEPTION");
       setErreur(message);
       setEtat("erreur");
       toast.error(message);
@@ -144,6 +173,9 @@ export default function AuditPage() {
 
   const handleDownloadPDF = async () => {
     if (!resultats) return;
+    // Phase 9 — pdf_downloaded (R2 event 11). Émis en début de fonction
+    // pour capturer l'intention même si la génération échoue ensuite.
+    trackPdfDownloaded();
     setIsGeneratingPDF(true);
     try {
       const [{ pdf }, { default: RapportPDF }] = await Promise.all([
