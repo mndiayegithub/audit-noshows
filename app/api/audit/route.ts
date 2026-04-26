@@ -1,7 +1,14 @@
-import { validateAuditPayload } from "@/lib/audit-validation";
+import {
+  validateAuditPayload,
+  evaluateRecognition,
+} from "@/lib/audit-validation";
 import { logServerError } from "@/lib/safe-log";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { normalizeN8nResponse } from "@/lib/n8n-normalize";
+import {
+  normalizeN8nResponse,
+  mapN8nErrorToCode,
+} from "@/lib/n8n-normalize";
+import type { AuditErrorPayload } from "@/types/audit-errors";
 
 export const maxDuration = 60;
 
@@ -39,6 +46,16 @@ export async function POST(request: Request) {
 
     const v = validateAuditPayload(formData);
     if (!v.ok) {
+      // Phase 7 (REQ #2): branche structurée si error_code typé, sinon legacy.
+      if ("error_code" in v) {
+        const payload: AuditErrorPayload = {
+          success: false,
+          error_code: v.error_code,
+          error: v.error,
+          ...(v.details ? { details: v.details } : {}),
+        };
+        return Response.json(payload, { status: 400 });
+      }
       return Response.json({ success: false, error: v.error }, { status: 400 });
     }
 
@@ -71,13 +88,66 @@ export async function POST(request: Request) {
       );
     }
 
-    return Response.json(normalizeN8nResponse(raw));
+    const normalized = normalizeN8nResponse(raw);
+
+    // Phase 7 — REQ #2 / #3 / #4 : interpréter la réponse normalisée.
+    if (
+      normalized &&
+      typeof normalized === "object" &&
+      !Array.isArray(normalized)
+    ) {
+      const obj = normalized as Record<string, unknown>;
+
+      // Cas erreur n8n (success=false avec message technique) → mapper sur error_code typé.
+      if (obj.success === false && typeof obj.error === "string") {
+        const code = mapN8nErrorToCode(obj.error);
+        const payload: AuditErrorPayload = {
+          success: false,
+          error_code: code,
+          error: obj.error,
+          details: { source: "n8n" },
+        };
+        return Response.json(payload, { status: 400 });
+      }
+
+      // Cas success: évaluer reco_rate / nb_rdv_valides si fournis par n8n (REQ #3 + #4).
+      if (obj.success === true) {
+        const recoRate =
+          typeof obj.reco_rate === "number" ? (obj.reco_rate as number) : null;
+        const nbValides =
+          typeof obj.nb_rdv_valides === "number"
+            ? (obj.nb_rdv_valides as number)
+            : null;
+
+        if (recoRate !== null && nbValides !== null) {
+          const verdict = evaluateRecognition(recoRate, nbValides);
+          if (verdict.outcome === "reject") {
+            return Response.json(verdict.error, { status: 400 });
+          }
+          if (verdict.outcome === "degraded") {
+            // Passthrough des champs dégradé fournis par n8n (sample_ignored, ignored_count).
+            return Response.json({
+              ...obj,
+              degraded: true,
+              reco_rate: verdict.reco_rate,
+            });
+          }
+          // outcome === "ok" → passthrough standard.
+        }
+      }
+    }
+
+    return Response.json(normalized);
   } catch (error: unknown) {
     logServerError("api/audit", error);
-    const message = error instanceof Error ? error.message : "Erreur serveur";
-    return Response.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    // Phase 7 — message FR clair, aucun leak (URL webhook, stack trace) côté client.
+    const payload: AuditErrorPayload = {
+      success: false,
+      error_code: "EMPTY_AFTER_PARSING",
+      error:
+        "Le service d'audit est momentanément indisponible. Veuillez réessayer dans quelques minutes.",
+      details: { source: "network" },
+    };
+    return Response.json(payload, { status: 502 });
   }
 }
