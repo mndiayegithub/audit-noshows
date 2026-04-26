@@ -1,0 +1,11 @@
+{
+  "success": false,
+  "error_code": "INSUFFICIENT_DATA",
+  "error": "Données trop incomplètes pour produire un audit fiable (42 % reconnus, 14 RDV valides — il faut au moins 50 % et 20 RDV).",
+  "details": {
+    "reco_rate": 0.42,
+    "nb_rdv_valides": 14,
+    "min_reco_rate": 0.5,
+    "min_rdv_valides": 20
+  }
+}

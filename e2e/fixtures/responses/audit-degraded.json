@@ -1,0 +1,47 @@
+{
+  "success": true,
+  "stats": {
+    "nom_cabinet": "Cabinet Test Degraded",
+    "periode": { "debut": "2025-10-01", "fin": "2026-04-01", "nb_mois": 6 },
+    "global": {
+      "total_rdv": 408,
+      "no_shows": 52,
+      "honores": 356,
+      "taux": 12.7,
+      "ca_moyen": 80,
+      "ca_perdu_mois": 693,
+      "ca_perdu_an": 8320
+    },
+    "benchmark": { "votre_taux": 12.7, "optimal": "5.0", "ecart": 7.7 },
+    "top_3_pires": [
+      { "jour": "Mercredi", "heure": "10:00", "total": 35, "noShows": 7, "taux": 20.0, "ca_perdu": 560 },
+      { "jour": "Lundi", "heure": "09:00", "total": 30, "noShows": 5, "taux": 16.7, "ca_perdu": 400 },
+      { "jour": "Jeudi", "heure": "16:00", "total": 28, "noShows": 4, "taux": 14.3, "ca_perdu": 320 }
+    ],
+    "top_3_meilleurs": [
+      { "jour": "Vendredi", "heure": "14:00", "total": 25, "noShows": 1, "taux": 4.0, "ca_perdu": 80 },
+      { "jour": "Mardi", "heure": "11:00", "total": 30, "noShows": 2, "taux": 6.7, "ca_perdu": 160 },
+      { "jour": "Samedi", "heure": "09:30", "total": 22, "noShows": 2, "taux": 9.1, "ca_perdu": 160 }
+    ],
+    "potentiel": { "passage_5": 5200, "passage_45": 4800 },
+    "par_jour": [
+      { "jour": "Lundi", "total_rdv": 76, "no_shows": 9, "taux": 11.8 },
+      { "jour": "Mardi", "total_rdv": 75, "no_shows": 7, "taux": 9.3 },
+      { "jour": "Mercredi", "total_rdv": 80, "no_shows": 14, "taux": 17.5 },
+      { "jour": "Jeudi", "total_rdv": 72, "no_shows": 11, "taux": 15.3 },
+      { "jour": "Vendredi", "total_rdv": 68, "no_shows": 8, "taux": 11.8 },
+      { "jour": "Samedi", "total_rdv": 37, "no_shows": 3, "taux": 8.1 }
+    ]
+  },
+  "rapport_texte": "## Synthèse (rapport partiel)\n\n72 lignes ignorées (15 %) en raison de statuts inconnus ou dates invalides. Les statistiques portent sur 408 RDV reconnus.\n",
+  "pdf_url": null,
+  "email_sent": false,
+  "degraded": true,
+  "reco_rate": 0.85,
+  "ignored_count": 72,
+  "sample_ignored": [
+    { "ligne": 14, "raison": "statut inconnu", "valeur": "Reporté" },
+    { "ligne": 27, "raison": "statut inconnu", "valeur": "DNA" },
+    { "ligne": 41, "raison": "date invalide", "valeur": "" }
+  ]
+}

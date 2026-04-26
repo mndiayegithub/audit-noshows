@@ -1,0 +1,39 @@
+{
+  "success": true,
+  "stats": {
+    "nom_cabinet": "Cabinet Test",
+    "periode": { "debut": "2025-10-01", "fin": "2026-04-01", "nb_mois": 6 },
+    "global": {
+      "total_rdv": 480,
+      "no_shows": 58,
+      "honores": 422,
+      "taux": 12.08,
+      "ca_moyen": 80,
+      "ca_perdu_mois": 725,
+      "ca_perdu_an": 8700
+    },
+    "benchmark": { "votre_taux": 12.08, "optimal": "5.0", "ecart": 7.08 },
+    "top_3_pires": [
+      { "jour": "Mercredi", "heure": "10:00", "total": 40, "noShows": 8, "taux": 20.0, "ca_perdu": 640 },
+      { "jour": "Lundi", "heure": "09:00", "total": 35, "noShows": 6, "taux": 17.1, "ca_perdu": 480 },
+      { "jour": "Jeudi", "heure": "16:00", "total": 30, "noShows": 5, "taux": 16.7, "ca_perdu": 400 }
+    ],
+    "top_3_meilleurs": [
+      { "jour": "Vendredi", "heure": "14:00", "total": 28, "noShows": 1, "taux": 3.6, "ca_perdu": 80 },
+      { "jour": "Mardi", "heure": "11:00", "total": 32, "noShows": 2, "taux": 6.3, "ca_perdu": 160 },
+      { "jour": "Samedi", "heure": "09:30", "total": 24, "noShows": 2, "taux": 8.3, "ca_perdu": 160 }
+    ],
+    "potentiel": { "passage_5": 5800, "passage_45": 5220 },
+    "par_jour": [
+      { "jour": "Lundi", "total_rdv": 90, "no_shows": 10, "taux": 11.1 },
+      { "jour": "Mardi", "total_rdv": 88, "no_shows": 8, "taux": 9.1 },
+      { "jour": "Mercredi", "total_rdv": 92, "no_shows": 15, "taux": 16.3 },
+      { "jour": "Jeudi", "total_rdv": 85, "no_shows": 12, "taux": 14.1 },
+      { "jour": "Vendredi", "total_rdv": 80, "no_shows": 9, "taux": 11.3 },
+      { "jour": "Samedi", "total_rdv": 45, "no_shows": 4, "taux": 8.9 }
+    ]
+  },
+  "rapport_texte": "## Synthèse\n\nVotre cabinet présente un taux de no-show de 12 % sur 480 RDV analysés sur 6 mois.\n\n## Recommandations\n\n- Mettre en place un système de relance SMS J-1\n- Revoir la politique de réservation des créneaux du mercredi matin\n",
+  "pdf_url": null,
+  "email_sent": false
+}
