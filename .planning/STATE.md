@@ -1,3 +1,19 @@
+---
+gsd_state_version: 1.0
+milestone: v2.0
+milestone_name: — Finalisation
+status: unknown
+stopped_at: ✅ **Phase 7-bis CLOSE — n8n alignment + 3 fixes post-UAT, 10/10 smoke prod validés**.
+last_updated: "2026-04-26T12:56:26.626Z"
+last_activity: 2026-04-26 -- Phase 9 planning complete
+progress:
+  total_phases: 9
+  completed_phases: 4
+  total_plans: 31
+  completed_plans: 23
+  percent: 74
+---
+
 # Project State
 
 ## Project Reference
@@ -13,13 +29,14 @@ Phase: 09 of 09 — 📝 à spec (monitoring & analytics)
 Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT), **08 (Déploiement production v2)**
 Phase 08 résumé : smoke E2E 4/4, backup `v1-backup` branch + tag `v1.0.0` (commit `91e66ad`), 3 env vars set + redéploy (55s), Calendly URL baked dans bundle, Google Places API live, rollback plan → `.planning/ROLLBACK.md`. **Découverte** : 0 env vars set avant ce passage → CTA Calendly cassé silencieusement depuis 1er deploy v2 — réparé.
 Next: Phase 09 monitoring (events, dashboard conversion, alertes Sentry/Vercel logs).
-Last activity: 2026-04-26 13h — Phase 8 close : `dpl_3Y9QfUxKtrDtvDQNKCuB7cTe7Epd` live alias `audit.perfiamatic.fr`.
+Last activity: 2026-04-26 -- Phase 9 planning complete
 
 Progress: [████████░░] 89% (8/9 phases validées)
 
 ## Performance Metrics
 
 **Velocity:**
+
 - Total plans completed: 8
 - Average duration: ~9 min
 - Total execution time: ~75 min
@@ -33,6 +50,7 @@ Progress: [████████░░] 89% (8/9 phases validées)
 | 03 | 1/1 | ~7 min  | ~7 min   |
 
 **Recent Trend:**
+
 - Last 5 plans: 02-03 (~8 min), 02-04 (~8 min), 02-05 (~7 min), 02-06 (~4 min), 03-01 (~7 min)
 - Trend: ↘️ plans courts et focalisés ; Phase 3 = livraison backend pure
 
@@ -90,6 +108,7 @@ Stopped at: ✅ **Phase 7-bis CLOSE — n8n alignment + 3 fixes post-UAT, 10/10 
 **Phase 7-bis n8n** (option propre choisie — refactor graphe avec IF + 2 Respond Webhook).
 
 Workflow `Hc3aGjSuNjd4KVuu` mis à jour via MCP `n8n_update_full_workflow` :
+
 - Parse & Validate CSV : strip Doctolib metadata, regex statuts FR/EN étendue, retourne `{success, ...}` (jamais throw), expose `nb_rdv_valides`/`reco_rate`/`ignored_count`/`sample_ignored`, self-handle INSUFFICIENT_DATA + INVALID_DATE_FORMAT
 - Nouveau IF "Validation Success?" + nouveau Respond Webhook "Respond Error" (HTTP 400 + JSON typé)
 - Formater Réponse passthrough des 4 champs
@@ -99,10 +118,12 @@ Workaround `stripLeadingMetadata` côté `route.ts` (commit `ae78614`) **retiré
 Snapshots préservés : `04_Scripts_Workflows/audit-flash-Hc3aGjSuNjd4KVuu-snapshot-2026-04-26.json` (pre) + `-postrefactor.json` (post).
 
 **Fixes additionnels post-UAT** :
+
 - `2a50473` — `BROAD_DATE`/`BROAD_STATUT` substring-match (débloque headers Doctolib `Statut_presence`, Julie `Statut RDV`, Logos `Résultat`). Aligne client `parseCSVForPreview` + serveur `audit-validation`.
 - `d2a37c6` — Helper `lib/readCSVAsText.ts` avec auto-décode UTF-8 → fallback ISO-8859-1. Branché dans `useCSVPreview` + `app/audit/page.tsx` submit. Hint `MISSING_COLUMNS` aussi mis à jour pour lister les variantes acceptées au lieu de demander un rename.
 
 **Smoke test prod 10/10 CSVs ✅** (`01_Leads_CSV/test_*.csv`, via curl) :
+
 - 9/10 à 100 % reco / 0 ignored (golden path complet)
 - 1/10 (test_05_doctolib_statuts_inconnus) à 80 % → mode dégradé attendu (DegradedConfirmDialog côté UI)
 
