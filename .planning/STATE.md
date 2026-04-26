@@ -5,17 +5,18 @@
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Audit rapide des no-shows pour cabinets dentaires — diagnostic + rapport IA en 60 s.
-**Current focus:** Phase 06 — Infra tests Vitest + Playwright (scope à définir avec utilisateur)
+**Current focus:** Phase 07 livrée structurellement — UAT utilisateur en attente (e2e + vitest + smoke prod) avant Phase 08 deploy.
 
 ## Current Position
 
-Phase: 05 of 09 — ✅ Validée UAT par utilisateur 2026-04-26
+Phase: 07 of 09 — ✅ Livrée structurellement 2026-04-26 (UAT utilisateur en attente)
 Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité)
-Next: Phase 06 (tests Vitest + Playwright) puis Phase 07 (Robustesse upload CSV — nouveau, prioritaire avant deploy prod)
-Roadmap mise à jour 2026-04-26 : insertion Phase 07 "Robustesse upload" entre l'ancienne Phase 06 (tests) et l'ancienne Phase 07 (deploy → 08), Phase 08 monitoring → 09. Total 9 phases.
-Last activity: 2026-04-26 — Phases 4 & 5 validées UAT ; fixes additionnels livrés (Footer copy/padding, RapportPDF U+202F + pagination wrap={false}, n8n system prompt durci, sanitizeRapportTexte garde-fou) ; ROADMAP étendue avec nouvelle Phase 07.
+Phase 06 (tests Vitest + Playwright) absorbée dans Phase 07 (config existait, étendue par Phase 7).
+Phase 07 (Robustesse upload CSV) — 8 plans, 4 vagues, 6 REQs livrées. Verifier: 6/6 REQs PASS structurel. Voir `.planning/phases/phase-07-robustesse-upload-csv/PHASE-SUMMARY.md`.
+Next: UAT utilisateur (npm run test:e2e + npm test + smoke prod) → puis Phase 08 (deploy Vercel) → Phase 09 (monitoring).
+Last activity: 2026-04-26 — Phase 7 complète : `lib/audit-thresholds.ts`, `lib/parseCSVForPreview.ts`, `lib/n8n-normalize.ts:mapN8nErrorToCode`, CSVPreview / DegradedConfirmDialog (Radix) / CSVErrorCard, page.tsx full wiring, 12 fixtures CSV + 3 mocks JSON, 3 specs Playwright e2e (mock page.route).
 
-Progress: [█████░░░░░] 56% (5/9 phases livrées et validées)
+Progress: [██████░░░░] 67% (6/9 phases livrées — Phase 7 en attente UAT)
 
 ## Performance Metrics
 
@@ -85,5 +86,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-26 01:30
-Stopped at: Phases 4 & 5 validées UAT par utilisateur. Fixes additionnels livrés post-validation : Footer décalé md:pl-[240px] + nouveau copyright, RapportPDF helper fmtFR() pour bug "2/553" (U+202F), sanitizeRapportTexte() garde-fou JSON brut, n8n AI Agent system prompt durci (workflow Hc3aGjSuNjd4KVuu live), pagination PDF wrap={false} + minPresenceAhead + break conditionnel avant Plan d'action si Google présent. Build green. Phase 06 à scoper avec utilisateur.
+Stopped at: Phase 7 (Robustesse upload CSV) livrée structurellement. 8 plans exécutés en 4 vagues, commit final `0102185`. gsd-verifier rapport `human_needed` : 6/6 REQs PASS structurel, 4 vérifs humaines à dérouler avant deploy (e2e/vitest/smoke réel/smoke dégradé). Tous les artifacts : `lib/audit-thresholds.ts`, `lib/audit-validation.ts` 3-branch, `lib/parseCSVForPreview.ts`, `lib/n8n-normalize.ts:mapN8nErrorToCode + sanitizeRapportTexte`, `lib/mapErrorToCard.ts`, `types/audit-errors.ts`, `hooks/useCSVPreview.ts`, `components/audit/{CSVPreview,DegradedConfirmDialog,CSVErrorCard}.tsx`, `app/audit/page.tsx` full wiring, `app/api/audit/route.ts` error_code+degraded passthrough, `scripts/gen-csv-fixtures.ts`, 12 fixtures CSV + 3 mocks JSON, 3 specs Playwright e2e. PHASE-SUMMARY.md écrit. Build green & lint OK. À faire pour valider : `npm run test:e2e && npm test`, puis upload manuel Doctolib + smoke mode dégradé.
 Resume file: None

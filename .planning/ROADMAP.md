@@ -157,7 +157,7 @@ invariants métier avant deploy prod.
 
 ### Phase 7 · Robustesse upload CSV (autonomie client)
 
-**Status:** 📝 à spec — **prioritaire avant deploy prod**
+**Status:** ✅ Livrée structurellement 2026-04-26 — UAT utilisateur en attente (e2e + vitest + smoke prod) avant Phase 8 deploy. Voir `.planning/phases/phase-07-robustesse-upload-csv/PHASE-SUMMARY.md`.
 **Goal:** Rendre le pipeline d'upload CSV résilient pour un client en
 **autonomie totale**. Aujourd'hui, sur un export Doctolib bien formé ça
 marche, mais en autonomie le taux d'échec silencieux est élevé (encodage
