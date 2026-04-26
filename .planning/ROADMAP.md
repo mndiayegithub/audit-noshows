@@ -140,24 +140,19 @@ stepped reveal)
 
 ### Phase 6 · Infra tests (Vitest + Playwright)
 
-**Status:** 📝 à spec
-**Goal:** Mettre en place l'infra de test minimum pour figer les
-invariants métier avant deploy prod.
+**Status:** ✅ **Validée** 2026-04-26 — absorbée dans Phase 7 (l'infra tests existait déjà partiellement, Phase 7 a étendu : Vitest 79 tests passent ✅, Playwright 3 specs e2e ✅, fixtures CSV générées). Couverture : invariants `ca_perdu` (pas de re-multiplication), normalization n8n (3 shapes), parsing CSV (parseCSVForPreview), validation backend (audit-validation), seuils dégradé/reject, mapping codes erreur, encodage UTF-8/latin1.
 
-**Scope prévisionnel :**
-- Vitest unit : `calcScore`/normalization n8n (3 shapes), money build
-  math, formules benchmarks
-- Playwright e2e : parcours complet landing → upload CSV → 6 steps
-  reveal → CTA Calendly (mock)
-- **Tests de régression `ca_perdu`** : mandatory — guard que le frontend
-  ne re-multiplie jamais
-- Script npm `test`, `test:e2e` + intégration CI basique
+**Livré :**
+- `vitest.config.ts` + 9 suites de tests dans `lib/__tests__/` (79 tests)
+- `playwright.config.ts` + 3 specs `e2e/audit-flow-{ok,degraded,reject}.spec.ts`
+- 12 CSVs fixtures + 3 mocks JSON (`scripts/gen-csv-fixtures.ts`)
+- Scripts npm `test` + `test:e2e`
 
 ---
 
 ### Phase 7 · Robustesse upload CSV (autonomie client)
 
-**Status:** ✅ Livrée structurellement 2026-04-26 — UAT utilisateur en attente (e2e + vitest + smoke prod) avant Phase 8 deploy. Voir `.planning/phases/phase-07-robustesse-upload-csv/PHASE-SUMMARY.md`.
+**Status:** ✅ **Validée** 2026-04-26 — UAT user OK + Phase 7-bis (n8n alignment + 3 fixes post-UAT) close + smoke prod 10/10 CSVs ✅. Voir `.planning/phases/phase-07-robustesse-upload-csv/PHASE-SUMMARY.md`.
 **Goal:** Rendre le pipeline d'upload CSV résilient pour un client en
 **autonomie totale**. Aujourd'hui, sur un export Doctolib bien formé ça
 marche, mais en autonomie le taux d'échec silencieux est élevé (encodage
@@ -206,17 +201,17 @@ livrer un audit en autonomie sans support manuel.
 
 ### Phase 8 · Déploiement production v2
 
-**Status:** 📝 à spec
-**Goal:** Mise en production de la v2 complète (landing + audit
-refondus + Google + RGPD + robustesse upload + tests verts).
+**Status:** 🟡 **Partiellement faite** 2026-04-26 — déploiement Vercel déjà effectué par l'utilisateur. Reste 4 items à valider avant clôture.
 
-**Scope prévisionnel :**
-- Smoke test sur preview Vercel
-- Backup de la v1 en prod (branche `v1-backup`)
-- Déploiement progressif (optionnel : feature flag)
-- Rollback plan documenté
-- Communication utilisateurs existants (email si applicable)
-- Vérification domaine `audit.perfiamatic.fr` OK
+**Scope restant :**
+- 🔴 Smoke test E2E sur l'URL de prod déployée (curl + UI réelle, ≠ test contre n8n direct)
+- 🟠 Backup branche `v1-backup` (tag git de la v1 avant que main = v2 définitive)
+- 🟠 Vérification env vars Vercel (`N8N_WEBHOOK_URL`, `NEXT_PUBLIC_CALENDLY_URL`, `GOOGLE_PLACES_API_KEY`) — un seul manquant casse une feature silencieusement
+- 🟢 Rollback plan documenté (1 ligne : "si problème, revert via Vercel UI vers déploiement précédent")
+
+**Hors scope (reportés v2.1+) :**
+- Déploiement progressif / feature flag (overkill au volume actuel)
+- Communication utilisateurs existants (pas de base installée notable)
 
 ---
 

@@ -5,18 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Audit rapide des no-shows pour cabinets dentaires — diagnostic + rapport IA en 60 s.
-**Current focus:** Phase 07 + 7-bis n8n alignment ✅ livrées et validées en smoke prod — Phase 08 deploy Vercel débloquée.
+**Current focus:** Phase 07 + 7-bis ✅ validées (smoke prod 10/10 CSVs + UAT user OK). Phase 08 partiellement faite (Vercel deploy déjà effectué par user) — reste 4 items de validation avant clôture v2.
 
 ## Current Position
 
-Phase: 07 of 09 — ✅ Livrée + Phase 7-bis n8n alignée (smoke prod 4/4 cas validés 2026-04-26 12h20)
-Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité)
-Phase 06 (tests Vitest + Playwright) absorbée dans Phase 07 (config existait, étendue par Phase 7).
-Phase 07 (Robustesse upload CSV) — 8 plans, 4 vagues, 6 REQs livrées. Verifier: 6/6 REQs PASS structurel. Voir `.planning/phases/phase-07-robustesse-upload-csv/PHASE-SUMMARY.md`.
-Next: UAT utilisateur (npm run test:e2e + npm test + smoke prod) → puis Phase 08 (deploy Vercel) → Phase 09 (monitoring).
-Last activity: 2026-04-26 — Phase 7 complète : `lib/audit-thresholds.ts`, `lib/parseCSVForPreview.ts`, `lib/n8n-normalize.ts:mapN8nErrorToCode`, CSVPreview / DegradedConfirmDialog (Radix) / CSVErrorCard, page.tsx full wiring, 12 fixtures CSV + 3 mocks JSON, 3 specs Playwright e2e (mock page.route).
+Phase: 08 of 09 — 🟡 Partiellement faite (Vercel deploy effectué, 4 items restants : smoke E2E URL prod, backup v1-backup branch, vérif env vars Vercel, rollback plan documenté)
+Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT)
+Phase 07 résumé : 8 plans + 4 fixes post-UAT, 6/6 REQs livrées + smoke prod 10/10 CSVs ✅. Voir `.planning/phases/phase-07-robustesse-upload-csv/PHASE-SUMMARY.md`.
+Next: 4 items Phase 8 restants → puis Phase 09 (monitoring).
+Last activity: 2026-04-26 — Phase 7-bis close : workflow n8n `Hc3aGjSuNjd4KVuu` aligné option propre, regex headers broad, auto-décode UTF-8/latin1, tests 79/79 ✅.
 
-Progress: [██████░░░░] 67% (6/9 phases livrées — Phase 7 en attente UAT)
+Progress: [████████░░] 78% (7/9 phases validées + Phase 8 ~25%)
 
 ## Performance Metrics
 
@@ -85,23 +84,27 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-26 12:25 GMT+2
-Stopped at: ✅ **Phase 7-bis n8n alignment LIVRÉE** (option propre choisie — refactor graphe avec IF + 2 Respond Webhook).
+Last session: 2026-04-26 13:00 GMT+2
+Stopped at: ✅ **Phase 7-bis CLOSE — n8n alignment + 3 fixes post-UAT, 10/10 smoke prod validés**.
+
+**Phase 7-bis n8n** (option propre choisie — refactor graphe avec IF + 2 Respond Webhook).
 
 Workflow `Hc3aGjSuNjd4KVuu` mis à jour via MCP `n8n_update_full_workflow` :
 - Parse & Validate CSV : strip Doctolib metadata, regex statuts FR/EN étendue, retourne `{success, ...}` (jamais throw), expose `nb_rdv_valides`/`reco_rate`/`ignored_count`/`sample_ignored`, self-handle INSUFFICIENT_DATA + INVALID_DATE_FORMAT
 - Nouveau IF "Validation Success?" + nouveau Respond Webhook "Respond Error" (HTTP 400 + JSON typé)
 - Formater Réponse passthrough des 4 champs
 
-**Smoke test prod 4/4 cas validés** (curl + UI utilisateur) :
-1. test_01 Doctolib clean → 200, 480 RDV, audit complet ✅
-2. test_09 metadata header (3 lignes) → 200, 480 RDV (gap 1 OK) ✅
-3. CSV sans colonne statut → 400 `MISSING_COLUMNS` typé ✅
-4. CSV 15 RDV (< MIN_RDV_VALIDES) → 400 `INSUFFICIENT_DATA` avec `reco_rate`/`nb_rdv_valides` ✅
-
-Workaround `stripLeadingMetadata` côté `route.ts` (commit `ae78614`) **retiré** car redondant — n8n gère maintenant.
+Workaround `stripLeadingMetadata` côté `route.ts` (commit `ae78614`) **retiré** car redondant après alignement n8n (commit `b67ff1d`).
 
 Snapshots préservés : `04_Scripts_Workflows/audit-flash-Hc3aGjSuNjd4KVuu-snapshot-2026-04-26.json` (pre) + `-postrefactor.json` (post).
 
-**Phase 8 deploy Vercel = DÉBLOQUÉE.** Si problème n8n en prod (≥3 incidents en 2 semaines), fallback option simple documenté dans memory `feedback_n8n_workflow_error_strategy`.
+**Fixes additionnels post-UAT** :
+- `2a50473` — `BROAD_DATE`/`BROAD_STATUT` substring-match (débloque headers Doctolib `Statut_presence`, Julie `Statut RDV`, Logos `Résultat`). Aligne client `parseCSVForPreview` + serveur `audit-validation`.
+- `d2a37c6` — Helper `lib/readCSVAsText.ts` avec auto-décode UTF-8 → fallback ISO-8859-1. Branché dans `useCSVPreview` + `app/audit/page.tsx` submit. Hint `MISSING_COLUMNS` aussi mis à jour pour lister les variantes acceptées au lieu de demander un rename.
+
+**Smoke test prod 10/10 CSVs ✅** (`01_Leads_CSV/test_*.csv`, via curl) :
+- 9/10 à 100 % reco / 0 ignored (golden path complet)
+- 1/10 (test_05_doctolib_statuts_inconnus) à 80 % → mode dégradé attendu (DegradedConfirmDialog côté UI)
+
+**Phase 8 deploy Vercel = DÉBLOQUÉE.** Fallback option simple n8n documenté (`feedback_n8n_workflow_error_strategy`) si ≥3 incidents prod en 2 semaines. UAT user en cours en parallèle pour confirmer côté UI réelle.
 Resume file: None

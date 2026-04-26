@@ -1,9 +1,26 @@
 # Phase 7 — Robustesse upload CSV (autonomie client)
 
-**Status:** ✅ Livrée — en attente UAT utilisateur (e2e + vitest + smoke réel)
+**Status:** ✅ Livrée + UAT validée + Phase 7-bis (n8n alignment + post-UAT fixes) close
 **Date:** 2026-04-26
-**Plans:** 8 (4 vagues d'exécution parallèle)
-**Verification:** `07-VERIFICATION.md` — 6/6 REQs structurellement OK, 4 vérifications humaines à dérouler avant deploy.
+**Plans:** 8 (4 vagues d'exécution parallèle) + 4 fixes post-UAT
+**Verification:** `07-VERIFICATION.md` — 6/6 REQs structurellement OK + 10/10 CSVs validés en smoke prod (9 OK, 1 dégradé attendu).
+
+## Phase 7-bis (post-UAT 2026-04-26 ~11h–13h)
+
+UAT utilisateur du matin a remonté plusieurs problèmes (workflow n8n désaligné, CSV Doctolib avec headers `Statut_presence` rejetés, fichier latin1 produisant 0 reconnu). Tous corrigés :
+
+| # | Problème | Fix | Commit |
+|---|----------|-----|--------|
+| 1 | n8n `Hc3aGjSuNjd4KVuu` non aligné Phase 7 (4 gaps) | Refactor graphe option propre — IF "Validation Success?" + Respond Error 400 + Parse réécrit avec strip metadata, regex statuts étendue, codes erreur typés, passthrough degraded | (workflow live, snapshots `04_Scripts_Workflows/`) |
+| 2 | Workaround `stripLeadingMetadata` route.ts pour débloquer Doctolib | Posé puis retiré une fois n8n aligné | `ae78614` → `b67ff1d` |
+| 3 | Headers `Statut_presence` (Doctolib), `Statut RDV`, `Résultat` rejetés | `BROAD_DATE`/`BROAD_STATUT` substring-match post-parse, alignés client + serveur | `2a50473` |
+| 4 | CSV ISO-8859-1 → 0 statut reconnu (FileReader UTF-8 strict) | Helper `lib/readCSVAsText.ts` avec auto-décode UTF-8 → fallback latin1, partagé entre `useCSVPreview` et submit. Hint MISSING_COLUMNS aussi mis à jour. | `d2a37c6` |
+
+**Smoke test prod 10/10 CSVs ✅** (`01_Leads_CSV/test_*.csv`) :
+- 9 à 100 % reco / 0 ignored (golden path complet)
+- 1 (test_05) à 80 % reco — déclenche correctement DegradedConfirmDialog côté UI
+
+**Fallback documenté** : si n8n option propre génère ≥3 incidents prod en 2 semaines, basculer vers option simple (`feedback_n8n_workflow_error_strategy` memory). Snapshots pre/post-refactor archivés.
 
 ## Goal
 
