@@ -1,6 +1,7 @@
 // app/page.tsx
 // RSC orchestrator — thin. 5 sections, single CTA /audit.
 
+import LandingViewTracker from "@/components/landing/LandingViewTracker";
 import LandingNav from "@/components/landing/LandingNav";
 import LandingHero from "@/components/landing/LandingHero";
 import StatsBar from "@/components/landing/StatsBar";
@@ -16,6 +17,7 @@ import ScrollFadeUp from "@/components/landing/ScrollFadeUp";
 export default function LandingPage() {
   return (
     <>
+      <LandingViewTracker />
       <LandingNav />
       <main>
         {/* 1. Hero */}

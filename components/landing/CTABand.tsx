@@ -1,7 +1,9 @@
+"use client";
 // components/landing/CTABand.tsx
-// RSC — single conversion anchor, no form.
+// Client — single conversion anchor, no form. Phase 9: tracks landing CTA click.
 
 import Link from "next/link";
+import { trackLandingCtaAuditClick } from "@/lib/analytics";
 
 export default function CTABand() {
   return (
@@ -18,6 +20,7 @@ export default function CTABand() {
           </div>
           <Link
             href="/audit"
+            onClick={() => trackLandingCtaAuditClick()}
             className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-medium text-primaryDark transition-shadow hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primaryDark"
           >
             Lancer mon audit
