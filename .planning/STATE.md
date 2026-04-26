@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Finalisation
 status: unknown
-stopped_at: ✅ **Phase 7-bis CLOSE — n8n alignment + 3 fixes post-UAT, 10/10 smoke prod validés**.
-last_updated: "2026-04-26T17:14:00.000Z"
-last_activity: "2026-04-26 -- Plan 09-03 complete: 11 events wired across funnel (4 commits 879a89c → a2e834b). 98/98 vitest GREEN, build + lint exit 0, zero direct @vercel/analytics imports outside lib/analytics.ts (D-03), zero PII in track* args (R3/AC-3). Wave 2 done."
+stopped_at: ⏳ **Phase 9 livrée code-side (5 plans ✅), smoke prod manuel pending user sur audit.perfiamatic.fr (AC-1, AC-2, AC-6).**
+last_updated: "2026-04-26T17:34:00.000Z"
+last_activity: "2026-04-26 -- Plan 09-05 complete: SUMMARY.md de Phase 9 + 09-05-SMOKE-PROD-CHECKLIST.md créés. Phase 9 livrée code-side (5/5 plans). AC-3, AC-4, AC-5 PASS code-side. AC-1, AC-2, AC-6 PENDING USER SMOKE — user doit suivre la checklist sur audit.perfiamatic.fr puis confirmer 'approved' pour basculer Phase 9 ✅ close."
 progress:
   total_phases: 9
   completed_phases: 4
   total_plans: 31
-  completed_plans: 26
+  completed_plans: 31
   percent: 84
 ---
 
@@ -21,17 +21,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Audit rapide des no-shows pour cabinets dentaires — diagnostic + rapport IA en 60 s.
-**Current focus:** Phase 08 ✅ close — funnel commercial v2 live + complet sur `audit.perfiamatic.fr`. Reste Phase 09 (monitoring) pour clôturer milestone v2.
+**Current focus:** Phase 09 livrée code-side (5/5 plans ✅) — 11 events Vercel Analytics instrumentés, bundle +2 kB (AC-4 PASS). Smoke prod manuel pending user sur `audit.perfiamatic.fr` pour valider AC-1, AC-2, AC-6 et clôturer milestone v2.
 
 ## Current Position
 
-Phase: 09 of 09 — 📝 à spec (monitoring & analytics)
+Phase: 09 of 09 — ⏳ livrée code-side, smoke prod pending user (monitoring & analytics)
 Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT), **08 (Déploiement production v2)**
 Phase 08 résumé : smoke E2E 4/4, backup `v1-backup` branch + tag `v1.0.0` (commit `91e66ad`), 3 env vars set + redéploy (55s), Calendly URL baked dans bundle, Google Places API live, rollback plan → `.planning/ROLLBACK.md`. **Découverte** : 0 env vars set avant ce passage → CTA Calendly cassé silencieusement depuis 1er deploy v2 — réparé.
-Next: Phase 09 monitoring (events, dashboard conversion, alertes Sentry/Vercel logs).
-Last activity: 2026-04-26 -- Plan 09-02 complete: lib/analytics.ts (11 typed helpers + safeTrack fail-soft) + vitest GREEN 19/19 in 7.35s. Wave 1 done with 09-01 (parallel, disjoint files).
+Next: Smoke prod manuel user (~10 min sur audit.perfiamatic.fr) → si "approved" → Phase 9 close + milestone v2 done. Sinon Phase 9-bis (Sentry) / Phase 10 (dashboard custom + n8n stats serveur) backlog.
+Last activity: 2026-04-26 -- Plan 09-05 complete: Phase 9 SUMMARY.md + 09-05-SMOKE-PROD-CHECKLIST.md livrés. Phase 9 livrée code-side (5/5 plans), smoke prod pending user.
 
-Progress: [████████░░] 89% (8/9 phases validées)
+Progress: [█████████░] 89% (8/9 phases validées + Phase 9 code-side, validation user pending)
 
 ## Performance Metrics
 
@@ -91,6 +91,9 @@ Recent decisions affecting current work:
 - Plan 09-01: `@vercel/analytics@2.0.1` résolu (npm latest = 2.x ; deviation Rule 3 vs plan-spec 1.x) ; subpath `/react` inchangé per RESEARCH Q1
 - Plan 09-01: Bundle baseline / = 160 kB / /audit = 242 kB capturé pre-install dans `09-01-bundle-baseline.txt` (R5 baseline pour AC-4 delta Plan 09-04)
 - Plan 09-01: `<Analytics />` monté en sibling de Toaster + Agentation (D-01) ; pas de prop `mode`/`debug` (defaults Vercel auto)
+- Plan 09-03: 11 events wirés en 20 invocations (4 commits 879a89c → a2e834b) ; D-03 import barrier verified, R3/AC-3 PII-free verified, 98/98 vitest GREEN, build + lint exit 0
+- Plan 09-04: Bundle delta route `/` = +2 kB (160 → 162 kB) ; AC-4 PASS (seuil +5 KB)
+- Plan 09-05: Phase 9 SUMMARY + smoke prod checklist livrés ; AC-1/2/6 PENDING USER SMOKE — Vercel Analytics ne tracke qu'en prod (RESEARCH §Q4), smoke ne peut pas être automatisé
 
 ### Pending Todos
 
