@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react";
+import { trackCtaCalendlyClick } from "@/lib/analytics";
 
 interface Props {
   caPerduAn: number;
@@ -62,6 +63,7 @@ export default function CTACalendly({ caPerduAn, caPerduGoogle, email }: Props) 
           href={urlWithPrefill}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackCtaCalendlyClick("audit-results")}
           className="inline-flex items-center gap-2 bg-white text-ink px-8 py-4 rounded-full font-extrabold text-lg hover:bg-white/90 focus:ring-2 focus:ring-white/40 focus:outline-none transition-all duration-200 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transform cursor-pointer"
         >
           Réserver mon appel de 20 minutes

@@ -1,5 +1,7 @@
 "use client";
 
+import { trackCtaCalendlyClick } from "@/lib/analytics";
+
 /**
  * Section 5 — CTA band (sketch 009 variante A).
  *
@@ -38,6 +40,7 @@ export default function CalendlyEmbed({ onDownloadPDF }: CalendlyEmbedProps) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackCtaCalendlyClick("audit-results")}
             className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-[14px] font-semibold text-[#064E3B] transition hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
           >
             Prendre rendez-vous
@@ -45,6 +48,7 @@ export default function CalendlyEmbed({ onDownloadPDF }: CalendlyEmbedProps) {
         ) : (
           <button
             type="button"
+            onClick={() => trackCtaCalendlyClick("audit-results")}
             className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-[14px] font-semibold text-[#064E3B] transition hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
           >
             Prendre rendez-vous

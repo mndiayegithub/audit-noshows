@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Star, AlertTriangle, RefreshCw, ArrowRight } from "lucide-react";
 import type { GoogleData } from "@/types/audit";
+import { trackGoogleDiagnosticTriggered } from "@/lib/analytics";
 
 const BENCHMARK_AVIS = 87;
 
@@ -63,6 +64,8 @@ export default function DiagnosticGoogle({ nomCabinet, onSuccess }: Props) {
 
   const handleSearch = async () => {
     if (!inputValue.trim()) { inputRef.current?.focus(); return; }
+    // Phase 9 — google_diagnostic_triggered (R2 event 10)
+    trackGoogleDiagnosticTriggered();
     setEtat("loading");
     setErrorMsg("");
     try {
