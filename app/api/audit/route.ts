@@ -12,6 +12,29 @@ import type { AuditErrorPayload } from "@/types/audit-errors";
 
 export const maxDuration = 60;
 
+// Phase 7-bis (workaround option C) — le nœud "Parse & Validate CSV" du workflow
+// n8n Hc3aGjSuNjd4KVuu ne skippe pas la ligne métadonnée Doctolib `Export du …`,
+// ce qui crashe le header parsing. On nettoie côté Next.js avant forward, le
+// temps que le plan 07-09 aligne le workflow n8n. Logique dupliquée volontairement
+// de lib/parseCSVForPreview.ts (canonique) pour éviter d'embarquer papaparse côté route.
+const HEADER_DATE_RE = /^(date|jour|date_rdv|date du rendez-vous)$/i;
+const HEADER_STATUT_RE = /^(statut|status|état|etat)$/i;
+function stripLeadingMetadata(csv: string): string {
+  const lines = csv.split(/\r?\n/);
+  const sep = /[,;\t]/;
+  for (let i = 0; i < Math.min(lines.length, 20); i++) {
+    const line = lines[i];
+    if (!line || !sep.test(line)) continue;
+    const cells = line.split(sep).map((c) => c.trim());
+    const hasDate = cells.some((c) => HEADER_DATE_RE.test(c));
+    const hasStatut = cells.some((c) => HEADER_STATUT_RE.test(c));
+    if (hasDate && hasStatut) {
+      return i === 0 ? csv : lines.slice(i).join("\n");
+    }
+  }
+  return csv;
+}
+
 const ALLOWED_ORIGIN_PARTS = [
   "localhost",
   "127.0.0.1",
@@ -62,6 +85,13 @@ export async function POST(request: Request) {
     const webhookUrl =
       process.env.N8N_WEBHOOK_URL ??
       "https://n8n.srv939707.hstgr.cloud/webhook/audit-flash";
+
+    // Phase 7-bis workaround : strip métadonnées Doctolib avant forward n8n.
+    const cleanedCsv = stripLeadingMetadata(v.values.csv);
+    if (cleanedCsv !== v.values.csv) {
+      formData.set("csv", cleanedCsv);
+    }
+
     const response = await fetch(webhookUrl, {
       method: "POST",
       body: formData,
