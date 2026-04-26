@@ -12,6 +12,7 @@ import {
   parseCSVForPreview,
   type CSVPreviewResult,
 } from "@/lib/parseCSVForPreview";
+import { readCSVAsText } from "@/lib/readCSVAsText";
 
 export type CSVPreviewStatus = "idle" | "loading" | "ready" | "error";
 
@@ -29,25 +30,23 @@ export function useCSVPreview(file: File | null): {
       return;
     }
     setStatus("loading");
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const text = (e.target?.result as string) ?? "";
-      const r = parseCSVForPreview(text);
-      setResult(r);
-      setStatus(r.ok ? "ready" : "error");
-    };
-    reader.onerror = () => {
-      setResult({
-        ok: false,
-        error: {
-          error_code: "ENCODING_ERROR",
-          error:
-            "Impossible de lire le fichier (encodage non supporté). Réenregistrez en UTF-8.",
-        },
+    readCSVAsText(file)
+      .then((text) => {
+        const r = parseCSVForPreview(text);
+        setResult(r);
+        setStatus(r.ok ? "ready" : "error");
+      })
+      .catch(() => {
+        setResult({
+          ok: false,
+          error: {
+            error_code: "ENCODING_ERROR",
+            error:
+              "Impossible de lire le fichier. Vérifiez qu'il s'agit bien d'un CSV valide.",
+          },
+        });
+        setStatus("error");
       });
-      setStatus("error");
-    };
-    reader.readAsText(file, "utf-8");
   }, [file]);
 
   return { status, result };

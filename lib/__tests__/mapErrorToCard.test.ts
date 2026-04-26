@@ -2,10 +2,16 @@ import { describe, it, expect } from "vitest";
 import { mapErrorToCard } from "../mapErrorToCard";
 
 describe("mapErrorToCard — D-05 verbatim mapping", () => {
-  it("MISSING_COLUMNS → titre + hint avec backticks `date` et `statut`", () => {
-    const result = mapErrorToCard("MISSING_COLUMNS", { missing: ["date"] });
+  it("MISSING_COLUMNS → titre + hint avec colonnes manquantes interpolées", () => {
+    const result = mapErrorToCard("MISSING_COLUMNS", { missing: ["statut"] });
     expect(result.title).toBe("Colonnes obligatoires manquantes");
-    expect(result.hint).toContain("Renommez vos colonnes en `date` et `statut`");
+    expect(result.hint).toContain("statut");
+    expect(result.hint).toContain("Statut_presence");
+  });
+
+  it("MISSING_COLUMNS sans details → hint fallback générique", () => {
+    const result = mapErrorToCard("MISSING_COLUMNS");
+    expect(result.hint).toContain("date et/ou statut");
   });
 
   it("INVALID_DATE_FORMAT → titre + hint format JJ/MM/AAAA", () => {

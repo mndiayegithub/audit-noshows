@@ -12,6 +12,7 @@ import AuditDashboard from "@/components/audit/AuditDashboard";
 import CSVPreview, { type CSVPreviewSnapshot } from "@/components/audit/CSVPreview";
 import DegradedConfirmDialog from "@/components/audit/DegradedConfirmDialog";
 import CSVErrorCard from "@/components/audit/CSVErrorCard";
+import { readCSVAsText } from "@/lib/readCSVAsText";
 import type { AuditResponse, GoogleData } from "@/types/audit";
 import type { AuditErrorCode } from "@/types/audit-errors";
 
@@ -88,53 +89,48 @@ export default function AuditPage() {
     ETAPES_LOADING.forEach(({ id, delai }) => {
       setTimeout(() => setEtapeActuelle(id), delai);
     });
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const csvText = e.target?.result as string;
+    try {
+      const csvText = await readCSVAsText(file);
       const formData = new FormData();
       formData.append("csv", csvText);
       formData.append("nom_cabinet", nomCabinet.trim());
       formData.append("ca_moyen", String(caMoyen));
       if (email.trim()) formData.append("email", email.trim());
       if (degradedConfirmed) formData.append("degraded_confirmed", "true");
-      try {
-        const response = await fetch("/api/audit", { method: "POST", body: formData });
-        const data: AuditResponse = await response.json();
-        if (!response.ok) {
-          // Erreur structurée API → CSVErrorCard
-          if (data && data.error_code) {
-            setStructuredError({
-              error_code: data.error_code,
-              error: data.error || "Erreur lors du traitement du fichier",
-              details: data.details,
-            });
-            setEtat("erreur");
-            return;
-          }
-          throw new Error(data.error || "Erreur serveur");
+      const response = await fetch("/api/audit", { method: "POST", body: formData });
+      const data: AuditResponse = await response.json();
+      if (!response.ok) {
+        if (data && data.error_code) {
+          setStructuredError({
+            error_code: data.error_code,
+            error: data.error || "Erreur lors du traitement du fichier",
+            details: data.details,
+          });
+          setEtat("erreur");
+          return;
         }
-        if (!data.success) {
-          if (data.error_code) {
-            setStructuredError({
-              error_code: data.error_code,
-              error: data.error || "Erreur lors du traitement du fichier",
-              details: data.details,
-            });
-            setEtat("erreur");
-            return;
-          }
-          throw new Error(data.error || "Erreur lors de l'analyse");
-        }
-        setResultats(data);
-        setEtat("resultats");
-      } catch (err) {
-        const message = err instanceof Error ? err.message : "Une erreur est survenue";
-        setErreur(message);
-        setEtat("erreur");
-        toast.error(message);
+        throw new Error(data.error || "Erreur serveur");
       }
-    };
-    reader.readAsText(file, "utf-8");
+      if (!data.success) {
+        if (data.error_code) {
+          setStructuredError({
+            error_code: data.error_code,
+            error: data.error || "Erreur lors du traitement du fichier",
+            details: data.details,
+          });
+          setEtat("erreur");
+          return;
+        }
+        throw new Error(data.error || "Erreur lors de l'analyse");
+      }
+      setResultats(data);
+      setEtat("resultats");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Une erreur est survenue";
+      setErreur(message);
+      setEtat("erreur");
+      toast.error(message);
+    }
   };
 
   const reessayer = () => {

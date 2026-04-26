@@ -14,11 +14,15 @@ export function mapErrorToCard(
   details?: Record<string, unknown>,
 ): ErrorCardContent {
   switch (code) {
-    case "MISSING_COLUMNS":
+    case "MISSING_COLUMNS": {
+      const missing = Array.isArray(details?.missing)
+        ? (details.missing as string[]).join(" et ")
+        : "date et/ou statut";
       return {
         title: "Colonnes obligatoires manquantes",
-        hint: "Renommez vos colonnes en `date` et `statut`.",
+        hint: `Votre CSV doit contenir une colonne ${missing} (ex : Date, Date_RDV, Statut, Statut_presence, Présence). Vérifiez l'export de votre logiciel.`,
       };
+    }
     case "INVALID_DATE_FORMAT":
       return {
         title: "Format de date non reconnu",
