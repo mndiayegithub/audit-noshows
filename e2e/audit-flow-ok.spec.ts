@@ -24,7 +24,10 @@ test.describe("Audit flow — golden path (REQ #6)", () => {
     await page.getByLabel(/nom du cabinet/i).fill("Cabinet Test");
 
     const csvPath = path.join(__dirname, "fixtures/csv/doctolib_6mois.csv");
-    await page.setInputFiles('input[type="file"]', csvPath);
+    const fileChooserPromise = page.waitForEvent("filechooser");
+    await page.getByLabel(/Zone de dépôt de fichier CSV/i).click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(csvPath);
 
     await expect(
       page.getByText(/Vérifiez ce que nous avons compris/i),

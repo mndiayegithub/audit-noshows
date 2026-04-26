@@ -37,14 +37,19 @@ test.describe("Audit flow — refus dur INSUFFICIENT_DATA (REQ #4 + #6)", () => 
 
     // Fixture client-side OK ; le rejet vient du mock API.
     const csvPath = path.join(__dirname, "fixtures/csv/doctolib_6mois.csv");
-    await page.setInputFiles('input[type="file"]', csvPath);
+    const fileChooserPromise = page.waitForEvent("filechooser");
+    await page.getByLabel(/Zone de dépôt de fichier CSV/i).click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(csvPath);
 
     const continuerBtn = page.getByRole("button", { name: /^continuer$/i });
     await expect(continuerBtn).toBeEnabled({ timeout: 5000 });
     await continuerBtn.click();
 
     await expect(
-      page.getByText(/Données trop incomplètes pour produire un audit fiable/i),
+      page.getByRole("heading", {
+        name: /Données trop incomplètes pour produire un audit fiable/i,
+      }),
     ).toBeVisible({ timeout: 15000 });
 
     await expect(

@@ -47,17 +47,41 @@ export type CSVPreviewResult =
  * Statuts reconnus côté frontend — doit refléter la logique de `lib/audit-validation.ts`
  * et du nœud n8n "Parse & Validate CSV" (REQ contrainte de réutilisation).
  *
- * Couvre : Honoré/honored, present, venu(e), absent, no-show/no_show/noshow,
- * annulé/annulee, cancelled/canceled.
+ * Couvre les libellés Doctolib (Honoré/Non honoré/Excusé), Julie (présent/absent),
+ * logiciels métier (OK/NoShow, Honoré/Manqué, HONORE/ABSENT) et anglais
+ * (honored/noshow/cancelled). Match insensible à la casse + accents é/e + variations
+ * espace/tiret/underscore pour "Non honoré" / "no show".
  */
 const STATUTS_RECONNUS =
-  /^(honor[ée]e?|honored|present|venu[e]?|absent|no[\s_-]?show|annul[ée]e?|cancell?ed)$/i;
+  /^(honor[ée]e?|non[\s_-]?honor[ée]e?|honored|pr[ée]sent[e]?|venu[e]?|absent|no[\s_-]?show|manqu[ée]e?|annul[ée]e?|cancell?ed|excus[ée]e?|ok)$/i;
 
 /** Colonne date (ou ses synonymes courants Doctolib / Excel). */
 const COLONNE_DATE = /^(date|jour|date_rdv|date du rendez-vous)$/i;
 
 /** Colonne statut (FR + EN, avec accents). */
 const COLONNE_STATUT = /^(statut|status|état|etat)$/i;
+
+/**
+ * Détecte la 1re ligne qui ressemble à un header CSV (contient un signal
+ * date ET un signal statut, séparé par `,` ou `;` ou `\t`). Saute les
+ * lignes de métadonnées Doctolib (`Export du …`, commentaires `#`,
+ * titres cabinet, lignes vides).
+ */
+function stripLeadingMetadata(text: string): string {
+  const lines = text.split(/\r?\n/);
+  const sep = /[,;\t]/;
+  for (let i = 0; i < Math.min(lines.length, 20); i++) {
+    const line = lines[i];
+    if (!line || !sep.test(line)) continue;
+    const cells = line.split(sep).map((c) => c.trim());
+    const hasDate = cells.some((c) => COLONNE_DATE.test(c));
+    const hasStatut = cells.some((c) => COLONNE_STATUT.test(c));
+    if (hasDate && hasStatut) {
+      return lines.slice(i).join("\n");
+    }
+  }
+  return text;
+}
 
 export function parseCSVForPreview(text: string): CSVPreviewResult {
   if (!text || text.trim().length === 0) {
@@ -70,7 +94,12 @@ export function parseCSVForPreview(text: string): CSVPreviewResult {
     };
   }
 
-  const parsed = Papa.parse<Record<string, string>>(text, {
+  // Skip leading metadata lines (commentaires `#`, lignes "Export du …",
+  // titres cabinet, lignes vides) jusqu'à trouver la ligne de header :
+  // celle qui contient à la fois un signal date ET un signal statut.
+  const cleaned = stripLeadingMetadata(text);
+
+  const parsed = Papa.parse<Record<string, string>>(cleaned, {
     header: true,
     skipEmptyLines: true,
     transformHeader: (h) => h.trim(),

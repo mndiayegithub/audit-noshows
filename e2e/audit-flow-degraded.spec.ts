@@ -28,7 +28,10 @@ test.describe("Audit flow — mode dégradé (REQ #3 + #6)", () => {
       __dirname,
       "fixtures/csv/malformed_statuts_inconnus.csv",
     );
-    await page.setInputFiles('input[type="file"]', csvPath);
+    const fileChooserPromise = page.waitForEvent("filechooser");
+    await page.getByLabel(/Zone de dépôt de fichier CSV/i).click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(csvPath);
 
     await expect(page.getByText(/Mode dégradé/i).first()).toBeVisible({
       timeout: 5000,
