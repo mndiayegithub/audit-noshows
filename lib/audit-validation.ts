@@ -46,8 +46,14 @@ function detectSeparator(headerLine: string): "," | ";" {
   return (headerLine.match(/;/g)?.length ?? 0) > (headerLine.match(/,/g)?.length ?? 0) ? ";" : ",";
 }
 
+// Strict — header sniffing dans `findHeaderLineIndex` (évite faux positifs sur lignes méta).
 const HEADER_DATE = /^(date|jour|date_rdv|date du rendez-vous)$/;
 const HEADER_STATUT = /^(statut|status|état|etat)$/;
+
+// Broad — validation post-detection. Aligné avec parseCSVForPreview.ts + n8n
+// (Doctolib `Statut_presence`, Julie `Statut RDV`, Logos `Résultat`, etc.).
+const BROAD_DATE = /(?:^|[\s_-])(date|jour|rdv)(?:[\s_-]|$)|^date|^jour/i;
+const BROAD_STATUT = /(statut|status|etat|état|présence|presence|resultat|résultat)/i;
 
 /**
  * Scanne les 20 premières lignes pour trouver le header CSV. Une ligne candidate
@@ -112,12 +118,8 @@ export function validateAuditPayload(formData: FormData): ValidationResult {
   const headerLine = lines[headerIdx];
   const sep = detectSeparator(headerLine);
   const headers = headerLine.split(sep).map((h) => h.trim().toLowerCase());
-  const hasDate = headers.some((h) =>
-    /^(date|jour|date_rdv|date du rendez-vous)$/.test(h),
-  );
-  const hasStatut = headers.some((h) =>
-    /^(statut|status|état|etat)$/.test(h),
-  );
+  const hasDate = headers.some((h) => BROAD_DATE.test(h));
+  const hasStatut = headers.some((h) => BROAD_STATUT.test(h));
   if (!hasDate || !hasStatut) {
     const missing: string[] = [];
     if (!hasDate) missing.push("date");

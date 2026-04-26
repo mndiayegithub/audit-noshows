@@ -55,11 +55,22 @@ export type CSVPreviewResult =
 const STATUTS_RECONNUS =
   /^(honor[ée]e?|non[\s_-]?honor[ée]e?|honored|pr[ée]sent[e]?|venu[e]?|absent|no[\s_-]?show|manqu[ée]e?|annul[ée]e?|cancell?ed|excus[ée]e?|ok)$/i;
 
-/** Colonne date (ou ses synonymes courants Doctolib / Excel). */
+/**
+ * Header sniffing — strict, anchored. Utilisé par `stripLeadingMetadata` pour
+ * détecter la ligne header dans un océan de métadonnées. Ne doit PAS matcher
+ * `Cabinet du Dr Statut` ou des libellés ambigus.
+ */
 const COLONNE_DATE = /^(date|jour|date_rdv|date du rendez-vous)$/i;
-
-/** Colonne statut (FR + EN, avec accents). */
 const COLONNE_STATUT = /^(statut|status|état|etat)$/i;
+
+/**
+ * Validation des headers post-parse — broad match (substring). Aligné avec la
+ * détection n8n (`patterns.statut` / `patterns.date` du nœud Parse). Couvre
+ * `Date_RDV`, `Statut_presence` (Doctolib), `Statut RDV`, `Présence`, `Résultat`
+ * (Julie/Logos/Veasy).
+ */
+const BROAD_DATE = /(?:^|[\s_-])(date|jour|rdv)(?:[\s_-]|$)|^date|^jour/i;
+const BROAD_STATUT = /(statut|status|etat|état|présence|presence|resultat|résultat)/i;
 
 /**
  * Détecte la 1re ligne qui ressemble à un header CSV (contient un signal
@@ -117,8 +128,8 @@ export function parseCSVForPreview(text: string): CSVPreviewResult {
   }
 
   const headers = (parsed.meta.fields ?? []).map((h) => h.trim());
-  const hasDate = headers.some((h) => COLONNE_DATE.test(h));
-  const hasStatut = headers.some((h) => COLONNE_STATUT.test(h));
+  const hasDate = headers.some((h) => BROAD_DATE.test(h));
+  const hasStatut = headers.some((h) => BROAD_STATUT.test(h));
 
   if (!hasDate || !hasStatut) {
     const missing: string[] = [];
@@ -134,7 +145,7 @@ export function parseCSVForPreview(text: string): CSVPreviewResult {
     };
   }
 
-  const statutKey = headers.find((h) => COLONNE_STATUT.test(h))!;
+  const statutKey = headers.find((h) => BROAD_STATUT.test(h))!;
   const totalRows = parsed.data.length;
   const nbRdvValides = parsed.data.filter((row) =>
     STATUTS_RECONNUS.test((row[statutKey] ?? "").trim()),
