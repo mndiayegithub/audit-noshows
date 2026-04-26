@@ -201,13 +201,15 @@ livrer un audit en autonomie sans support manuel.
 
 ### Phase 8 · Déploiement production v2
 
-**Status:** 🟡 **Partiellement faite** 2026-04-26 — déploiement Vercel déjà effectué par l'utilisateur. Reste 4 items à valider avant clôture.
+**Status:** ✅ **Validée** 2026-04-26 — déploiement live sur `audit.perfiamatic.fr`, env vars set + propagées, smoke E2E 4/4, backup git + rollback plan documenté.
 
-**Scope restant :**
-- 🔴 Smoke test E2E sur l'URL de prod déployée (curl + UI réelle, ≠ test contre n8n direct)
-- 🟠 Backup branche `v1-backup` (tag git de la v1 avant que main = v2 définitive)
-- 🟠 Vérification env vars Vercel (`N8N_WEBHOOK_URL`, `NEXT_PUBLIC_CALENDLY_URL`, `GOOGLE_PLACES_API_KEY`) — un seul manquant casse une feature silencieusement
-- 🟢 Rollback plan documenté (1 ligne : "si problème, revert via Vercel UI vers déploiement précédent")
+**Livré :**
+- ✅ Smoke E2E URL prod (golden path 200, dégradé 200 + degraded:true, latin1 décodé 200, MISSING_COLUMNS 400 typé)
+- ✅ Backup `v1-backup` branch + tag `v1.0.0` (commit `91e66ad`, pushed origin)
+- ✅ 3 env vars Vercel set en prod : `N8N_WEBHOOK_URL`, `GOOGLE_PLACES_API_KEY`, `NEXT_PUBLIC_CALENDLY_URL`. Redéploy `dpl_3Y9QfUxKtrDtvDQNKCuB7cTe7Epd` (55s build) — Calendly URL baked dans bundle `page-e7caa0e7c0268296.js`, Google Places renvoie vraie data Google
+- ✅ Rollback plan : `.planning/ROLLBACK.md` (3 niveaux : Vercel UI / CLI / git v1-backup)
+
+**Découverte critique pendant Phase 8** : 0 env vars étaient set en prod avant ce passage → le bouton CTA Calendly principal pointait vers `href="#"` (lien mort) sur le déploiement précédent. **Funnel commercial cassé silencieusement** depuis le 1er deploy v2. Maintenant réparé.
 
 **Hors scope (reportés v2.1+) :**
 - Déploiement progressif / feature flag (overkill au volume actuel)

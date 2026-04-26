@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Audit rapide des no-shows pour cabinets dentaires — diagnostic + rapport IA en 60 s.
-**Current focus:** Phase 07 + 7-bis ✅ validées (smoke prod 10/10 CSVs + UAT user OK). Phase 08 partiellement faite (Vercel deploy déjà effectué par user) — reste 4 items de validation avant clôture v2.
+**Current focus:** Phase 08 ✅ close — funnel commercial v2 live + complet sur `audit.perfiamatic.fr`. Reste Phase 09 (monitoring) pour clôturer milestone v2.
 
 ## Current Position
 
-Phase: 08 of 09 — 🟡 Partiellement faite (Vercel deploy effectué, 4 items restants : smoke E2E URL prod, backup v1-backup branch, vérif env vars Vercel, rollback plan documenté)
-Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT)
-Phase 07 résumé : 8 plans + 4 fixes post-UAT, 6/6 REQs livrées + smoke prod 10/10 CSVs ✅. Voir `.planning/phases/phase-07-robustesse-upload-csv/PHASE-SUMMARY.md`.
-Next: 4 items Phase 8 restants → puis Phase 09 (monitoring).
-Last activity: 2026-04-26 — Phase 7-bis close : workflow n8n `Hc3aGjSuNjd4KVuu` aligné option propre, regex headers broad, auto-décode UTF-8/latin1, tests 79/79 ✅.
+Phase: 09 of 09 — 📝 à spec (monitoring & analytics)
+Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT), **08 (Déploiement production v2)**
+Phase 08 résumé : smoke E2E 4/4, backup `v1-backup` branch + tag `v1.0.0` (commit `91e66ad`), 3 env vars set + redéploy (55s), Calendly URL baked dans bundle, Google Places API live, rollback plan → `.planning/ROLLBACK.md`. **Découverte** : 0 env vars set avant ce passage → CTA Calendly cassé silencieusement depuis 1er deploy v2 — réparé.
+Next: Phase 09 monitoring (events, dashboard conversion, alertes Sentry/Vercel logs).
+Last activity: 2026-04-26 13h — Phase 8 close : `dpl_3Y9QfUxKtrDtvDQNKCuB7cTe7Epd` live alias `audit.perfiamatic.fr`.
 
-Progress: [████████░░] 78% (7/9 phases validées + Phase 8 ~25%)
+Progress: [████████░░] 89% (8/9 phases validées)
 
 ## Performance Metrics
 
