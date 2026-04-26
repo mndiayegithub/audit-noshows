@@ -4,14 +4,14 @@ milestone: v2.0
 milestone_name: — Finalisation
 status: unknown
 stopped_at: ✅ **Phase 7-bis CLOSE — n8n alignment + 3 fixes post-UAT, 10/10 smoke prod validés**.
-last_updated: "2026-04-26T12:56:26.626Z"
-last_activity: 2026-04-26 -- Phase 9 planning complete
+last_updated: "2026-04-26T14:30:00.000Z"
+last_activity: 2026-04-26 -- Plan 09-02 complete (typed analytics helpers + vitest GREEN)
 progress:
   total_phases: 9
   completed_phases: 4
   total_plans: 31
-  completed_plans: 23
-  percent: 74
+  completed_plans: 24
+  percent: 77
 ---
 
 # Project State
@@ -29,7 +29,7 @@ Phase: 09 of 09 — 📝 à spec (monitoring & analytics)
 Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT), **08 (Déploiement production v2)**
 Phase 08 résumé : smoke E2E 4/4, backup `v1-backup` branch + tag `v1.0.0` (commit `91e66ad`), 3 env vars set + redéploy (55s), Calendly URL baked dans bundle, Google Places API live, rollback plan → `.planning/ROLLBACK.md`. **Découverte** : 0 env vars set avant ce passage → CTA Calendly cassé silencieusement depuis 1er deploy v2 — réparé.
 Next: Phase 09 monitoring (events, dashboard conversion, alertes Sentry/Vercel logs).
-Last activity: 2026-04-26 -- Phase 9 planning complete
+Last activity: 2026-04-26 -- Plan 09-02 complete: lib/analytics.ts (11 typed helpers + safeTrack fail-soft) + vitest GREEN 19/19 in 7.35s. Wave 1 done with 09-01 (parallel, disjoint files).
 
 Progress: [████████░░] 89% (8/9 phases validées)
 
@@ -85,6 +85,9 @@ Recent decisions affecting current work:
 - Plan 02-06: Task 2 (RapportPDF refonte light palette) SKIPPED par override utilisateur explicite — RapportPDF.tsx conservé verbatim en palette dark/gold v1, REQ-2 reporté vers milestone "PDF refonte clinique" backlog
 - Plan 02-06: Bouton PDF déplacé de page.tsx vers AuditDashboard Section 5 (props `onDownloadPDF` + `isGeneratingPDF`) — aligné avec la nouvelle arborescence par sections
 - Plan 02-06: Suppression 3 composants legacy v1 (GaugeBenchmark / GraphiqueParJour / ScoreGlobal) + nettoyage massif des imports dans page.tsx (ScoreCard inline, ReactMarkdown, Framer Motion, Font.register redondants)
+- Plan 09-02: `lib/analytics.ts` = single import barrier pour `@vercel/analytics` (D-03) — 11 helpers typés + `safeTrack` try/catch silencieux (D-04 fail-soft) + `CalendlyCtaLocation` literal union exporté
+- Plan 09-02: PII safety by construction — signatures TS bloquent statiquement free-form `email`/`nom_cabinet`/CSV content (R3 / AC-3)
+- Plan 09-02: TDD red→green honoré (`b78e58b` test → `caf218d` impl) ; vitest GREEN 19/19 en 7.35s
 
 ### Pending Todos
 
