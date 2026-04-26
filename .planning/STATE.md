@@ -4,14 +4,14 @@ milestone: v2.0
 milestone_name: — Finalisation
 status: unknown
 stopped_at: ✅ **Phase 7-bis CLOSE — n8n alignment + 3 fixes post-UAT, 10/10 smoke prod validés**.
-last_updated: "2026-04-26T16:30:00.000Z"
-last_activity: "2026-04-26 -- Plan 09-01 complete: @vercel/analytics@2.0.1 installed + <Analytics /> mounted in RootLayout, bundle baseline / = 160 kB captured pre-install for AC-4 delta. Wave 1 (09-01 + 09-02) DONE — disjoint files merged cleanly."
+last_updated: "2026-04-26T17:14:00.000Z"
+last_activity: "2026-04-26 -- Plan 09-03 complete: 11 events wired across funnel (4 commits 879a89c → a2e834b). 98/98 vitest GREEN, build + lint exit 0, zero direct @vercel/analytics imports outside lib/analytics.ts (D-03), zero PII in track* args (R3/AC-3). Wave 2 done."
 progress:
   total_phases: 9
   completed_phases: 4
   total_plans: 31
-  completed_plans: 25
-  percent: 81
+  completed_plans: 26
+  percent: 84
 ---
 
 # Project State
