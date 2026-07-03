@@ -12,6 +12,21 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Tracking redirect for guide lead-magnet opens.
+      // /g/<guide>?lead=<id> → n8n guide-open webhook, keeping ?lead for attribution.
+      // The incoming ?lead=... is NOT consumed by the source pattern, so Next.js
+      // automatically merges it into the destination query (…?guide=<guide>&lead=<id>).
+      {
+        source: '/g/:guide',
+        destination:
+          'https://n8n.srv939707.hstgr.cloud/webhook/guide-open?guide=:guide',
+        // 302 explicite (au lieu du 307 par défaut de `permanent: false`).
+        statusCode: 302,
+      },
+    ];
+  },
   async headers() {
     return [
       {
