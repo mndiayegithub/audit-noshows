@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les 3 fuites silencieuses d'un cabinet dentaire · Guide PerfIAmatic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF9F4; --ink:#1C1B17; --ink2:#46443C; --ink3:#6E6B60;
+    --muted:#9A968A; --primary:#064E3B; --primary2:#0B6B52;
+    --line:#E6E1D4; --card:#FFFFFF; --tint:#ECF2EE; --hl:#CFE7D9;
+    --blue-bg:#DFF3FF; --blue:#2563EB;
+    --emer-bg:#DCF4E6; --emer:#059669;
+    --oran-bg:#FCEACC; --oran:#EA580C;
+    --purp-bg:#ECCDF8; --purp:#9333EA; --purp-d:#6B21A8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  @page{ size:A4; margin:0; }
+  html,body{ background:var(--paper); }
+  body{ font-family:'Newsreader',Georgia,serif; color:var(--ink2); font-size:12px; line-height:1.62;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  .page{ width:210mm; min-height:297mm; background:var(--paper); padding:22mm 24mm 18mm;
+    margin:0 auto; position:relative; page-break-after:always; overflow:hidden; }
+  .page:last-child{ page-break-after:auto; }
+
+  /* Typography */
+  .disp{ font-family:'Fraunces',Georgia,serif; color:var(--ink); }
+  h1{ font-family:'Fraunces',serif; color:var(--ink); font-weight:600; font-size:46px; line-height:1.04; letter-spacing:-.012em; }
+  h2{ font-family:'Fraunces',serif; color:var(--ink); font-weight:600; font-size:27px; line-height:1.12; letter-spacing:-.01em; margin-bottom:12px; }
+  h3{ font-family:'Fraunces',serif; color:var(--ink); font-weight:600; font-size:16px; line-height:1.2; margin-bottom:5px; }
+  p{ margin:0 0 11px; }
+  strong{ color:var(--ink); font-weight:600; }
+  em{ font-style:italic; }
+  .lead{ font-size:13.5px; color:var(--ink2); line-height:1.6; }
+
+  /* Mono labels · the signature */
+  .mono{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.16em; }
+  .kicker{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.18em; font-size:9.5px; font-weight:700; color:var(--primary); }
+  .sec-label{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.18em; font-size:9.5px; font-weight:700; color:var(--primary); display:block; margin-bottom:9px; }
+
+  a{ color:var(--primary); text-decoration:none; border-bottom:1px solid var(--primary); padding-bottom:1px; }
+
+  /* ---------- COVER ---------- */
+  .cover{ display:flex; flex-direction:column; }
+  .pill{ display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
+    background:var(--card); border:1px solid var(--line); border-radius:999px; padding:7px 15px;
+    font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.16em; font-size:9.5px; font-weight:700; color:var(--ink); }
+  .pill .dot{ width:7px;height:7px;border-radius:999px;background:var(--primary); }
+  .cover-grid{ display:flex; gap:18px; margin-top:42mm; align-items:flex-start; }
+  .cover-main{ flex:1; }
+  h1 .hl{ background:linear-gradient(transparent 58%, var(--hl) 58% 92%, transparent 92%); padding:0 3px; }
+  h1 .ital{ font-style:italic; color:var(--primary); }
+  .rule{ width:64px; height:3px; background:var(--primary); margin:22px 0 20px; }
+  .cover .sub{ font-family:'Newsreader',serif; font-size:14.5px; line-height:1.55; color:var(--ink2); max-width:118mm; }
+
+  /* lateral timeline */
+  .timeline{ width:46mm; padding-top:6px; position:relative; }
+  .timeline::before{ content:''; position:absolute; left:4px; top:12px; bottom:12px; width:1.5px; background:var(--line); }
+  .tl{ position:relative; padding-left:20px; margin-bottom:16px; }
+  .tl .d{ position:absolute; left:0; top:3px; width:9px;height:9px;border-radius:999px; background:var(--paper); border:2px solid var(--primary); }
+  .tl.on .d{ background:var(--primary); }
+  .tl .t{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.12em; font-size:8.5px; font-weight:700; color:var(--ink); line-height:1.3; }
+  .tl .s{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.12em; font-size:8px; color:var(--muted); }
+
+  .cover-foot{ position:absolute; left:24mm; right:24mm; bottom:18mm; display:flex; gap:30px; border-top:1px solid var(--line); padding-top:14px; }
+  .cf .l{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.16em; font-size:8.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:3px; }
+  .cf .v{ font-family:'Fraunces',serif; font-size:13px; color:var(--ink); font-weight:500; }
+
+  /* ---------- SOMMAIRE ---------- */
+  .somm-wrap{ display:flex; flex-direction:column; justify-content:center; min-height:253mm; }
+  .toc-card{ background:var(--card); border:1px solid var(--line); border-radius:4px; padding:34px 40px; }
+  .toc-card .kicker{ margin-bottom:22px; display:block; }
+  ol.toc{ list-style:none; counter-reset:t; }
+  ol.toc li{ counter-increment:t; display:flex; align-items:baseline; gap:18px; padding:13px 0; border-top:1px solid var(--line); }
+  ol.toc li:first-of-type{ border-top:none; }
+  ol.toc li .num{ font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:var(--primary); min-width:24px; }
+  ol.toc li .ti{ font-family:'Fraunces',serif; font-size:16px; font-weight:500; color:var(--ink); }
+  ol.toc li::before{ content:counter(t,decimal-leading-zero); display:none; }
+
+  /* ---------- SECTIONS ---------- */
+  .sec{ margin-bottom:20px; }
+  .intro{ font-size:13px; color:var(--ink2); line-height:1.58; max-width:135mm; }
+
+  /* KPI editorial cards */
+  .kpis{ display:flex; gap:12px; margin:16px 0 16px; }
+  .kpi{ flex:1; border-radius:6px; padding:15px 15px 14px; }
+  .kpi .lab{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.1em; font-size:8px; font-weight:700; display:block; margin-bottom:10px; line-height:1.35; min-height:22px; }
+  .kpi .v{ font-family:'Fraunces',serif; font-size:29px; font-weight:600; color:var(--ink); line-height:1; letter-spacing:-.01em; }
+  .kpi .n{ font-size:10px; color:var(--ink3); line-height:1.4; margin-top:8px; }
+  .kpi .n sup{ color:var(--muted); }
+  .kpi.blue{ background:var(--blue-bg);} .kpi.blue .lab{ color:var(--blue);}
+  .kpi.emer{ background:var(--emer-bg);} .kpi.emer .lab{ color:var(--emer);}
+  .kpi.oran{ background:var(--oran-bg);} .kpi.oran .lab{ color:var(--oran);}
+  .kpi.purp{ background:var(--purp-bg);} .kpi.purp .lab{ color:var(--purp);} .kpi.purp .v{ color:var(--purp-d);}
+
+  /* lists */
+  ul.bul{ list-style:none; margin:4px 0 11px; }
+  ul.bul li{ position:relative; padding-left:18px; margin-bottom:7px; }
+  ul.bul li::before{ content:''; position:absolute; left:1px; top:9px; width:6px;height:6px;border-radius:999px;background:var(--primary); }
+  ol.num{ list-style:none; counter-reset:n; margin:6px 0 11px; }
+  ol.num li{ counter-increment:n; position:relative; padding-left:30px; margin-bottom:9px; }
+  ol.num li::before{ content:counter(n)"."; position:absolute; left:0; top:0; font-family:'Fraunces',serif; font-weight:600; color:var(--primary); font-size:15px; }
+
+  /* auto-diagnostic checkboxes · additive, DA-consistent (mono + vert sapin) */
+  ul.check{ list-style:none; margin:8px 0 4px; }
+  ul.check li{ position:relative; padding-left:26px; margin-bottom:9px; font-size:12px; color:var(--ink2); line-height:1.5; }
+  ul.check li::before{ content:'\2610'; position:absolute; left:0; top:-2px; font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:700; color:var(--primary); }
+
+  /* calc / confrontation box · the "prise de conscience" lever, distinct from encarts */
+  .calc{ background:var(--card); border:1px solid var(--primary); border-radius:4px; padding:14px 20px; margin:15px 0; break-inside:avoid; }
+  .calc .ct{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.16em; font-size:9px; font-weight:700; color:var(--primary); margin-bottom:7px; }
+  .calc p{ margin:0; font-size:12.5px; color:var(--ink); line-height:1.52; }
+  .calc .f{ font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:500; color:var(--primary2); }
+
+  /* sub-headings (Profil / Voie / point) */
+  .sub-h{ font-family:'Fraunces',serif; color:var(--ink); font-weight:600; font-size:15.5px; margin:14px 0 4px; }
+  .sub-h .sep{ color:var(--primary); font-weight:600; }
+
+  /* Tables · hairline only */
+  table{ width:100%; border-collapse:collapse; margin:14px 0; }
+  thead th{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.13em; font-size:8.5px; font-weight:700;
+    color:var(--muted); text-align:left; padding:0 14px 11px 0; border-bottom:1px solid var(--ink); }
+  tbody td{ padding:13px 14px 13px 0; font-size:11.5px; border-bottom:1px solid var(--line); color:var(--ink2); vertical-align:top; }
+  tbody td:first-child{ font-family:'Fraunces',serif; font-weight:600; color:var(--ink); white-space:nowrap; font-size:12.5px; }
+  td .mm{ color:var(--primary); }
+
+  /* Encarts · variant A (note) + variant B (highlight w/ bar) */
+  .encart{ border-radius:4px; padding:18px 22px; margin:15px 0; break-inside:avoid; }
+  .encart .et{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.16em; font-size:9px; font-weight:700; color:var(--primary); margin-bottom:8px; }
+  .encart p{ margin:0; font-size:12.5px; color:var(--ink2); line-height:1.55; }
+  .encart.note{ background:var(--emer-bg); border:1px solid transparent; }
+  .encart.note .et{ color:var(--emer); }
+  .encart.hl{ background:var(--tint); border-left:4px solid var(--primary); }
+
+  /* Templates */
+  .tpl{ background:var(--card); border:1px solid var(--line); border-radius:4px; padding:16px 20px; margin:12px 0; break-inside:avoid; }
+  .tpl .cap{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.14em; font-size:9px; font-weight:700; color:var(--primary); }
+  .tpl .meta{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.1em; font-size:8.5px; color:var(--muted); margin-top:7px; padding-bottom:11px; border-bottom:1px solid var(--line); }
+  .tpl .msg{ font-family:'Newsreader',serif; font-size:12.5px; color:var(--ink); line-height:1.55; margin-top:11px; }
+
+  /* sources */
+  .src-block .sub-h{ margin-top:16px; }
+  ul.src{ list-style:none; }
+  ul.src li{ position:relative; padding-left:18px; margin-bottom:10px; font-size:11px; color:var(--ink2); line-height:1.45; }
+  ul.src li::before{ content:''; position:absolute; left:1px; top:8px; width:6px;height:6px;border-radius:999px;background:var(--primary); }
+
+  /* Closing CTA */
+  .cta{ background:var(--primary); border-radius:10px; padding:26px 32px 28px; margin:22px 0 4px; text-align:center; }
+  .cta h2{ color:var(--paper); font-size:23px; margin-bottom:9px; }
+  .cta .sub{ font-family:'Newsreader',serif; color:#CFE7D9; font-size:12.5px; line-height:1.55; max-width:116mm; margin:0 auto 17px; }
+  .cta a.btn{ display:inline-flex; align-items:center; gap:9px; background:var(--paper); color:var(--primary);
+    border:none; border-bottom:none; border-radius:999px; padding:12px 28px;
+    font-family:'Fraunces',serif; font-weight:600; font-size:13px; letter-spacing:.005em; }
+  .cta a.btn .arr{ font-size:15px; line-height:1; }
+  .cta .alt{ font-family:'Newsreader',serif; color:#CFE7D9; font-size:11px; line-height:1.5; margin:14px auto 0; max-width:118mm; }
+  .cta .alt a{ color:var(--paper); border-bottom:1px solid rgba(255,255,255,.45); padding-bottom:1px; }
+
+  .foot{ position:absolute; left:24mm; right:24mm; bottom:13mm; display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--line); padding-top:9px; }
+  .foot .b{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.2em; font-size:8.5px; font-weight:700; color:var(--primary); }
+  .foot .p{ font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.12em; font-size:8px; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE 1, COVER ===== -->
+<section class="page cover">
+  <span class="pill"><span class="dot"></span><span id="prepared-for">Préparé pour le Docteur</span> · 2026</span>
+  <div class="cover-grid">
+    <div class="cover-main">
+      <h1>Les 3 fuites<br><span class="hl">silencieuses</span><br>d'un <span class="ital">cabinet dentaire</span></h1>
+      <div class="rule"></div>
+      <p class="sub">Trois postes font perdre du revenu à un cabinet sans jamais faire de bruit : les rendez-vous manqués, les devis non signés et la visibilité en ligne. <br><br> Cet auto-diagnostic de cinq minutes vous aide à repérer lequel vous coûte le plus aujourd'hui, et par où commencer. Sans outil, sans jargon.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl on"><span class="d"></span><div class="t">Fuite 01 · RDV manqués</div></div>
+      <div class="tl on"><span class="d"></span><div class="t">Fuite 02 · Devis non signés</div></div>
+      <div class="tl on"><span class="d"></span><div class="t">Fuite 03 · Visibilité</div></div>
+      <div class="tl"><span class="d"></span><div class="t">Votre triage</div></div>
+      <div class="tl"><span class="d"></span><div class="t">1ʳᵉ action</div></div>
+    </div>
+  </div>
+  <div class="cover-foot">
+    <div class="cf"><span class="l">Niveau</span><span class="v">Aucun prérequis</span></div>
+    <div class="cf"><span class="l">Auto-diagnostic</span><span class="v">~ 5 minutes</span></div>
+    <div class="cf"><span class="l">Lecture</span><span class="v">7 minutes</span></div>
+  </div>
+</section>
+
+<!-- ===== PAGE 2, SOMMAIRE ===== -->
+<section class="page">
+  <div class="somm-wrap">
+    <div class="toc-card">
+      <span class="kicker">Sommaire du guide</span>
+      <ol class="toc">
+        <li><span class="num">01</span><span class="ti">Le principe du triage</span></li>
+        <li><span class="num">02</span><span class="ti">Fuite n°1, Les rendez-vous manqués</span></li>
+        <li><span class="num">03</span><span class="ti">Fuite n°2, Les devis non signés</span></li>
+        <li><span class="num">04</span><span class="ti">Fuite n°3, La visibilité en ligne</span></li>
+        <li><span class="num">05</span><span class="ti">Votre triage en une page</span></li>
+        <li><span class="num">06</span><span class="ti">À quoi ressemble une équipe d'agents</span></li>
+        <li><span class="num">07</span><span class="ti">Par où commencer</span></li>
+        <li><span class="num">08</span><span class="ti">Le cadre déontologique commun</span></li>
+      </ol>
+    </div>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Les 3 fuites silencieuses · 2026</span></div>
+</section>
+
+<!-- ===== PAGE 3, §0 + §1 ===== -->
+<section class="page">
+  <div class="sec">
+    <span class="sec-label">00 · En une phrase</span>
+    <p class="lead">Le revenu qui s'échappe d'un cabinet est rarement spectaculaire. Il part en silence, par petits trous qu'on ressent sans jamais les mesurer : un fauteuil qui reste vide, un plan de traitement qui ne se signe pas, une patientèle qui ne vous trouve pas. <br><br>Ce guide ne vous vend rien. Il vous aide à repérer <strong>laquelle de ces trois fuites</strong> vous coûte le plus.</p>
+    <div class="encart hl">
+      <div class="et">Le pari de ce guide</div>
+      <p>Vous n'avez pas besoin de tout régler d'un coup. En cinq minutes, vous pouvez identifier la fuite la plus active chez vous, puis n'engager qu'un seul chantier, celui qui rapporte le plus. C'est ce qui tient dans la durée.</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <span class="sec-label">01 · Le principe du triage</span>
+    <h2>Trois fuites, un diagnostic, une priorité</h2>
+    <p>Les pages qui suivent présentent les trois fuites, une par une. Chacune se termine par un court <strong>auto-diagnostic</strong> : quatre phrases à cocher si elles décrivent votre cabinet. Vous ne jugez rien, vous constatez.</p>
+    <p>À la fin, vous reportez le nombre de cases cochées par fuite sur la grille de la page <strong>05</strong>. Celle qui en réunit le plus est votre point de départ. Le reste peut attendre.</p>
+    <div class="encart note">
+      <div class="et">Comment lire ce guide</div>
+      <p>Lisez les trois fuites même si vous pensez déjà connaître la vôtre. Il arrive souvent que le poste qui coûte le plus ne soit pas celui qu'on avait en tête en ouvrant le document.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Les 3 fuites silencieuses · 2026</span></div>
+</section>
+
+<!-- ===== PAGE 4, §2 FUITE 1 ===== -->
+<section class="page">
+  <div class="sec">
+    <span class="sec-label">02 · Fuite n°1, Les rendez-vous manqués</span>
+    <h2>Le trou dans l'agenda qu'on sent <br>sans le mesurer</h2>
+    <div class="kpis">
+      <div class="kpi oran"><span class="lab">Profession la + touchée</span><div class="v">4,7 %</div><div class="n">de RDV non honorés en 2024<sup>1</sup></div></div>
+      <div class="kpi blue"><span class="lab">Soit près de</span><div class="v">1 / 20</div><div class="n">patient qui ne vient pas<sup>1</sup></div></div>
+      <div class="kpi emer"><span class="lab">Par semaine</span><div class="v">~2 h</div><div class="n">de consultation perdues<sup>2</sup></div></div>
+      <div class="kpi purp"><span class="lab">En libéral</span><div class="v">2,8 %</div><div class="n">vs 6,1 % en centre de santé<sup>1</sup></div></div>
+    </div>
+    <p>Parmi les professions de santé, les chirurgiens-dentistes sont les plus exposés aux rendez-vous non honorés.<sup>1</sup> L'Ordre des médecins observe le même phénomène : chaque semaine, 6 à 10 % des patients ne se présentent pas, et près des deux tiers de ces absences concernent un premier rendez-vous.<sup>2</sup> La cause la plus fréquente n'est pas le désintérêt, c'est l'<strong>oubli</strong> : un oubli qu'un simple rappel suffit, le plus souvent, à éviter.</p>
+    <div class="calc">
+      <div class="ct">Connaître votre vrai chiffre</div>
+      <p>Plutôt qu'une estimation, chargez votre export de rendez-vous : l'audit gratuit calcule votre taux de rendez-vous manqués, le chiffre d'affaires en jeu et vos créneaux à risque. En 60 secondes, sans inscription.<br><a href="https://audit.perfiamatic.fr">audit.perfiamatic.fr</a></p>
+    </div>
+    <div class="encart hl">
+      <div class="et">Auto-diagnostic, cochez ce qui vous parle</div>
+      <ul class="check">
+        <li>Vous n'avez pas de chiffre précis de votre taux d'absence ce mois-ci.</li>
+        <li>Les rappels de rendez-vous sont manuels, ou dépendent de la disponibilité de l'assistante.</li>
+        <li>Les creux dans l'agenda tombent souvent les mêmes jours, sans qu'on sache pourquoi.</li>
+        <li>Un patient qui ne vient pas n'est presque jamais rappelé ni recasé dans l'agenda.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Les 3 fuites silencieuses · 2026</span></div>
+</section>
+
+<!-- ===== PAGE 5, §3 FUITE 2 ===== -->
+<section class="page">
+  <div class="sec">
+    <span class="sec-label">03 · Fuite n°2, Les devis non signés</span>
+    <h2>Le « oui, mais plus tard »<br>qui ne revient jamais</h2>
+    <div class="kpis">
+      <div class="kpi oran"><span class="lab">Devis abandonnés</span><div class="v">38 %</div><div class="n">renoncement total après devis<sup>3</sup></div></div>
+      <div class="kpi emer"><span class="lab">Au-delà de 1 000 €</span><div class="v">~60 %</div><div class="n">de renoncement<sup>3</sup></div></div>
+      <div class="kpi blue"><span class="lab">Motif n°1</span><div class="v">le coût</div><div class="n">cité dans plus d'un cas sur deux<sup>4</sup></div></div>
+    </div>
+    <p>Plus d'un devis dentaire sur trois reste lettre morte.<sup>3</sup> Un devis sans réponse n'est pourtant pas un refus : c'est un patient qui attend le retour de sa mutuelle, une explication, ou simplement le bon moment. Sans suivi, cette attente se transforme en abandon par défaut. Le levier n'est pas le niveau de vos honoraires : c'est la <strong>relance</strong>, un geste de suivi de soins parfaitement légitime, qui pèse directement sur votre taux d'acceptation des plans de traitement.</p>
+    <div class="calc">
+      <div class="ct">Le calcul que personne ne pose</div>
+      <p>Additionnez le montant de vos plans de traitement non signés des trois derniers mois. Ce chiffre dort déjà dans votre logiciel. Une partie se récupère par le seul suivi, sans toucher à vos honoraires.</p>
+    </div>
+    <div class="encart hl">
+      <div class="et">Auto-diagnostic, cochez ce qui vous parle</div>
+      <ul class="check">
+        <li>Vous ne savez pas combien de devis remis ce trimestre sont restés sans réponse.</li>
+        <li>Une fois le devis remis, il n'existe aucune relance prévue à l'avance.</li>
+        <li>Vous hésitez à relancer, par crainte de « faire commercial ».</li>
+        <li>Vos devis prothétiques ou d'alignement dépassent souvent 1 000 €.</li>
+      </ul>
+    </div>
+    <div class="encart note">
+      <div class="et">À noter</div>
+      <p>C'est la fuite la mieux documentée des trois. Un guide PerfIAmatic dédié détaille la cadence complète, le cadre légal et des modèles de relance prêts à l'emploi.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Les 3 fuites silencieuses · 2026</span></div>
+</section>
+
+<!-- ===== PAGE 6, §4 FUITE 3 ===== -->
+<section class="page">
+  <div class="sec">
+    <span class="sec-label">04 · Fuite n°3, La visibilité en ligne</span>
+    <h2>Être trouvable n'est pas<br>faire de la publicité</h2>
+    <div class="kpis">
+      <div class="kpi blue"><span class="lab">Avis Google</span><div class="v">1,3 M</div><div class="n">sur 205 000 soignants FR, 2022<sup>5</sup></div></div>
+      <div class="kpi emer"><span class="lab">Consultent les avis</span><div class="v">57 %</div><div class="n">au moins occasionnellement<sup>6</sup></div></div>
+      <div class="kpi oran"><span class="lab">Fiches dentaires</span><div class="v">47 %</div><div class="n">parmi les fiches consultées<sup>6</sup></div></div>
+      <div class="kpi purp"><span class="lab">Chez les 25-34 ans</span><div class="v">77 %</div><div class="n">consultent les avis<sup>6</sup></div></div>
+    </div>
+    <p>Vos avis existent déjà, que vous vous en occupiez ou non : au 1ᵉʳ mars 2022, on recensait 1,3 million d'avis Google sur plus de 205 000 soignants français.<sup>5</sup> L'avis en ligne reste un critère <em>secondaire</em> de choix.<sup>6</sup> L'enjeu n'est donc pas de « capter » une patientèle par la note, mais de ne pas <strong>perdre</strong> celle qui est déjà orientée vers vous, faute d'une fiche exacte et d'une prise de rendez-vous claire.</p>
+    <div class="calc">
+      <div class="ct">Faites-le maintenant</div>
+      <p>Tapez le nom de votre cabinet sur Google, avant de tourner la page. Ce que vous voyez à l'écran, c'est ce que voit votre prochain patient au moment de choisir. L'audit gratuit mesure aussi ce volet de votre visibilité.<br><a href="https://audit.perfiamatic.fr">audit.perfiamatic.fr</a></p>
+    </div>
+    <div class="encart hl">
+      <div class="et">Auto-diagnostic, cochez ce qui vous parle</div>
+      <ul class="check">
+        <li>Vous ne savez pas exactement ce qui s'affiche en tapant le nom de votre cabinet sur Google.</li>
+        <li>Vos informations (horaires, adresse, accès) divergent d'une plateforme à l'autre.</li>
+        <li>Vous n'avez pas de site informatif présentant votre parcours et vos conditions d'exercice.</li>
+        <li>Votre fiche Google n'est pas revendiquée, ou n'a pas été mise à jour depuis longtemps.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Les 3 fuites silencieuses · 2026</span></div>
+</section>
+
+<!-- ===== PAGE 7, §5 TRIAGE ===== -->
+<section class="page">
+  <div class="sec">
+    <span class="sec-label">05 · Votre triage en une page</span>
+    <h2>Comptez vos cases,<br>lisez votre priorité</h2>
+    <p class="intro">Reportez ci-dessous le nombre de cases que vous avez cochées dans chaque auto-diagnostic. La fuite qui en réunit le plus est celle par laquelle commencer.</p>
+    <table>
+      <thead><tr><th style="width:40%">Fuite</th><th style="width:20%">Cases cochées</th><th>Ce que cela indique</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mm">Fuite n°1</span><br>RDV manqués</td><td>____ / 4</td><td>Du temps de fauteuil perdu, rarement chiffré</td></tr>
+        <tr><td><span class="mm">Fuite n°2</span><br>Devis non signés</td><td>____ / 4</td><td>Des plans de traitement acceptés qui restent sans suite</td></tr>
+        <tr><td><span class="mm">Fuite n°3</span><br>Visibilité en ligne</td><td>____ / 4</td><td>Une patientèle qui ne vous trouve pas, ou hésite</td></tr>
+      </tbody>
+    </table>
+    <div class="encart note">
+      <div class="et">Comment lire votre score</div>
+      <p><strong>3 à 4 cases</strong> : fuite active, c'est votre priorité du moment. <br><strong>1 à 2 cases</strong> : à surveiller, sans urgence. <strong>0 case</strong> : ce poste est sous contrôle, passez au suivant. <br><br>Un seul chantier à la fois : c'est la règle qui fait tenir le reste.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Les 3 fuites silencieuses · 2026</span></div>
+</section>
+
+<!-- ===== PAGE 8, §6 ÉQUIPE D'AGENTS ===== -->
+<section class="page">
+  <div class="sec">
+    <span class="sec-label">06 · À quoi ressemble une équipe d'agents</span>
+    <h2>Une fuite, un agent ;<br>plusieurs fuites, une équipe</h2>
+    <p class="intro">Une fois votre fuite prioritaire repérée, voici à quoi ressemble la solution, vue du cabinet. Chaque fuite a son agent : un assistant qui tourne en arrière-plan, branché sur vos outils, qui tient sans faille ce que personne n'a le temps de faire à la main chaque jour. Vous ne changez rien à votre façon de travailler.</p>
+    <div class="sub-h"><span class="sep">Fuite n°1</span> · un agent de rappels intelligents</div>
+    <p>Il confirme chaque rendez-vous, facilite l'annulation en un clic, et comble les créneaux libérés depuis la liste d'attente. Le trou dans l'agenda se rebouche sans appel manuel de l'assistante.</p>
+    <div class="sub-h"><span class="sep">Fuite n°2</span> · un agent de relance de devis</div>
+    <p>Il suit chaque plan de traitement remis, relance à la bonne cadence et signale les devis qui dorment, sans jamais de ton de recouvrement, toujours dans le suivi de soins.</p>
+    <div class="sub-h"><span class="sep">Fuite n°3</span> · un agent de collecte d'avis</div>
+    <p>Il sollicite un avis sans trier, auprès des patients déjà venus qui n'en ont pas laissé, pour amorcer la fiche, puis après chaque consultation. Il surveille les nouvelles notes et vous alerte dès qu'un avis négatif tombe, pour que vous puissiez y répondre.</p>
+    <div class="encart hl">
+      <div class="et">Commencer par un, les ajouter ensuite</div>
+      <p>Rien n'oblige à tout lancer d'un coup, et c'est même déconseillé. On installe l'agent de votre fuite prioritaire, on le voit travailler, puis on ajoute les suivants si le besoin est là. Quand les trois tournent ensemble et se coordonnent, c'est votre cabinet qui récupère du temps et du revenu sur les trois postes à la fois, mais un seul chantier à la fois reste la règle qui tient dans la durée.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Les 3 fuites silencieuses · 2026</span></div>
+</section>
+
+<!-- ===== PAGE 9, §7 + §8 ===== -->
+<section class="page">
+  <div class="sec">
+    <span class="sec-label">07 · Par où commencer</span>
+    <h2>Une première action gratuite,<br>selon votre fuite</h2>
+    <div class="sub-h"><span class="sep">Fuite n°1</span> · RDV manqués</div>
+    <p>Mesurez avant de corriger. Le plus rapide : chargez votre export de rendez-vous dans l'audit, votre taux et le chiffre d'affaires en jeu tombent en 60 secondes. Ce chiffre, que la plupart des cabinets n'ont pas, suffit à décider si le sujet mérite qu'on s'en occupe.</p>
+    <div class="sub-h"><span class="sep">Fuite n°2</span> · Devis non signés</div>
+    <p>Ajoutez une date de validité claire à votre modèle de devis, puis listez vos plans de traitement non signés des trois derniers mois dans un tableau unique. Vous voyez aussitôt le montant de soins en attente de signature.</p>
+    <div class="sub-h"><span class="sep">Fuite n°3</span> · Visibilité en ligne</div>
+    <p>Reprenez votre fiche Google et vos profils de prise de rendez-vous. Vérifiez d'abord l'exactitude : horaires, adresse, accès, cohérence d'une plateforme à l'autre. L'information juste passe avant tout le reste.</p>
+  </div>
+
+  <div class="sec">
+    <span class="sec-label">08 · Le cadre déontologique commun</span>
+    <p class="intro">Les trois sujets relèvent de la <strong>gestion du cabinet</strong>, jamais du soin clinique. Aucun ne suppose de promesse de résultat ni de comparaison avec un confrère. La communication d'un chirurgien-dentiste doit rester loyale et honnête, et l'exercice ne se pratique pas « comme un commerce ».<sup>7</sup></p>
+    <div class="encart hl">
+      <div class="et">Ce qui est permis, ce qui ne l'est pas</div>
+      <p>Depuis 2020, informer le public sur votre parcours, vos compétences et vos conditions d'exercice (y compris sur un site et une fiche en ligne) est <strong>autorisé</strong>.<sup>7</sup> Restent interdits : mettre en avant des témoignages de patients, vous comparer à un autre praticien, et <strong>acheter une position prioritaire</strong> dans les résultats de recherche.<sup>8</sup> La visibilité légitime passe par l'exactitude, pas par l'achat de rang.</p>
+    </div>
+    <p class="lead" style="text-align:center; margin-top:18px; font-style:italic; color:var(--ink3);">Vous avez repéré votre fuite principale ? C'est déjà l'essentiel.<br>Le jour où vous voudrez en parler, ma porte est ouverte.</p>
+  </div>
+  <div class="cta">
+    <h2>Commencez par votre vrai chiffre</h2>
+    <p class="sub">Avant tout, l'audit gratuit chiffre vos rendez-vous manqués et passe en revue votre visibilité en ligne, en 60 secondes, à partir de votre export d'agenda, sans inscription ni engagement.</p>
+    <a class="btn" href="https://audit.perfiamatic.fr">Lancer mon audit gratuit <span class="arr">→</span></a>
+    <p class="alt">Vous préférez en parler de vive voix ? <a href="https://calendly.com/mndiayepro97/30min">Réservez un diagnostic gratuit de 30 minutes →</a></p>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Les 3 fuites silencieuses · 2026</span></div>
+</section>
+
+<!-- ===== PAGE 9, SOURCES ===== -->
+<section class="page">
+  <div class="sec src-block">
+    <span class="sec-label">Sources & références</span>
+    <h2>Sources</h2>
+    <p class="intro">Chiffres et obligations vérifiés en mai-juin 2026. Les données sectorielles évoluent : vérifiez l'édition la plus récente avant tout usage public. Les pourcentages cités sont des repères sectoriels, jamais une promesse de résultat.</p>
+    <div class="sub-h">Données &amp; chiffres</div>
+    <ul class="src">
+      <li><strong>1.</strong> Doctolib · statistiques 2024 sur les rendez-vous non honorés : les chirurgiens-dentistes restent la profession la plus touchée (4,7 % en 2024, contre 6,2 % en 2023) ; ~2,8 % en cabinet libéral contre ~6,1 % en centre de santé. Relayé par <em>Dynamique Dentaire</em>. <a href="https://www.dynamiquedentaire.com/doctolib-publie-ses-statistiques-2024-sur-les-rendez-vous-non-honores/">dynamiquedentaire.com</a></li>
+      <li><strong>2.</strong> Conseil National de l'Ordre des Médecins (CNOM) · communiqué « Rendez-vous médicaux non honorés », 26 janvier 2023 : 6 à 10 % d'absents par semaine, ~2 h de consultation perdues, près des deux tiers sur un premier rendez-vous. <a href="https://www.conseil-national.medecin.fr/publications/communiques-presse/rendez-medicaux-honores">conseil-national.medecin.fr</a></li>
+      <li><strong>3.</strong> Santéclair · étude sur l'accès aux soins dentaires (renoncement aux devis) : 38 % de renoncement total ; ≈ 60 % au-delà de 1 000 € de reste à charge. <a href="https://www.santeclair.fr/blog/soins-dentaires-des-renoncements-encore-importants/">santeclair.fr</a></li>
+      <li><strong>4.</strong> DREES · <em>Le renoncement aux soins</em> : le motif financier est le premier motif de renoncement dentaire (plus d'un cas sur deux). <a href="https://drees.solidarites-sante.gouv.fr">drees.solidarites-sante.gouv.fr</a></li>
+      <li><strong>5.</strong> Le Quotidien du Médecin · e-santé, 2022 : 1,3 million d'avis Google recensés sur plus de 205 000 professionnels de santé français au 1ᵉʳ mars 2022 ; l'avis en ligne reste un critère de choix secondaire. <a href="https://www.lequotidiendumedecin.fr/actus-medicales/esante">lequotidiendumedecin.fr</a></li>
+      <li><strong>6.</strong> OpinionWay pour DoctiZen, octobre 2021 (957 répondants), relayé par Le Quotidien du Médecin : 57 % consultent les avis en ligne sur les soignants au moins occasionnellement ; 47 % des fiches consultées concernent un dentiste ; 77 % chez les 25-34 ans. <a href="https://www.lequotidiendumedecin.fr/actus-medicales/esante">lequotidiendumedecin.fr</a></li>
+    </ul>
+    <div class="sub-h">Cadre légal &amp; déontologique</div>
+    <ul class="src">
+      <li><strong>7.</strong> Légifrance · <em>Article R.4127-215-1 du Code de la santé publique</em> (issu du décret n° 2020-1658 du 22 décembre 2020) : communication au public permise par tout moyen, y compris un site internet, dès lors qu'elle est loyale et honnête ; interdiction des témoignages de tiers et des comparaisons. Article R.4127-215 : la profession « ne doit pas être pratiquée comme un commerce ». <a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042743767">legifrance.gouv.fr</a></li>
+      <li><strong>8.</strong> Légifrance · <em>Article R.4127-217 (II) du Code de la santé publique</em> : interdiction d'obtenir, contre paiement ou par tout autre moyen, un référencement numérique faisant apparaître l'information de façon prioritaire dans les résultats d'une recherche sur internet. <a href="https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072665/LEGISCTA000006196413/">legifrance.gouv.fr</a></li>
+    </ul>
+  </div>
+  <div class="foot"><span class="b">PerfIAmatic</span><span class="p">Infrastructure IA pour cabinets dentaires libéraux · 2026</span></div>
+</section>
+
+<!-- Personnalisation dynamique : ?nom=Demoy → "Préparé pour le Dr Demoy". Sans param → "Préparé pour le Docteur". -->
+<script>
+(function(){
+  try{
+    var nom = new URLSearchParams(window.location.search).get('nom');
+    if(!nom) return;
+    nom = nom.replace(/[<>]/g,'').trim().slice(0,60);
+    if(!nom) return;
+    var el = document.getElementById('prepared-for');
+    if(el) el.textContent = 'Préparé pour le Dr ' + nom;
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>
