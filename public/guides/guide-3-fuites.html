@@ -436,5 +436,32 @@
 })();
 </script>
 
+<!-- Confirmation d'ouverture RÉELLE — anti faux-positif : ne se déclenche que sur présence humaine
+     (interaction ou lecture prolongée au premier plan), jamais sur le préfetch/scan LinkedIn à l'envoi. -->
+<script>
+(function(){
+  try{
+    var lead = new URLSearchParams(window.location.search).get('lead');
+    if(!lead) return;
+    var fired = false;
+    function confirmOpen(){
+      if(fired) return; fired = true;
+      var url = 'https://n8n.srv939707.hstgr.cloud/webhook/guide-open-confirm?lead=' + encodeURIComponent(lead) + '&t=' + Date.now();
+      if(window.fetch){ fetch(url, {mode:'no-cors', keepalive:true}).catch(function(){ new Image().src = url; }); }
+      else { new Image().src = url; }
+    }
+    // 1) Première vraie interaction humaine (un scanner ne scrolle/clique/bouge jamais)
+    ['scroll','pointerdown','keydown','touchstart','mousemove'].forEach(function(ev){
+      window.addEventListener(ev, confirmOpen, { once:true, passive:true });
+    });
+    // 2) Ou présence prolongée au premier plan (lecteur qui ne scrolle pas) : 6 s cumulées visibles
+    var visibleMs = 0;
+    setInterval(function(){
+      if(document.visibilityState === 'visible'){ visibleMs += 1000; if(visibleMs >= 6000) confirmOpen(); }
+    }, 1000);
+  }catch(e){}
+})();
+</script>
+
 </body>
 </html>
