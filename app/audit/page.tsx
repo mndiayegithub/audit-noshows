@@ -98,6 +98,11 @@ export default function AuditPage() {
     console.info("[audit] submit", { degradedConfirmed });
     // Phase 9 — audit_submitted (R2 event 6)
     trackAuditSubmitted(degradedConfirmed);
+    // Chrono du tunnel d'attente. Démarré ici, au moment où l'utilisateur
+    // perçoit le début de l'attente — il couvre donc la lecture du CSV en
+    // plus de l'appel n8n (30-50 s), qui est bien ce qu'il subit.
+    const debutAttente = Date.now();
+    const dureeMs = () => Date.now() - debutAttente;
     setEtat("loading");
     setEtapeActuelle(0);
     ETAPES_LOADING.forEach(({ id, delai }) => {
@@ -116,7 +121,7 @@ export default function AuditPage() {
       if (!response.ok) {
         if (data && data.error_code) {
           // Phase 9 — audit_failed (R2 event 8)
-          trackAuditFailed(String(data.error_code));
+          trackAuditFailed(String(data.error_code), dureeMs());
           setStructuredError({
             error_code: data.error_code,
             error: data.error || "Erreur lors du traitement du fichier",
@@ -125,12 +130,12 @@ export default function AuditPage() {
           setEtat("erreur");
           return;
         }
-        trackAuditFailed(String(response.status));
+        trackAuditFailed(String(response.status), dureeMs());
         throw new Error(data.error || "Erreur serveur");
       }
       if (!data.success) {
         if (data.error_code) {
-          trackAuditFailed(String(data.error_code));
+          trackAuditFailed(String(data.error_code), dureeMs());
           setStructuredError({
             error_code: data.error_code,
             error: data.error || "Erreur lors du traitement du fichier",
@@ -139,7 +144,7 @@ export default function AuditPage() {
           setEtat("erreur");
           return;
         }
-        trackAuditFailed("UNKNOWN_FAILURE");
+        trackAuditFailed("UNKNOWN_FAILURE", dureeMs());
         throw new Error(data.error || "Erreur lors de l'analyse");
       }
       // Phase 9 — audit_success (R2 event 7).
@@ -148,14 +153,14 @@ export default function AuditPage() {
       {
         const tauxNoshow = data.stats?.global?.taux ?? 0;
         const score = Math.max(0, Math.min(100, Math.round(100 - tauxNoshow * 3.2)));
-        trackAuditSuccess(score, tauxNoshow);
+        trackAuditSuccess(score, tauxNoshow, dureeMs());
       }
       setResultats(data);
       setEtat("resultats");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Une erreur est survenue";
       // Phase 9 — capture client-side exception (timeout, JSON parse, network)
-      trackAuditFailed("CLIENT_EXCEPTION");
+      trackAuditFailed("CLIENT_EXCEPTION", dureeMs());
       setErreur(message);
       setEtat("erreur");
       toast.error(message);

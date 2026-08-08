@@ -36,10 +36,13 @@ describe("trackLandingView", () => {
 });
 
 describe("trackLandingCtaAuditClick", () => {
-  it('emits "landing_cta_audit_click" without properties', () => {
-    trackLandingCtaAuditClick();
-    expect(track).toHaveBeenCalledWith("landing_cta_audit_click", undefined);
-  });
+  it.each(["nav", "hero", "cta-band", "footer"] as const)(
+    'emits "landing_cta_audit_click" with location "%s"',
+    (location) => {
+      trackLandingCtaAuditClick(location);
+      expect(track).toHaveBeenCalledWith("landing_cta_audit_click", { location });
+    },
+  );
 });
 
 describe("trackAuditView", () => {
@@ -86,41 +89,60 @@ describe("trackAuditSubmitted", () => {
 });
 
 describe("trackAuditSuccess", () => {
-  it('emits "audit_success" with score + taux_noshow snake_case', () => {
-    trackAuditSuccess(72, 18.5);
-    expect(track).toHaveBeenCalledWith("audit_success", { score: 72, taux_noshow: 18.5 });
+  it('emits "audit_success" with score + taux_noshow + duration_ms snake_case', () => {
+    trackAuditSuccess(72, 18.5, 42_318);
+    expect(track).toHaveBeenCalledWith("audit_success", {
+      score: 72,
+      taux_noshow: 18.5,
+      duration_ms: 42_318,
+    });
+  });
+
+  it("preserves a zero duration rather than dropping the property", () => {
+    trackAuditSuccess(72, 18.5, 0);
+    expect(track).toHaveBeenCalledWith("audit_success", {
+      score: 72,
+      taux_noshow: 18.5,
+      duration_ms: 0,
+    });
   });
 
   it("is fail-soft when track throws (R4 / D-04)", () => {
     vi.mocked(track).mockImplementationOnce(() => {
       throw new Error("blocked by adblocker");
     });
-    expect(() => trackAuditSuccess(72, 18.5)).not.toThrow();
+    expect(() => trackAuditSuccess(72, 18.5, 1000)).not.toThrow();
   });
 });
 
 describe("trackAuditFailed", () => {
-  it('emits "audit_failed" with error_code free string', () => {
-    trackAuditFailed("VALIDATION_ERROR");
-    expect(track).toHaveBeenCalledWith("audit_failed", { error_code: "VALIDATION_ERROR" });
+  it('emits "audit_failed" with error_code + duration_ms', () => {
+    trackAuditFailed("VALIDATION_ERROR", 12_004);
+    expect(track).toHaveBeenCalledWith("audit_failed", {
+      error_code: "VALIDATION_ERROR",
+      duration_ms: 12_004,
+    });
+  });
+
+  it("timestamps a client-side timeout too", () => {
+    trackAuditFailed("CLIENT_EXCEPTION", 60_000);
+    expect(track).toHaveBeenCalledWith("audit_failed", {
+      error_code: "CLIENT_EXCEPTION",
+      duration_ms: 60_000,
+    });
   });
 });
 
 describe("trackCtaCalendlyClick", () => {
-  it('emits "cta_calendly_click" with location "hero"', () => {
-    trackCtaCalendlyClick("hero");
-    expect(track).toHaveBeenCalledWith("cta_calendly_click", { location: "hero" });
-  });
-
-  it('emits "cta_calendly_click" with location "footer"', () => {
-    trackCtaCalendlyClick("footer");
-    expect(track).toHaveBeenCalledWith("cta_calendly_click", { location: "footer" });
-  });
-
-  it('emits "cta_calendly_click" with location "audit-results"', () => {
-    trackCtaCalendlyClick("audit-results");
-    expect(track).toHaveBeenCalledWith("cta_calendly_click", { location: "audit-results" });
-  });
+  // Le vocabulaire est celui de CalendlyOrigin : un seul jeu de valeurs
+  // partagé entre l'event et le `utm_content` du lien sortant.
+  it.each(["audit-results", "pdf"] as const)(
+    'emits "cta_calendly_click" with location "%s"',
+    (location) => {
+      trackCtaCalendlyClick(location);
+      expect(track).toHaveBeenCalledWith("cta_calendly_click", { location });
+    },
+  );
 });
 
 describe("trackGoogleDiagnosticTriggered", () => {

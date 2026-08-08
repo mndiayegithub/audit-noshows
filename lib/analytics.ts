@@ -16,6 +16,7 @@
  */
 import { track } from "@vercel/analytics";
 import type { AuditErrorCode } from "@/types/audit-errors";
+import type { CalendlyOrigin } from "@/lib/calendly";
 
 /** Wrapper fail-soft local (D-04). */
 function safeTrack(
@@ -33,8 +34,15 @@ export function trackLandingView(referrer?: string): void {
   safeTrack("landing_view", referrer ? { referrer } : undefined);
 }
 
-export function trackLandingCtaAuditClick(): void {
-  safeTrack("landing_cta_audit_click");
+/**
+ * Emplacement du bouton « lancer un audit » sur la landing.
+ * Paramètre obligatoire : quatre boutons mènent à /audit, et sans ça on ne
+ * peut pas savoir lequel travaille.
+ */
+export type LandingCtaLocation = "nav" | "hero" | "cta-band" | "footer";
+
+export function trackLandingCtaAuditClick(location: LandingCtaLocation): void {
+  safeTrack("landing_cta_audit_click", { location });
 }
 
 export function trackAuditView(): void {
@@ -53,15 +61,36 @@ export function trackAuditSubmitted(degraded: boolean): void {
   safeTrack("audit_submitted", { degraded });
 }
 
-export function trackAuditSuccess(score: number, tauxNoshow: number): void {
-  safeTrack("audit_success", { score, taux_noshow: tauxNoshow });
+/**
+ * `durationMs` = temps écoulé entre `audit_submitted` et l'arrivée du
+ * résultat. L'appel n8n prend 30 à 50 s : c'est le moment le plus fragile du
+ * parcours, et il était jusqu'ici totalement aveugle.
+ *
+ * ⚠️ Trois propriétés — au-dessus des 2 autorisées par Vercel Pro « de base »
+ * (l'add-on Web Analytics Plus en donne 8). Sans effet si la collecte part
+ * ailleurs (Supabase / n8n) ; à revérifier si on reste sur Vercel.
+ */
+export function trackAuditSuccess(
+  score: number,
+  tauxNoshow: number,
+  durationMs: number,
+): void {
+  safeTrack("audit_success", {
+    score,
+    taux_noshow: tauxNoshow,
+    duration_ms: durationMs,
+  });
 }
 
-export function trackAuditFailed(errorCode: string): void {
-  safeTrack("audit_failed", { error_code: errorCode });
+export function trackAuditFailed(errorCode: string, durationMs: number): void {
+  safeTrack("audit_failed", { error_code: errorCode, duration_ms: durationMs });
 }
 
-export type CalendlyCtaLocation = "hero" | "footer" | "audit-results";
+/**
+ * Aligné sur `CalendlyOrigin` : un seul vocabulaire pour l'emplacement, qu'il
+ * serve à nommer l'event ou à remplir `utm_content`.
+ */
+export type CalendlyCtaLocation = CalendlyOrigin;
 
 export function trackCtaCalendlyClick(location: CalendlyCtaLocation): void {
   safeTrack("cta_calendly_click", { location });

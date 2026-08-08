@@ -12,6 +12,7 @@ import {
 } from "@react-pdf/renderer";
 import type { AuditResponse, GoogleData } from "@/types/audit";
 import { computeBlendedScore, computeScore, scoreBadge } from "@/lib/score";
+import { lienCalendly } from "@/lib/calendly";
 
 // ─── Font registration (module load) ─────────────────────────────────────────
 // Inter + Fraunces : fichiers locaux servis par Next.js depuis /public/fonts/*.ttf.
@@ -1017,7 +1018,9 @@ export default function RapportPDF({
     },
   ];
 
-  const calendlyUrl = process.env.NEXT_PUBLIC_CALENDLY_URL;
+  // `utm_content=pdf` : un clic depuis le PDF n'est pas traçable côté site
+  // (le document vit hors du navigateur), l'UTM est le seul témoin.
+  const calendlyUrl = lienCalendly("pdf");
 
   return (
     <Document>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react";
 import { trackCtaCalendlyClick } from "@/lib/analytics";
+import { lienCalendly } from "@/lib/calendly";
 
 interface Props {
   caPerduAn: number;
@@ -17,12 +18,10 @@ const CHECKLIST = [
 ] as const;
 
 export default function CTACalendly({ caPerduAn, caPerduGoogle, email }: Props) {
-  const calendlyUrl = process.env.NEXT_PUBLIC_CALENDLY_URL ?? "#";
   const impactTotal = caPerduAn + (caPerduGoogle ?? 0);
 
-  const urlWithPrefill = email
-    ? `${calendlyUrl}${calendlyUrl.includes("?") ? "&" : "?"}email=${encodeURIComponent(email)}`
-    : calendlyUrl;
+  // UTM + préremplissage email en un seul endroit (lib/calendly.ts).
+  const urlWithPrefill = lienCalendly("audit-results", { email }) ?? "#";
 
   return (
     <motion.div

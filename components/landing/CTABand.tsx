@@ -20,7 +20,7 @@ export default function CTABand() {
           </div>
           <Link
             href="/audit"
-            onClick={() => trackLandingCtaAuditClick()}
+            onClick={() => trackLandingCtaAuditClick("cta-band")}
             className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-medium text-primaryDark transition-shadow hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primaryDark"
           >
             Lancer mon audit

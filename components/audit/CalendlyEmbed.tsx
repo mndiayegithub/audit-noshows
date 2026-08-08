@@ -1,6 +1,7 @@
 "use client";
 
 import { trackCtaCalendlyClick } from "@/lib/analytics";
+import { lienCalendly } from "@/lib/calendly";
 
 /**
  * Section 5 — CTA band (sketch 009 variante A).
@@ -20,7 +21,8 @@ interface CalendlyEmbedProps {
 }
 
 export default function CalendlyEmbed({ onDownloadPDF }: CalendlyEmbedProps) {
-  const url = process.env.NEXT_PUBLIC_CALENDLY_URL;
+  // UTM inclus : c'est ce qui permettra de relier un clic à un RDV réel.
+  const url = lienCalendly("audit-results");
 
   return (
     <div className="rounded-[24px] bg-[#064E3B] p-10 text-white md:p-12">

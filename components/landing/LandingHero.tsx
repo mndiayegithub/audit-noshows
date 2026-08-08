@@ -50,7 +50,7 @@ export default function LandingHero() {
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/audit"
-              onClick={() => trackLandingCtaAuditClick()}
+              onClick={() => trackLandingCtaAuditClick("hero")}
               className="inline-flex items-center rounded-xl bg-primaryDark px-5 py-3 text-sm font-medium text-white transition-shadow hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primaryDark focus-visible:ring-offset-2"
             >
               Lancer mon audit

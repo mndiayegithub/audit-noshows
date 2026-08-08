@@ -35,7 +35,7 @@ export default function LandingFooter() {
               <li><a href="#comment-ca-marche" className="hover:text-slate-900">Comment ça marche</a></li>
               <li><a href="#pour-qui" className="hover:text-slate-900">Pour qui ?</a></li>
               <li><a href="#faq" className="hover:text-slate-900">FAQ</a></li>
-              <li><Link href="/audit" onClick={() => trackLandingCtaAuditClick()} className="hover:text-slate-900">Lancer un audit</Link></li>
+              <li><Link href="/audit" onClick={() => trackLandingCtaAuditClick("footer")} className="hover:text-slate-900">Lancer un audit</Link></li>
             </ul>
           </div>
 
