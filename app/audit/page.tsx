@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, createElement } from "react";
+import { useState, useEffect, useCallback, useRef, createElement } from "react";
 import { useDropzone } from "react-dropzone";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -20,6 +20,7 @@ import {
   trackAuditSubmitted,
   trackAuditSuccess,
   trackAuditFailed,
+  trackAuditAbandoned,
   trackPdfDownloaded,
 } from "@/lib/analytics";
 
@@ -55,10 +56,30 @@ export default function AuditPage() {
   const [degradedDialogOpen, setDegradedDialogOpen] = useState(false);
   const [previewSnapshot, setPreviewSnapshot] = useState<CSVPreviewSnapshot | null>(null);
 
+  // Instant où l'attente du résultat a commencé. Une ref et pas un state :
+  // la valeur doit être lisible depuis l'écouteur `pagehide` sans provoquer
+  // de rendu.
+  const debutAttenteRef = useRef<number | null>(null);
+
   // Phase 9 — audit_view (R2 event 3)
   useEffect(() => {
     trackAuditView();
   }, []);
+
+  // Abandon pendant l'attente : le seul événement du funnel qui mesure une
+  // absence. `pagehide` et non `visibilitychange` — ce dernier se déclenche
+  // aussi sur un simple changement d'onglet et compterait des abandons
+  // imaginaires. L'écouteur n'existe que pendant l'état "loading", donc il se
+  // retire tout seul dès qu'un résultat arrive.
+  useEffect(() => {
+    if (etat !== "loading") return;
+    const onPageHide = () => {
+      const debut = debutAttenteRef.current;
+      if (debut !== null) trackAuditAbandoned(Date.now() - debut);
+    };
+    window.addEventListener("pagehide", onPageHide);
+    return () => window.removeEventListener("pagehide", onPageHide);
+  }, [etat]);
 
   const handleResetUpload = useCallback(() => {
     setFile(null);
@@ -102,6 +123,7 @@ export default function AuditPage() {
     // perçoit le début de l'attente — il couvre donc la lecture du CSV en
     // plus de l'appel n8n (30-50 s), qui est bien ce qu'il subit.
     const debutAttente = Date.now();
+    debutAttenteRef.current = debutAttente;
     const dureeMs = () => Date.now() - debutAttente;
     setEtat("loading");
     setEtapeActuelle(0);

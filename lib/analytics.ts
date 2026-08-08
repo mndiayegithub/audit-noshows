@@ -1,30 +1,41 @@
 /**
- * Phase 9 — Couche typée d'analytics (Vercel Web Analytics).
- * Tous les call-sites passent par les helpers ci-dessous (D-03 :
- * import direct de `@vercel/analytics` interdit ailleurs dans le repo).
- * Chaque helper est fail-soft (D-04) : si track() throw (adblock,
- * réseau, infra Vercel down), le funnel commercial n'est jamais interrompu.
+ * Phase 9 — Couche typée d'analytics.
+ * Tous les call-sites passent par les helpers ci-dessous (D-03 : appel direct
+ * au transport interdit ailleurs dans le repo). Chaque helper est fail-soft
+ * (D-04) : si l'envoi échoue (adblock, réseau, base Supabase en pause), le
+ * funnel commercial n'est jamais interrompu.
+ *
+ * ── Changement de collecte (2026-08-08) ──────────────────────────────────
+ * Ces événements partaient vers `@vercel/analytics`, qui les jetait : les
+ * événements personnalisés sont réservés au plan Pro, le projet est en Hobby.
+ * Zéro donnée collectée entre avril et août. Ils vont désormais dans la table
+ * Supabase `audit_events` via `lib/mesure.ts`.
+ *
+ * `<Analytics />` reste monté dans `app/layout.tsx` : les pages vues, elles,
+ * sont bien collectées sur Hobby, gratuitement, et donnent volume et
+ * provenance. Les deux dispositifs sont complémentaires, pas redondants.
+ *
+ * La promesse de cette couche a tenu : le changement d'outil n'a touché que
+ * ce fichier, aucun des 20 call-sites.
+ * ─────────────────────────────────────────────────────────────────────────
  *
  * Convention (verrouillée — RESEARCH gotcha §3) :
  * - Event names : snake_case verbatim (ex: "audit_success", PAS "auditSuccess")
  * - Properties : snake_case (ex: taux_noshow, nb_rdv, reco_rate, error_code)
- * - Properties values : string | number | boolean | null UNIQUEMENT (RESEARCH §Q3)
+ * - Properties values : string | number | boolean | null UNIQUEMENT
  *
  * PII safety (D-03 / R3 / AC-3) : aucun helper ci-dessous n'accepte de string
  * libre représentant une identité (email, nom_cabinet, contenu CSV). Les
  * signatures TypeScript bloquent statiquement toute fuite de PII via analytics.
  */
-import { track } from "@vercel/analytics";
+import { envoyer, type ProprietesMesure } from "@/lib/mesure";
 import type { AuditErrorCode } from "@/types/audit-errors";
 import type { CalendlyOrigin } from "@/lib/calendly";
 
 /** Wrapper fail-soft local (D-04). */
-function safeTrack(
-  name: string,
-  properties?: Record<string, string | number | boolean | null>,
-): void {
+function safeTrack(name: string, properties?: ProprietesMesure): void {
   try {
-    track(name, properties);
+    envoyer(name, properties);
   } catch {
     // Silencieux — analytics ne doit JAMAIS bloquer le parcours commercial.
   }
@@ -65,10 +76,6 @@ export function trackAuditSubmitted(degraded: boolean): void {
  * `durationMs` = temps écoulé entre `audit_submitted` et l'arrivée du
  * résultat. L'appel n8n prend 30 à 50 s : c'est le moment le plus fragile du
  * parcours, et il était jusqu'ici totalement aveugle.
- *
- * ⚠️ Trois propriétés — au-dessus des 2 autorisées par Vercel Pro « de base »
- * (l'add-on Web Analytics Plus en donne 8). Sans effet si la collecte part
- * ailleurs (Supabase / n8n) ; à revérifier si on reste sur Vercel.
  */
 export function trackAuditSuccess(
   score: number,
@@ -84,6 +91,18 @@ export function trackAuditSuccess(
 
 export function trackAuditFailed(errorCode: string, durationMs: number): void {
   safeTrack("audit_failed", { error_code: errorCode, duration_ms: durationMs });
+}
+
+/**
+ * L'utilisateur a quitté la page PENDANT l'attente du résultat.
+ *
+ * Émis sur `pagehide` — et pas sur `visibilitychange`, qui se déclenche aussi
+ * sur un simple changement d'onglet et compterait des abandons imaginaires.
+ * Le transport est `sendBeacon` : un `fetch` ordinaire n'aurait pas le temps
+ * de partir. C'est le seul événement du funnel qui mesure une absence.
+ */
+export function trackAuditAbandoned(durationMs: number): void {
+  safeTrack("audit_abandoned", { duration_ms: durationMs });
 }
 
 /**
