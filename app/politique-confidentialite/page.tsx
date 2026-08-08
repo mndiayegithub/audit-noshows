@@ -84,7 +84,7 @@ export default function PolitiqueConfidentialitePage() {
           Délégué à la protection des données (DPO)
         </h2>
         <p>
-          PerfIAmatic · Mouhamed Ndiaye · <a href="mailto:mndiayepro97@gmail.com" className="underline">mndiayepro97@gmail.com</a>
+          PerfIAmatic · Mansour Ndiaye · <a href="mailto:mndiayepro97@gmail.com" className="underline">mndiayepro97@gmail.com</a>
         </p>
       </section>
     </main>

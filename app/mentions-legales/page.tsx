@@ -11,7 +11,7 @@ export default function MentionsLegalesPage() {
       <section className="space-y-3 mb-8">
         <h2 className="font-serif text-xl font-semibold text-slate-900">Éditeur du site</h2>
         <p>
-          PerfIAmatic · Mouhamed Ndiaye<br />
+          PerfIAmatic · Mansour Ndiaye<br />
           Contact : <a href="mailto:mndiayepro97@gmail.com" className="underline">mndiayepro97@gmail.com</a>
         </p>
         <p className="text-sm text-gray-500">SIREN / statut juridique : [à compléter]</p>
