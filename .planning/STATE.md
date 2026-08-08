@@ -26,10 +26,10 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 ## Current Position
 
 Phase: 09 of 09 — ✅ validée 2026-08-08 (monitoring & analytics, collecte Supabase)
-Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT), **08 (Déploiement production v2)**
+Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT), 08 (Déploiement production v2), **09 (Monitoring & Analytics — collecte Supabase)**
 Phase 08 résumé : smoke E2E 4/4, backup `v1-backup` branch + tag `v1.0.0` (commit `91e66ad`), 3 env vars set + redéploy (55s), Calendly URL baked dans bundle, Google Places API live, rollback plan → `.planning/ROLLBACK.md`. **Découverte** : 0 env vars set avant ce passage → CTA Calendly cassé silencieusement depuis 1er deploy v2 — réparé.
 Next: Milestone v2 clos. Deux restes non bloquants — observer en prod les 9 events pas encore vus (1 parcours d'audit réel avec un CSV), et planifier la purge 12 mois annoncée dans la politique de confidentialité. Jalon suivant à choisir : Phase 9-bis (Sentry) ou Phase 10 (tracking n8n serveur).
-Last activity: 2026-04-26 -- Plan 09-05 complete: Phase 9 SUMMARY.md + 09-05-SMOKE-PROD-CHECKLIST.md livrés. Phase 9 livrée code-side (5/5 plans), smoke prod pending user.
+Last activity: 2026-08-08 -- Phase 9 close. Collecte basculée de Vercel (events personnalisés = plan Pro, donc morte depuis avril) vers la table Supabase `audit_events`. 3 correctifs funnel, event `audit_abandoned`, section RGPD mesure d'audience, `docs/rapport-hebdo.sql`. Suite e2e remise à 4/4.
 
 Progress: [██████████] 100% (9/9 phases validées)
 
@@ -107,11 +107,17 @@ None.
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
+| legal    | Purge 12 mois de `audit_events` non planifiée alors que `/politique-confidentialite` l'annonce. Reporté sciemment le 2026-08-08 : 0 ligne à purger, rien n'atteindra 12 mois avant août 2027. SQL prêt en annexe de `docs/rapport-hebdo.sql` | open | 2026-08-08 |
+| mesure   | 9 des 12 events pas encore observés en production — il faut un parcours d'audit complet avec un vrai CSV sur `audit.perfiamatic.fr` (AC-1 / AC-6) | open | 2026-08-08 |
+| dette    | `components/audit/CTACalendly.tsx` n'est importé nulle part — code mort, candidat à la suppression | open | 2026-08-08 |
 | build    | 4 npm deps missing from node_modules (chart.js, react-chartjs-2, react-markdown, remark-gfm) — blocks `npm run build` on unrelated audit-flow files. Pre-existing, network offline. See `.planning/phases/phase-01-refonte-landing-v2/deferred-items.md` | open | 2026-04-23 (Plan 01-01) |
 
 ## Session Continuity
 
-Last session: 2026-04-26 13:00 GMT+2
+Last session: 2026-08-08 21:00 GMT+2
+Stopped at: ✅ **Milestone v2.0 clos — Phase 9 validée, collecte Supabase vivante et vérifiée en prod, suite e2e 4/4.**
+
+Session précédente : 2026-04-26 13:00 GMT+2
 Stopped at: ✅ **Phase 7-bis CLOSE — n8n alignment + 3 fixes post-UAT, 10/10 smoke prod validés**.
 
 **Phase 7-bis n8n** (option propre choisie — refactor graphe avec IF + 2 Respond Webhook).
