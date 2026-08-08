@@ -34,3 +34,7 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 audit_capture.png
+
+# Playwright — artefacts de test régénérés à chaque run
+/test-results/
+/playwright-report/

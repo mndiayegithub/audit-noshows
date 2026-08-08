@@ -140,13 +140,17 @@ stepped reveal)
 
 ### Phase 6 · Infra tests (Vitest + Playwright)
 
-**Status:** ✅ **Validée** 2026-04-26 — absorbée dans Phase 7 (l'infra tests existait déjà partiellement, Phase 7 a étendu : Vitest 79 tests passent ✅, Playwright 3 specs e2e ✅, fixtures CSV générées). Couverture : invariants `ca_perdu` (pas de re-multiplication), normalization n8n (3 shapes), parsing CSV (parseCSVForPreview), validation backend (audit-validation), seuils dégradé/reject, mapping codes erreur, encodage UTF-8/latin1.
+**Status:** ✅ **Validée** 2026-04-26 — absorbée dans Phase 7 (l'infra tests existait déjà partiellement, Phase 7 a étendu : Vitest 79 tests passent ✅, Playwright 3 specs e2e ✅ au 26/04 — **voir la réserve ci-dessous**, fixtures CSV générées). Couverture : invariants `ca_perdu` (pas de re-multiplication), normalization n8n (3 shapes), parsing CSV (parseCSVForPreview), validation backend (audit-validation), seuils dégradé/reject, mapping codes erreur, encodage UTF-8/latin1.
 
 **Livré :**
 - `vitest.config.ts` + 9 suites de tests dans `lib/__tests__/` (79 tests)
 - `playwright.config.ts` + 3 specs `e2e/audit-flow-{ok,degraded,reject}.spec.ts`
 - 12 CSVs fixtures + 3 mocks JSON (`scripts/gen-csv-fixtures.ts`)
 - Scripts npm `test` + `test:e2e`
+
+⚠️ **Réserve levée le 2026-08-08.** Au 08/08, **2 des 4 specs e2e échouaient** (`audit-flow.spec.ts`, `audit-flow-degraded.spec.ts`). Vérifié par rejeu sur le commit `9f2139f` : elles étaient déjà cassées avant, donc la validation du 26/04 avait cessé d'être vraie sans que rien ne le signale. Cause : les specs décrivaient le parcours d'AVANT la Phase 7. Celle-ci a inséré l'écran d'aperçu CSV entre le dépôt et le formulaire, et posé `MIN_RDV_VALIDES = 20` — or la fixture `sample.csv` n'avait que 10 lignes, donc le bouton « Continuer » restait désactivé et le formulaire n'apparaissait jamais. Réparé le 08/08.
+
+**Leçon à retenir pour les prochaines phases** : une suite e2e validée une fois ne le reste pas. Rien n'exécutait ces tests entre avril et août ; il faut soit les lancer en CI, soit les rejouer à chaque phase qui touche au parcours.
 
 ---
 
@@ -219,8 +223,11 @@ livrer un audit en autonomie sans support manuel.
 
 ### Phase 9 · Monitoring & Analytics
 
-**Status:** 🛠️ planifiée — exécution en attente
-**Goal:** Instrumenter le funnel commercial v2 (`audit.perfiamatic.fr`) avec 11 events client-side via Vercel Web Analytics (cookieless RGPD-friendly), pour passer du pilotage par feedback à un pilotage par métriques objectives observables dans le dashboard Vercel.
+**Status:** ✅ **Validée 2026-08-08** — livrée code-side le 26/04, mais la collecte est restée morte 4 mois (voir ci-dessous). Bascule sur Supabase le 08/08, vérifiée en production.
+
+⚠️ **Le scope a changé en cours de route, et il faut savoir pourquoi.** La phase visait Vercel Web Analytics. Les **events personnalisés y sont réservés au plan Pro** ; le projet est en Hobby, donc les 11 events partaient dans le vide. Entre le 26/04 et le 08/08 : zéro donnée collectée, sans aucun signal d'erreur. La collecte passe désormais par la table Supabase `audit_events` (projet `perfiamatic-prod`, région Irlande), via la route même-origine `/api/mesure`. `<Analytics />` reste monté : les pages vues, elles, sont gratuites sur Hobby.
+
+**Goal (révisé) :** Instrumenter le funnel commercial v2 (`audit.perfiamatic.fr`) avec 12 events client-side sans cookie, pour passer du pilotage par feedback à un pilotage par métriques observables.
 
 **Scope verrouillé (cf 09-SPEC.md, 6 requirements R1-R6) :**
 - Installation `@vercel/analytics` + `<Analytics />` dans `app/layout.tsx`
@@ -235,11 +242,19 @@ livrer un audit en autonomie sans support manuel.
 **Plans:** 5 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Install @vercel/analytics + baseline bundle + monter <Analytics /> dans RootLayout
-- [ ] 09-02-PLAN.md — lib/analytics.ts (11 helpers typés fail-soft) + Vitest 15-20 tests
-- [ ] 09-03-PLAN.md — Wiring 11 call-sites (landing + audit page + hooks + components) + grep guards
-- [ ] 09-04-PLAN.md — Mesure bundle after + delta vs baseline (AC-4)
-- [ ] 09-05-PLAN.md — SUMMARY phase D-10 + checklist smoke prod (AC-1, AC-2, AC-6)
+- [x] 09-01-PLAN.md — Install @vercel/analytics + baseline bundle + monter <Analytics /> dans RootLayout
+- [x] 09-02-PLAN.md — lib/analytics.ts (11 helpers typés fail-soft) + Vitest 15-20 tests
+- [x] 09-03-PLAN.md — Wiring 11 call-sites (landing + audit page + hooks + components) + grep guards
+- [x] 09-04-PLAN.md — Mesure bundle after + delta vs baseline (AC-4)
+- [x] 09-05-PLAN.md — SUMMARY phase D-10 + checklist smoke prod (AC-1, AC-2, AC-6)
+- [x] Hors plan, 2026-08-08 — 3 correctifs funnel (UTM Calendly, emplacement des CTA, chronométrage n8n), bascule Supabase + event `audit_abandoned`, section RGPD mesure d'audience, `docs/rapport-hebdo.sql`. Commits `441f63e`, `3c5a0c9`, `2921475`, `41375e1`, `84d46f1`, `472d6bb`.
+
+**Critères d'acceptation :**
+- ✅ AC-2 — funnel visualisable. Satisfait **autrement** que prévu, et mieux : `docs/rapport-hebdo.sql` le donne en **visites distinctes** grâce au `session_id`, ce que Vercel n'aurait jamais permis.
+- ✅ AC-3 — aucune PII. Les signatures TypeScript l'interdisent statiquement.
+- ✅ AC-4 — bundle. Mesuré à +0,4 Ko sur `/`, très en deçà des +5 Ko autorisés (aucun SDK Supabase embarqué : `fetch` + `sendBeacon`).
+- ✅ AC-5 — `npm run build` + `npm run lint` verts.
+- ⚠️ **AC-1 et AC-6 — partiellement satisfaits, et leur énoncé est périmé.** Ils exigent que les events soient visibles « dans le dashboard Vercel Analytics », ce qui n'arrivera jamais sur Hobby. Lire : « visibles dans `audit_events` ». **3 events sur 12 vérifiés en production** (`landing_view`, `landing_cta_audit_click`, `audit_view`, via Playwright sur `audit.perfiamatic.fr`, même `session_id`). Les 9 autres sont couverts par les tests unitaires et par la route testée de bout en bout, mais **pas encore observés en prod** : il faut un parcours d'audit complet avec un vrai CSV.
 
 ---
 

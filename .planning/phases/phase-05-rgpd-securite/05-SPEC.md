@@ -55,7 +55,7 @@ La robustesse côté n8n (parsing CSV, filtrage) est hors scope : cette phase tr
 
 4. **Page `/politique-confidentialite` + `/mentions-legales` + lien footer** : 2 pages statiques MD-like en React (App Router) avec contenu minimal mais complet :
    - `/politique-confidentialite` : finalité du traitement (audit no-shows), données collectées (CSV rdv + cabinet + email optionnel), base légale (consentement + intérêt légitime), durée de conservation (CSV non stocké, supprimé après traitement ; nom cabinet + email conservés sur demande de rapport), destinataires (n8n hostinger, Google Places si opt-in, Calendly si prise de RDV, éventuellement email SMTP), droits (accès/rectification/suppression via email contact), DPO (mndiayepro97@gmail.com). Mention **Art. 9 RGPD** : les données transmises sont des métadonnées de rendez-vous (date, statut, heure), **aucune donnée de santé identifiante** n'est envoyée à la plateforme.
-   - `/mentions-legales` : éditeur (PerfIAmatic / Mouhamed Ndiaye), hébergeur (Vercel Inc. + Hostinger pour n8n), contact, n° SIREN si applicable (mettre `[à compléter]` si non-ready).
+   - `/mentions-legales` : éditeur (PerfIAmatic / Mansour Ndiaye), hébergeur (Vercel Inc. + Hostinger pour n8n), contact, n° SIREN si applicable (mettre `[à compléter]` si non-ready).
    - Footer ajouté à `app/layout.tsx` (ou composant `components/Footer.tsx` rendu dans layout) avec liens vers ces 2 pages + © année en cours + mention `PerfIAmatic`.
    - Current : pas de footer, pas de pages légales.
    - Target : 2 nouveaux fichiers `app/politique-confidentialite/page.tsx` + `app/mentions-legales/page.tsx` + `components/Footer.tsx` importé dans `app/layout.tsx`.

@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Finalisation
-status: unknown
-stopped_at: ⏳ **Phase 9 livrée code-side (5 plans ✅), smoke prod manuel pending user sur audit.perfiamatic.fr (AC-1, AC-2, AC-6).**
-last_updated: "2026-04-26T17:34:00.000Z"
-last_activity: "2026-04-26 -- Plan 09-05 complete: SUMMARY.md de Phase 9 + 09-05-SMOKE-PROD-CHECKLIST.md créés. Phase 9 livrée code-side (5/5 plans). AC-3, AC-4, AC-5 PASS code-side. AC-1, AC-2, AC-6 PENDING USER SMOKE — user doit suivre la checklist sur audit.perfiamatic.fr puis confirmer 'approved' pour basculer Phase 9 ✅ close."
+status: milestone_v2_complete
+stopped_at: ✅ **Milestone v2.0 clos. Phase 9 validée le 2026-08-08 après bascule de la collecte sur Supabase. Reste : observer les 9 events non encore vus en prod (1 parcours d'audit réel), et planifier la purge 12 mois.**
+last_updated: "2026-08-08T18:55:00.000Z"
+last_activity: "2026-08-08 -- Phase 9 close. La collecte Vercel était morte depuis avril (events personnalisés = plan Pro) : bascule sur la table Supabase audit_events via la route /api/mesure. 3 correctifs funnel (UTM Calendly, emplacement des CTA, chronométrage n8n) + event audit_abandoned + section RGPD mesure d'audience + docs/rapport-hebdo.sql. Suite e2e réparée : 4/4 verte, contre 2/4 depuis avril sans que personne ne l'ait vu. Commits 441f63e, 3c5a0c9, 2921475, 41375e1, 84d46f1, 472d6bb."
 progress:
   total_phases: 9
-  completed_phases: 4
+  completed_phases: 9
   total_plans: 31
   completed_plans: 31
-  percent: 84
+  percent: 100
 ---
 
 # Project State
@@ -21,17 +21,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Audit rapide des no-shows pour cabinets dentaires — diagnostic + rapport IA en 60 s.
-**Current focus:** Phase 09 livrée code-side (5/5 plans ✅) — 11 events Vercel Analytics instrumentés, bundle +2 kB (AC-4 PASS). Smoke prod manuel pending user sur `audit.perfiamatic.fr` pour valider AC-1, AC-2, AC-6 et clôturer milestone v2.
+**Current focus:** Milestone v2.0 clos. La mesure du funnel est vivante et vérifiée en production (table Supabase `audit_events`). Prochain jalon à définir : Phase 9-bis (Sentry) ou Phase 10 (tracking n8n côté serveur).
 
 ## Current Position
 
-Phase: 09 of 09 — ⏳ livrée code-side, smoke prod pending user (monitoring & analytics)
+Phase: 09 of 09 — ✅ validée 2026-08-08 (monitoring & analytics, collecte Supabase)
 Phases livrées & validées : 01 (landing v2), 02 (audit dashboard v2), 03 (n8n stats_par_mois), 04 (Google Places API), 05 (RGPD & Sécurité), 06 (tests Vitest + Playwright — absorbée dans Phase 7), 07 (Robustesse upload CSV + 7-bis n8n alignment + 3 fixes post-UAT), **08 (Déploiement production v2)**
 Phase 08 résumé : smoke E2E 4/4, backup `v1-backup` branch + tag `v1.0.0` (commit `91e66ad`), 3 env vars set + redéploy (55s), Calendly URL baked dans bundle, Google Places API live, rollback plan → `.planning/ROLLBACK.md`. **Découverte** : 0 env vars set avant ce passage → CTA Calendly cassé silencieusement depuis 1er deploy v2 — réparé.
-Next: Smoke prod manuel user (~10 min sur audit.perfiamatic.fr) → si "approved" → Phase 9 close + milestone v2 done. Sinon Phase 9-bis (Sentry) / Phase 10 (dashboard custom + n8n stats serveur) backlog.
+Next: Milestone v2 clos. Deux restes non bloquants — observer en prod les 9 events pas encore vus (1 parcours d'audit réel avec un CSV), et planifier la purge 12 mois annoncée dans la politique de confidentialité. Jalon suivant à choisir : Phase 9-bis (Sentry) ou Phase 10 (tracking n8n serveur).
 Last activity: 2026-04-26 -- Plan 09-05 complete: Phase 9 SUMMARY.md + 09-05-SMOKE-PROD-CHECKLIST.md livrés. Phase 9 livrée code-side (5/5 plans), smoke prod pending user.
 
-Progress: [█████████░] 89% (8/9 phases validées + Phase 9 code-side, validation user pending)
+Progress: [██████████] 100% (9/9 phases validées)
 
 ## Performance Metrics
 

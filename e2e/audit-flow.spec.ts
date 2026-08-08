@@ -32,19 +32,25 @@ test("happy path: landing → audit upload → dashboard renders with ca_perdu_a
   // Audit page
   await page.goto("/audit");
 
-  // Upload CSV
-  const csvPath = join(__dirname, "fixtures/sample.csv");
-  const fileInput = page.locator('input[type="file"]');
-  await fileInput.setInputFiles(csvPath);
-
-  // Fill cabinet + CA fields (select by input type or label — the audit form has text inputs)
-  const textInputs = page.locator('input[type="text"], input[type="email"], input[type="number"]');
-  // nom_cabinet is the first text input after the file drop
-  await page.getByPlaceholder(/cabinet|nom/i).first().fill("Cabinet Test");
+  // Le formulaire (nom du cabinet, CA moyen) n'existe que dans l'état
+  // "formulaire". Dès qu'un fichier est déposé, la Phase 7 bascule sur l'écran
+  // d'aperçu CSV et le formulaire disparaît : on remplit donc AVANT le dépôt.
+  await page.getByLabel(/nom du cabinet/i).fill("Cabinet Test");
   const caInput = page.locator('input[type="number"]').first();
   if (await caInput.count()) {
     await caInput.fill("80");
   }
+
+  // Upload CSV. On alimente directement l'input caché plutôt que de passer par
+  // l'événement "filechooser" : la zone de dépôt peut être recouverte en dev
+  // par la barre d'outils Agentation, qui intercepte alors le clic.
+  const csvPath = join(__dirname, "fixtures/sample.csv");
+  await page.locator('input[type="file"]').setInputFiles(csvPath);
+
+  // Écran d'aperçu introduit en Phase 7. « Continuer » reste désactivé si le
+  // CSV est refusé — d'où une fixture d'au moins MIN_RDV_VALIDES (20) lignes.
+  await expect(page.getByRole("heading", { name: /Vérifiez ce que nous avons compris/i })).toBeVisible();
+  await page.getByRole("button", { name: /^continuer$/i }).click();
 
   // Submit
   await page.getByRole("button", { name: /g[ée]n[ée]rer|lancer|audit/i }).first().click();
@@ -59,8 +65,10 @@ test("happy path: landing → audit upload → dashboard renders with ca_perdu_a
   // And it must NOT display 150000 (12500 × 12) or 4166 (12500 / 3) which would suggest re-math.
   expect(body).not.toMatch(/150[\s., ]?000/);
 
-  // Score section visible
-  await expect(page.locator("text=Score cabinet")).toBeVisible();
+  // Score section visible. `.first()` obligatoire : « Score cabinet » apparaît
+  // trois fois dans le dashboard v2 (barre latérale, en-tête de section,
+  // ScoreHero), et le mode strict de Playwright échoue sur un locator ambigu.
+  await expect(page.locator("text=Score cabinet").first()).toBeVisible();
 
   // Footer with privacy link
   await expect(page.getByRole("link", { name: /politique de confidentialit/i })).toBeVisible();
