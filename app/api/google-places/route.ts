@@ -1,5 +1,6 @@
 import { logServerError } from "@/lib/safe-log";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { interpreterReponseGoogle } from "@/lib/googlePlaces";
 
 export const maxDuration = 15;
 
@@ -59,12 +60,29 @@ export async function GET(request: Request) {
     }
 
     const data = await response.json();
+    const resultat = interpreterReponseGoogle(data);
 
-    if (!data.candidates || data.candidates.length === 0) {
+    if (resultat.type === "indisponible") {
+      // Le détail (statut Google + error_message) va dans les logs serveur,
+      // jamais à l'écran : « activez la facturation » ne regarde pas le
+      // dentiste qui consulte son audit.
+      logServerError("api/google-places", new Error(resultat.detail));
+      return Response.json(
+        { error: "Analyse de réputation momentanément indisponible" },
+        { status: 502 },
+      );
+    }
+
+    if (resultat.type === "introuvable") {
       return Response.json({ found: false });
     }
 
-    const place = data.candidates[0];
+    const place = resultat.place as {
+      name?: string;
+      rating?: number;
+      user_ratings_total?: number;
+      formatted_address?: string;
+    };
     return Response.json({
       found: true,
       name: place.name ?? input,
