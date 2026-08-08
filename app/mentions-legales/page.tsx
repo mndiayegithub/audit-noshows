@@ -14,7 +14,6 @@ export default function MentionsLegalesPage() {
           PerfIAmatic · Mansour Ndiaye<br />
           Contact : <a href="mailto:mndiayepro97@gmail.com" className="underline">mndiayepro97@gmail.com</a>
         </p>
-        <p className="text-sm text-gray-500">SIREN / statut juridique : [à compléter]</p>
       </section>
 
       <section className="space-y-3 mb-8">
