@@ -8,7 +8,7 @@ export default function PolitiqueConfidentialitePage() {
       <h1 className="font-serif text-3xl font-bold mb-2 text-slate-900">
         Politique de confidentialité
       </h1>
-      <p className="text-sm text-gray-500 mb-10">Dernière mise à jour : 24 avril 2026</p>
+      <p className="text-sm text-gray-500 mb-10">Dernière mise à jour : 8 août 2026</p>
 
       <section className="space-y-3 mb-8">
         <h2 className="font-serif text-xl font-semibold text-slate-900">Finalité du traitement</h2>
@@ -54,7 +54,40 @@ export default function PolitiqueConfidentialitePage() {
           <li>Google Places API (uniquement si l&apos;utilisateur lance l&apos;analyse de réputation optionnelle ; seul le nom du cabinet est transmis).</li>
           <li>Calendly (uniquement si l&apos;utilisateur prend rendez-vous).</li>
           <li>Service SMTP d&apos;envoi email (uniquement si l&apos;option d&apos;envoi par email est activée).</li>
+          <li>Vercel (hébergement du site et mesure des pages consultées).</li>
+          <li>Supabase (base de données de la mesure d&apos;audience, région Irlande, Union européenne).</li>
         </ul>
+      </section>
+
+      <section className="space-y-3 mb-8">
+        <h2 className="font-serif text-xl font-semibold text-slate-900">Mesure d&apos;audience</h2>
+        <p>
+          Nous mesurons la façon dont ce site est utilisé, dans le seul but de l&apos;améliorer :
+          pages consultées, provenance, étapes du parcours effectivement franchies (dépôt
+          d&apos;un fichier, lancement d&apos;un audit, téléchargement du rapport, clic vers la
+          prise de rendez-vous), erreurs rencontrées et durée de traitement d&apos;un audit.
+        </p>
+        <p>
+          <strong>Ce que cette mesure ne collecte pas :</strong> ni adresse IP, ni nom, ni
+          adresse email, ni nom de cabinet, ni aucun élément du fichier CSV que vous déposez.
+          Les statistiques produites sont agrégées et ne permettent pas de vous identifier.
+        </p>
+        <p>
+          Pour distinguer deux visites l&apos;une de l&apos;autre, un identifiant aléatoire est
+          généré et conservé dans la mémoire de votre onglet (<em>sessionStorage</em>).{" "}
+          <strong>Il n&apos;est pas un cookie</strong>, il est effacé dès la fermeture de
+          l&apos;onglet, il n&apos;est jamais rapproché de votre identité ni du contenu de votre
+          fichier, et il ne permet aucun suivi d&apos;un site à l&apos;autre ni aucune publicité
+          ciblée.
+        </p>
+        <p>
+          Ce dispositif entre dans le cadre de la dispense de consentement prévue par la CNIL
+          pour la mesure d&apos;audience strictement nécessaire au fonctionnement et à
+          l&apos;amélioration du service : aucun bandeau de consentement n&apos;est donc affiché.
+          Les données de mesure sont conservées 12 mois, puis supprimées. Vous pouvez vous y
+          opposer en écrivant à&nbsp;
+          <a href="mailto:mndiayepro97@gmail.com" className="underline">mndiayepro97@gmail.com</a>.
+        </p>
       </section>
 
       <section className="space-y-3 mb-8">
