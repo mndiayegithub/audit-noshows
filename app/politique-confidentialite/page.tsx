@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Politique de confidentialité — PerfIAmatic Audit",
+  title: "Politique de confidentialité · PerfIAmatic Audit",
 };
 
 export default function PolitiqueConfidentialitePage() {
@@ -22,7 +22,7 @@ export default function PolitiqueConfidentialitePage() {
       <section className="space-y-3 mb-8">
         <h2 className="font-serif text-xl font-semibold text-slate-900">Données collectées</h2>
         <ul className="list-disc pl-5 space-y-1">
-          <li>Export CSV de rendez-vous : date, statut, heure — <strong>aucun nom patient</strong>.</li>
+          <li>Export CSV de rendez-vous : date, statut, heure. Aucun nom de patient.</li>
           <li>Nom du cabinet (renseigné par l&apos;utilisateur).</li>
           <li>Chiffre d&apos;affaires moyen par RDV (estimation utilisateur).</li>
           <li>Adresse email (optionnelle, si l&apos;utilisateur souhaite recevoir le rapport).</li>
@@ -32,7 +32,7 @@ export default function PolitiqueConfidentialitePage() {
       <section className="space-y-3 mb-8">
         <h2 className="font-serif text-xl font-semibold text-slate-900">Base légale</h2>
         <p>
-          Consentement explicite de l&apos;utilisateur (l&apos;upload est volontaire) et
+          Consentement explicite de l&apos;utilisateur (le dépôt du fichier est volontaire) et
           intérêt légitime du responsable de traitement à fournir le service d&apos;audit.
         </p>
       </section>
@@ -40,7 +40,7 @@ export default function PolitiqueConfidentialitePage() {
       <section className="space-y-3 mb-8">
         <h2 className="font-serif text-xl font-semibold text-slate-900">Durée de conservation</h2>
         <p>
-          Le CSV n&apos;est pas persistant — il traverse nos serveurs le temps de l&apos;analyse
+          Le CSV n&apos;est pas conservé : il traverse nos serveurs le temps de l&apos;analyse
           puis est purgé en mémoire à la fin de la requête HTTP. L&apos;email et le nom du
           cabinet sont conservés 12 mois si un rapport a été envoyé, et supprimés sur
           simple demande.
@@ -62,30 +62,29 @@ export default function PolitiqueConfidentialitePage() {
       <section className="space-y-3 mb-8">
         <h2 className="font-serif text-xl font-semibold text-slate-900">Mesure d&apos;audience</h2>
         <p>
-          Nous mesurons la façon dont ce site est utilisé, dans le seul but de l&apos;améliorer :
-          pages consultées, provenance, étapes du parcours effectivement franchies (dépôt
-          d&apos;un fichier, lancement d&apos;un audit, téléchargement du rapport, clic vers la
-          prise de rendez-vous), erreurs rencontrées et durée de traitement d&apos;un audit.
+          Nous regardons comment ce site est utilisé, uniquement pour l&apos;améliorer : pages
+          consultées, provenance, étapes du parcours réellement franchies (dépôt d&apos;un
+          fichier, lancement d&apos;un audit, téléchargement du rapport, clic vers la prise de
+          rendez-vous), erreurs rencontrées et temps de traitement d&apos;un audit.
         </p>
         <p>
-          <strong>Ce que cette mesure ne collecte pas :</strong> ni adresse IP, ni nom, ni
-          adresse email, ni nom de cabinet, ni aucun élément du fichier CSV que vous déposez.
-          Les statistiques produites sont agrégées et ne permettent pas de vous identifier.
+          Cette mesure ne collecte ni adresse IP, ni nom, ni adresse email, ni nom de cabinet,
+          et rien du fichier que vous déposez. Les statistiques obtenues sont agrégées et ne
+          permettent pas de vous identifier.
         </p>
         <p>
-          Pour distinguer deux visites l&apos;une de l&apos;autre, un identifiant aléatoire est
-          généré et conservé dans la mémoire de votre onglet (<em>sessionStorage</em>).{" "}
-          <strong>Il n&apos;est pas un cookie</strong>, il est effacé dès la fermeture de
-          l&apos;onglet, il n&apos;est jamais rapproché de votre identité ni du contenu de votre
-          fichier, et il ne permet aucun suivi d&apos;un site à l&apos;autre ni aucune publicité
-          ciblée.
+          Pour distinguer deux visites, un identifiant aléatoire est gardé dans la mémoire de
+          votre onglet (<em>sessionStorage</em>). Ce n&apos;est pas un cookie, et il disparaît
+          dès que vous fermez l&apos;onglet. Il n&apos;est rapproché ni de votre identité ni du
+          contenu de votre fichier, et il ne sert ni à vous suivre d&apos;un site à l&apos;autre,
+          ni à de la publicité.
         </p>
         <p>
-          Ce dispositif entre dans le cadre de la dispense de consentement prévue par la CNIL
-          pour la mesure d&apos;audience strictement nécessaire au fonctionnement et à
-          l&apos;amélioration du service : aucun bandeau de consentement n&apos;est donc affiché.
-          Les données de mesure sont conservées 12 mois, puis supprimées. Vous pouvez vous y
-          opposer en écrivant à&nbsp;
+          Cette mesure relève de la dispense de consentement prévue par la CNIL pour
+          l&apos;audience strictement nécessaire au fonctionnement et à l&apos;amélioration du
+          service. C&apos;est pourquoi aucun bandeau de consentement ne vous est présenté. Les
+          données sont gardées 12 mois, puis supprimées. Vous pouvez vous y opposer en écrivant
+          à&nbsp;
           <a href="mailto:mndiayepro97@gmail.com" className="underline">mndiayepro97@gmail.com</a>.
         </p>
       </section>
@@ -102,7 +101,7 @@ export default function PolitiqueConfidentialitePage() {
 
       <section className="space-y-3 mb-8">
         <h2 className="font-serif text-xl font-semibold text-slate-900">
-          Art. 9 RGPD — Données de santé
+          Art. 9 RGPD · Données de santé
         </h2>
         <p>
           Les métadonnées de rendez-vous (date, statut, heure) transmises par l&apos;utilisateur

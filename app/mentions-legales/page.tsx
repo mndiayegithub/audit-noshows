@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Mentions légales — PerfIAmatic Audit",
+  title: "Mentions légales · PerfIAmatic Audit",
 };
 
 export default function MentionsLegalesPage() {
