@@ -20,5 +20,51 @@ jobs:
       - run: npm run test
         env:
           CI: "true"
-  # Note: Playwright E2E (npm run test:e2e) is intentionally deferred to Phase 7
-  # — needs browser install caching to keep CI fast.
+
+  # Ajouté le 2026-08-08. L'e2e était exclu de la CI depuis l'origine, avec une
+  # note le reportant « à la Phase 7 » — Phase 7 close en avril sans que ce soit
+  # fait. Conséquence : 2 des 4 specs sont restées cassées d'avril à août sans
+  # que rien ne le signale, pendant que lint, build et tests unitaires
+  # continuaient de passer au vert. C'est précisément le seul type de test non
+  # couvert qui a dérivé.
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+
+      # Le cache est indexé sur le package-lock : une montée de version de
+      # Playwright invalide l'entrée et réinstalle le binaire correspondant.
+      # Sans ça, un navigateur périmé face à une nouvelle API donne des échecs
+      # incompréhensibles.
+      - name: Cache des navigateurs Playwright
+        id: cache-playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      # Chromium seul : c'est le seul projet déclaré dans playwright.config.ts.
+      # `--with-deps` reste nécessaire même quand le cache est chaud, car les
+      # bibliothèques système ne sont pas dans ~/.cache.
+      - name: Installer Chromium
+        run: npx playwright install --with-deps chromium
+
+      # webServer lance `npm run start` quand CI=1 : le build doit exister.
+      - run: npm run build
+
+      - run: npm run test:e2e
+        env:
+          CI: "true"
+
+      - name: Conserver les traces en cas d'échec
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7

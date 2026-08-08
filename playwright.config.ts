@@ -18,7 +18,12 @@ export default defineConfig({
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
   ],
   webServer: {
-    command: "npm run dev",
+    // En CI on sert le build de production : c'est ce que voit l'utilisateur,
+    // c'est plus rapide qu'une compilation à la demande, et surtout la barre
+    // d'outils Agentation ne s'y injecte pas (en dev elle se superpose à la
+    // page et a déjà fait échouer un test en interceptant un clic).
+    // Le job CI doit donc lancer `npm run build` avant `npm run test:e2e`.
+    command: process.env.CI ? "npm run start" : "npm run dev",
     port: 3000,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

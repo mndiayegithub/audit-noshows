@@ -150,7 +150,11 @@ stepped reveal)
 
 ⚠️ **Réserve levée le 2026-08-08.** Au 08/08, **2 des 4 specs e2e échouaient** (`audit-flow.spec.ts`, `audit-flow-degraded.spec.ts`). Vérifié par rejeu sur le commit `9f2139f` : elles étaient déjà cassées avant, donc la validation du 26/04 avait cessé d'être vraie sans que rien ne le signale. Cause : les specs décrivaient le parcours d'AVANT la Phase 7. Celle-ci a inséré l'écran d'aperçu CSV entre le dépôt et le formulaire, et posé `MIN_RDV_VALIDES = 20` — or la fixture `sample.csv` n'avait que 10 lignes, donc le bouton « Continuer » restait désactivé et le formulaire n'apparaissait jamais. Réparé le 08/08.
 
-**Leçon à retenir pour les prochaines phases** : une suite e2e validée une fois ne le reste pas. Rien n'exécutait ces tests entre avril et août ; il faut soit les lancer en CI, soit les rejouer à chaque phase qui touche au parcours.
+**La cause racine, trouvée le 2026-08-08** : `.github/workflows/ci.yml` existait depuis l'origine et tournait à chaque push (lint + build + Vitest), mais **excluait explicitement Playwright**, avec cette note : « intentionally deferred to Phase 7 — needs browser install caching to keep CI fast ». La Phase 7 a été close en avril sans que ce soit fait, et la note est restée. Résultat : le seul type de test non couvert par la CI est précisément celui qui a dérivé, pendant que le reste continuait de passer au vert.
+
+**Corrigé le 2026-08-08** : job `e2e` ajouté à la CI, avec cache des navigateurs indexé sur `package-lock.json` et upload des traces en cas d'échec. `playwright.config.ts` sert désormais le build de production quand `CI=1` — 11 s contre 56 s en mode dev, et la barre Agentation ne s'injecte pas dans la page.
+
+**Leçon** : une suite de tests validée une fois ne le reste pas. Un « deferred to Phase X » dans un fichier de CI est une dette qui ne réclame jamais son dû.
 
 ---
 
